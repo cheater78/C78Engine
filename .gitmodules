@@ -1,0 +1,3 @@
+[submodule "C78Engine/vendor/spdlog"]
+	path = C78Engine/vendor/spdlog
+	url = https://github.com/gabime/spdlog
