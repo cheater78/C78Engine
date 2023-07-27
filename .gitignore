@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+
+#Custom
+C78Engine/vendor/VulkanSDK
+
+bin
+bin-int

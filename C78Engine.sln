@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C78TestApp", "C78TestApp\C78TestApp.vcxproj", "{CD067A10-E642-4831-BC48-C5CCAD5C7ABB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C78Engine", "C78Engine\C78Engine.vcxproj", "{C03B4488-A8B9-4073-B9F4-E188B9A8E432}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C03B4488-A8B9-4073-B9F4-E188B9A8E432}.Debug|x64.ActiveCfg = Debug|x64
+		{C03B4488-A8B9-4073-B9F4-E188B9A8E432}.Debug|x64.Build.0 = Debug|x64
+		{C03B4488-A8B9-4073-B9F4-E188B9A8E432}.Release|x64.ActiveCfg = Release|x64
+		{C03B4488-A8B9-4073-B9F4-E188B9A8E432}.Release|x64.Build.0 = Release|x64
+		{CD067A10-E642-4831-BC48-C5CCAD5C7ABB}.Debug|x64.ActiveCfg = Debug|x64
+		{CD067A10-E642-4831-BC48-C5CCAD5C7ABB}.Debug|x64.Build.0 = Debug|x64
+		{CD067A10-E642-4831-BC48-C5CCAD5C7ABB}.Release|x64.ActiveCfg = Release|x64
+		{CD067A10-E642-4831-BC48-C5CCAD5C7ABB}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B93B4C61-3BF5-4C5F-98E2-A9CA44341287}
+	EndGlobalSection
+EndGlobal

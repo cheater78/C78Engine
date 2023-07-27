@@ -1,0 +1,21 @@
+[submodule "C78Engine/vendor/spdlog"]
+	path = C78Engine/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "C78Engine/vendor/entt"]
+	path = C78Engine/vendor/entt
+	url = https://github.com/skypjack/entt
+[submodule "C78Engine/vendor/glfw"]
+	path = C78Engine/vendor/glfw
+	url = https://github.com/glfw/glfw
+[submodule "C78Engine/vendor/glm"]
+	path = C78Engine/vendor/glm
+	url = https://github.com/g-truc/glm
+[submodule "C78Engine/vendor/imgui"]
+	path = C78Engine/vendor/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "C78Engine/vendor/tinyobjloader"]
+	path = C78Engine/vendor/tinyobjloader
+	url = https://github.com/tinyobjloader/tinyobjloader
+[submodule "C78Engine/vendor/stb"]
+	path = C78Engine/vendor/stb
+	url = https://github.com/nothings/stb
