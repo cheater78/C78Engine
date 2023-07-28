@@ -19,3 +19,6 @@
 [submodule "vendor/premake"]
 	path = vendor/premake
 	url = https://github.com/premake/premake-core
+[submodule "C78Engine/vendor/glfw"]
+	path = C78Engine/vendor/glfw
+	url = https://github.com/TheCherno/glfw

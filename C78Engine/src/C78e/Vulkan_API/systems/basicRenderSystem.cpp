@@ -9,7 +9,7 @@
 #include <vulkan/vulkan_core.h>
 
 #include "entt/entt.hpp"
-#include "Engine/engine.h"
+#include "C78e/engine.h"
 
 #include <iostream>
 
@@ -100,7 +100,7 @@ namespace C78e {
 			push.normalMat = transform.normalMat();
 
 			vkCmdPushConstants(renderTask.commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
-
+			/*
 			for (auto& [ uuid, model ] : renderTask.models) {
 				if (model.m_UUID == entity.getUUID()) {
 					model.bind(renderTask.commandBuffer);
@@ -108,6 +108,7 @@ namespace C78e {
 					break;
 				}
 			}
+			*/
 		}
 	}
 

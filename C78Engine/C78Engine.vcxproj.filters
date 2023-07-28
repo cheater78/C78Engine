@@ -1,36 +1,93 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="C78e">
+      <UniqueIdentifier>{7CBE827C-68F5-830D-11E2-6910FDF7FF0E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="C78e\Core">
+      <UniqueIdentifier>{5450A2F6-C0BA-566D-09F9-071375A234C2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="C78e\CoreOld">
+      <UniqueIdentifier>{33BE6F37-1F21-FFDB-C8A6-3792B4E8CA5E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Events">
+      <UniqueIdentifier>{E0C6992D-4C7C-1223-D570-0CFA41250927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Util">
+      <UniqueIdentifier>{4943ACF6-B5AD-606D-FEEB-11136A953EC2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Vulkan_API">
+      <UniqueIdentifier>{953D8093-01C9-ED57-0ADA-704C76E44958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Vulkan_API\Input">
+      <UniqueIdentifier>{5409A914-C075-640F-8969-FC6CF5948677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Vulkan_API\systems">
+      <UniqueIdentifier>{BCF0FC9D-2828-4535-3132-A9589DE86B2E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\openGL_API">
+      <UniqueIdentifier>{69B72EE4-D542-9CA8-DE53-1F9D4A5EF8A8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\C78e\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="src\C78e.h" />
     <ClInclude Include="src\C78e\Application.h">
-      <Filter>Header Files</Filter>
+      <Filter>C78e</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\C78e\Core.h">
+      <Filter>C78e</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\KeyCodes.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\MouseCodes.h">
+      <Filter>C78e\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\EntryPoint.h">
-      <Filter>Header Files</Filter>
+      <Filter>C78e</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78e\Events\ApplicationEvent.h">
+      <Filter>C78e\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Events\Event.h">
+      <Filter>C78e\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Events\KeyEvent.h">
+      <Filter>C78e\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Events\MouseEvent.h">
+      <Filter>C78e\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Log.h">
+      <Filter>C78e</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Util\ImageLoader.h">
+      <Filter>C78e\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Util\MeshLoader.h">
+      <Filter>C78e\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Util\types.h">
+      <Filter>C78e\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\engine.h">
+      <Filter>C78e</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78ePCH.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\C78e\Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>C78e</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78e\Log.cpp">
+      <Filter>C78e</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Util\ImageLoader.cpp">
+      <Filter>C78e\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Util\MeshLoader.cpp">
+      <Filter>C78e\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78ePCH.cpp" />
   </ItemGroup>
 </Project>

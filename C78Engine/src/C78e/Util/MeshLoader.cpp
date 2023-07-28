@@ -1,9 +1,8 @@
+#include "C78ePCH.h"
 #include "MeshLoader.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
-
-#include <filesystem>
 
 namespace C78e {
     namespace MeshLoader {

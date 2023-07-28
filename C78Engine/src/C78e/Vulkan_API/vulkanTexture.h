@@ -3,7 +3,8 @@
 #include "GLFW/glfw3.h"
 
 #include "vulkanDevice.h"
-#include "../Util/Image.h"
+#include "C78e/Util/ImageLoader.h"
+#include "C78e/Util/types.h"
 
 #include <stdexcept>
 
@@ -29,7 +30,7 @@ namespace C78e {
 	private:
 		VulkanDevice& m_Device;
 
-		Util::RawImage m_RawImg;
+		RawImage m_RawImg;
 		std::string m_File;
 
 		VkImage m_TextureImage;

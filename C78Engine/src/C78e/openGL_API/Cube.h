@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GeoHelp.h"
 #include "Renderer.h"
 #include <array>
 

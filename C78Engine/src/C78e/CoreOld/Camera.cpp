@@ -1,3 +1,4 @@
+#include "C78ePCH.h"
 #include "Camera.h"
 
 #include "Scene.h"
@@ -19,27 +20,27 @@ namespace C78e {
 	Camera::~Camera() {
 	}
 	
-	void Camera::setOrthographicProj(float left, float right, float top, float bottom, float near, float far) {
+	void Camera::setOrthographicProj(float left, float right, float top, float bottom, float vnear, float vfar) {
 		auto& projMat = getProjMat();
 		projMat = glm::mat4{ 1.0f };
 		projMat[0][0] = 2.f / (right - left);
 		projMat[1][1] = 2.f / (bottom - top);
-		projMat[2][2] = 1.f / (far - near);
+		projMat[2][2] = 1.f / (vfar - vnear);
 		projMat[3][0] = -(right + left) / (right - left);
 		projMat[3][1] = -(bottom + top) / (bottom - top);
-		projMat[3][2] = -near / (far - near);
+		projMat[3][2] = -vnear / (vfar - vnear);
 	}
 
-	void Camera::setPerspectiveProj(float fovy, float aspect, float near, float far) {
+	void Camera::setPerspectiveProj(float fovy, float aspect, float vnear, float vfar) {
 		assert(glm::abs(aspect - std::numeric_limits<float>::epsilon()) > 0.0f);
 		const float tanHalfFovy = tan(fovy / 2.f);
 		auto& projMat = getProjMat();
 		projMat = glm::mat4{ 0.0f };
 		projMat[0][0] = 1.f / (aspect * tanHalfFovy);
 		projMat[1][1] = 1.f / (tanHalfFovy);
-		projMat[2][2] = far / (far - near);
+		projMat[2][2] = vfar / (vfar - vnear);
 		projMat[2][3] = 1.f;
-		projMat[3][2] = -(far * near) / (far - near);
+		projMat[3][2] = -(vfar * vnear) / (vfar - vnear);
 	}
 
 	void Camera::setPosDir(glm::vec3 position, glm::vec3 direction) {

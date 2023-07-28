@@ -11,3 +11,4 @@
 	#error WinOnlyForNow!
 #endif // C78_PLATFORM_WINDOWS
 
+#define BIT(x) (1<<x)

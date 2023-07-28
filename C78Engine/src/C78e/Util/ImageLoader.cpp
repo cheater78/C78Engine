@@ -1,9 +1,8 @@
+#include "C78ePCH.h"
 #include "ImageLoader.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image/stb_image.h>
-
-#include <stdexcept>
+#include <stb_image.h>
 
 namespace C78e {
 	namespace Util {

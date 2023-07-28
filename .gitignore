@@ -403,3 +403,5 @@ C78Engine/vendor/VulkanSDK
 
 bin
 bin-int
+
+vendor/premake/*

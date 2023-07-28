@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Core.h"
+#include "C78e/Core.h"
+#include "Events/Event.h"
 
 namespace C78e {
 

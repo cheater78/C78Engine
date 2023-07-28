@@ -1,9 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
 
-#include <string>
-#include <vector>
-
 namespace C78e {
 
 	struct Mesh {

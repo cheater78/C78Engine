@@ -1,6 +1,6 @@
 #include "vulkanInstance.h"
 
-#include "Engine/engine.h"
+#include "C78e/engine.h"
 #include "types.h"
 
 #include <iostream>
@@ -21,6 +21,7 @@ namespace C78e {
 
 	bool VulkanInstance::render(Scene& scene)
 	{
+		/*
 		if (!m_IsAlive) return m_IsAlive;
 
 		Camera cam = scene.getActiveCam();
@@ -77,6 +78,7 @@ namespace C78e {
 		
 		vkDeviceWaitIdle(m_Device.device());
 		m_IsAlive = !glfwWindowShouldClose(m_Window.getGLFWwindow());
+		*/
 		return m_IsAlive;
 	}
 
@@ -114,6 +116,7 @@ namespace C78e {
 	}
 
 	void VulkanInstance::loadResources() {
+		/*
 		const std::filesystem::path c_CWD = std::filesystem::current_path();
 		const std::filesystem::path c_ROOT = c_CWD.parent_path();
 
@@ -176,6 +179,7 @@ namespace C78e {
 
 		cout << "Shaders: " << m_Shaders.size() << endl;
 		cout << "Buffers: " << m_Buffers.size() << endl;
+		*/
 	}
 
 
