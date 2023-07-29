@@ -1,12 +1,27 @@
 #include "C78TestApp.h"
 #include <C78e.h>
 
+class TestLayer : public C78e::Layer {
+public:
+	TestLayer() : Layer() { }
+
+	void onUpdate() override {
+		C78_INFO("LayerUpdate");
+	}
+
+	void onEvent(C78e::Event& e) override {
+		C78_TRACE("{0}", e);
+	}
+
+};
+
+
 class C78TestApp : public C78e::Application
 {
 public:
 	C78TestApp()
 	{
-
+		pushLayer(new TestLayer);
 	}
 	~C78TestApp()
 	{

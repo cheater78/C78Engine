@@ -12,6 +12,12 @@ workspace "C78Engine"
 vulkanSDKdir = "%{prj.name}/vendor/VulkanSDK/Include"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "C78Engine/vendor/glfw/include"
+IncludeDir["GLAD"] = "C78Engine/vendor/glad/"
+
+include "C78Engine/vendor/glfw"
+include "C78Engine/vendor/glad"
 
 project "C78Engine"
 	location "C78Engine"
@@ -36,14 +42,21 @@ project "C78Engine"
 		"%{prj.name}/src/",
 		"%{prj.name}/vendor/entt/single_include",
 		"%{prj.name}/vendor/glm/glm",
-		"%{prj.name}/vendor/glad",
-		"%{prj.name}/vendor/glfw/include",
 		"%{prj.name}/vendor/imgui",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/stb",
 		"%{prj.name}/vendor/tinyobjloader",
-		vulkanSDKdir
+		"%{vulkanSDKdir}",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}"
 	}
+
+	links{
+		"GLFW",
+		"GLAD",
+		"opengl32.lib"
+	}
+
 
 	filter "system:windows"
 		cppdialect "C++20"
@@ -52,7 +65,8 @@ project "C78Engine"
 
 		defines{
 			"C78_PLATFORM_WINDOWS",
-			"C78_BUILD_DLL"
+			"C78_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
@@ -61,16 +75,19 @@ project "C78Engine"
 		}
 
 	filter "configurations:Debug"
-		defines "C78_DEBUG"
+		defines{ "C78_DEBUG", "C78_ENABLE_ASSERTS" }
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "C78_RELEASE"
-		optimize "On"
+		buildoptions "/MD"
+		optimize "speed"
 
 	filter "configurations:Dist"
 		defines "C78_DIST"
-		optimize "On"
+		buildoptions "/MD"
+		optimize "speed"
 
 
 
@@ -113,14 +130,17 @@ project "C78TestApp"
 
 	filter "configurations:Debug"
 		defines "C78_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "C78_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "C78_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 

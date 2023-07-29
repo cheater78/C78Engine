@@ -2,5 +2,6 @@
 
 #include "C78e/Application.h"
 #include "C78e/Log.h"
+#include "C78e/Layer.h"
 
 #include "C78e/EntryPoint.h"

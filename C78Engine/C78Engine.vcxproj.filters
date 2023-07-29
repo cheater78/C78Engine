@@ -7,26 +7,17 @@
     <Filter Include="C78e\Core">
       <UniqueIdentifier>{5450A2F6-C0BA-566D-09F9-071375A234C2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\CoreOld">
-      <UniqueIdentifier>{33BE6F37-1F21-FFDB-C8A6-3792B4E8CA5E}</UniqueIdentifier>
-    </Filter>
     <Filter Include="C78e\Events">
       <UniqueIdentifier>{E0C6992D-4C7C-1223-D570-0CFA41250927}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Util">
-      <UniqueIdentifier>{4943ACF6-B5AD-606D-FEEB-11136A953EC2}</UniqueIdentifier>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Vulkan_API">
-      <UniqueIdentifier>{953D8093-01C9-ED57-0ADA-704C76E44958}</UniqueIdentifier>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Vulkan_API\Input">
-      <UniqueIdentifier>{5409A914-C075-640F-8969-FC6CF5948677}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="C78e\Vulkan_API\systems">
-      <UniqueIdentifier>{BCF0FC9D-2828-4535-3132-A9589DE86B2E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="C78e\openGL_API">
-      <UniqueIdentifier>{69B72EE4-D542-9CA8-DE53-1F9D4A5EF8A8}</UniqueIdentifier>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,36 +49,99 @@
     <ClInclude Include="src\C78e\Events\MouseEvent.h">
       <Filter>C78e\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78e\Layer.h">
+      <Filter>C78e</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\LayerStack.h">
+      <Filter>C78e</Filter>
+    </ClInclude>
     <ClInclude Include="src\C78e\Log.h">
       <Filter>C78e</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Util\ImageLoader.h">
-      <Filter>C78e\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\C78e\Util\MeshLoader.h">
-      <Filter>C78e\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\C78e\Util\types.h">
-      <Filter>C78e\Util</Filter>
+    <ClInclude Include="src\C78e\Window.h">
+      <Filter>C78e</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\engine.h">
       <Filter>C78e</Filter>
     </ClInclude>
     <ClInclude Include="src\C78ePCH.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\C78e\Application.cpp">
       <Filter>C78e</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78e\Layer.cpp">
+      <Filter>C78e</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\LayerStack.cpp">
+      <Filter>C78e</Filter>
+    </ClCompile>
     <ClCompile Include="src\C78e\Log.cpp">
       <Filter>C78e</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Util\ImageLoader.cpp">
-      <Filter>C78e\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="src\C78e\Util\MeshLoader.cpp">
-      <Filter>C78e\Util</Filter>
+    <ClCompile Include="src\C78e\Window.cpp">
+      <Filter>C78e</Filter>
     </ClCompile>
     <ClCompile Include="src\C78ePCH.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

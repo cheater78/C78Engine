@@ -26,7 +26,7 @@ namespace C78e {
 
 		bool IsRepeat() const { return m_IsRepeat; }
 
-		std::string ToString() const override
+		std::string toString() const override
 		{
 			std::stringstream ss;
 			ss << "KeyPressedEvent: " << m_KeyCode << " (repeat = " << m_IsRepeat << ")";
@@ -44,7 +44,7 @@ namespace C78e {
 		KeyReleasedEvent(const KeyCode keycode)
 			: KeyEvent(keycode) {}
 
-		std::string ToString() const override
+		std::string toString() const override
 		{
 			std::stringstream ss;
 			ss << "KeyReleasedEvent: " << m_KeyCode;
@@ -60,7 +60,7 @@ namespace C78e {
 		KeyTypedEvent(const KeyCode keycode)
 			: KeyEvent(keycode) {}
 
-		std::string ToString() const override
+		std::string toString() const override
 		{
 			std::stringstream ss;
 			ss << "KeyTypedEvent: " << m_KeyCode;
