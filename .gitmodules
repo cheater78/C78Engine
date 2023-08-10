@@ -22,3 +22,5 @@
 [submodule "C78Engine/vendor/glfw"]
 	path = C78Engine/vendor/glfw
 	url = https://github.com/TheCherno/glfw
+[submodule "glfw"]
+	branch = master

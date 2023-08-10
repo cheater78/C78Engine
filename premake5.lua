@@ -19,6 +19,13 @@ IncludeDir["GLAD"] = "C78Engine/vendor/glad/"
 include "C78Engine/vendor/glfw"
 include "C78Engine/vendor/glad"
 
+filter "system:windows"
+	argsym = "/"
+filter "system:linux"
+	argsym = "-"
+
+
+
 project "C78Engine"
 	location "C78Engine"
 	kind "SharedLib"
@@ -26,9 +33,6 @@ project "C78Engine"
 
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
-	
-	pchheader "C78ePCH.h"
-	pchsource "C78Engine/src/C78ePCH.cpp"
 
 	files
 	{
@@ -50,12 +54,10 @@ project "C78Engine"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}"
 	}
-
-	links{
-		"GLFW",
-		"GLAD",
-		"opengl32.lib"
-	}
+	
+	filter "action:vs*"
+	    pchheader "C78ePCH.h"
+		pchsource "C78Engine/src/C78ePCH.cpp"
 
 
 	filter "system:windows"
@@ -69,6 +71,34 @@ project "C78Engine"
 			"GLFW_INCLUDE_NONE"
 		}
 
+		links{
+			"GLFW",
+			"GLAD",
+			"opengl32.lib"
+		}
+
+		postbuildcommands
+		{
+			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/")
+		}
+		
+	filter "system:linux"
+		cppdialect "C++20"
+		staticruntime "On"
+		systemversion "latest"
+
+		defines{
+			"C78_PLATFORM_LINUX",
+			"C78_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
+		}
+
+		links{
+			"GLFW",
+			"GLAD",
+			"GL"
+		}
+
 		postbuildcommands
 		{
 			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/C78TestApp")
@@ -76,17 +106,17 @@ project "C78Engine"
 
 	filter "configurations:Debug"
 		defines{ "C78_DEBUG", "C78_ENABLE_ASSERTS" }
-		buildoptions "/MDd"
+		buildoptions "%{argsym}MD"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "C78_RELEASE"
-		buildoptions "/MD"
+		buildoptions "%{argsym}MD"
 		optimize "speed"
 
 	filter "configurations:Dist"
 		defines "C78_DIST"
-		buildoptions "/MD"
+		buildoptions "%{argsym}MD"
 		optimize "speed"
 
 
@@ -97,7 +127,7 @@ project "C78TestApp"
 	kind "ConsoleApp"
 	language "C++"
 
-	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
+	targetdir  ("bin/" .. outputdir .. "/")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	files
@@ -127,20 +157,29 @@ project "C78TestApp"
 		defines{
 			"C78_PLATFORM_WINDOWS"
 		}
+		
+	filter "system:linux"
+		cppdialect "C++20"
+		staticruntime "On"
+		systemversion "latest"
+
+		defines{
+			"C78_PLATFORM_LINUX"
+		}
 
 	filter "configurations:Debug"
 		defines "C78_DEBUG"
-		buildoptions "/MDd"
+		buildoptions "%{argsym}MD"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "C78_RELEASE"
-		buildoptions "/MD"
+		buildoptions "%{argsym}MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "C78_DIST"
-		buildoptions "/MD"
+		buildoptions "%{argsym}MD"
 		optimize "On"
 
 
