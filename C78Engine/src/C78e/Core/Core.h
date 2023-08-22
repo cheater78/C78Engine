@@ -41,8 +41,8 @@
 
 #ifdef C78_ENABLE_ASSERTS
 	#include "C78e/Core/Log.h"
-	#define C78_CORE_ASSERT(x, ...) { if(!x) { C78_CORE_FATAL("Assertion Failed: {0}", __VA_ARGS__); DEBUG_BREAK; } }
-	#define C78_ASSERT(x, ...) { if(!x) { C78_FATAL("Assertion Failed: {0}", __VA_ARGS__); DEBUG_BREAK; } }
+	#define C78_CORE_ASSERT(x, ...) { if(!x) { C78_CORE_FATAL("Assertion Failed: {0}", __VA_ARGS__);	DEBUG_BREAK; } }
+	#define C78_ASSERT(x, ...)		{ if(!x) { C78_FATAL("Assertion Failed: {0}", __VA_ARGS__);			DEBUG_BREAK; } }
 #else
 	#define C78_CORE_ASSERT(x, ...)
 	#define C78_ASSERT(x, ...)
@@ -50,4 +50,4 @@
 
 #define BIT(x) (1<<x)
 
-#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define BIND_CALLBACK_FN(fn) std::bind(&fn, this, std::placeholders::_1)

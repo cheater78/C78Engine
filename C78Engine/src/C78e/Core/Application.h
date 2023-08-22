@@ -6,6 +6,7 @@
 #include "C78e/Events/ApplicationEvent.h"
 #include "C78e/Core/LayerStack.h"
 #include <C78e/ImGui/ImGuiLayer.h>
+#include "C78e/Console/Console.h"
 
 namespace C78e {
 
@@ -34,9 +35,12 @@ namespace C78e {
 
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;
+		Console* m_Console;
 
 		bool onWindowClose(WindowCloseEvent e);
+		bool onCMDClose(std::string cmd);
 
+		void closeWindow();
 		
 	};
 	

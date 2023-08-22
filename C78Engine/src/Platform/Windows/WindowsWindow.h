@@ -3,6 +3,7 @@
 #include "C78e/Core/Window.h"
 
 #include <GLFW/glfw3.h>
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace C78e {
 
@@ -27,7 +28,7 @@ namespace C78e {
 		virtual void shutdown();
 	private:
 		GLFWwindow* m_Window;
-		//Scope<GraphicsContext> m_Context;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{

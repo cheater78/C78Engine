@@ -1,0 +1,15 @@
+#pragma once
+
+namespace C78e {
+
+	class GraphicsContext {
+	public:
+		virtual ~GraphicsContext() = default;
+
+		virtual void init() = 0;
+		virtual void swapBuffers() = 0;
+
+		//static GraphicsContext* Create(void* window);
+	};
+
+}

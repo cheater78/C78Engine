@@ -66,8 +66,7 @@ namespace C78e {
 
 	void ImGuiLayer::onDetach()
 	{
-		
-		C78_CORE_INFO("ImGui Layer destroyed.");
+		C78_CORE_INFO("ImGui Layer stopped.");
 	}
 
 	void ImGuiLayer::onEvent(Event& e)
@@ -109,7 +108,7 @@ namespace C78e {
 	}
 
 	void ImGuiLayer::onImGuiRender() {
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 	}
 
 	void ImGuiLayer::SetDarkThemeColors()

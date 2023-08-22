@@ -19,24 +19,26 @@ namespace C78e {
 		s_App = this;
 
 		m_Window = std::unique_ptr<Window>(Window::create());
-		m_Window->setEventCallback(BIND_EVENT_FN(Application::onEvent));
+		m_Window->setEventCallback(BIND_CALLBACK_FN(Application::onEvent));
 
 		m_ImGuiLayer = new ImGuiLayer();
 		pushOverlay(m_ImGuiLayer);
 
+		m_Console = new Console("C78e Console");
+		pushOverlay(m_Console);
+
+		m_Console->addCmd("stop", BIND_CALLBACK_FN(Application::onCMDClose));
+
 	}
 
-	Application::~Application()
-	{
-		for (Layer* layer : m_LayerStack)
-			layer->onDetach();
+	Application::~Application() {	
 	}
 
 	void Application::run()
 	{
-
+		std::srand(7539475345);
 		while (m_Running) {
-			glClearColor(0, 1, 0, 1);
+			glClearColor(0.1f, 0.1f, 0.15f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
@@ -46,7 +48,6 @@ namespace C78e {
 			m_ImGuiLayer->begin();
 
 			for (Layer* layer : m_LayerStack) {
-				//C78_CORE_INFO(layer->getName());
 				layer->onImGuiRender();
 			}
 				
@@ -60,7 +61,7 @@ namespace C78e {
 
 	void Application::onEvent(Event& e) {
 		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
+		dispatcher.dispatch<WindowCloseEvent>(BIND_CALLBACK_FN(Application::onWindowClose));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 			(*--it)->onEvent(e);
@@ -70,10 +71,19 @@ namespace C78e {
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent e) {
+		closeWindow();
+		return true;
+	}
+	bool Application::onCMDClose(std::string cmd) {
+		closeWindow();
+		return true;
+	}
+
+	void Application::closeWindow()
+	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		m_Running = false;
-		return true;
 	}
 
 	void Application::pushLayer(Layer* layer) {
@@ -85,7 +95,6 @@ namespace C78e {
 		m_LayerStack.pushOverlay(layer);
 		layer->onAttach();
 	}
-
 }
 
 

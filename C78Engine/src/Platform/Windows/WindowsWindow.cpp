@@ -7,8 +7,6 @@
 
 #include <C78e/Core/Log.h>
 
-#include <glad.h>
-
 namespace C78e {
 	
 	static uint8_t s_GLFWWindowCount = 0;
@@ -53,13 +51,10 @@ namespace C78e {
 			++s_GLFWWindowCount;
 		}
 
-		//
-		glfwMakeContextCurrent(m_Window);
 
-		//m_Context = GraphicsContext::Create(m_Window);
-		//m_Context->Init();
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		C78_CORE_ASSERT(status, "Failed to init Glad");
+		m_Context = new OpenGLContext(m_Window);//GraphicsContext::Create(m_Window);
+		m_Context->init();
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		setVSync(true);
 
@@ -163,8 +158,7 @@ namespace C78e {
 	void WindowsWindow::onUpdate() {
 
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
-		//m_Context->SwapBuffers();
+		m_Context->swapBuffers();
 	}
 
 	void WindowsWindow::setVSync(bool enabled) {
