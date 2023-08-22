@@ -405,3 +405,5 @@ bin
 bin-int
 
 vendor/premake/*
+
+.idea/
