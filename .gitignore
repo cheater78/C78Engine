@@ -400,9 +400,11 @@ FodyWeavers.xsd
 
 #Custom
 C78Engine/vendor/VulkanSDK
+C78Engine/vendor/entt
+C78Engine/vendor/imgui
 
-bin
-bin-int
+bin/
+bin-int/
 
 vendor/premake/*
 
