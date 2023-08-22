@@ -10,11 +10,11 @@
     <Filter Include="C78e\Events">
       <UniqueIdentifier>{E0C6992D-4C7C-1223-D570-0CFA41250927}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C78e\ImGui">
+      <UniqueIdentifier>{A62057CB-92D8-9818-FBDF-7174E7B63309}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\OpenGL">
-      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
@@ -22,20 +22,38 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\C78e.h" />
-    <ClInclude Include="src\C78e\Application.h">
-      <Filter>C78e</Filter>
+    <ClInclude Include="src\C78e\Core\Application.h">
+      <Filter>C78e\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core.h">
-      <Filter>C78e</Filter>
+    <ClInclude Include="src\C78e\Core\Core.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\EntryPoint.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\Input.h">
+      <Filter>C78e\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Core\KeyCodes.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\Layer.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\LayerStack.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\Log.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Core\MouseCodes.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\EntryPoint.h">
-      <Filter>C78e</Filter>
+    <ClInclude Include="src\C78e\Core\Window.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\engine.h">
+      <Filter>C78e\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Events\ApplicationEvent.h">
       <Filter>C78e\Events</Filter>
@@ -49,95 +67,38 @@
     <ClInclude Include="src\C78e\Events\MouseEvent.h">
       <Filter>C78e\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Layer.h">
-      <Filter>C78e</Filter>
-    </ClInclude>
-    <ClInclude Include="src\C78e\LayerStack.h">
-      <Filter>C78e</Filter>
-    </ClInclude>
-    <ClInclude Include="src\C78e\Log.h">
-      <Filter>C78e</Filter>
-    </ClInclude>
-    <ClInclude Include="src\C78e\Window.h">
-      <Filter>C78e</Filter>
-    </ClInclude>
-    <ClInclude Include="src\C78e\engine.h">
-      <Filter>C78e</Filter>
+    <ClInclude Include="src\C78e\ImGui\ImGuiLayer.h">
+      <Filter>C78e\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\C78ePCH.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\C78e\Application.cpp">
-      <Filter>C78e</Filter>
+    <ClCompile Include="src\C78e\Core\Application.cpp">
+      <Filter>C78e\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Layer.cpp">
-      <Filter>C78e</Filter>
+    <ClCompile Include="src\C78e\Core\Layer.cpp">
+      <Filter>C78e\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\LayerStack.cpp">
-      <Filter>C78e</Filter>
+    <ClCompile Include="src\C78e\Core\LayerStack.cpp">
+      <Filter>C78e\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Log.cpp">
-      <Filter>C78e</Filter>
+    <ClCompile Include="src\C78e\Core\Log.cpp">
+      <Filter>C78e\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Window.cpp">
-      <Filter>C78e</Filter>
+    <ClCompile Include="src\C78e\Core\Window.cpp">
+      <Filter>C78e\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\ImGui\ImGuiBuild.cpp">
+      <Filter>C78e\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\ImGui\ImGuiLayer.cpp">
+      <Filter>C78e\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\C78ePCH.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
-      <Filter>Platform\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
-      <Filter>Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">

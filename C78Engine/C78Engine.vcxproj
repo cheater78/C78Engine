@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>C78ePCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>C78_PLATFORM_WINDOWS;C78_BUILD_DLL;GLFW_INCLUDE_NONE;C78_DEBUG;C78_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\entt\single_include;vendor\glm\glm;vendor\imgui;vendor\spdlog\include;vendor\stb;vendor\tinyobjloader;vendor\VulkanSDK\Include;vendor\glfw\include;vendor\glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\entt\single_include;vendor\glm\glm;vendor\imgui;vendor\spdlog\include;vendor\stb;vendor\tinyobjloader;vendor\VulkanSDK\Include;vendor\glfw\include;vendor\glad;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -104,7 +104,7 @@
       <PrecompiledHeaderFile>C78ePCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>C78_PLATFORM_WINDOWS;C78_BUILD_DLL;GLFW_INCLUDE_NONE;C78_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\entt\single_include;vendor\glm\glm;vendor\imgui;vendor\spdlog\include;vendor\stb;vendor\tinyobjloader;vendor\VulkanSDK\Include;vendor\glfw\include;vendor\glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\entt\single_include;vendor\glm\glm;vendor\imgui;vendor\spdlog\include;vendor\stb;vendor\tinyobjloader;vendor\VulkanSDK\Include;vendor\glfw\include;vendor\glad;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -132,7 +132,7 @@
       <PrecompiledHeaderFile>C78ePCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>C78_PLATFORM_WINDOWS;C78_BUILD_DLL;GLFW_INCLUDE_NONE;C78_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\entt\single_include;vendor\glm\glm;vendor\imgui;vendor\spdlog\include;vendor\stb;vendor\tinyobjloader;vendor\VulkanSDK\Include;vendor\glfw\include;vendor\glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\entt\single_include;vendor\glm\glm;vendor\imgui;vendor\spdlog\include;vendor\stb;vendor\tinyobjloader;vendor\VulkanSDK\Include;vendor\glfw\include;vendor\glad;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -156,32 +156,37 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\C78e.h" />
-    <ClInclude Include="src\C78e\Application.h" />
-    <ClInclude Include="src\C78e\Core.h" />
+    <ClInclude Include="src\C78e\Core\Application.h" />
+    <ClInclude Include="src\C78e\Core\Core.h" />
+    <ClInclude Include="src\C78e\Core\EntryPoint.h" />
+    <ClInclude Include="src\C78e\Core\Input.h" />
     <ClInclude Include="src\C78e\Core\KeyCodes.h" />
+    <ClInclude Include="src\C78e\Core\Layer.h" />
+    <ClInclude Include="src\C78e\Core\LayerStack.h" />
+    <ClInclude Include="src\C78e\Core\Log.h" />
     <ClInclude Include="src\C78e\Core\MouseCodes.h" />
-    <ClInclude Include="src\C78e\EntryPoint.h" />
+    <ClInclude Include="src\C78e\Core\Window.h" />
+    <ClInclude Include="src\C78e\Core\engine.h" />
     <ClInclude Include="src\C78e\Events\ApplicationEvent.h" />
     <ClInclude Include="src\C78e\Events\Event.h" />
     <ClInclude Include="src\C78e\Events\KeyEvent.h" />
     <ClInclude Include="src\C78e\Events\MouseEvent.h" />
-    <ClInclude Include="src\C78e\Layer.h" />
-    <ClInclude Include="src\C78e\LayerStack.h" />
-    <ClInclude Include="src\C78e\Log.h" />
-    <ClInclude Include="src\C78e\Window.h" />
-    <ClInclude Include="src\C78e\engine.h" />
+    <ClInclude Include="src\C78e\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\C78ePCH.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\C78e\Application.cpp" />
-    <ClCompile Include="src\C78e\Layer.cpp" />
-    <ClCompile Include="src\C78e\LayerStack.cpp" />
-    <ClCompile Include="src\C78e\Log.cpp" />
-    <ClCompile Include="src\C78e\Window.cpp" />
+    <ClCompile Include="src\C78e\Core\Application.cpp" />
+    <ClCompile Include="src\C78e\Core\Layer.cpp" />
+    <ClCompile Include="src\C78e\Core\LayerStack.cpp" />
+    <ClCompile Include="src\C78e\Core\Log.cpp" />
+    <ClCompile Include="src\C78e\Core\Window.cpp" />
+    <ClCompile Include="src\C78e\ImGui\ImGuiBuild.cpp" />
+    <ClCompile Include="src\C78e\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\C78ePCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +195,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\glad\GLAD.vcxproj">
       <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

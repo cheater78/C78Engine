@@ -1,16 +1,11 @@
 #include "C78ePCH.h"
 #include "Platform/Windows/WindowsWindow.h"
 
-//#include "Hazel/Core/Input.h"
-
 #include "C78e/Events/ApplicationEvent.h"
 #include "C78e/Events/MouseEvent.h"
 #include "C78e/Events/KeyEvent.h"
 
-//#include "Hazel/Renderer/Renderer.h"
-
-//#include "Platform/OpenGL/OpenGLContext.h"C78_CORE_ASSERT
-#include <C78e/Log.h>
+#include <C78e/Core/Log.h>
 
 #include <glad.h>
 
@@ -31,6 +26,8 @@ namespace C78e {
 	}
 
 	WindowsWindow::~WindowsWindow() {
+
+		C78_CORE_WARN("destroying winWindow...");
 		shutdown();
 	}
 
@@ -50,7 +47,7 @@ namespace C78e {
 		{
 		#if defined(C78_DEBUG)
 			//if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
-			//	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 		#endif
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
@@ -67,8 +64,7 @@ namespace C78e {
 		setVSync(true);
 
 		// Set GLFW callbacks
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-		{
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height){
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			data.Width = width;
 			data.Height = height;
@@ -77,15 +73,13 @@ namespace C78e {
 			data.EventCallback(event);
 		});
 
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
-		{
+		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window){
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowCloseEvent event;
 			data.EventCallback(event);
 		});
 
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
+		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action)
@@ -111,16 +105,14 @@ namespace C78e {
 			}
 		});
 
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
-		{
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode){
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			KeyTypedEvent event(keycode);
 			data.EventCallback(event);
 		});
 
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
-		{
+		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods){
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action)
@@ -140,16 +132,14 @@ namespace C78e {
 			}
 		});
 
-		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
-		{
+		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset){
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data.EventCallback(event);
 		});
 
-		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
-		{
+		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos){
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			MouseMovedEvent event((float)xPos, (float)yPos);
@@ -158,6 +148,8 @@ namespace C78e {
 	}
 
 	void WindowsWindow::shutdown() {
+
+		C78_CORE_TRACE("Windows onClose: {0}, ptr: {1}", s_GLFWWindowCount, (uint32_t)m_Window);
 
 		glfwDestroyWindow(m_Window);
 		--s_GLFWWindowCount;
@@ -171,6 +163,7 @@ namespace C78e {
 	void WindowsWindow::onUpdate() {
 
 		glfwPollEvents();
+		glfwSwapBuffers(m_Window);
 		//m_Context->SwapBuffers();
 	}
 

@@ -8,7 +8,7 @@ namespace C78e {
 	class C78_API Layer
 	{
 	public:
-		Layer(const std::string& name = "Layer");
+		Layer(const std::string& debugName = "Layer");
 		virtual ~Layer() = default;
 
 		virtual void onAttach() {}

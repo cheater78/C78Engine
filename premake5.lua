@@ -15,9 +15,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "C78Engine/vendor/glfw/include"
 IncludeDir["GLAD"] = "C78Engine/vendor/glad/"
+IncludeDir["IMGUI"] = "C78Engine/vendor/imgui/"
 
 include "C78Engine/vendor/glfw"
 include "C78Engine/vendor/glad"
+include "C78Engine/vendor/imgui"
 
 project "C78Engine"
 	location "C78Engine"
@@ -48,12 +50,14 @@ project "C78Engine"
 		"%{prj.name}/vendor/tinyobjloader",
 		"%{vulkanSDKdir}",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}"
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.IMGUI}"
 	}
 
 	links{
 		"GLFW",
 		"GLAD",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -111,12 +115,14 @@ project "C78TestApp"
 	{
 		"%{prj.name}/vendor/",
 		"C78Engine/vendor/spdlog/include",
+		"C78Engine/vendor/",
 		"C78Engine/src"
 	}
 
 	links
 	{
-		"C78Engine"
+		"C78Engine",
+		"ImGui"
 	}
 
 	filter "system:windows"

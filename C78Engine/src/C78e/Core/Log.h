@@ -1,5 +1,5 @@
 #pragma once
-#include "C78e/Core.h"
+#include "C78e/Core/Core.h"
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 

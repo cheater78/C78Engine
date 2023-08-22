@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78e/Window.h"
+#include "C78e/Core/Window.h"
 
 #include <GLFW/glfw3.h>
 

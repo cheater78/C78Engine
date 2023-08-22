@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78e/Application.h"
+#include "C78e/Core/Application.h"
 
 #ifdef C78_PLATFORM_WINDOWS
 

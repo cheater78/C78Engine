@@ -1,7 +1,7 @@
 #pragma once
 #include "C78ePCH.h"
 
-#include "C78e/Core.h"
+#include "C78e/Core/Core.h"
 
 namespace C78e {
 

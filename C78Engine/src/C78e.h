@@ -1,7 +1,14 @@
 #pragma once
 
-#include "C78e/Application.h"
-#include "C78e/Log.h"
-#include "C78e/Layer.h"
+#include "C78e/Core/Application.h"
+#include "C78e/Core/Log.h"
 
-#include "C78e/EntryPoint.h"
+
+
+#include "C78e/Core/Layer.h"
+#include "C78e/ImGui/ImGuiLayer.h"
+
+
+
+
+#include "C78e/Core/EntryPoint.h"
