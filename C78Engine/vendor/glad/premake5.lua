@@ -1,8 +1,8 @@
 project "GLAD"
 	kind "StaticLib"
 	language "C"
+	cppdialect "C++20"
 	staticruntime "on"
-	runtime "Release"
 	warnings "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")

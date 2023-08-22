@@ -30,8 +30,10 @@ filter "system:linux"
 
 project "C78Engine"
 	location "C78Engine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -64,7 +66,6 @@ project "C78Engine"
 
 
 	filter "system:windows"
-		cppdialect "C++20"
 		staticruntime "On"
 		systemversion "latest"
 
@@ -80,14 +81,8 @@ project "C78Engine"
 			"opengl32.lib",
 			"ImGui"
 		}
-
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/")
-		}
 		
 	filter "system:linux"
-		cppdialect "C++20"
 		staticruntime "On"
 		systemversion "latest"
 
@@ -104,33 +99,28 @@ project "C78Engine"
 			"ImGui"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/C78TestApp")
-		}
-
 	filter "configurations:Debug"
 		defines{ "C78_DEBUG", "C78_ENABLE_ASSERTS" }
-		buildoptions "%{argsym}MD"
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "C78_RELEASE"
-		buildoptions "%{argsym}MD"
-		optimize "speed"
+		runtime "Release"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "C78_DIST"
-		buildoptions "%{argsym}MD"
-		optimize "speed"
-
-
+		runtime "Release"
+		optimize "on"
 
 
 project "C78TestApp"
 	location "C78TestApp"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -152,24 +142,17 @@ project "C78TestApp"
 
 	links
 	{
-		"C78Engine",
-		"ImGui"
+		"C78Engine"
 	}
 
 	filter "system:windows"
-		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
-
-		
 
 		defines{
 			"C78_PLATFORM_WINDOWS"
 		}
 		
 	filter "system:linux"
-		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines{
@@ -177,18 +160,17 @@ project "C78TestApp"
 		}
 
 	filter "configurations:Debug"
-		defines "C78_DEBUG"
-		buildoptions "%{argsym}MD"
-		symbols "On"
+		defines{ "C78_DEBUG", "C78_ENABLE_ASSERTS" }
+		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "C78_RELEASE"
-		buildoptions "%{argsym}MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "C78_DIST"
-		buildoptions "%{argsym}MD"
-		optimize "On"
-
+		runtime "Release"
+		optimize "on"
 

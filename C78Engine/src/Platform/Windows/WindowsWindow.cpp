@@ -149,7 +149,7 @@ namespace C78e {
 
 	void WindowsWindow::shutdown() {
 
-		C78_CORE_TRACE("Windows onClose: {0}, ptr: {1}", s_GLFWWindowCount, (uint32_t)m_Window);
+		C78_CORE_TRACE("Windows onClose({0} windows closed)", s_GLFWWindowCount);
 
 		glfwDestroyWindow(m_Window);
 		--s_GLFWWindowCount;

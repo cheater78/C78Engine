@@ -31,9 +31,10 @@ namespace C78e {
 
 		struct WindowData
 		{
-			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
+			std::string Title = "<error>";
+			unsigned int Width = 100;
+			unsigned int Height = 100;
+			bool VSync = true;
 
 			EventCallbackFn EventCallback;
 		};

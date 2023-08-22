@@ -2,11 +2,15 @@
 #pragma once
 
 #ifdef C78_PLATFORM_WINDOWS
+#ifdef C78_DYN_LINK
 	#ifdef C78_BUILD_DLL
 		#define C78_API __declspec(dllexport)
 	#else
 		#define C78_API __declspec(dllimport)
 	#endif // C78_BUILD_DLL
+#else
+	#define C78_API
+#endif
 
 #define DEBUG_BREAK __debugbreak()
 
@@ -17,6 +21,16 @@
 		#define C78_API
 	#endif // C78_BUILD_DLL
 
+#ifdef C78_DYN_LINK
+	#ifdef C78_BUILD_DLL
+		#define C78_API __attribute__((visibility("default")))
+	#else
+		#define C78_API __declspec(dllimport)
+	#endif // C78_BUILD_DLL
+#else
+	#define C78_API
+#endif
+ 
 #include <stdio.h>
 #include <signal.h>
 #define DEBUG_BREAK raise(SIGTRAP)

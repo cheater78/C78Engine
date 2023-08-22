@@ -46,7 +46,7 @@ namespace C78e {
 			m_ImGuiLayer->begin();
 
 			for (Layer* layer : m_LayerStack) {
-				C78_CORE_INFO(layer->getName());
+				//C78_CORE_INFO(layer->getName());
 				layer->onImGuiRender();
 			}
 				
