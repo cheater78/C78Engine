@@ -77,7 +77,8 @@ project "C78Engine"
 		links{
 			"GLFW",
 			"GLAD",
-			"opengl32.lib"
+			"opengl32.lib",
+			"ImGui"
 		}
 
 		postbuildcommands
@@ -99,7 +100,8 @@ project "C78Engine"
 		links{
 			"GLFW",
 			"GLAD",
-			"GL"
+			"GL",
+			"ImGui"
 		}
 
 		postbuildcommands
@@ -130,6 +132,7 @@ project "C78TestApp"
 	kind "ConsoleApp"
 	language "C++"
 
+	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	files
@@ -158,7 +161,7 @@ project "C78TestApp"
 		staticruntime "On"
 		systemversion "latest"
 
-		targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
+		
 
 		defines{
 			"C78_PLATFORM_WINDOWS"
@@ -168,8 +171,6 @@ project "C78TestApp"
 		cppdialect "C++20"
 		staticruntime "On"
 		systemversion "latest"
-		
-		targetdir  ("bin/" .. outputdir .. "/")
 
 		defines{
 			"C78_PLATFORM_LINUX"

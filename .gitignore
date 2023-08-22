@@ -407,3 +407,7 @@ bin-int
 vendor/premake/*
 
 .idea/
+
+*.vcxproj
+*.sln
+*Makefile

@@ -17,7 +17,7 @@ public:
 	}
 
 	virtual void onImGuiRender() override {
-        if (!m_active) return;
+        if (!m_active || true) return;
 
         ImGui::Begin(c_Title.c_str(), &m_active);
         if (ImGui::SmallButton("[Debug] Add 5 entries"))

@@ -84,7 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -95,7 +95,7 @@
       <ImportLibrary>..\bin\Debug-windows-x86_64\C78Engine\C78Engine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-x86_64\C78Engine\C78Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Debug-windows-x86_64\C78TestApp &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Debug-windows-x86_64\C78TestApp &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Debug-windows-x86_64\C78Engine\C78Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Debug-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Debug-windows-x86_64 &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -111,7 +111,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -123,7 +123,7 @@
       <ImportLibrary>..\bin\Release-windows-x86_64\C78Engine\C78Engine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-x86_64\C78Engine\C78Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Release-windows-x86_64\C78TestApp &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Release-windows-x86_64\C78TestApp &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Release-windows-x86_64\C78Engine\C78Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Release-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Release-windows-x86_64 &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -139,7 +139,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -151,7 +151,7 @@
       <ImportLibrary>..\bin\Dist-windows-x86_64\C78Engine\C78Engine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Dist-windows-x86_64\C78Engine\C78Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Dist-windows-x86_64\C78TestApp &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Dist-windows-x86_64\C78TestApp &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Dist-windows-x86_64\C78Engine\C78Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Dist-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\C78Engine\C78Engine.dll ..\bin\Dist-windows-x86_64 &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
