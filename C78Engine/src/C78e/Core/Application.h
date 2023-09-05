@@ -1,12 +1,14 @@
 #pragma once
 
 #include "C78e/Core/Core.h"
-#include "Window.h"
-#include "C78e/Events/Event.h"
-#include "C78e/Events/ApplicationEvent.h"
+#include "C78e/Core/Timer.h"
+#include "C78e/Core/Window.h"
 #include "C78e/Core/LayerStack.h"
 #include <C78e/ImGui/ImGuiLayer.h>
-#include "C78e/Console/Console.h"
+#include "C78e/Core/Console.h"
+#include "C78e/Events/Event.h"
+#include "C78e/Events/ApplicationEvent.h"
+
 
 namespace C78e {
 
@@ -19,8 +21,8 @@ namespace C78e {
 		void run();
 		void onEvent(Event& e);
 
-		void pushLayer(Layer* layer);
-		void pushOverlay(Layer* layer);
+		void pushLayer(Ref<Layer> layer);
+		void pushOverlay(Ref<Layer> layer);
 
 		Window& getWindow() { return *m_Window.get(); }
 
@@ -30,18 +32,22 @@ namespace C78e {
 		//Singelton Application
 		static Application* s_App;
 
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		bool m_Running = true;
 
+		Scope<Timer> m_RunTime;
 		LayerStack m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer;
-		Console* m_Console;
+		Ref<ImGuiLayer> m_ImGuiLayer;
+		Ref<Console> m_Console;
 
+
+		//Events
 		bool onWindowClose(WindowCloseEvent e);
-		bool onCMDClose(std::string cmd);
+		bool onWindowResize(WindowResizeEvent e);
 
-		void closeWindow();
-		
+
+		//Commands
+		void onCMDClose(std::string cmd);
 	};
 	
 	Application* createApplication();

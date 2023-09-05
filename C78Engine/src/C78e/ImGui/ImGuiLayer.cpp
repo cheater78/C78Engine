@@ -9,6 +9,8 @@
 
 #include "C78e/Core/Application.h"
 
+#include "C78e/Renderer/RendererAPI.h"
+
 // TEMPORARY
 #include <glad.h>
 #include <GLFW/glfw3.h>
@@ -35,8 +37,8 @@ namespace C78e {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 		float fontSize = 18.0f;// *2.0f;
-		//io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
-		//io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -59,7 +61,7 @@ namespace C78e {
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		ImGui_ImplOpenGL3_Init("#version 450");
 
 		C78_CORE_INFO("ImGui Layer created.");
 	}
@@ -81,6 +83,7 @@ namespace C78e {
 	
 	void ImGuiLayer::begin()
 	{
+		
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();

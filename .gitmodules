@@ -24,3 +24,6 @@
 	url = https://github.com/TheCherno/glfw
 [submodule "glfw"]
 	branch = master
+[submodule "C78Engine/vendor/msdf-atlas-gen"]
+	path = C78Engine/vendor/msdf-atlas-gen
+	url = https://github.com/TheCherno/msdf-atlas-gen.git

@@ -1,3 +1,5 @@
+include "Dependencies.lua"
+
 workspace "C78Engine"
 	architecture "x64"
 	startproject "C78TestApp"
@@ -9,17 +11,13 @@ workspace "C78Engine"
 		"Dist"
 	}
 
-vulkanSDKdir = "%{prj.name}/vendor/VulkanSDK/Include"
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-IncludeDir = {}
-IncludeDir["GLFW"] = "C78Engine/vendor/glfw/include"
-IncludeDir["GLAD"] = "C78Engine/vendor/glad/"
-IncludeDir["IMGUI"] = "C78Engine/vendor/imgui/"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "C78Engine/vendor/glfw"
 include "C78Engine/vendor/glad"
 include "C78Engine/vendor/imgui"
+include "C78Engine/vendor/msdf-atlas-gen"
 
 filter "system:windows"
 	argsym = "/"
@@ -32,8 +30,8 @@ project "C78Engine"
 	location "C78Engine"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++20"
-	staticruntime "on"
+	cppdialect "C++17"
+	staticruntime "off"
 
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -48,16 +46,26 @@ project "C78Engine"
 	includedirs
 	{
 		"%{prj.name}/src/",
-		"%{prj.name}/vendor/entt/single_include",
-		"%{prj.name}/vendor/glm/glm",
-		"%{prj.name}/vendor/imgui",
-		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/vendor/stb",
-		"%{prj.name}/vendor/tinyobjloader",
-		"%{vulkanSDKdir}",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.IMGUI}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.IMGUI}",
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.msdf_atlas_gen}",
+		"%{IncludeDir.msdfgen}",
+		"%{IncludeDir.VulkanSDK}",
+		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/tinyobjloader"
+	}
+	
+	links
+	{
+		"GLFW",
+		"Glad",
+		"ImGui",
+		"msdf-atlas-gen",
 	}
 	
 	filter "action:vs*"
@@ -66,7 +74,6 @@ project "C78Engine"
 
 
 	filter "system:windows"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines{
@@ -74,16 +81,12 @@ project "C78Engine"
 			"C78_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
-
+		
 		links{
-			"GLFW",
-			"GLAD",
-			"opengl32.lib",
-			"ImGui"
+			"opengl32.lib"
 		}
 		
 	filter "system:linux"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines{
@@ -93,34 +96,51 @@ project "C78Engine"
 		}
 
 		links{
-			"GLFW",
-			"GLAD",
-			"GL",
-			"ImGui"
+			"GL"
 		}
 
 	filter "configurations:Debug"
 		defines{ "C78_DEBUG", "C78_ENABLE_ASSERTS" }
 		runtime "Debug"
 		symbols "on"
+		
+		links
+		{
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+		}
 
 	filter "configurations:Release"
 		defines "C78_RELEASE"
 		runtime "Release"
 		optimize "on"
 
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
+
 	filter "configurations:Dist"
 		defines "C78_DIST"
 		runtime "Release"
 		optimize "on"
 
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
 
-project "C78TestApp"
-	location "C78TestApp"
+project "C78App"
+	location "C78App"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++20"
-	staticruntime "on"
+	cppdialect "C++17"
+	staticruntime "off"
 
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -136,6 +156,9 @@ project "C78TestApp"
 	{
 		"%{prj.name}/vendor/",
 		"C78Engine/vendor/spdlog/include",
+		"C78Engine/vendor/glm",
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.stb}",
 		"C78Engine/vendor/",
 		"C78Engine/src"
 	}

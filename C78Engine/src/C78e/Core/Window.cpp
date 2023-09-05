@@ -6,8 +6,8 @@
 #endif
 
 namespace C78e {
-	/*
-	Window* Window::Create(const WindowProps& props)
+	
+	Scope<Window> Window::create(const WindowProps& props)
 	{
 	#ifdef C78_PLATFORM_WINDOWS
 		return createScope<WindowsWindow>(props);
@@ -16,5 +16,5 @@ namespace C78e {
 		return nullptr;
 	#endif
 	}
-	*/
+	
 }

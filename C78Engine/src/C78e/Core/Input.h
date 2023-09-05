@@ -15,6 +15,8 @@ namespace C78e {
 
 		static bool isMouseButtonPressed(MouseCode button);
 		static glm::vec2 getMousePosition();
+		static void setMousePosition(glm::vec2 position) { setMousePosition(position.x, position.y); }
+		static void setMousePosition(float x, float y);
 		static float getMouseX();
 		static float getMouseY();
 	};

@@ -1,6 +1,8 @@
 #include "C78ePCH.h"
 #include "Platform/Windows/WindowsWindow.h"
 
+#include <C78e/Renderer/Renderer.h>
+
 #include "C78e/Events/ApplicationEvent.h"
 #include "C78e/Events/MouseEvent.h"
 #include "C78e/Events/KeyEvent.h"
@@ -15,8 +17,8 @@ namespace C78e {
 		C78_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::create(const WindowProps& props) {
-		return new WindowsWindow(props);
+	Scope<Window> Window::create(const WindowProps& props) {
+		return createScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props) {
@@ -44,7 +46,7 @@ namespace C78e {
 
 		{
 		#if defined(C78_DEBUG)
-			//if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
 				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 		#endif
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
@@ -52,7 +54,7 @@ namespace C78e {
 		}
 
 
-		m_Context = new OpenGLContext(m_Window);//GraphicsContext::Create(m_Window);
+		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -172,6 +174,32 @@ namespace C78e {
 
 	bool WindowsWindow::isVSync() const {
 		return m_Data.VSync;
+	}
+
+	MouseMode WindowsWindow::getMouseMode() {
+		return m_MouseMode;
+	}
+
+
+	void WindowsWindow::setMouseMode(MouseMode mouseMode) {
+		m_MouseMode = mouseMode;
+		int mode;
+		switch (mouseMode)
+		{
+		case C78e::NORMAL:
+			mode = GLFW_CURSOR_NORMAL;
+			break;
+		case C78e::HIDDEN:
+			mode = GLFW_CURSOR_HIDDEN;
+			break;
+		case C78e::DISABLED:
+			mode = GLFW_CURSOR_DISABLED;
+			break;
+		default:
+			C78_CORE_ASSERT("Illegal Mouse Input Mode!");
+			break;
+		}
+		glfwSetInputMode(m_Window, GLFW_CURSOR, mode);
 	}
 
 }

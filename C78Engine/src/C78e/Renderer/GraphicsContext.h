@@ -9,7 +9,7 @@ namespace C78e {
 		virtual void init() = 0;
 		virtual void swapBuffers() = 0;
 
-		//static GraphicsContext* Create(void* window);
+		static Scope<GraphicsContext> Create(void* window);
 	};
 
 }

@@ -22,13 +22,19 @@ namespace C78e {
 		void setVSync(bool enabled) override;
 		bool isVSync() const override;
 
+		virtual MouseMode getMouseMode() override;
+		virtual void setMouseMode(MouseMode mouseMode) override;
+
 		virtual void* getNativeWindow() const { return m_Window; }
+
+		virtual WindowProps getWindowProperties() const { return {m_Data.Title, m_Data.Width, m_Data.Height }; }
+
 	private:
 		virtual void init(const WindowProps& props);
 		virtual void shutdown();
 	private:
 		GLFWwindow* m_Window;
-		GraphicsContext* m_Context;
+		Scope<GraphicsContext> m_Context;
 
 		struct WindowData
 		{
@@ -41,6 +47,8 @@ namespace C78e {
 		};
 
 		WindowData m_Data;
+
+		MouseMode m_MouseMode = MouseMode::NORMAL;
 	};
 
 }

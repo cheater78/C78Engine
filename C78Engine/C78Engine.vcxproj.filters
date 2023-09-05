@@ -13,8 +13,23 @@
     <Filter Include="C78e\ImGui">
       <UniqueIdentifier>{A62057CB-92D8-9818-FBDF-7174E7B63309}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C78e\Renderer">
+      <UniqueIdentifier>{A20D22F2-0ECE-9D28-D708-E7A54388E204}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Scene">
+      <UniqueIdentifier>{991807CC-85D0-4819-EED7-2175DAAEE309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Utils">
+      <UniqueIdentifier>{DCAC34CC-C864-7619-316C-4F751D43110A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Linux">
+      <UniqueIdentifier>{C9310D94-B5FF-009A-9E93-71C08A00DDFE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
@@ -25,10 +40,22 @@
     <ClInclude Include="src\C78e\Core\Application.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78e\Core\Assert.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\Buffer.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\Console.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\C78e\Core\Core.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Core\EntryPoint.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\FileSystem.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Core\Input.h">
@@ -49,10 +76,19 @@
     <ClInclude Include="src\C78e\Core\MouseCodes.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Window.h">
+    <ClInclude Include="src\C78e\Core\PlatformDetection.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\engine.h">
+    <ClInclude Include="src\C78e\Core\Timer.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\Timestep.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\UUID.h">
+      <Filter>C78e\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Core\Window.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Events\ApplicationEvent.h">
@@ -70,16 +106,120 @@
     <ClInclude Include="src\C78e\ImGui\ImGuiLayer.h">
       <Filter>C78e\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Buffer.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Camera.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\EditorCamera.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Font.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Framebuffer.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\GraphicsContext.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\MSDFData.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\OrthographicCamera.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\OrthographicCameraController.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\RenderCommand.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Renderer.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Renderer2D.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Renderer3D.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\RendererAPI.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Shader.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Texture.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\UniformBuffer.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\VertexArray.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Scene\Components.h">
+      <Filter>C78e\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Scene\Entity.h">
+      <Filter>C78e\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Scene\Scene.h">
+      <Filter>C78e\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Scene\SceneCamera.h">
+      <Filter>C78e\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Scene\ScriptableEntity.h">
+      <Filter>C78e\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Utils\PlatformUtils.h">
+      <Filter>C78e\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\C78ePCH.h" />
+    <ClInclude Include="src\Platform\Linux\LinuxWindow.h">
+      <Filter>Platform\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Console\Console.h" />
-    <ClInclude Include="src\C78e\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\C78e\Core\Types.h" />
+    <ClInclude Include="src\C78e\Renderer\Model.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\C78e\Core\Application.cpp">
+      <Filter>C78e\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Core\Console.cpp">
+      <Filter>C78e\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Core\FileSystem.cpp">
       <Filter>C78e\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\C78e\Core\Layer.cpp">
@@ -91,6 +231,9 @@
     <ClCompile Include="src\C78e\Core\Log.cpp">
       <Filter>C78e\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78e\Core\UUID.cpp">
+      <Filter>C78e\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\C78e\Core\Window.cpp">
       <Filter>C78e\Core</Filter>
     </ClCompile>
@@ -100,15 +243,100 @@
     <ClCompile Include="src\C78e\ImGui\ImGuiLayer.cpp">
       <Filter>C78e\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Buffer.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\EditorCamera.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Font.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Framebuffer.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\GraphicsContext.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\OrthographicCamera.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\OrthographicCameraController.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\RenderCommand.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Renderer.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Renderer2D.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Renderer3D.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\RendererAPI.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Shader.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Texture.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\UniformBuffer.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\VertexArray.cpp">
+      <Filter>C78e\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Scene\Entity.cpp">
+      <Filter>C78e\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Scene\Scene.cpp">
+      <Filter>C78e\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Scene\SceneCamera.cpp">
+      <Filter>C78e\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\C78ePCH.cpp" />
+    <ClCompile Include="src\Platform\Linux\LinuxWindow.cpp">
+      <Filter>Platform\Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Console\Console.cpp" />
-    <ClCompile Include="src\C78e\Renderer\GraphicsContext.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\C78e\Renderer\Model.cpp" />
   </ItemGroup>
 </Project>

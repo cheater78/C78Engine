@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "C78e/Events/Event.h"
+#include "C78e/Core/Timestep.h"
 
 namespace C78e {
 
@@ -13,7 +14,7 @@ namespace C78e {
 
 		virtual void onAttach() {}
 		virtual void onDetach() {}
-		virtual void onUpdate(/* Timestep ts */) {}
+		virtual void onUpdate(Timestep ts) {}
 		virtual void onImGuiRender() {}
 		virtual void onEvent(Event& event) {}
 

@@ -18,6 +18,12 @@ namespace C78e {
 		}
 	};
 
+	enum MouseMode {
+		NORMAL = 0,
+		HIDDEN = 1,
+		DISABLED = 2
+	};
+
 	// Interface representing a desktop system based Window
 	class Window {
 	public:
@@ -36,8 +42,12 @@ namespace C78e {
 		virtual bool isVSync() const = 0;
 
 		virtual void* getNativeWindow() const = 0;
+		virtual WindowProps getWindowProperties() const = 0;
+		
+		virtual MouseMode getMouseMode() = 0;
+		virtual void setMouseMode(MouseMode mouseMode) = 0;
 
-		static Window* create(const WindowProps& props = WindowProps());
+		static Scope<Window> create(const WindowProps& props = WindowProps());
 	};
 
 }

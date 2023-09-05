@@ -407,7 +407,7 @@ bin/
 bin-int/
 
 vendor/premake/*
-
+C78eApp/assets
 .idea/
 
 *.vcxproj

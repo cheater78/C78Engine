@@ -7,6 +7,7 @@
 #include <functional>
 #include <filesystem>
 
+#include <limits>
 #include <cstdint>
 #include <string>
 #include <sstream>
@@ -20,3 +21,10 @@
 
 #endif // C78_PLATFORM_WINDOWS
 
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <entt/entt.hpp>
+
+#include "C78e/Core/Core.h"
+#include "C78e/Core/Assert.h"
+#include "C78e/Core/Log.h"
