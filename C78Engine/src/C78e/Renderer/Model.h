@@ -18,8 +18,8 @@ namespace C78e {
 
 
 	private:
-		std::vector<Vertex> m_Vertecies{};
-		std::vector<uint32_t> m_Indicies{};
+		Ref<std::vector<Vertex>> m_Vertecies;
+		Ref<std::vector<uint32_t>> m_Indicies;
 
 		bool m_HasIndicies = false;
 	};

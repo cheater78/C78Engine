@@ -4,6 +4,8 @@
 #include "C78e/Core/Log.h"
 #include "C78e/Core/Timestep.h"
 #include "C78e/Core/Application.h"
+#include "C78e/Core/Types.h"
+#include "C78e/Core/UUID.h"
 
 #include "C78e/Core/Layer.h"
 #include "C78e/ImGui/ImGuiLayer.h"
@@ -21,7 +23,10 @@
 #include "C78e/Renderer/Buffer.h"
 #include "C78e/Renderer/VertexArray.h"
 #include "C78e/Renderer/UniformBuffer.h"
+
+#include "C78e/Renderer/Font.h"
 #include "C78e/Renderer/Shader.h"
+#include "C78e/Renderer/Model.h"
 #include "C78e/Renderer/Texture.h"
 
 #include "C78e/Renderer/Camera.h"
@@ -34,3 +39,5 @@
 #include "C78e/Scene/ScriptableEntity.h"
 
 #include "C78e/Core/EntryPoint.h"
+
+

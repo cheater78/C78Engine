@@ -1,7 +1,7 @@
 #pragma once
+#include "C78e/Scene/Entity.h"
 
 #include "C78e/Core/Timestep.h"
-#include "C78e/Core/UUID.h"
 #include "C78e/Renderer/EditorCamera.h"
 
 

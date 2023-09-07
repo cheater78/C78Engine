@@ -1,10 +1,9 @@
 #pragma once
-
-#include "C78e/Core/UUID.h"
-#include "Scene.h"
 #include "Components.h"
 
 namespace C78e {
+
+	class Scene;
 
 	class Entity
 	{

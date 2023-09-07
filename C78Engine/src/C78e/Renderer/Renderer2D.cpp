@@ -562,7 +562,7 @@ namespace C78e {
 		double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
 		double y = 0.0;
 
-		const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
+		const float spaceGlyphAdvance = static_cast<float>(fontGeometry.getGlyph(' ')->getAdvance());
 		
 		for (size_t i = 0; i < string.size(); i++)
 		{

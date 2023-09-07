@@ -7,18 +7,18 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
 layout(location = 2) in vec3 a_Normal;
 layout(location = 3) in vec2 a_TexCoord;
-layout(location = 5) in float a_TexIndex;
-layout(location = 7) in int a_EntityID;
+layout(location = 4) in float a_TexIndex;
+layout(location = 5) in int a_EntityID;
 
 layout(std140, binding = 0) uniform CameraUniformBuffer
 {
-	glm::mat4 projMat;
-	glm::mat4 viewMat;
-	glm::mat4 invViewMat{ 1.f };
+	mat4 u_ProjectionMat;
+	mat4 u_ViewMat;
+	mat4 u_InvViewMat;
 };
 
 layout(std140, binding = 1) uniform EntityUniformBuffer {
-	glm::mat4 transform;
+	mat4 u_TransformMat;
 };
 
 struct VertexOutput
@@ -38,7 +38,7 @@ void main()
 	v_TexIndex = a_TexIndex;
 	v_EntityID = a_EntityID;
 
-	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+	gl_Position = u_ProjectionMat * u_ViewMat * u_TransformMat * vec4(a_Position, 1.0);
 }
 
 #type fragment

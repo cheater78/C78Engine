@@ -1,18 +1,18 @@
 #pragma once
+#include "C78ePCH.h"
 
 #include "SceneCamera.h"
+#include "C78e/Core/Types.h"
 #include "C78e/Core/UUID.h"
-#include "C78e/Renderer/Texture.h"
 #include "C78e/Renderer/Font.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
-#include <C78e/Renderer/Model.h>
+#include "C78e/Renderer/Model.h"
 
 namespace C78e {
+	// Forward declaration
+	class Model;
+	class Texture2D;
+	class Font;
+	class ScriptableEntity;
 
 	struct IDComponent
 	{
@@ -62,7 +62,7 @@ namespace C78e {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 	};
-
+	
 	struct ModelComponent {
 		Ref<Model> model;
 
@@ -106,9 +106,6 @@ namespace C78e {
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent&) = default;
 	};
-
-	// Forward declaration
-	class ScriptableEntity;
 
 	struct NativeScriptComponent
 	{

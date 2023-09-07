@@ -1,18 +1,23 @@
 #pragma once
-#include "C78e.h"
-
+#include "C78ePCH.h"
 
 namespace C78e {
 
 	struct Vertex {
+	public:
 		glm::vec3 Position;
 		glm::vec4 Color;
 		glm::vec3 Normal;
 		glm::vec2 TexCoord;
 		float TexIndex;
-
+		
 		// Editor-only
 		int EntityID;
+
+		Vertex() = default;
+		Vertex(glm::vec3 position, glm::vec4 color, glm::vec3 normal, glm::vec2 texCoord, float texIndex, int entityID)
+			: Position(position), Color(color), Normal(normal), TexCoord(texCoord), TexIndex(texIndex), EntityID(entityID)
+		{}
 	};
 
 	struct AmbientLight {
@@ -44,8 +49,8 @@ namespace C78e {
 
 	struct CameraUniform
 	{
-		glm::mat4 projMat;
-		glm::mat4 viewMat;
+		glm::mat4 projMat{ 1.f };
+		glm::mat4 viewMat{ 1.f };
 		glm::mat4 invViewMat{ 1.f };
 	};
 
