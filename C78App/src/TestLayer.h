@@ -19,34 +19,41 @@ public:
         C78e::Entity camera = m_Scene->createEntity("MainCamera");
         auto& camComponent = camera.addComponent<C78e::CameraComponent>();
         camComponent.Primary = true;
-        camComponent.Camera.SetPerspective(45.f, 0.001f, 1000.f);
+        camComponent.Camera.SetPerspective(45.f, 0.01f, 10000.f);
         camComponent.Camera.SetViewportSize(m_Window.getWidth(), m_Window.getHeight());
         auto& camTransform = camera.getComponent<C78e::TransformComponent>();
-        camTransform.Translation = glm::vec3(0.f, 0.f, 0.f);
+        camTransform.Translation = glm::vec3(0.f, 1.f, 2.f);
         
+
+        C78e::RenderCommand::Init();
         C78e::RenderCommand::SetClearColor(glm::vec4(.1f, .2f, .25f, 1.f));
         C78e::Renderer3D::Init();
         
-        C78e::Entity quad = m_Scene->createEntity("Quad");
-        
-        std::vector<C78e::Vertex> vertecies{
-            C78e::Vertex( glm::vec3{-.5f, -.5f, -.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{0.f, 0.f},  2.f, static_cast<int>(quad) ),
-            C78e::Vertex( glm::vec3{+.5f, -.5f, -.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{1.f, 0.f},  2.f, static_cast<int>(quad) ),
-            C78e::Vertex( glm::vec3{+.5f, +.5f, -.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{1.f, 1.f},  2.f, static_cast<int>(quad) ),
-            C78e::Vertex( glm::vec3{-.5f, +.5f, -.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{0.f, 1.f},  2.f, static_cast<int>(quad) ),
-            C78e::Vertex( glm::vec3{-.5f, -.5f, +.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{0.f, 0.f},  1.f, static_cast<int>(quad) ),
-            C78e::Vertex( glm::vec3{+.5f, -.5f, +.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{1.f, 0.f},  1.f, static_cast<int>(quad) ),
-            C78e::Vertex( glm::vec3{+.5f, +.5f, +.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{1.f, 1.f},  1.f, static_cast<int>(quad) ),
-            C78e::Vertex( glm::vec3{-.5f, +.5f, +.5f},  glm::vec4{1.f, 1.f, 1.f, 1.0f},  glm::vec3{1.f, 1.f, 1.f},  glm::vec2{0.f, 1.f},  1.f, static_cast<int>(quad) )
-        };
-        std::vector<uint32_t> indicies{
-            0, 1, 2,  2, 3, 0,
-            4, 5, 6,  6, 7, 4
-        };
-        quad.addComponent<C78e::ModelComponent>(vertecies, indicies);
-        auto& quadTrans = quad.getComponent<C78e::TransformComponent>();
-        quadTrans.Translation = glm::vec3(0.f, 0.f, -2.f);
+        C78e::ModelManager::get()->load("triag2",   C78e::GenericShape::Triangle::  getMesh(glm::vec4(1.f, 0.f, 0.f, 1.f), 0));
+        C78e::ModelManager::get()->load("quad1",    C78e::GenericShape::Quad::      getMesh(glm::vec4(.2f, .2f, .3f, 1.1f), 0));
+        C78e::ModelManager::get()->load("cube2",    C78e::GenericShape::Cube::      getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 2));
 
+        C78e::Entity triag = m_Scene->createEntity("Triag");
+        auto& triagMesh = triag.addComponent<C78e::MeshComponent>();
+        triagMesh.mesh = C78e::ModelManager::get()->get("triag2");
+        auto& triagTrans = triag.getComponent<C78e::TransformComponent>();
+        triagTrans.Translation = glm::vec3(0.f, 1.5f, -5.f);
+        triagTrans.Scale = glm::vec3(5.f, 5.f, 1.f);
+
+        C78e::Entity quad = m_Scene->createEntity("Quad");
+        auto& quadMesh = quad.addComponent<C78e::MeshComponent>();
+        quadMesh.mesh = C78e::ModelManager::get()->get("quad1");
+        auto& quadTrans = quad.getComponent<C78e::TransformComponent>();
+        quadTrans.Translation = glm::vec3(0.f, 0.f, 0.f);
+        quadTrans.Rotation = glm::vec3(glm::half_pi<float>(), 0.f, 0.f);
+        quadTrans.Scale = glm::vec3(10.f, 10.f, 1.f);
+
+        C78e::Entity cube = m_Scene->createEntity("Cube");
+        auto& cubeMesh = cube.addComponent<C78e::MeshComponent>();
+        cubeMesh.mesh = C78e::ModelManager::get()->get("cube2");
+        auto& cubeTrans = cube.getComponent<C78e::TransformComponent>();
+        cubeTrans.Translation = glm::vec3(-2.f, 0.51f, -2.f);
+        
     }
 
     void onDetach() {
@@ -111,6 +118,7 @@ public:
     }
   
     bool onWindowResize(C78e::WindowResizeEvent e) {
+        C78e::RenderCommand::SetViewport(0, 0, e.getWidth(), e.getHeight());
         m_Scene->getPrimaryCameraEntity().getComponent<C78e::CameraComponent>().Camera.SetViewportSize(e.getWidth(), e.getHeight());
         return true;
     }
@@ -118,7 +126,7 @@ public:
     void onImGuiRender() override {
         if (!m_active) return;
         ImGui::Begin("Info");
-        ImGui::Text(("FPS: " + std::to_string((1/m_LastFrameTime))).c_str());
+        ImGui::Text(("FPS: " + std::to_string((uint32_t)(1/m_LastFrameTime))).c_str());
         ImGui::Text(("DrawCalls: " + std::to_string(C78e::Renderer3D::GetStats().DrawCalls)).c_str());
         ImGui::Text(("Vertecies: " + std::to_string(C78e::Renderer3D::GetStats().Vertecies)).c_str());
         ImGui::Text(("Indicies: " + std::to_string(C78e::Renderer3D::GetStats().Indicies)).c_str());

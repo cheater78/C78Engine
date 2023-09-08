@@ -2,12 +2,13 @@
 #include "C78e/Renderer/Renderer3D.h"
 
 #include "C78e/Core/Types.h"
-#include "C78e/Renderer/Model.h"
-#include "C78e/Renderer/Texture.h"
+#include "C78e/Renderer/Assets/Model/Mesh.h"
+#include "C78e/Renderer/Assets/Texture/Texture.h"
 #include "C78e/Renderer/Shader.h"
 #include "C78e/Renderer/vertexArray.h"
 #include "C78e/Renderer/UniformBuffer.h"
 #include "C78e/Renderer/RenderCommand.h"
+#include "C78e/Renderer/Assets/Texture/TextureManager.h"
 
 #include "MSDFData.h"
 
@@ -16,7 +17,7 @@ namespace C78e {
 	C78e::Renderer3D::Renderer3DData Renderer3D::s_Data;
 
 	void Renderer3D::Init() {
-
+		
 		s_Data.whiteTexture = Texture2D::Create(TextureSpecification());
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
@@ -29,10 +30,9 @@ namespace C78e {
 
 		s_Data.TextureSlotIndex = 0;
 		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = s_Data.whiteTexture;
-		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78e::Texture2D::Create("assets/textures/bird.png");
-		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78e::Texture2D::Create("assets/textures/Top.png");
+		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78e::TextureManager::get()->get_s("assets/textures/bird.png");
+		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78e::TextureManager::get()->get_s("assets/textures/Top.png");
 		
-
 		s_Data.cameraUniformBuffer = UniformBuffer::Create(sizeof(CameraUniform), 0);
 	}
 
@@ -49,32 +49,31 @@ namespace C78e {
 	}
 
 	void Renderer3D::submit(Ref<Scene> scene) {
-		auto entitiesToRender = scene->getAllEntitiesWith<ModelComponent>();
+		auto entitiesToRender = scene->getAllEntitiesWith<MeshComponent>();
 		s_Data.shader->Bind();
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 			s_Data.TextureSlots[i]->Bind(i);
 			
 		for (auto& enttity : entitiesToRender) {
 			Entity entity(enttity, scene.get());
-			Model& model = *entity.getComponent<ModelComponent>().model.get();
+			Mesh& mesh = *entity.getComponent<MeshComponent>().mesh.get();
 
-			s_Data.Stats.Vertecies = model.getVertexData().size();
-			s_Data.Stats.Indicies = model.getIndexData().size();
+			s_Data.Stats.Vertecies += mesh.getVertexData().size();
+			s_Data.Stats.Indicies += mesh.getIndexData().size();
 
 			s_Data.vertexArray = VertexArray::Create();
 
-			s_Data.vertexBuffer = VertexBuffer::Create((float*)model.getVertexData().data(), model.getVertexData().size() * sizeof(Vertex));
+			s_Data.vertexBuffer = VertexBuffer::Create((float*)mesh.getVertexData().data(), mesh.getVertexData().size() * sizeof(Vertex));
 			s_Data.vertexBuffer->SetLayout({
 				{ ShaderDataType::Float3, "a_Position"     },
 				{ ShaderDataType::Float4, "a_Color"        },
 				{ ShaderDataType::Float3, "a_Normal"       },
 				{ ShaderDataType::Float2, "a_TexCoord"     },
-				{ ShaderDataType::Float,  "a_TexIndex"     },
-				{ ShaderDataType::Int,    "a_EntityID"     }
+				{ ShaderDataType::Float,  "a_TexIndex"     }
 				});
 			s_Data.vertexArray->AddVertexBuffer(s_Data.vertexBuffer);
 
-			auto indexBuffer = C78e::IndexBuffer::Create(model.getIndexData().data(), static_cast<uint32_t>(model.getIndexData().size()));
+			auto indexBuffer = C78e::IndexBuffer::Create(mesh.getIndexData().data(), static_cast<uint32_t>(mesh.getIndexData().size()));
 			indexBuffer->Bind();
 			s_Data.vertexArray->SetIndexBuffer(indexBuffer);
 

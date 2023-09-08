@@ -26,8 +26,9 @@
 
 #include "C78e/Renderer/Font.h"
 #include "C78e/Renderer/Shader.h"
-#include "C78e/Renderer/Model.h"
-#include "C78e/Renderer/Texture.h"
+#include "C78e/Renderer/Assets/Model/Mesh.h"
+#include "C78e/Renderer/Assets/Texture/Texture.h"
+#include "C78e/Renderer/Assets/Texture/TextureManager.h"
 
 #include "C78e/Renderer/Camera.h"
 #include "C78e/Renderer/EditorCamera.h"
@@ -37,6 +38,9 @@
 #include "C78e/Scene/Entity.h"
 #include "C78e/Scene/Scene.h"
 #include "C78e/Scene/ScriptableEntity.h"
+#include "C78e/Renderer/GenericShape.h"
+#include "C78e/Renderer/Assets/Texture/TextureManager.h"
+#include "C78e/Renderer/Assets/Model/ModelManager.h"
 
 #include "C78e/Core/EntryPoint.h"
 

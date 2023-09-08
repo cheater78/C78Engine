@@ -1,23 +1,20 @@
 #include "C78ePCH.h"
-#include "Model.h"
+#include "Mesh.h"
 
 namespace C78e {
 
-	Model::Model()
+	Mesh::Mesh()
 		: m_Vertecies(createRef<std::vector<Vertex>>()), m_Indicies(createRef<std::vector<uint32_t>>()), m_HasIndicies(true)
 	{ }
-	Model::Model(std::vector<Vertex> vertecies, std::vector<uint32_t> indicies)
+	Mesh::Mesh(std::vector<Vertex> vertecies, std::vector<uint32_t> indicies)
 		: m_Vertecies(createRef<std::vector<Vertex>>(vertecies)), m_Indicies(createRef<std::vector<uint32_t>>(indicies)), m_HasIndicies(true)
 	{
 	}
-	Model::Model(const char* file)
+	Mesh::Mesh(const char* file)
 	{
 		//TODO: FileManager
 	}
 	
-
-	
-	
-	std::vector<Vertex>& Model::getVertexData() { return *m_Vertecies; }
-	std::vector<uint32_t>& Model::getIndexData() { return *m_Indicies; }
+	std::vector<Vertex>& Mesh::getVertexData() { return *m_Vertecies; }
+	std::vector<uint32_t>& Mesh::getIndexData() { return *m_Indicies; }
 }

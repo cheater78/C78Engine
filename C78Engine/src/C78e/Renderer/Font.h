@@ -3,7 +3,7 @@
 #include <filesystem>
 
 #include "C78e/Core/Core.h"
-#include "C78e/Renderer/Texture.h"
+#include "C78e/Renderer/Assets/Texture/Texture.h"
 
 namespace C78e {
 

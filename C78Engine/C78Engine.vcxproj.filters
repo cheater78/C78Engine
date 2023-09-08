@@ -130,7 +130,7 @@
     <ClInclude Include="src\C78e\Renderer\MSDFData.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Model.h">
+    <ClInclude Include="src\C78e\Renderer\Assets\Model\Mesh.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Renderer\OrthographicCamera.h">
@@ -157,7 +157,7 @@
     <ClInclude Include="src\C78e\Renderer\Shader.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Texture.h">
+    <ClInclude Include="src\C78e\Renderer\Assets\Texture\Texture.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Renderer\UniformBuffer.h">
@@ -215,6 +215,9 @@
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\GenericShape.h" />
+    <ClInclude Include="src\C78e\Renderer\Assets\Texture\TextureManager.h" />
+    <ClInclude Include="src\C78e\Renderer\Assets\Model\ModelManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\C78e\Core\Application.cpp">
@@ -262,7 +265,7 @@
     <ClCompile Include="src\C78e\Renderer\GraphicsContext.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Model.cpp">
+    <ClCompile Include="src\C78e\Renderer\Assets\Model\Mesh.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\C78e\Renderer\OrthographicCamera.cpp">
@@ -289,7 +292,7 @@
     <ClCompile Include="src\C78e\Renderer\Shader.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Texture.cpp">
+    <ClCompile Include="src\C78e\Renderer\Assets\Texture\Texture.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\C78e\Renderer\UniformBuffer.cpp">
@@ -344,5 +347,7 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Assets\Texture\TextureManager.cpp" />
+    <ClCompile Include="src\C78e\Renderer\Assets\Model\ModelManager.cpp" />
   </ItemGroup>
 </Project>

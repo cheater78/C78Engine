@@ -1,5 +1,5 @@
 #include "C78ePCH.h"
-#include "C78e/Renderer/Texture.h"
+#include "C78e/Renderer/Assets/Texture/Texture.h"
 
 #include "C78e/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"

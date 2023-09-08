@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78e/Renderer/Texture.h"
+#include "C78e/Renderer/Assets/Texture/Texture.h"
 
 #include <glad.h>
 

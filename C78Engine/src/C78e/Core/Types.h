@@ -10,13 +10,10 @@ namespace C78e {
 		glm::vec3 Normal;
 		glm::vec2 TexCoord;
 		float TexIndex;
-		
-		// Editor-only
-		int EntityID;
 
 		Vertex() = default;
-		Vertex(glm::vec3 position, glm::vec4 color, glm::vec3 normal, glm::vec2 texCoord, float texIndex, int entityID)
-			: Position(position), Color(color), Normal(normal), TexCoord(texCoord), TexIndex(texIndex), EntityID(entityID)
+		Vertex(glm::vec3 position, glm::vec4 color, glm::vec3 normal, glm::vec2 texCoord, float texIndex)
+			: Position(position), Color(color), Normal(normal), TexCoord(texCoord), TexIndex(texIndex)
 		{}
 	};
 

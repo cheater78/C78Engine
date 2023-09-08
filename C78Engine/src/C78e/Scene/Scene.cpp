@@ -323,7 +323,7 @@ namespace C78e {
 	}
 
 	template<>
-	void Scene::onComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
+	void Scene::onComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
 	{
 	}
 

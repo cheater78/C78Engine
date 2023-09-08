@@ -5,7 +5,7 @@
 #include "C78e/Core/Types.h"
 #include "C78e/Core/UUID.h"
 #include "C78e/Renderer/Font.h"
-#include "C78e/Renderer/Model.h"
+#include "C78e/Renderer/Assets/Model/Mesh.h"
 
 namespace C78e {
 	// Forward declaration
@@ -63,16 +63,16 @@ namespace C78e {
 		CameraComponent(const CameraComponent&) = default;
 	};
 	
-	struct ModelComponent {
-		Ref<Model> model;
+	struct MeshComponent {
+		Ref<Mesh> mesh;
 
-		ModelComponent() = default;
-		ModelComponent(const ModelComponent&) = default;
-		ModelComponent(std::vector<Vertex> vertecies, std::vector<uint32_t> indicies)
-			: model(createRef<Model>(vertecies, indicies))
+		MeshComponent() = default;
+		MeshComponent(const MeshComponent&) = default;
+		MeshComponent(std::vector<Vertex> vertecies, std::vector<uint32_t> indicies)
+			: mesh(createRef<Mesh>(vertecies, indicies))
 		{}
-		ModelComponent(const char* file)
-			: model(createRef<Model>(file))
+		MeshComponent(const char* file)
+			: mesh(createRef<Mesh>(file))
 		{}
 	};
 
