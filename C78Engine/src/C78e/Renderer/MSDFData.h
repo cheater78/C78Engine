@@ -5,7 +5,7 @@
 #undef INFINITE
 #include "msdf-atlas-gen.h"
 
-namespace C78e {
+namespace C78E {
 
 	struct MSDFData
 	{

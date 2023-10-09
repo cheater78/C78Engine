@@ -1,6 +1,6 @@
 #pragma once
 
-namespace C78e {
+namespace C78E {
 
 	enum class ShaderDataType
 	{
@@ -117,7 +117,7 @@ namespace C78e {
 		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
-	// Currently C78e only supports 32-bit index buffers
+	// Currently C78E only supports 32-bit index buffers
 	class IndexBuffer
 	{
 	public:

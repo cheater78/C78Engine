@@ -1,8 +1,8 @@
 #pragma once
 
-#include "C78e/Renderer/VertexArray.h"
+#include "C78E/Renderer/VertexArray.h"
 
-namespace C78e {
+namespace C78E {
 
 	class OpenGLVertexArray : public VertexArray
 	{

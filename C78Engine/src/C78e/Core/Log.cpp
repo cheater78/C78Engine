@@ -1,7 +1,7 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Log.h"
 
-namespace C78e {
+namespace C78E {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 	std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
 
@@ -25,7 +25,7 @@ namespace C78e {
 		coreSink->set_pattern("%^[%T] %n: %v%$");
 		sinks.push_back(coreSink);
 
-		s_CoreLogger = std::make_shared<spdlog::logger>("C78e", sinks.begin(), sinks.end());
+		s_CoreLogger = std::make_shared<spdlog::logger>("C78E", sinks.begin(), sinks.end());
 		s_CoreLogger->set_level(spdlog::level::trace);
 
 		sinks.pop_back();

@@ -1,7 +1,7 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "LayerStack.h"
 
-namespace C78e {
+namespace C78E {
 
 	LayerStack::~LayerStack()
 	{

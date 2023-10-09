@@ -1,10 +1,10 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/OrthographicCameraController.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/OrthographicCameraController.h"
 
-#include "C78e/Core/Input.h"
-#include "C78e/Core/KeyCodes.h"
+#include "C78E/Core/Input.h"
+#include "C78E/Core/KeyCodes.h"
 
-namespace C78e {
+namespace C78E {
 
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
 		: m_AspectRatio(aspectRatio), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel), m_Rotation(rotation)

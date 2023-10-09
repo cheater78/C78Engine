@@ -1,17 +1,17 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/Renderer2D.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/Renderer2D.h"
 
-#include "C78e/Renderer/VertexArray.h"
-#include "C78e/Renderer/Shader.h"
-#include "C78e/Renderer/UniformBuffer.h"
-#include "C78e/Renderer/RenderCommand.h"
+#include "C78E/Renderer/VertexArray.h"
+#include "C78E/Renderer/Shader.h"
+#include "C78E/Renderer/UniformBuffer.h"
+#include "C78E/Renderer/RenderCommand.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "MSDFData.h"
 
-namespace C78e {
+namespace C78E {
 
 	struct QuadVertex
 	{
@@ -297,7 +297,7 @@ namespace C78e {
 				s_Data.TextureSlots[i]->Bind(i);
 
 			s_Data.QuadShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+			RenderCommand::drawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 
@@ -307,7 +307,7 @@ namespace C78e {
 			s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
 
 			s_Data.CircleShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
+			RenderCommand::drawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 
@@ -317,8 +317,8 @@ namespace C78e {
 			s_Data.LineVertexBuffer->SetData(s_Data.LineVertexBufferBase, dataSize);
 
 			s_Data.LineShader->Bind();
-			RenderCommand::SetLineWidth(s_Data.LineWidth);
-			RenderCommand::DrawLines(s_Data.LineVertexArray, s_Data.LineVertexCount);
+			RenderCommand::setLineWidth(s_Data.LineWidth);
+			RenderCommand::drawLines(s_Data.LineVertexArray, s_Data.LineVertexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 		
@@ -331,7 +331,7 @@ namespace C78e {
 			s_Data.FontAtlasTexture->Bind(0);
 
 			s_Data.TextShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.TextVertexArray, s_Data.TextIndexCount);
+			RenderCommand::drawIndexed(s_Data.TextVertexArray, s_Data.TextIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 	}

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "C78e/Events/Event.h"
-#include "C78e/Core/KeyCodes.h"
+#include "C78E/Events/Event.h"
+#include "C78E/Core/KeyCodes.h"
 
-namespace C78e {
+namespace C78E {
 
 	class KeyEvent : public Event
 	{

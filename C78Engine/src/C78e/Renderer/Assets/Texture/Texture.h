@@ -1,10 +1,10 @@
 #pragma once
 
-#include "C78e/Core/Core.h"
+#include "C78E/Core/Core.h"
 
 #include <string>
 
-namespace C78e {
+namespace C78E {
 
 	enum class ImageFormat
 	{

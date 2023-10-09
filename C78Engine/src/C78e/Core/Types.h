@@ -1,7 +1,7 @@
 #pragma once
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 
-namespace C78e {
+namespace C78E {
 
 	struct Vertex {
 	public:
@@ -18,31 +18,33 @@ namespace C78e {
 	};
 
 	struct AmbientLight {
-		glm::vec4 color{};
+		glm::vec4 color{ 1.f, 1.f, 1.f, .0f };
 	};
 
 	struct DirectLight {
-		glm::vec3 direction{};
-		glm::vec4 color{};
+		glm::vec3 direction{0.f, -1.f, 0.f};
+		alignas(16) glm::vec4 color{ 1.f, 1.f, 1.f, 1.f };
 	};
 
 	struct PointLight {
-		glm::vec4 position{};
-		glm::vec4 color{};
+		glm::vec3 position{ 0.f, 0.f, 0.f };
+		alignas(16) glm::vec4 color{ 1.f, 1.f, 1.f, 1.f };
 	};
 
 	struct SpotLight {
-		glm::vec4 position{};
-		glm::vec4 color{};
-		alignas(16) float angle;
+		glm::vec3 position{ 0.f, 0.f, 0.f };
+		alignas(16) glm::vec3 direction{ 0.f, -1.f, 0.f };
+		alignas(16) glm::vec4 color{ 1.f, 1.f, 1.f, 1.f };
+		float angle = 30.f/180.f*glm::pi<float>();
 	};
+
+
+
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////                       UniformBuffer Types                      ////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 	struct CameraUniform
 	{
@@ -55,18 +57,19 @@ namespace C78e {
 #define MAX_POINT_LIGHTS 10
 #define MAX_SPOT_LIGHTS 10
 	struct SceneLightUniform {
-		AmbientLight ambientLight{ {1.f, 1.f, 1.f, .05f} };
+		AmbientLight ambientLight{ {1.f, 1.f, 1.f, .1f} };
 
-		DirectLight directLights[MAX_DIRECT_LIGHTS];
+		DirectLight directLights[MAX_DIRECT_LIGHTS]{};
 		int directLightCount = 0;
-		PointLight pointLights[MAX_POINT_LIGHTS];
+		alignas(16) PointLight pointLights[MAX_POINT_LIGHTS]{};
 		int pointLightCount = 0;
-		SpotLight spotLights[MAX_SPOT_LIGHTS];
+		alignas(16) SpotLight spotLights[MAX_SPOT_LIGHTS]{};
 		int spotLightCount = 0;
 	};
 
 	struct EntityUniform {
 		glm::mat4 transform;
+		glm::mat4 normalMat;
 	};
 
 }

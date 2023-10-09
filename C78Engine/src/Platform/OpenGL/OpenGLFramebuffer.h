@@ -1,8 +1,8 @@
 #pragma once
 
-#include "C78e/Renderer/Framebuffer.h"
+#include "C78E/Renderer/Framebuffer.h"
 
-namespace C78e {
+namespace C78E {
 
 	class OpenGLFramebuffer : public Framebuffer
 	{

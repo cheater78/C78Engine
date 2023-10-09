@@ -1,11 +1,11 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/Buffer.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/Buffer.h"
 
-#include "C78e/Renderer/Renderer.h"
+#include "C78E/Renderer/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
-namespace C78e {
+namespace C78E {
 
 	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{

@@ -1,8 +1,8 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/Renderer.h"
-#include "C78e/Renderer/Renderer2D.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/Renderer.h"
+#include "C78E/Renderer/Renderer2D.h"
 
-namespace C78e {
+namespace C78E {
 
 	Scope<Renderer::SceneData> Renderer::s_SceneData = createScope<Renderer::SceneData>();
 
@@ -10,7 +10,7 @@ namespace C78e {
 	{
 		//C78_PROFILE_FUNCTION();
 
-		RenderCommand::Init();
+		RenderCommand::init();
 		Renderer2D::Init();
 	}
 
@@ -21,7 +21,7 @@ namespace C78e {
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		RenderCommand::SetViewport(0, 0, width, height);
+		RenderCommand::setViewport(0, 0, width, height);
 	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera)
@@ -40,7 +40,7 @@ namespace C78e {
 		//shader->SetMat4("u_Transform", transform);
 
 		vertexArray->Bind();
-		RenderCommand::DrawIndexed(vertexArray);
+		RenderCommand::drawIndexed(vertexArray);
 	}
 
 }

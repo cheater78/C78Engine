@@ -1,27 +1,27 @@
 #pragma once
 
-#include "C78e/Scene/Scene.h"
+#include "C78E/Scene/Scene.h"
 
-#include "C78e/Core/Core.h"
-#include "C78e/Renderer/Buffer.h"
-#include "C78e/Renderer/VertexArray.h"
-#include "C78e/Renderer/UniformBuffer.h"
-#include "C78e/Renderer/Shader.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Renderer/Buffer.h"
+#include "C78E/Renderer/VertexArray.h"
+#include "C78E/Renderer/UniformBuffer.h"
+#include "C78E/Renderer/Shader.h"
 
-namespace C78e {
+namespace C78E {
 
 	class Renderer3D
 	{
 	public:
-		static void Init();
-		static void Shutdown();
+		static void init();
+		static void shutdown();
 
-		static void BeginScene(Entity camera);
+		static void beginScene(Entity camera);
 
 		static void submit(Ref<Scene> scene);
 
-		static void EndScene();
-		static void Flush();
+		static void endScene();
+		static void flush();
 
 		// Stats
 		struct Statistics
@@ -30,8 +30,8 @@ namespace C78e {
 			uint32_t Vertecies = 0;
 			uint32_t Indicies = 0;
 		};
-		static void ResetStats();
-		static Statistics GetStats();
+		static void resetStats();
+		static Statistics getStats();
 
 	private:
 
@@ -52,14 +52,15 @@ namespace C78e {
 
 			Ref<Scene> Scene;
 			Ref<UniformBuffer> cameraUniformBuffer;
+			Ref<UniformBuffer> sceneLightUniformBuffer;
 			CameraUniform cameraUniform;
 			Ref<UniformBuffer> entityUniformBuffer;
 		};
 
 		static Renderer3DData s_Data;
 
-		static void StartBatch();
-		static void NextBatch();
+		static void startBatch();
+		static void nextBatch();
 	};
 
 }

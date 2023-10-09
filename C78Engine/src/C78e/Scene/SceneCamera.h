@@ -1,8 +1,8 @@
 #pragma once
 
-#include "C78e/Renderer/Camera.h"
+#include "C78E/Renderer/Camera.h"
 
-namespace C78e {
+namespace C78E {
 
 	class SceneCamera : public Camera
 	{

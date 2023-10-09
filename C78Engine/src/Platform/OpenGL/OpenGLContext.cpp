@@ -1,12 +1,12 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 
-#include "C78e/Core/Log.h"
+#include "C78E/Core/Log.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
 #include <glad.h>
 
-namespace C78e {
+namespace C78E {
 
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 		: m_WindowHandle(windowHandle)
@@ -25,7 +25,7 @@ namespace C78e {
 		C78_CORE_INFO("  Renderer: {0}", (const char*)glGetString(GL_RENDERER));
 		C78_CORE_INFO("  Version: {0}", (const char*)glGetString(GL_VERSION));
 
-		C78_CORE_ASSERT(((GLVersion.major > 4) || ((GLVersion.major == 4) && (GLVersion.minor >= 5))), "C78e requires at least OpenGL version 4.5!");
+		C78_CORE_ASSERT(((GLVersion.major > 4) || ((GLVersion.major == 4) && (GLVersion.minor >= 5))), "C78E requires at least OpenGL version 4.5!");
 		
 	}
 

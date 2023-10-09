@@ -1,18 +1,18 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Application.h"
 
 #include "Core.h"
-#include "C78e/Events/ApplicationEvent.h"
-#include "C78e/Core/Log.h"
+#include "C78E/Events/ApplicationEvent.h"
+#include "C78E/Core/Log.h"
 
 #include <glad.h>
 
-#include "C78e/Renderer/Renderer2D.h"
-#include <C78e/Renderer/UniformBuffer.h>
-#include <C78e/Renderer/RenderCommand.h>
-#include <C78e/Renderer/Shader.h>
+#include "C78E/Renderer/Renderer2D.h"
+#include <C78E/Renderer/UniformBuffer.h>
+#include <C78E/Renderer/RenderCommand.h>
+#include <C78E/Renderer/Shader.h>
 
-namespace C78e {
+namespace C78E {
 
 	Application* Application::s_App = nullptr;
 
@@ -23,7 +23,7 @@ namespace C78e {
 
 		m_RunTime = createScope<Timer>();
 
-		m_Console = createRef<Console>("C78e Console");
+		m_Console = createRef<Console>("C78E Console");
 		m_Console->addCmd("exit", BIND_CALLBACK_FN(Application::onCMDClose));
 		m_Console->show(true);
 

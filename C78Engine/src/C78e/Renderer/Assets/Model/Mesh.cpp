@@ -1,7 +1,7 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Mesh.h"
 
-namespace C78e {
+namespace C78E {
 
 	Mesh::Mesh()
 		: m_Vertecies(createRef<std::vector<Vertex>>()), m_Indicies(createRef<std::vector<uint32_t>>()), m_HasIndicies(true)

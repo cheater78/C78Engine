@@ -1,11 +1,11 @@
 #pragma once
 
-#include "C78e/Renderer/RenderCommand.h"
+#include "C78E/Renderer/RenderCommand.h"
 
-#include "C78e/Renderer/OrthographicCamera.h"
-#include "C78e/Renderer/Shader.h"
+#include "C78E/Renderer/OrthographicCamera.h"
+#include "C78E/Renderer/Shader.h"
 
-namespace C78e {
+namespace C78E {
 
 	class Renderer
 	{
@@ -20,7 +20,7 @@ namespace C78e {
 
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 
-		static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
+		static RendererAPI::API GetAPI() { return RendererAPI::getAPI(); }
 	private:
 		struct SceneData
 		{

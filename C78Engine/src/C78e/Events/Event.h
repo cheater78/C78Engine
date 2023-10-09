@@ -1,9 +1,9 @@
 #pragma once
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 
-#include "C78e/Core/Core.h"
+#include "C78E/Core/Core.h"
 
-namespace C78e {
+namespace C78E {
 
 	enum class EventType {
 		None = 0,

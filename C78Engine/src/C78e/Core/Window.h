@@ -1,9 +1,9 @@
 #pragma once
 
-#include "C78e/Core/Core.h"
-#include "C78e/Events/Event.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Events/Event.h"
 
-namespace C78e {
+namespace C78E {
 
 	struct WindowProps {
 		std::string Title;
@@ -11,8 +11,8 @@ namespace C78e {
 		uint32_t Height;
 
 		WindowProps(const std::string& title = "C78Engine",
-			        uint32_t width = 1280,
-			        uint32_t height = 720)
+			        uint32_t width = 1920,
+			        uint32_t height = 1080)
 			: Title(title), Width(width), Height(height)
 		{
 		}

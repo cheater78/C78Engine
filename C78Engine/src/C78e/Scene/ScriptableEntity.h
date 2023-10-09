@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-namespace C78e {
+namespace C78E {
 
 	class ScriptableEntity
 	{

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "C78e/Core/Window.h"
+#include "C78E/Core/Window.h"
 
 #include <GLFW/glfw3.h>
 #include "Platform/OpenGL/OpenGLContext.h"
 
-namespace C78e {
+namespace C78E {
 
 	class WindowsWindow : public Window {
 	public:

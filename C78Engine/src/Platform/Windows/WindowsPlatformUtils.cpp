@@ -1,13 +1,13 @@
-#include "C78ePCH.h"
-#include "C78e/Utils/PlatformUtils.h"
-#include "C78e/Core/Application.h"
+#include "C78EPCH.h"
+#include "C78E/Utils/PlatformUtils.h"
+#include "C78E/Core/Application.h"
 
 #include <commdlg.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-namespace C78e {
+namespace C78E {
 
 	float Time::getTime()
 	{

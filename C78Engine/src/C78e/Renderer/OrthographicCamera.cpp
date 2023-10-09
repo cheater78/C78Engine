@@ -1,9 +1,9 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/OrthographicCamera.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/OrthographicCamera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace C78e {
+namespace C78E {
 
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
 		: m_ProjectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)), m_ViewMatrix(1.0f)

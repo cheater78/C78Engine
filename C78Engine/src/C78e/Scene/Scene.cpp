@@ -1,9 +1,9 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Scene.h"
 #include "Entity.h"
 
 #include "Components.h"
-#include "C78e/Renderer/Renderer2D.h"
+#include "C78E/Renderer/Renderer2D.h"
 #include "ScriptableEntity.h"
 
 #include <glm/glm.hpp>
@@ -11,7 +11,7 @@
 #include "Entity.h"
 
 
-namespace C78e {
+namespace C78E {
 
 	Scene::Scene() {
 	}
@@ -144,7 +144,7 @@ namespace C78e {
 				if (camera.Primary)
 				{
 					mainCamera = &camera.Camera;
-					cameraTransform = transform.GetTransform();
+					cameraTransform = transform.getTransform();
 					break;
 				}
 			}
@@ -265,7 +265,7 @@ namespace C78e {
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				Renderer2D::DrawSprite(transform.getTransform(), sprite, (int)entity);
 			}
 		}
 
@@ -276,7 +276,7 @@ namespace C78e {
 			{
 				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
 
-				Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+				Renderer2D::DrawCircle(transform.getTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
 			}
 		}
 
@@ -287,7 +287,7 @@ namespace C78e {
 			{
 				auto [transform, text] = view.get<TransformComponent, TextComponent>(entity);
 
-				Renderer2D::DrawString(text.TextString, transform.GetTransform(), text, (int)entity);
+				Renderer2D::DrawString(text.TextString, transform.getTransform(), text, (int)entity);
 			}
 		}
 
@@ -324,6 +324,26 @@ namespace C78e {
 
 	template<>
 	void Scene::onComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<AmbientLightComponent>(Entity entity, AmbientLightComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<DirectLightComponent>(Entity entity, DirectLightComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<PointLightComponent>(Entity entity, PointLightComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component)
 	{
 	}
 

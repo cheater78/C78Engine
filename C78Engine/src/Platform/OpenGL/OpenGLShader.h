@@ -1,12 +1,12 @@
 #pragma once
 
-#include "C78e/Renderer/Shader.h"
+#include "C78E/Renderer/Shader.h"
 #include <glm/glm.hpp>
 
 // TODO: REMOVE!
 typedef unsigned int GLenum;
 
-namespace C78e {
+namespace C78E {
 
 	class OpenGLShader : public Shader
 	{

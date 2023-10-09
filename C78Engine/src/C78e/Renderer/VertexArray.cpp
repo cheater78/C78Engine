@@ -1,10 +1,10 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/VertexArray.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/VertexArray.h"
 
-#include "C78e/Renderer/Renderer.h"
+#include "C78E/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
-namespace C78e {
+namespace C78E {
 
 	Ref<VertexArray> VertexArray::Create()
 	{

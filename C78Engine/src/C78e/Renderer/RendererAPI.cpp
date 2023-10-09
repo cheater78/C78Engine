@@ -1,13 +1,13 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/RendererAPI.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/RendererAPI.h"
 
 #include "Platform/OpenGL/OpenGLRendererAPI.h"
 
-namespace C78e {
+namespace C78E {
 
 	RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
 
-	Scope<RendererAPI> RendererAPI::Create()
+	Scope<RendererAPI> RendererAPI::create()
 	{
 		switch (s_API)
 		{

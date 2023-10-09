@@ -1,8 +1,8 @@
 #pragma once
 
-#include "C78e/Events/Event.h"
+#include "C78E/Events/Event.h"
 
-namespace C78e {
+namespace C78E {
 
 	class WindowResizeEvent : public Event {
 	public:

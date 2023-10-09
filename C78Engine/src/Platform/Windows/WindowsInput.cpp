@@ -1,10 +1,10 @@
-#include "C78ePCH.h"
-#include "C78e/Core/Input.h"
+#include "C78EPCH.h"
+#include "C78E/Core/Input.h"
 
-#include "C78e/Core/Application.h"
+#include "C78E/Core/Application.h"
 #include <GLFW/glfw3.h>
 
-namespace C78e {
+namespace C78E {
 
 	bool Input::isKeyPressed(const KeyCode key)
 	{

@@ -1,12 +1,12 @@
 #pragma once
-#include "C78e/Scene/Entity.h"
+#include "C78E/Scene/Entity.h"
 
-#include "C78e/Core/Timestep.h"
-#include "C78e/Renderer/EditorCamera.h"
+#include "C78E/Core/Timestep.h"
+#include "C78E/Renderer/EditorCamera.h"
 
 
 
-namespace C78e {
+namespace C78E {
 
 	class Entity;
 

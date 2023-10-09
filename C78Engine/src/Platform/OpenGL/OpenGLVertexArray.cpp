@@ -1,9 +1,9 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 #include <glad.h>
 
-namespace C78e {
+namespace C78E {
 
 	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
 	{

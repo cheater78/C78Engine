@@ -1,16 +1,16 @@
 #pragma once
 
-#include "C78e/Renderer/OrthographicCamera.h"
+#include "C78E/Renderer/OrthographicCamera.h"
 
-#include "C78e/Renderer/Assets/Texture/Texture.h"
+#include "C78E/Renderer/Assets/Texture/Texture.h"
 
-#include "C78e/Renderer/Camera.h"
-#include "C78e/Renderer/EditorCamera.h"
-#include "C78e/Renderer/Font.h"
+#include "C78E/Renderer/Camera.h"
+#include "C78E/Renderer/EditorCamera.h"
+#include "C78E/Renderer/Font.h"
 
-#include "C78e/Scene/Components.h"
+#include "C78E/Scene/Components.h"
 
-namespace C78e {
+namespace C78E {
 
 	class Renderer2D
 	{

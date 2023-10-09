@@ -2,10 +2,10 @@
 
 #include <filesystem>
 
-#include "C78e/Core/Core.h"
-#include "C78e/Renderer/Assets/Texture/Texture.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Renderer/Assets/Texture/Texture.h"
 
-namespace C78e {
+namespace C78E {
 
 	struct MSDFData;
 

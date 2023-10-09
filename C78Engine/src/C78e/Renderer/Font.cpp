@@ -1,4 +1,4 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 	#include "Font.h"
 
 
@@ -9,7 +9,7 @@
 
 #include "MSDFData.h"
 
-namespace C78e {
+namespace C78E {
 
 	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S, N> GenFunc>
 	static Ref<Texture2D> CreateAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs,

@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <cstring>
 
-namespace C78e {
+namespace C78E {
 
 	// Non-owning raw buffer class
 	struct Buffer

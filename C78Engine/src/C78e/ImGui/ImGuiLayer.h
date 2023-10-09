@@ -1,12 +1,12 @@
 #pragma once
 
-#include "C78e/Core/Layer.h"
+#include "C78E/Core/Layer.h"
 
-#include "C78e/Events/ApplicationEvent.h"
-#include "C78e/Events/KeyEvent.h"
-#include "C78e/Events/MouseEvent.h"
+#include "C78E/Events/ApplicationEvent.h"
+#include "C78E/Events/KeyEvent.h"
+#include "C78E/Events/MouseEvent.h"
 
-namespace C78e {
+namespace C78E {
 
 	class C78_API ImGuiLayer : public Layer
 	{

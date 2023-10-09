@@ -1,5 +1,6 @@
 #pragma once
-#include "C78e/Core/Core.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Core/StdUtils.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
@@ -15,18 +16,7 @@
 #pragma warning(pop)
 //----
 
-
-namespace std {
-	_EXPORT_STD _NODISCARD inline string to_string(const char* _Val) {
-		std::string ret = _Val;
-		return ret;
-	}
-	_EXPORT_STD _NODISCARD inline string to_string(string _Val) {
-		return _Val;
-	}
-}
-
-namespace C78e {
+namespace C78E {
 	using LogCallbackFn = std::function<void(std::vector<std::string>)>;
 	class C78_API Log
 	{
@@ -70,31 +60,31 @@ inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
 
 #ifdef C78_DEBUG
 
-#define C78_CORE_FATAL(...)     { ::C78e::Log::getCoreLogger()->critical(__VA_ARGS__);	}
-#define C78_CORE_ERROR(...)     { ::C78e::Log::getCoreLogger()->error(__VA_ARGS__);		}
-#define C78_CORE_WARN(...)      { ::C78e::Log::getCoreLogger()->warn(__VA_ARGS__);		}
-#define C78_CORE_INFO(...)      { ::C78e::Log::getCoreLogger()->info(__VA_ARGS__);		}
-#define C78_CORE_TRACE(...)     { ::C78e::Log::getCoreLogger()->trace(__VA_ARGS__);		}
+#define C78_CORE_FATAL(...)     { ::C78E::Log::getCoreLogger()->critical(__VA_ARGS__);	}
+#define C78_CORE_ERROR(...)     { ::C78E::Log::getCoreLogger()->error(__VA_ARGS__);		}
+#define C78_CORE_WARN(...)      { ::C78E::Log::getCoreLogger()->warn(__VA_ARGS__);		}
+#define C78_CORE_INFO(...)      { ::C78E::Log::getCoreLogger()->info(__VA_ARGS__);		}
+#define C78_CORE_TRACE(...)     { ::C78E::Log::getCoreLogger()->trace(__VA_ARGS__);		}
 
-#define C78_FATAL(...)          { ::C78e::Log::getClientLogger()->critical(__VA_ARGS__);}
-#define C78_ERROR(...)          { ::C78e::Log::getClientLogger()->error(__VA_ARGS__);	}
-#define C78_WARN(...)           { ::C78e::Log::getClientLogger()->warn(__VA_ARGS__);	}
-#define C78_INFO(...)           { ::C78e::Log::getClientLogger()->info(__VA_ARGS__);	}
-#define C78_TRACE(...)          { ::C78e::Log::getClientLogger()->trace(__VA_ARGS__);	}
+#define C78_FATAL(...)          { ::C78E::Log::getClientLogger()->critical(__VA_ARGS__);}
+#define C78_ERROR(...)          { ::C78E::Log::getClientLogger()->error(__VA_ARGS__);	}
+#define C78_WARN(...)           { ::C78E::Log::getClientLogger()->warn(__VA_ARGS__);	}
+#define C78_INFO(...)           { ::C78E::Log::getClientLogger()->info(__VA_ARGS__);	}
+#define C78_TRACE(...)          { ::C78E::Log::getClientLogger()->trace(__VA_ARGS__);	}
 
 #elif C78_RELEASE																		
 
-#define C78_CORE_FATAL(...)     { ::C78e::Log::getCoreLogger()->critical(__VA_ARGS__);	}
-#define C78_CORE_ERROR(...)     { ::C78e::Log::getCoreLogger()->error(__VA_ARGS__);		}
-#define C78_CORE_WARN(...)      { ::C78e::Log::getCoreLogger()->warn(__VA_ARGS__);		}
-#define C78_CORE_INFO(...)      { ::C78e::Log::getCoreLogger()->info(__VA_ARGS__);		}
-#define C78_CORE_TRACE(...)     { ::C78e::Log::getCoreLogger()->trace(__VA_ARGS__);		}
+#define C78_CORE_FATAL(...)     { ::C78E::Log::getCoreLogger()->critical(__VA_ARGS__);	}
+#define C78_CORE_ERROR(...)     { ::C78E::Log::getCoreLogger()->error(__VA_ARGS__);		}
+#define C78_CORE_WARN(...)      { ::C78E::Log::getCoreLogger()->warn(__VA_ARGS__);		}
+#define C78_CORE_INFO(...)      { ::C78E::Log::getCoreLogger()->info(__VA_ARGS__);		}
+#define C78_CORE_TRACE(...)     { ::C78E::Log::getCoreLogger()->trace(__VA_ARGS__);		}
 
-#define C78_FATAL(...)          { ::C78e::Log::getClientLogger()->critical(__VA_ARGS__);}
-#define C78_ERROR(...)          { ::C78e::Log::getClientLogger()->error(__VA_ARGS__);	}
-#define C78_WARN(...)           { ::C78e::Log::getClientLogger()->warn(__VA_ARGS__);	}
-#define C78_INFO(...)           { ::C78e::Log::getClientLogger()->info(__VA_ARGS__);	}
-#define C78_TRACE(...)          { ::C78e::Log::getClientLogger()->trace(__VA_ARGS__);	}
+#define C78_FATAL(...)          { ::C78E::Log::getClientLogger()->critical(__VA_ARGS__);}
+#define C78_ERROR(...)          { ::C78E::Log::getClientLogger()->error(__VA_ARGS__);	}
+#define C78_WARN(...)           { ::C78E::Log::getClientLogger()->warn(__VA_ARGS__);	}
+#define C78_INFO(...)           { ::C78E::Log::getClientLogger()->info(__VA_ARGS__);	}
+#define C78_TRACE(...)          { ::C78E::Log::getClientLogger()->trace(__VA_ARGS__);	}
 
 #elif C78_DIST																			
 				

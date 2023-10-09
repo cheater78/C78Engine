@@ -27,12 +27,13 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <entt/entt.hpp>
 
-//C78e core
-#include "C78e/Core/Core.h"
-#include "C78e/Core/Assert.h"
-#include "C78e/Core/Log.h"
+//C78E core
+#include "C78E/Core/Core.h"
+#include "C78E/Core/Assert.h"
+#include "C78E/Core/Log.h"

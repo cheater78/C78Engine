@@ -1,8 +1,8 @@
 #pragma once
 
-#include "C78e/Core/Buffer.h"
+#include "C78E/Core/Buffer.h"
 
-namespace C78e {
+namespace C78E {
 
 	class FileSystem
 	{

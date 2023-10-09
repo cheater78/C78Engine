@@ -1,6 +1,6 @@
 #pragma once
 
-namespace C78e {
+namespace C78E {
 
 	class UUID
 	{
@@ -20,9 +20,9 @@ namespace std {
 	template <typename T> struct hash;
 
 	template<>
-	struct hash<C78e::UUID>
+	struct hash<C78E::UUID>
 	{
-		std::size_t operator()(const C78e::UUID& uuid) const
+		std::size_t operator()(const C78E::UUID& uuid) const
 		{
 			return (uint64_t)uuid;
 		}

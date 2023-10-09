@@ -1,9 +1,9 @@
 #pragma once
 
-#include "C78e/Events/Event.h"
-#include "C78e/Core/MouseCodes.h"
+#include "C78E/Events/Event.h"
+#include "C78E/Core/MouseCodes.h"
 
-namespace C78e {
+namespace C78E {
 
 	class MouseMovedEvent : public Event {
 	public:

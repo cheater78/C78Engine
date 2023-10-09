@@ -1,7 +1,7 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "TextureManager.h"
 
-namespace C78e {
+namespace C78E {
 	Ref<TextureManager> TextureManager::s_MainTextureManager;
 
 	TextureManager::TextureManager()

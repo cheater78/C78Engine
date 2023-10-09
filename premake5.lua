@@ -69,8 +69,8 @@ project "C78Engine"
 	}
 	
 	filter "action:vs*"
-	    pchheader "C78ePCH.h"
-		pchsource "C78Engine/src/C78ePCH.cpp"
+	    pchheader "C78EPCH.h"
+		pchsource "C78Engine/src/C78EPCH.cpp"
 
 
 	filter "system:windows"

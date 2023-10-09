@@ -1,9 +1,12 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "SceneCamera.h"
+
+#include "C78E/Renderer/RendererAPI.h"
+
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace C78e {
+namespace C78E {
 
 	SceneCamera::SceneCamera()
 	{
@@ -39,7 +42,11 @@ namespace C78e {
 	{
 		if (m_ProjectionType == ProjectionType::Perspective)
 		{
-			m_Projection = glm::perspective(m_PerspectiveFOV, m_AspectRatio, m_PerspectiveNear, m_PerspectiveFar);
+			//TODO: Implement API System
+			if (RendererAPI::getAPI() == RendererAPI::API::OpenGL) {
+				m_Projection = glm::perspectiveLH(m_PerspectiveFOV, m_AspectRatio, m_PerspectiveNear, m_PerspectiveFar);
+			}
+			
 		}
 		else
 		{

@@ -1,8 +1,8 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/RenderCommand.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/RenderCommand.h"
 
-namespace C78e {
+namespace C78E {
 
-	Scope<RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::Create();
+	Scope<RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::create();
 
 }

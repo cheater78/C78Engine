@@ -1,8 +1,8 @@
 #pragma once
 
-#include "C78e/Renderer/Buffer.h"
+#include "C78E/Renderer/Buffer.h"
 
-namespace C78e {
+namespace C78E {
 
 	class OpenGLVertexBuffer : public VertexBuffer
 	{

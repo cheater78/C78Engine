@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace C78e {
+namespace C78E {
 
 	class LayerStack
 	{

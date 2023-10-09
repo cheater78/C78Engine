@@ -1,10 +1,10 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "UUID.h"
 
 #include <random>
 #include <unordered_map>
 
-namespace C78e {
+namespace C78E {
 
 	static std::random_device s_RandomDevice;
 	static std::mt19937_64 s_Engine(s_RandomDevice());

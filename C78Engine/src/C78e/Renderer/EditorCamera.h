@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Camera.h"
-#include "C78e/Core/Timestep.h"
-#include "C78e/Events/Event.h"
-#include "C78e/Events/MouseEvent.h"
+#include "C78E/Core/Timestep.h"
+#include "C78E/Events/Event.h"
+#include "C78E/Events/MouseEvent.h"
 
 #include <glm/glm.hpp>
 
-namespace C78e {
+namespace C78E {
 
 	class EditorCamera : public Camera
 	{

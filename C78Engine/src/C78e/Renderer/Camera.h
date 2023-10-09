@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace C78e {
+namespace C78E {
 
 	class Camera
 	{

@@ -1,7 +1,7 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "FileSystem.h"
 
-namespace C78e {
+namespace C78E {
 
 	Buffer FileSystem::ReadFileBinary(const std::filesystem::path& filepath)
 	{

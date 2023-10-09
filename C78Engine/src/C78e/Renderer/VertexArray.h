@@ -1,10 +1,10 @@
 #pragma once
 
-#include "C78e/Renderer/Buffer.h"
+#include "C78E/Renderer/Buffer.h"
 
 #include <memory>
 
-namespace C78e {
+namespace C78E {
 
 	class VertexArray
 	{

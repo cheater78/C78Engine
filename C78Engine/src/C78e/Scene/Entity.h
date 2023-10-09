@@ -1,7 +1,7 @@
 #pragma once
 #include "Components.h"
 
-namespace C78e {
+namespace C78E {
 
 	class Scene;
 

@@ -1,7 +1,7 @@
 #pragma once
-#include "C78e/Renderer/Assets/Model/Mesh.h"
+#include "C78E/Renderer/Assets/Model/Mesh.h"
 
-namespace C78e {
+namespace C78E {
 	class ModelManager {
 	public:
 		ModelManager();

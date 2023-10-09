@@ -1,9 +1,9 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLFramebuffer.h"
 
 #include <glad.h>
 
-namespace C78e {
+namespace C78E {
 
 	static const uint32_t s_MaxFramebufferSize = 8192;
 
@@ -76,7 +76,7 @@ namespace C78e {
 			return false;
 		}
 
-		static GLenum C78eFBTextureFormatToGL(FramebufferTextureFormat format)
+		static GLenum C78EFBTextureFormatToGL(FramebufferTextureFormat format)
 		{
 			switch (format)
 			{
@@ -219,7 +219,7 @@ namespace C78e {
 
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
 		glClearTexImage(m_ColorAttachments[attachmentIndex], 0,
-			Utils::C78eFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+			Utils::C78EFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
 	}
 
 }

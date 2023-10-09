@@ -1,12 +1,12 @@
 #pragma once
 
-#include "C78e/Renderer/OrthographicCamera.h"
-#include "C78e/Core/Timestep.h"
+#include "C78E/Renderer/OrthographicCamera.h"
+#include "C78E/Core/Timestep.h"
 
-#include "C78e/Events/ApplicationEvent.h"
-#include "C78e/Events/MouseEvent.h"
+#include "C78E/Events/ApplicationEvent.h"
+#include "C78E/Events/MouseEvent.h"
 
-namespace C78e {
+namespace C78E {
 
 	class OrthographicCameraController
 	{

@@ -1,15 +1,15 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Platform/Windows/WindowsWindow.h"
 
-#include <C78e/Renderer/Renderer.h>
+#include <C78E/Renderer/Renderer.h>
 
-#include "C78e/Events/ApplicationEvent.h"
-#include "C78e/Events/MouseEvent.h"
-#include "C78e/Events/KeyEvent.h"
+#include "C78E/Events/ApplicationEvent.h"
+#include "C78E/Events/MouseEvent.h"
+#include "C78E/Events/KeyEvent.h"
 
-#include <C78e/Core/Log.h>
+#include <C78E/Core/Log.h>
 
-namespace C78e {
+namespace C78E {
 	
 	static uint8_t s_GLFWWindowCount = 0;
 
@@ -183,16 +183,16 @@ namespace C78e {
 
 	void WindowsWindow::setMouseMode(MouseMode mouseMode) {
 		m_MouseMode = mouseMode;
-		int mode;
+		int mode = GLFW_CURSOR_NORMAL;
 		switch (mouseMode)
 		{
-		case C78e::NORMAL:
+		case C78E::NORMAL:
 			mode = GLFW_CURSOR_NORMAL;
 			break;
-		case C78e::HIDDEN:
+		case C78E::HIDDEN:
 			mode = GLFW_CURSOR_HIDDEN;
 			break;
-		case C78e::DISABLED:
+		case C78E::DISABLED:
 			mode = GLFW_CURSOR_DISABLED;
 			break;
 		default:

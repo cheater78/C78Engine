@@ -1,16 +1,16 @@
 #pragma once
 
-#include "C78e/Core/Core.h"
-#include "C78e/Core/Timer.h"
-#include "C78e/Core/Window.h"
-#include "C78e/Core/LayerStack.h"
-#include <C78e/ImGui/ImGuiLayer.h>
-#include "C78e/Core/Console.h"
-#include "C78e/Events/Event.h"
-#include "C78e/Events/ApplicationEvent.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Core/Timer.h"
+#include "C78E/Core/Window.h"
+#include "C78E/Core/LayerStack.h"
+#include <C78E/ImGui/ImGuiLayer.h>
+#include "C78E/Core/Console.h"
+#include "C78E/Events/Event.h"
+#include "C78E/Events/ApplicationEvent.h"
 
 
-namespace C78e {
+namespace C78E {
 
 	class C78_API Application
 	{

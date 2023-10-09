@@ -1,14 +1,14 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Console.h"
 
-#include <C78e/Events/KeyEvent.h>
+#include <C78E/Events/KeyEvent.h>
 
 
 #include <imgui.h>
 #include <imgui_internal.h>
 
 
-namespace C78e {
+namespace C78E {
 
 	Console::Console(std::string consoleName) : Layer(consoleName), m_Title(consoleName) {
 	}

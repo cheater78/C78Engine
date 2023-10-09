@@ -1,5 +1,5 @@
-#include "C78ePCH.h"
-#include "C78e/ImGui/ImGuiLayer.h"
+#include "C78EPCH.h"
+#include "C78E/ImGui/ImGuiLayer.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -7,15 +7,15 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
-#include "C78e/Core/Application.h"
+#include "C78E/Core/Application.h"
 
-#include "C78e/Renderer/RendererAPI.h"
+#include "C78E/Renderer/RendererAPI.h"
 
 // TEMPORARY
 #include <glad.h>
 #include <GLFW/glfw3.h>
 
-namespace C78e {
+namespace C78E {
 
 	ImGuiLayer::ImGuiLayer()
 		: Layer("ImGuiLayer")

@@ -1,7 +1,7 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "ModelManager.h"
 
-namespace C78e {
+namespace C78E {
 	Ref<ModelManager> ModelManager::s_MainTextureManager;
 
 	ModelManager::ModelManager()

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "C78e/Core/Core.h"
-#include "C78e/Core/Log.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Core/Log.h"
 #include <filesystem>
 
 #ifdef C78_ENABLE_ASSERTS

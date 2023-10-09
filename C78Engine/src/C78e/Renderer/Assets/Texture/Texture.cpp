@@ -1,10 +1,10 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/Assets/Texture/Texture.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/Assets/Texture/Texture.h"
 
-#include "C78e/Renderer/Renderer.h"
+#include "C78E/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
-namespace C78e {
+namespace C78E {
 
 	Ref<Texture2D> Texture2D::Create(const TextureSpecification& specification)
 	{

@@ -1,11 +1,11 @@
 #pragma once
-#include "C78e/Core/Core.h"
-#include "C78e/Core/Layer.h"
-#include "C78e/Core/KeyCodes.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Core/Layer.h"
+#include "C78E/Core/KeyCodes.h"
 
 struct ImGuiInputTextCallbackData;
 
-namespace C78e {
+namespace C78E {
 
     class KeyPressedEvent;
 

@@ -1,11 +1,11 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/Framebuffer.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/Framebuffer.h"
 
-#include "C78e/Renderer/Renderer.h"
+#include "C78E/Renderer/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLFramebuffer.h"
 
-namespace C78e {
+namespace C78E {
 	
 	Ref<Framebuffer> Framebuffer::Create(const FramebufferSpecification& spec)
 	{

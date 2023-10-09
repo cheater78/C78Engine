@@ -1,12 +1,12 @@
 #pragma once
 
-#include "C78e/Core/Core.h"
-#include "C78e/Core/KeyCodes.h"
-#include "C78e/Core/MouseCodes.h"
+#include "C78E/Core/Core.h"
+#include "C78E/Core/KeyCodes.h"
+#include "C78E/Core/MouseCodes.h"
 
 #include <glm/glm.hpp>
 
-namespace C78e {
+namespace C78E {
 
 	class C78_API Input
 	{

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace C78e {
+namespace C78E {
 
 	class Timestep
 	{

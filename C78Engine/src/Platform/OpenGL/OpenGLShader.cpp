@@ -1,6 +1,6 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLShader.h"
-#include "C78e/Core/Timer.h"
+#include "C78E/Core/Timer.h"
 
 #include <fstream>
 #include <glad.h>
@@ -11,7 +11,7 @@
 #include <spirv_cross/spirv_cross.hpp>
 #include <spirv_cross/spirv_glsl.hpp>
 
-namespace C78e {
+namespace C78E {
 
 	namespace Utils {
 

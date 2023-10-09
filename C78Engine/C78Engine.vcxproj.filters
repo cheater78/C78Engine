@@ -16,6 +16,15 @@
     <Filter Include="C78e\Renderer">
       <UniqueIdentifier>{A20D22F2-0ECE-9D28-D708-E7A54388E204}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C78e\Renderer\Assets">
+      <UniqueIdentifier>{446A4C93-30F9-D55C-D917-EA57C585E602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Renderer\Assets\Model">
+      <UniqueIdentifier>{84763E5F-7086-EA2F-D93F-4F4EC56ED9C8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78e\Renderer\Assets\Texture">
+      <UniqueIdentifier>{A493AC2D-904E-9CD9-3906-152425A0E669}</UniqueIdentifier>
+    </Filter>
     <Filter Include="C78e\Scene">
       <UniqueIdentifier>{991807CC-85D0-4819-EED7-2175DAAEE309}</UniqueIdentifier>
     </Filter>
@@ -36,7 +45,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\C78e.h" />
+    <ClInclude Include="src\C78E.h" />
+    <ClInclude Include="src\C78EPCH.h" />
     <ClInclude Include="src\C78e\Core\Application.h">
       <Filter>C78e\Core</Filter>
     </ClInclude>
@@ -109,6 +119,18 @@
     <ClInclude Include="src\C78e\ImGui\ImGuiLayer.h">
       <Filter>C78e\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Assets\Model\Mesh.h">
+      <Filter>C78e\Renderer\Assets\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Assets\Model\ModelManager.h">
+      <Filter>C78e\Renderer\Assets\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Assets\Texture\Texture.h">
+      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\Assets\Texture\TextureManager.h">
+      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    </ClInclude>
     <ClInclude Include="src\C78e\Renderer\Buffer.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
@@ -124,13 +146,13 @@
     <ClInclude Include="src\C78e\Renderer\Framebuffer.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78e\Renderer\GenericShape.h">
+      <Filter>C78e\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\C78e\Renderer\GraphicsContext.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Renderer\MSDFData.h">
-      <Filter>C78e\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Assets\Model\Mesh.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Renderer\OrthographicCamera.h">
@@ -157,9 +179,6 @@
     <ClInclude Include="src\C78e\Renderer\Shader.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Assets\Texture\Texture.h">
-      <Filter>C78e\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\C78e\Renderer\UniformBuffer.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
@@ -184,7 +203,6 @@
     <ClInclude Include="src\C78e\Utils\PlatformUtils.h">
       <Filter>C78e\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78ePCH.h" />
     <ClInclude Include="src\Platform\Linux\LinuxWindow.h">
       <Filter>Platform\Linux</Filter>
     </ClInclude>
@@ -215,11 +233,10 @@
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\GenericShape.h" />
-    <ClInclude Include="src\C78e\Renderer\Assets\Texture\TextureManager.h" />
-    <ClInclude Include="src\C78e\Renderer\Assets\Model\ModelManager.h" />
+    <ClInclude Include="src\C78e\Core\StdUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\C78EPCH.cpp" />
     <ClCompile Include="src\C78e\Core\Application.cpp">
       <Filter>C78e\Core</Filter>
     </ClCompile>
@@ -250,6 +267,18 @@
     <ClCompile Include="src\C78e\ImGui\ImGuiLayer.cpp">
       <Filter>C78e\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Assets\Model\Mesh.cpp">
+      <Filter>C78e\Renderer\Assets\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Assets\Model\ModelManager.cpp">
+      <Filter>C78e\Renderer\Assets\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Assets\Texture\Texture.cpp">
+      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Assets\Texture\TextureManager.cpp">
+      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    </ClCompile>
     <ClCompile Include="src\C78e\Renderer\Buffer.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
@@ -263,9 +292,6 @@
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\C78e\Renderer\GraphicsContext.cpp">
-      <Filter>C78e\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Model\Mesh.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\C78e\Renderer\OrthographicCamera.cpp">
@@ -292,9 +318,6 @@
     <ClCompile Include="src\C78e\Renderer\Shader.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Texture\Texture.cpp">
-      <Filter>C78e\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\C78e\Renderer\UniformBuffer.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
@@ -310,7 +333,6 @@
     <ClCompile Include="src\C78e\Scene\SceneCamera.cpp">
       <Filter>C78e\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78ePCH.cpp" />
     <ClCompile Include="src\Platform\Linux\LinuxWindow.cpp">
       <Filter>Platform\Linux</Filter>
     </ClCompile>
@@ -347,7 +369,5 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Texture\TextureManager.cpp" />
-    <ClCompile Include="src\C78e\Renderer\Assets\Model\ModelManager.cpp" />
   </ItemGroup>
 </Project>

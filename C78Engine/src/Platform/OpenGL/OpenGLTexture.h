@@ -1,10 +1,10 @@
 #pragma once
 
-#include "C78e/Renderer/Assets/Texture/Texture.h"
+#include "C78E/Renderer/Assets/Texture/Texture.h"
 
 #include <glad.h>
 
-namespace C78e {
+namespace C78E {
 
 	class OpenGLTexture2D : public Texture2D
 	{

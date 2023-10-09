@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace C78e {
+namespace C78E {
 
 	class Timer
 	{

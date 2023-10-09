@@ -1,11 +1,11 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLRendererAPI.h"
 
 #include <glad.h>
 
-namespace C78e {
+namespace C78E {
 	
-	void OpenGLMessageCallback(
+	void openGLMessageCallback(
 		unsigned source,
 		unsigned type,
 		unsigned id,
@@ -25,14 +25,11 @@ namespace C78e {
 		C78_CORE_ASSERT(false, "Unknown severity level!");
 	}
 
-	void OpenGLRendererAPI::Init()
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLRendererAPI::init() {
 	#ifdef C78_DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+		glDebugMessageCallback(openGLMessageCallback, nullptr);
 		
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 	#endif
@@ -44,36 +41,30 @@ namespace C78e {
 		glEnable(GL_LINE_SMOOTH);
 	}
 
-	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
-	{
+	void OpenGLRendererAPI::setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
 		glViewport(x, y, width, height);
 	}
 
-	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
-	{
+	void OpenGLRendererAPI::setClearColor(const glm::vec4& color) {
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void OpenGLRendererAPI::Clear()
-	{
+	void OpenGLRendererAPI::clear() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
-	{
+	void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount) {
 		vertexArray->Bind();
 		uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
-	void OpenGLRendererAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
-	{
+	void OpenGLRendererAPI::drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) {
 		vertexArray->Bind();
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 
-	void OpenGLRendererAPI::SetLineWidth(float width)
-	{
+	void OpenGLRendererAPI::setLineWidth(float width) {
 		glLineWidth(width);
 	}
 

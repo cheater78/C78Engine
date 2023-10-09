@@ -1,10 +1,10 @@
-#include "C78ePCH.h"
-#include "C78e/Renderer/Shader.h"
+#include "C78EPCH.h"
+#include "C78E/Renderer/Shader.h"
 
-#include "C78e/Renderer/Renderer.h"
+#include "C78E/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
-namespace C78e {
+namespace C78E {
 
 	Ref<Shader> Shader::Create(const std::string& filepath)
 	{

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "C78e/Renderer/GraphicsContext.h"
+#include "C78E/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;
 
-namespace C78e {
+namespace C78E {
 
 	class OpenGLContext : public GraphicsContext {
 	public:

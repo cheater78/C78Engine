@@ -42,7 +42,7 @@
 #define C78_STRINGIFY_MACRO(x) #x
 
 #include <memory>
-namespace C78e {
+namespace C78E {
 
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
@@ -62,4 +62,4 @@ namespace C78e {
 
 }
 
-#include "C78e/Core/Log.h"
+#include "C78E/Core/Log.h"

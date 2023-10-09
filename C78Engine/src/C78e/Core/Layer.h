@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Core.h"
-#include "C78e/Events/Event.h"
-#include "C78e/Core/Timestep.h"
+#include "C78E/Events/Event.h"
+#include "C78E/Core/Timestep.h"
 
-namespace C78e {
+namespace C78E {
 
 	class C78_API Layer
 	{

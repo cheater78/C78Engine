@@ -1,7 +1,7 @@
 #pragma once
-#include <C78e/Core/Types.h>
+#include <C78E/Core/Types.h>
 
-namespace C78e {
+namespace C78E {
 
 	class Mesh
 	{

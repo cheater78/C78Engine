@@ -1,8 +1,8 @@
 #pragma once
 
-#include "C78e/Renderer/UniformBuffer.h"
+#include "C78E/Renderer/UniformBuffer.h"
 
-namespace C78e {
+namespace C78E {
 
 	class OpenGLUniformBuffer : public UniformBuffer
 	{

@@ -1,9 +1,9 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "OpenGLUniformBuffer.h"
 
 #include <glad.h>
 
-namespace C78e {
+namespace C78E {
 
 	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size, uint32_t binding)
 	{

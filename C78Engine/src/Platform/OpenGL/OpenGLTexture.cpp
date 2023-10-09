@@ -1,14 +1,14 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-namespace C78e {
+namespace C78E {
 
 	namespace Utils {
 
-		static GLenum C78eImageFormatToGLDataFormat(ImageFormat format)
+		static GLenum C78EImageFormatToGLDataFormat(ImageFormat format)
 		{
 			switch (format)
 			{
@@ -20,7 +20,7 @@ namespace C78e {
 			return 0;
 		}
 		
-		static GLenum C78eImageFormatToGLInternalFormat(ImageFormat format)
+		static GLenum C78EImageFormatToGLInternalFormat(ImageFormat format)
 		{
 			switch (format)
 			{
@@ -39,8 +39,8 @@ namespace C78e {
 	{
 		//C78_PROFILE_FUNCTION();
 
-		m_InternalFormat = Utils::C78eImageFormatToGLInternalFormat(m_Specification.Format);
-		m_DataFormat = Utils::C78eImageFormatToGLDataFormat(m_Specification.Format);
+		m_InternalFormat = Utils::C78EImageFormatToGLInternalFormat(m_Specification.Format);
+		m_DataFormat = Utils::C78EImageFormatToGLDataFormat(m_Specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
