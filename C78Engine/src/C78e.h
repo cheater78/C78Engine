@@ -25,8 +25,13 @@
 #include "C78E/Renderer/UniformBuffer.h"
 
 #include "C78E/Renderer/Font.h"
-#include "C78E/Renderer/Shader.h"
+
+#include "C78E/Renderer/Assets/Material/Material.h"
+#include "C78E/Renderer/Assets/Material/MaterialSystem.h"
 #include "C78E/Renderer/Assets/Model/Mesh.h"
+#include "C78E/Renderer/Assets/Model/ModelManager.h"
+#include "C78E/Renderer/Assets/Shader/Shader.h"
+#include "C78E/Renderer/Assets/Shader/ShaderLibrary.h"
 #include "C78E/Renderer/Assets/Texture/Texture.h"
 #include "C78E/Renderer/Assets/Texture/TextureManager.h"
 
@@ -42,6 +47,7 @@
 #include "C78E/Renderer/Assets/Texture/TextureManager.h"
 #include "C78E/Renderer/Assets/Model/ModelManager.h"
 
+
+#ifdef C78E_ENTRYPOINT
 #include "C78E/Core/EntryPoint.h"
-
-
+#endif

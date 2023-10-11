@@ -4,7 +4,7 @@
 #include "C78E/Core/Types.h"
 #include "C78E/Renderer/Assets/Model/Mesh.h"
 #include "C78E/Renderer/Assets/Texture/Texture.h"
-#include "C78E/Renderer/Shader.h"
+#include "C78E/Renderer/Assets/Shader/Shader.h"
 #include "C78E/Renderer/vertexArray.h"
 #include "C78E/Renderer/UniformBuffer.h"
 #include "C78E/Renderer/RenderCommand.h"
@@ -18,7 +18,7 @@ namespace C78E {
 
 	void Renderer3D::init() {
 		
-		s_Data.whiteTexture = Texture2D::Create(TextureSpecification());
+		s_Data.whiteTexture = Texture2D::create(TextureSpecification());
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
@@ -26,12 +26,12 @@ namespace C78E {
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.shader = Shader::Create("assets/shaders/Renderer3D_Generic.glsl");
+		//s_Data.shader = Shader::create("assets/shaders/Renderer3D_Generic.glsl");
 
 		s_Data.TextureSlotIndex = 0;
 		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = s_Data.whiteTexture;
-		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->get_s("assets/textures/Top.png");
-		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->get_s("assets/textures/Test000.png");
+		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->load("assets/textures/Top.png");
+		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->load("assets/textures/Test000.png");
 		
 		s_Data.cameraUniformBuffer = UniformBuffer::Create(sizeof(CameraUniform), 0);
 	}
@@ -55,14 +55,14 @@ namespace C78E {
 		C78_ASSERT(ambientLights.size() == 1, "Every Scene needs exactly one AmbientLight!");
 
 		Entity ambientLightEntity(*ambientLights.begin(), scene.get());
-		sceneLightUniform.ambientLight = ambientLightEntity.getComponent<AmbientLightComponent>().ambientLight;
+		sceneLightUniform.ambientLight = ambientLightEntity.getComponent<AmbientLightComponent>();
 		
 
 		auto directLights = scene->getAllEntitiesWith<DirectLightComponent>();
 
 		for (auto& enttity : directLights) {
 			Entity entity(enttity, scene.get());
-			auto& dLight = entity.getComponent<DirectLightComponent>().directLight;
+			auto& dLight = entity.getComponent<DirectLightComponent>();
 			sceneLightUniform.directLights[sceneLightUniform.directLightCount++] = dLight;
 		}
 
@@ -71,7 +71,7 @@ namespace C78E {
 		
 		for (auto& enttity : pointLights) {
 			Entity entity(enttity, scene.get());
-			auto& pLight = entity.getComponent<PointLightComponent>().pointLight;
+			auto& pLight = entity.getComponent<PointLightComponent>();
 			pLight.position = entity.getComponent<TransformComponent>().Translation;
 			sceneLightUniform.pointLights[sceneLightUniform.pointLightCount++] = pLight;
 		}
@@ -80,7 +80,7 @@ namespace C78E {
 
 		for (auto& enttity : spotLights) {
 			Entity entity(enttity, scene.get());
-			auto& sLight = entity.getComponent<SpotLightComponent>().spotLight;
+			auto& sLight = entity.getComponent<SpotLightComponent>();
 			sLight.position = entity.getComponent<TransformComponent>().Translation;
 			sceneLightUniform.spotLights[sceneLightUniform.spotLightCount++] = sLight;
 		}
@@ -88,14 +88,16 @@ namespace C78E {
 		s_Data.sceneLightUniformBuffer = C78E::UniformBuffer::Create(sizeof(SceneLightUniform), 1);
 		s_Data.sceneLightUniformBuffer->SetData(&sceneLightUniform, sizeof(SceneLightUniform));
 
-		auto entitiesToRender = scene->getAllEntitiesWith<MeshComponent>();
-		s_Data.shader->Bind();
-		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
-			s_Data.TextureSlots[i]->Bind(i);
-			
+		auto entitiesToRender = scene->getAllEntitiesWith<MeshComponent, MaterialComponent>();
+		
 		for (auto& enttity : entitiesToRender) {
 			Entity entity(enttity, scene.get());
 			Mesh& mesh = *entity.getComponent<MeshComponent>().mesh.get();
+			Material& material = entity.getComponent<MaterialComponent>();
+
+			material.getShader().get()->Bind();
+			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
+				s_Data.TextureSlots[i]->Bind(i);
 
 			s_Data.Stats.Vertecies += static_cast<uint32_t>(mesh.getVertexData().size());
 			s_Data.Stats.Indicies += static_cast<uint32_t>(mesh.getIndexData().size());
@@ -116,19 +118,24 @@ namespace C78E {
 			indexBuffer->Bind();
 			s_Data.vertexArray->SetIndexBuffer(indexBuffer);
 
-			glm::mat3 normalMat = entity.getComponent<TransformComponent>().normalMat();
+
+			s_Data.entityMaterialUniformBuffer = C78E::UniformBuffer::Create(sizeof(EntityMaterialUniform), 2);
+			s_Data.entityMaterialUniformBuffer->SetData(&material.getUniform(), sizeof(EntityMaterialUniform));
 
 			EntityUniform trans{	entity.getComponent<TransformComponent>().getTransform(),
 									entity.getComponent<TransformComponent>().normalMat() };
 
-			s_Data.entityUniformBuffer = C78E::UniformBuffer::Create(sizeof(EntityUniform), 2);
+			s_Data.entityUniformBuffer = C78E::UniformBuffer::Create(sizeof(EntityUniform), 3);
 			s_Data.entityUniformBuffer->SetData(&trans, sizeof(EntityUniform));
 
-			s_Data.shader->Bind();
 			s_Data.vertexArray->Bind();
 			RenderCommand::drawIndexed(s_Data.vertexArray);
 			s_Data.Stats.DrawCalls++;
 		}
+	}
+
+	void Renderer3D::setShader(std::string shader) {
+		s_Data.shader = Shader::create(shader);
 	}
 
 	void Renderer3D::endScene()

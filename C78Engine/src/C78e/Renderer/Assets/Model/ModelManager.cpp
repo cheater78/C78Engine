@@ -2,37 +2,50 @@
 #include "ModelManager.h"
 
 namespace C78E {
-	Ref<ModelManager> ModelManager::s_MainTextureManager;
+	Ref<ModelManager> ModelManager::s_ModelManager;
 
-	ModelManager::ModelManager()
+	void ModelManager::add(const std::string& name, const Ref<Mesh>& mesh)
 	{
+		C78_CORE_ASSERT(!exists(name), "Mesh already exists!");
+		mesh.get()->setName(name);
+		m_Meshes[name] = mesh;
 	}
 
-	ModelManager::~ModelManager()
+	void ModelManager::add(const Ref<Mesh>& mesh)
 	{
+		auto& name = mesh->getName();
+		add(name, mesh);
 	}
 
-	void ModelManager::load(std::string file)
+	Ref<Mesh> ModelManager::load(const std::string& filepath)
 	{
-		m_Textures[file] = createRef<Mesh>();
+		auto shader = createRef<Mesh>(filepath);
+		add(shader);
+		return shader;
 	}
 
-	Ref<Mesh> ModelManager::get(std::string name)
+	Ref<Mesh> ModelManager::load(const std::string& name, const std::string& filepath)
 	{
-		return m_Textures.at(name);
+		auto mesh = createRef<Mesh>(filepath);
+		add(name, mesh);
+		return mesh;
 	}
 
-	Ref<Mesh> ModelManager::get_s(std::string file)
-	{
-		if (m_Textures.find(file) == m_Textures.end())
-			load(file);
-		return get(file);
+	Ref<Mesh> ModelManager::load(const std::string& name, Mesh mesh) {
+		auto meshRef = createRef<Mesh>(mesh);
+		add(name, meshRef);
+		return meshRef;
 	}
 
-
-
-	void ModelManager::load(std::string name, Mesh mesh)
+	Ref<Mesh> ModelManager::get(const std::string& name)
 	{
-		m_Textures[name] = createRef<Mesh>(mesh);
+		C78_CORE_ASSERT(exists(name), "Mesh not found!");
+		return m_Meshes[name];
 	}
+
+	bool ModelManager::exists(const std::string& name) const
+	{
+		return m_Meshes.find(name) != m_Meshes.end();
+	}
+
 }

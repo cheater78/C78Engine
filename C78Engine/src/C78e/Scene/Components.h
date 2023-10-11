@@ -6,6 +6,7 @@
 #include "C78E/Core/UUID.h"
 #include "C78E/Renderer/Font.h"
 #include "C78E/Renderer/Assets/Model/Mesh.h"
+#include "C78E/Renderer/Assets/Material/Material.h"
 
 namespace C78E {
 	// Forward declaration
@@ -14,23 +15,11 @@ namespace C78E {
 	class Font;
 	class ScriptableEntity;
 
-	struct IDComponent
-	{
-		UUID ID;
+	//ComponentTypes
 
-		IDComponent() = default;
-		IDComponent(const IDComponent&) = default;
-	};
+	typedef UUID IDComponent;
 
-	struct TagComponent
-	{
-		std::string Tag;
-
-		TagComponent() = default;
-		TagComponent(const TagComponent&) = default;
-		TagComponent(const std::string& tag)
-			: Tag(tag) {}
-	};
+	typedef std::string TagComponent;
 
 	struct TransformComponent
 	{
@@ -64,6 +53,14 @@ namespace C78E {
 		CameraComponent(const CameraComponent&) = default;
 	};
 	
+	typedef AmbientLight AmbientLightComponent;
+
+	typedef DirectLight DirectLightComponent;
+
+	typedef PointLight PointLightComponent;
+
+	typedef SpotLight SpotLightComponent;
+	
 	struct MeshComponent {
 		Ref<Mesh> mesh;
 
@@ -77,47 +74,7 @@ namespace C78E {
 		{}
 	};
 
-	struct AmbientLightComponent {
-		AmbientLight ambientLight{};
-
-		AmbientLightComponent() = default;
-		AmbientLightComponent(const AmbientLightComponent&) = default;
-		AmbientLightComponent(AmbientLight ambientLight)
-			: ambientLight{ ambientLight }
-		{}
-	};
-
-	struct DirectLightComponent {
-		DirectLight directLight{};
-
-		DirectLightComponent() = default;
-		DirectLightComponent(const DirectLightComponent&) = default;
-		DirectLightComponent(DirectLight directLight)
-			: directLight{ directLight }
-		{}
-	};
-
-	struct PointLightComponent {
-		PointLight pointLight{};
-
-		PointLightComponent() = default;
-		PointLightComponent(const PointLightComponent&) = default;
-		PointLightComponent(PointLight pointLight)
-			: pointLight{ pointLight }
-		{}
-	};
-
-	struct SpotLightComponent {
-		SpotLight spotLight{};
-
-		SpotLightComponent() = default;
-		SpotLightComponent(const SpotLightComponent&) = default;
-		SpotLightComponent(SpotLight spotLight)
-			: spotLight{ spotLight }
-		{}
-	};
-
-
+	typedef Material MaterialComponent;
 
 
 
@@ -178,14 +135,33 @@ namespace C78E {
 		float LineSpacing = 0.0f;
 	};
 
+	
 	template<typename... Component>
 	struct ComponentGroup
 	{
 	};
 
-	using AllComponents = 
-		ComponentGroup<TransformComponent, SpriteRendererComponent,
-			CircleRendererComponent, CameraComponent, ScriptComponent,
-			NativeScriptComponent, TextComponent>;
+	using AllComponents = ComponentGroup <
+		IDComponent,
+		TagComponent,
+		TransformComponent,
 
+		CameraComponent,
+
+		AmbientLightComponent,
+		DirectLightComponent,
+		PointLightComponent,
+		SpotLightComponent,
+
+		MeshComponent,
+		MaterialComponent,
+
+		SpriteRendererComponent,
+		CircleRendererComponent,
+		CameraComponent,
+		ScriptComponent,
+		NativeScriptComponent,
+		TextComponent
+	>;
+	
 }

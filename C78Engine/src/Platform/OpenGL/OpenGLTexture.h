@@ -11,7 +11,10 @@ namespace C78E {
 	public:
 		OpenGLTexture2D(const TextureSpecification& specification);
 		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(const OpenGLTexture2D&) = default;
 		virtual ~OpenGLTexture2D();
+
+		virtual std::string getName() const override { return m_Name; }
 
 		virtual const TextureSpecification& GetSpecification() const override { return m_Specification; }
 
@@ -35,6 +38,7 @@ namespace C78E {
 		TextureSpecification m_Specification;
 
 		std::string m_Path;
+		std::string m_Name;
 		bool m_IsLoaded = false;
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;

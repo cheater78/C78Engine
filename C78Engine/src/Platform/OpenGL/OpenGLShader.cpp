@@ -100,16 +100,11 @@ namespace C78E {
 			Timer timer;
 			CompileOrGetVulkanBinaries(shaderSources);
 			CompileOrGetOpenGLBinaries();
-			CreateProgram();
+			createProgram();
 			C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
 		}
 
-		// Extract name from filepath
-		auto lastSlash = filepath.find_last_of("/\\");
-		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		auto lastDot = filepath.rfind('.');
-		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
-		m_Name = filepath.substr(lastSlash, count);
+		m_Name = std::filesystem::getName(filepath);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
@@ -123,7 +118,7 @@ namespace C78E {
 
 		CompileOrGetVulkanBinaries(sources);
 		CompileOrGetOpenGLBinaries();
-		CreateProgram();
+		createProgram();
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -304,7 +299,7 @@ namespace C78E {
 		}
 	}
 
-	void OpenGLShader::CreateProgram()
+	void OpenGLShader::createProgram()
 	{
 		GLuint program = glCreateProgram();
 

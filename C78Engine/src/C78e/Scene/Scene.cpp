@@ -26,7 +26,7 @@ namespace C78E {
 			auto view = src.view<Component>();
 			for (auto srcEntity : view)
 			{
-				entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);
+				entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity));
 
 				auto& srcComponent = src.get<Component>(srcEntity);
 				dst.emplace_or_replace<Component>(dstEntity, srcComponent);
@@ -67,8 +67,8 @@ namespace C78E {
 		auto idView = srcSceneRegistry.view<IDComponent>();
 		for (auto e : idView)
 		{
-			UUID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
-			const auto& name = srcSceneRegistry.get<TagComponent>(e).Tag;
+			UUID uuid = srcSceneRegistry.get<IDComponent>(e);
+			const auto& name = srcSceneRegistry.get<TagComponent>(e);
 			Entity newEntity = newScene->createEntityWithUUID(uuid, name);
 			enttMap[uuid] = (entt::entity)newEntity;
 		}
@@ -88,7 +88,7 @@ namespace C78E {
 		entity.addComponent<IDComponent>(uuid);
 		entity.addComponent<TransformComponent>();
 		auto& tag = entity.addComponent<TagComponent>();
-		tag.Tag = name.empty() ? "Entity" : name;
+		tag = name.empty() ? "Entity" : name;
 
 		m_EntityMap[uuid] = entity;
 
@@ -239,7 +239,7 @@ namespace C78E {
 		for (auto entity : view)
 		{
 			const TagComponent& tc = view.get<TagComponent>(entity);
-			if (tc.Tag == name)
+			if (tc == name)
 				return Entity{ entity, this };
 		}
 		return {};
@@ -297,11 +297,16 @@ namespace C78E {
 	template<typename T>
 	void Scene::onComponentAdded(Entity entity, T& component)
 	{
-		static_assert(sizeof(T) == 0);
+		//static_assert(sizeof(T) == 0);
 	}
 
 	template<>
 	void Scene::onComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& component)
 	{
 	}
 
@@ -357,10 +362,7 @@ namespace C78E {
 	{
 	}
 
-	template<>
-	void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& component)
-	{
-	}
+	
 
 	template<>
 	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)

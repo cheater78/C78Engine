@@ -2,7 +2,7 @@
 #include "C78E/Renderer/Renderer2D.h"
 
 #include "C78E/Renderer/VertexArray.h"
-#include "C78E/Renderer/Shader.h"
+#include <C78E/Renderer/Assets/Shader/Shader.h>
 #include "C78E/Renderer/UniformBuffer.h"
 #include "C78E/Renderer/RenderCommand.h"
 
@@ -200,7 +200,7 @@ namespace C78E {
 		s_Data.TextVertexArray->SetIndexBuffer(quadIB);
 		s_Data.TextVertexBufferBase = new TextVertex[s_Data.MaxVertices];
 
-		s_Data.WhiteTexture = Texture2D::Create(TextureSpecification());
+		s_Data.WhiteTexture = Texture2D::create(TextureSpecification());
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
@@ -208,10 +208,10 @@ namespace C78E {
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
-		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
-		s_Data.LineShader = Shader::Create("assets/shaders/Renderer2D_Line.glsl");
-		s_Data.TextShader = Shader::Create("assets/shaders/Renderer2D_Text.glsl");
+		s_Data.QuadShader = Shader::create("assets/shaders/Renderer2D_Quad.glsl");
+		s_Data.CircleShader = Shader::create("assets/shaders/Renderer2D_Circle.glsl");
+		s_Data.LineShader = Shader::create("assets/shaders/Renderer2D_Line.glsl");
+		s_Data.TextShader = Shader::create("assets/shaders/Renderer2D_Text.glsl");
 
 		// Set first texture slot to 0
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;

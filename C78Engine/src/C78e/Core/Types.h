@@ -36,9 +36,14 @@ namespace C78E {
 		alignas(16) glm::vec3 direction{ 0.f, -1.f, 0.f };
 		alignas(16) glm::vec4 color{ 1.f, 1.f, 1.f, 1.f };
 		float angle = 30.f/180.f*glm::pi<float>();
+		float edgeAngle = 0.f;
 	};
 
-
+	struct MaterialProperties {
+		float defused = 1.0f;
+		float specular = 1.0f;
+		float opacity = 1.0f;
+	};
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,4 +77,5 @@ namespace C78E {
 		glm::mat4 normalMat;
 	};
 
+	typedef MaterialProperties EntityMaterialUniform;
 }

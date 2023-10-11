@@ -68,7 +68,8 @@ namespace C78E {
 		}
 		const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 		if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar)) {
-			if (ImGui::BeginPopupContextWindow()) {
+			// TODO: Close
+			if (false && ImGui::BeginPopupContextWindow()) {
 				if (ImGui::Selectable("Clear")) clearLog();
 				ImGui::EndPopup();
 			}

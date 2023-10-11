@@ -4,6 +4,7 @@
 
 //std lib
 #include <string>
+#include <vector>
 
 
 // std extension
@@ -35,6 +36,43 @@ namespace std {
 	}
 	_EXPORT_STD _NODISCARD inline string to_string(float _Val, const uint32_t& _Dec) {
 		return to_string(static_cast<double>(_Val), _Dec);
+	}
+
+	_EXPORT_STD _NODISCARD inline std::vector<std::string> split(const std::string& s, char seperator)
+	{
+		std::vector<std::string> output;
+
+		std::string::size_type prev_pos = 0, pos = 0;
+
+		while ((pos = s.find(seperator, pos)) != std::string::npos)
+		{
+			std::string substring(s.substr(prev_pos, pos - prev_pos));
+
+			output.push_back(substring);
+
+			prev_pos = ++pos;
+		}
+
+		output.push_back(s.substr(prev_pos, pos - prev_pos)); // Last word
+
+		return output;
+	}
+
+	//filesystem
+	namespace filesystem {
+		_EXPORT_STD _NODISCARD inline string getName(string filepath) {
+			// Extract name from filepath
+			auto lastSlash = filepath.find_last_of("/\\");
+			lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+			auto lastDot = filepath.rfind('.');
+			auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+			return filepath.substr(lastSlash, count);
+		}
+
+		_EXPORT_STD _NODISCARD inline string getExtension(string filepath) {
+			auto lastDot = filepath.rfind('.') + 1;
+			return filepath.substr(lastDot, filepath.size());
+		}
 	}
 }
 

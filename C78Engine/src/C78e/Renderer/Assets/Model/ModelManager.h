@@ -4,26 +4,26 @@
 namespace C78E {
 	class ModelManager {
 	public:
-		ModelManager();
-		~ModelManager();
+		static Ref<ModelManager> create() { s_ModelManager = createRef<ModelManager>(); return s_ModelManager; }
+		static Ref<ModelManager> get() { if (!s_ModelManager) return create(); else return s_ModelManager; }
 
-		void load(std::string file);
-		void load(std::string name, Mesh mesh);
-		Ref<Mesh> get(std::string name);
+		ModelManager() = default;
+		ModelManager(const ModelManager&) = delete;
+		~ModelManager() = default;
 
-		Ref<Mesh> get_s(std::string file);
+		void add(const std::string& name, const Ref<Mesh>& mesh);
+		void add(const Ref<Mesh>& mesh);
+		Ref<Mesh> load(const std::string& filepath);
+		Ref<Mesh> load(const std::string& name, const std::string& filepath);
+		Ref<Mesh> load(const std::string& name, Mesh mesh);
 
+		Ref<Mesh> get(const std::string& name);
 
-		static Ref<ModelManager> get() {
-			if (!s_MainTextureManager)
-				s_MainTextureManager = createRef<ModelManager>();
-			return s_MainTextureManager;
-		}
-
+		bool exists(const std::string& name) const;
 	private:
-		std::unordered_map<std::string, Ref<Mesh>> m_Textures;
+		std::unordered_map<std::string, Ref<Mesh>> m_Meshes;
 
-
-		static Ref<ModelManager> s_MainTextureManager;
+		//Singleton TODO: change
+		static Ref<ModelManager> s_ModelManager;
 	};
 }

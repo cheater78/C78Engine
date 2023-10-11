@@ -50,6 +50,8 @@ namespace C78E {
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		m_Name = "<unknown>";
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
@@ -102,6 +104,7 @@ namespace C78E {
 
 			stbi_image_free(data);
 		}
+		m_Name = std::filesystem::getName(path);
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()

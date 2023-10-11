@@ -6,7 +6,7 @@
 #include "C78E/Renderer/Buffer.h"
 #include "C78E/Renderer/VertexArray.h"
 #include "C78E/Renderer/UniformBuffer.h"
-#include "C78E/Renderer/Shader.h"
+#include "C78E/Renderer/Assets/Shader/Shader.h"
 
 namespace C78E {
 
@@ -19,6 +19,8 @@ namespace C78E {
 		static void beginScene(Entity camera);
 
 		static void submit(Ref<Scene> scene);
+
+		static void setShader(std::string shader);
 
 		static void endScene();
 		static void flush();
@@ -54,6 +56,7 @@ namespace C78E {
 			Ref<UniformBuffer> cameraUniformBuffer;
 			Ref<UniformBuffer> sceneLightUniformBuffer;
 			CameraUniform cameraUniform;
+			Ref<UniformBuffer> entityMaterialUniformBuffer;
 			Ref<UniformBuffer> entityUniformBuffer;
 		};
 

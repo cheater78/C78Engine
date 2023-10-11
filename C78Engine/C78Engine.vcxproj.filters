@@ -176,7 +176,7 @@
     <ClInclude Include="src\C78e\Renderer\RendererAPI.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Shader.h">
+    <ClInclude Include="src\C78e\Renderer\Assets\Shader\Shader.h">
       <Filter>C78e\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Renderer\UniformBuffer.h">
@@ -234,6 +234,9 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\C78e\Core\StdUtils.h" />
+    <ClInclude Include="src\C78e\Renderer\Assets\Material\Material.h" />
+    <ClInclude Include="src\C78e\Renderer\Assets\Shader\ShaderLibrary.h" />
+    <ClInclude Include="src\C78e\Renderer\Assets\Material\MaterialSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\C78EPCH.cpp" />
@@ -315,7 +318,7 @@
     <ClCompile Include="src\C78e\Renderer\RendererAPI.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Shader.cpp">
+    <ClCompile Include="src\C78e\Renderer\Assets\Shader\Shader.cpp">
       <Filter>C78e\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\C78e\Renderer\UniformBuffer.cpp">
@@ -369,5 +372,8 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78e\Renderer\Assets\Material\Material.cpp" />
+    <ClCompile Include="src\C78e\Renderer\Assets\Shader\ShaderLibrary.cpp" />
+    <ClCompile Include="src\C78e\Renderer\Assets\Material\MaterialSystem.cpp" />
   </ItemGroup>
 </Project>

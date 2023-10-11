@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "ImGui/EnttInspector.h"
+
 class TestLayer : public C78E::Layer {
 public:
     TestLayer(C78E::Window& window): Layer("TestLayer"), m_Window(window) {
@@ -28,40 +30,58 @@ public:
         C78E::RenderCommand::setClearColor(glm::vec4(.1f, .2f, .25f, 1.f));
         C78E::Renderer3D::init();
 
+        //Shaders
+        C78E::ShaderLibrary::get()->load("assets/shaders/Renderer3D_Generic.glsl");
+
+        // Meshes
         C78E::ModelManager::get()->load("RedTriag", C78E::GenericShape::Triangle::getMesh(glm::vec4(1.f, 0.f, 0.f, 1.f), 0));
         C78E::ModelManager::get()->load("quad1", C78E::GenericShape::Quad::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 1));
         C78E::ModelManager::get()->load("cube2", C78E::GenericShape::Cube::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 2));
         C78E::ModelManager::get()->load("cube1", C78E::GenericShape::Cube::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 1));
 
+        //Materials
+        C78E::Material defaultMaterial(
+            C78E::ShaderLibrary::get()->get("Renderer3D_Generic"),
+            {
+                1.0f,
+                1.0f,
+                1.0f
+            }
+        );
 
+        //Lights
         m_AmbientLight = m_Scene->createEntity("AmbientLight");
-        auto& ambientLight = m_AmbientLight.addComponent<C78E::AmbientLightComponent>().ambientLight;
+        auto& ambientLight = m_AmbientLight.addComponent<C78E::AmbientLightComponent>();
 
         m_DirectLight = m_Scene->createEntity("DirectLight");
-        auto& directLight = m_DirectLight.addComponent<C78E::DirectLightComponent>().directLight;
+        auto& directLight = m_DirectLight.addComponent<C78E::DirectLightComponent>();
         directLight.direction = { 0.f, -1.f, 0.f };
         directLight.color = {1.f, 1.f, 1.f, .1f};
 
         m_PointLight = m_Scene->createEntity("PointLight");
-        auto& pointLight =  m_PointLight.addComponent<C78E::PointLightComponent>().pointLight;
+        auto& pointLight =  m_PointLight.addComponent<C78E::PointLightComponent>();
         pointLight.color = { 1.f, 1.f, 1.f, 1.f };
         auto& pointLightTrans = m_PointLight.getComponent<C78E::TransformComponent>();
         pointLightTrans.Translation = glm::vec3(0.f, .5f, 0.f);
 
         m_SpotLight = m_Scene->createEntity("SpotLight");
-        auto& spotLight = m_SpotLight.addComponent<C78E::SpotLightComponent>().spotLight;
-        auto& spotLightMesh = m_SpotLight.addComponent<C78E::MeshComponent>();
-        spotLightMesh.mesh = C78E::ModelManager::get()->get("cube1");
+        auto& spotLight = m_SpotLight.addComponent<C78E::SpotLightComponent>();
         auto& spotLightTrans = m_SpotLight.getComponent<C78E::TransformComponent>();
         spotLightTrans.Translation = glm::vec3(4.f, 1.f, -4.f);
+        spotLightTrans.Scale = glm::vec3(0.1f, 0.1f, 0.1f);
         spotLight.direction = {0.f, -1.f, 0.f};
-        spotLight.angle = 30.f / 180.f * glm::pi<float>();
         spotLight.color = { 1.f, 0.f, 0.f, 1.f };
+        spotLight.angle = 30.f / 180.f * glm::pi<float>();
+        spotLight.edgeAngle = 0.f;
 
         
+        //Objects
+
         C78E::Entity triag = m_Scene->createEntity("Triag");
         auto& triagMesh = triag.addComponent<C78E::MeshComponent>();
         triagMesh.mesh = C78E::ModelManager::get()->get("RedTriag");
+        auto& triagMat = triag.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        triagMat.setShader(C78E::ShaderLibrary::get()->get("Renderer3D_Generic"));
         auto& triagTrans = triag.getComponent<C78E::TransformComponent>();
         triagTrans.Translation = glm::vec3(0.f, 1.5f, 5.f);
         triagTrans.Scale = glm::vec3(5.f, 5.f, 1.f);
@@ -69,6 +89,7 @@ public:
         C78E::Entity quad = m_Scene->createEntity("Quad");
         auto& quadMesh = quad.addComponent<C78E::MeshComponent>();
         quadMesh.mesh = C78E::ModelManager::get()->get("quad1");
+        auto& quadMat = quad.addComponent<C78E::MaterialComponent>(defaultMaterial);
         auto& quadTrans = quad.getComponent<C78E::TransformComponent>();
         quadTrans.Translation = glm::vec3(0.f, -.00001f, 0.f);
         quadTrans.Rotation = glm::vec3(1.f*glm::half_pi<float>(), 0.f, 0.f);
@@ -77,12 +98,14 @@ public:
         C78E::Entity cube = m_Scene->createEntity("Cube");
         auto& cubeMesh = cube.addComponent<C78E::MeshComponent>();
         cubeMesh.mesh = C78E::ModelManager::get()->get("cube2");
+        auto& cubeMat = cube.addComponent<C78E::MaterialComponent>(defaultMaterial);
         auto& cubeTrans = cube.getComponent<C78E::TransformComponent>();
         cubeTrans.Translation = glm::vec3(-2.f, 0.51f, 0.f);
         
         C78E::Entity cube2 = m_Scene->createEntity("Cube");
         auto& cube2Mesh = cube2.addComponent<C78E::MeshComponent>();
         cube2Mesh.mesh = C78E::ModelManager::get()->get("cube1");
+        auto& cube2Mat = cube2.addComponent<C78E::MaterialComponent>(defaultMaterial);
         auto& cube2Trans = cube2.getComponent<C78E::TransformComponent>();
         cube2Trans.Translation = glm::vec3(4.f, 1.01f, 2.f);
         cube2Trans.Scale = glm::vec3(2.f, 2.f, 2.f);
@@ -173,24 +196,31 @@ public:
         ImGui::End();
 
         ImGui::Begin("Tools");
+        if (ImGui::Button("Reload shader")) {
+            C78E::Renderer3D::setShader("assets/shaders/Renderer3D_Generic.glsl");
+        }
+        ImGui::Text(" ");
         ImGui::SliderFloat("vFOV", &m_FOV, 22.5f, 135.f);
         ImGui::SliderFloat4("ClearColor", &m_ClearColor[0], 0.f, 1.f);
         ImGui::Text("Lights: ");
-        ImGui::SliderFloat ("  AmbientBrightness",  &m_AmbientLight.getComponent<C78E::AmbientLightComponent>().ambientLight.color.a, 0.f, 1.f);
+        ImGui::SliderFloat ("  AmbientBrightness",  &m_AmbientLight.getComponent<C78E::AmbientLightComponent>().color.a, 0.f, 1.f);
         ImGui::Text(" ");
-        ImGui::SliderFloat4("  DirectLight",        &m_DirectLight.getComponent<C78E::DirectLightComponent>().directLight.color[0], 0.f, 1.f);
-        ImGui::SliderFloat3("  DirectLightDirect",  &m_DirectLight.getComponent<C78E::DirectLightComponent>().directLight.direction[0], -1.f, 1.f);
+        ImGui::SliderFloat4("  DirectLight",        &m_DirectLight.getComponent<C78E::DirectLightComponent>().color[0], 0.f, 1.f);
+        ImGui::SliderFloat3("  DirectLightDirect",  &m_DirectLight.getComponent<C78E::DirectLightComponent>().direction[0], -1.f, 1.f);
         ImGui::Text(" ");
         ImGui::SliderFloat3("  PointLightPos",      &m_PointLight.getComponent<C78E::TransformComponent>().Translation[0], -5.f, 5.f);
-        ImGui::SliderFloat3("  PointLightColor",    &m_PointLight.getComponent<C78E::PointLightComponent>().pointLight.color[0], 0.f, 1.f);
-        ImGui::SliderFloat ("  PointLightIntense",  &m_PointLight.getComponent<C78E::PointLightComponent>().pointLight.color[3], 0.f, 100.f);
+        ImGui::SliderFloat3("  PointLightColor",    &m_PointLight.getComponent<C78E::PointLightComponent>().color[0], 0.f, 1.f);
+        ImGui::SliderFloat ("  PointLightIntense",  &m_PointLight.getComponent<C78E::PointLightComponent>().color[3], 0.f, 100.f);
         ImGui::Text(" ");
         ImGui::SliderFloat3("  SpotLightPos",       &m_SpotLight.getComponent<C78E::TransformComponent>().Translation[0], -5.f, 5.f);
-        ImGui::SliderFloat3("  SpotLightDirect",    &m_SpotLight.getComponent<C78E::SpotLightComponent>().spotLight.direction[0], -1.f, 1.f);
-        ImGui::SliderFloat ("  SpotLightAngle",     &m_SpotLight.getComponent<C78E::SpotLightComponent>().spotLight.angle, 0.f, glm::two_pi<float>());
-        ImGui::SliderFloat3("  SpotLightColor",     &m_SpotLight.getComponent<C78E::SpotLightComponent>().spotLight.color[0], 0.f, 1.f);
-        ImGui::SliderFloat ("  SpotLightIntense",   &m_SpotLight.getComponent<C78E::SpotLightComponent>().spotLight.color[3], 0.f, 100.f);
+        ImGui::SliderFloat3("  SpotLightDirect",    &m_SpotLight.getComponent<C78E::SpotLightComponent>().direction[0], -1.f, 1.f);
+        ImGui::SliderFloat ("  SpotLightAngle",     &m_SpotLight.getComponent<C78E::SpotLightComponent>().angle, 0.f, glm::pi<float>());
+        ImGui::SliderFloat ("  SpotLightEdgeAngle", &m_SpotLight.getComponent<C78E::SpotLightComponent>().edgeAngle, 0.f, glm::pi<float>());
+        ImGui::SliderFloat3("  SpotLightColor",     &m_SpotLight.getComponent<C78E::SpotLightComponent>().color[0], 0.f, 1.f);
+        ImGui::SliderFloat ("  SpotLightIntense",   &m_SpotLight.getComponent<C78E::SpotLightComponent>().color[3], 0.f, 100.f);
         ImGui::End();
+
+        EnttInspector::onImGuiRender(m_Scene);
     }
 
 

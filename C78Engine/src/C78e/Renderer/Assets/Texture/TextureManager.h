@@ -5,23 +5,26 @@
 namespace C78E {
 	class TextureManager {
 	public:
-		TextureManager();
-		~TextureManager();
 
-		void load(std::string file);
-		Ref<Texture2D> get(std::string file);
-		Ref<Texture2D> get_s(std::string file);
+		static Ref<TextureManager> create() { s_TextureManager = createRef<TextureManager>(); return s_TextureManager; }
+		static Ref<TextureManager> get() { if (!s_TextureManager) return create(); else return s_TextureManager; }
 
-		static Ref<TextureManager> get() {
-			if (!s_MainTextureManager)
-				s_MainTextureManager = createRef<TextureManager>();
-			return s_MainTextureManager;
-		}
+		TextureManager() = default;
+		TextureManager(const TextureManager&) = delete;
+		~TextureManager() = default;
 
+		void add(const std::string& name, const Ref<Texture2D>& texture);
+		void add(const Ref<Texture2D>& texture);
+		Ref<Texture2D> load(const std::string& filepath);
+		Ref<Texture2D> load(const std::string& name, const std::string& filepath);
+
+		Ref<Texture2D> get(const std::string& name);
+
+		bool exists(const std::string& name) const;
 	private:
 		std::unordered_map<std::string, Ref<Texture2D>> m_Textures;
 
-
-		static Ref<TextureManager> s_MainTextureManager;
+		//Singleton TODO: change
+		static Ref<TextureManager> s_TextureManager;
 	};
 }

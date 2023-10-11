@@ -3,7 +3,7 @@
 #include "C78E/Renderer/RenderCommand.h"
 
 #include "C78E/Renderer/OrthographicCamera.h"
-#include "C78E/Renderer/Shader.h"
+#include "C78E/Renderer/Assets/Shader/Shader.h"
 
 namespace C78E {
 

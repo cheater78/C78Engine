@@ -7,7 +7,6 @@ namespace C78E {
 		static const glm::vec4 WHITE = glm::vec4(1.f, 1.f, 1.f, 1.f);
 		class Triangle {
 		public:
-
 			static std::vector<Vertex> getVertexData(glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f), uint32_t texID = 0) {
 				return std::vector<Vertex>{
 					Vertex(glm::vec3{ -.5f, -(glm::sqrt(3) / 6.f), 0.f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 0.0f, 0.f }, static_cast<float>(texID)),
@@ -22,7 +21,6 @@ namespace C78E {
 
 		class Quad {
 		public:
-
 			static std::vector<Vertex> getVertexData(glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f), uint32_t texID = 0) {
 				return std::vector<Vertex>{
 					Vertex(glm::vec3{ -.5f, -.5f, 0.f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
@@ -38,7 +36,6 @@ namespace C78E {
 
 		class Cube {
 		public:
-
 			static std::vector<Vertex> getVertexData(glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f), uint32_t texID = 0) {
 				return std::vector<Vertex>{
 					/*

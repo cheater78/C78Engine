@@ -28,6 +28,8 @@ namespace C78E {
 	public:
 		virtual ~Texture() = default;
 
+		virtual std::string getName() const = 0;
+
 		virtual const TextureSpecification& GetSpecification() const = 0;
 
 		virtual uint32_t GetWidth() const = 0;
@@ -48,8 +50,8 @@ namespace C78E {
 	class Texture2D : public Texture
 	{
 	public:
-		static Ref<Texture2D> Create(const TextureSpecification& specification);
-		static Ref<Texture2D> Create(const std::string& path);
+		static Ref<Texture2D> create(const TextureSpecification& specification);
+		static Ref<Texture2D> create(const std::string& path);
 	};
 
 }

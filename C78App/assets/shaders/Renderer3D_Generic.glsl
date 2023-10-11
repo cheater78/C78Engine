@@ -16,7 +16,7 @@ layout(std140, binding = 0) uniform CameraUniformBuffer
 	mat4 u_InvViewMat;
 };
 
-layout(std140, binding = 2) uniform EntityUniformBuffer {
+layout(std140, binding = 3) uniform EntityUniformBuffer {
 	mat4 u_TransformMat;
 	mat4 u_NormalMat;
 };
@@ -49,6 +49,8 @@ void main()
 
 #type fragment
 #version 450 core
+
+#define PI 3.1415926535897932384626433832795
 
 layout (location = 0) in vec4 v_Color;
 layout (location = 1) in vec2 v_TexCoord;
@@ -85,6 +87,7 @@ struct SpotLight {
 	vec3 direction;
 	vec4 color;
 	float angle;
+	float edgeAngle;
 };
 
 layout(std140, binding = 1) uniform SceneLightUniform{
@@ -98,7 +101,13 @@ layout(std140, binding = 1) uniform SceneLightUniform{
 	int u_SpotLightCount;
 };
 
-layout(std140, binding = 2) uniform EntityUniformBuffer {
+layout(std140, binding = 2) uniform EntityMaterialUniformBuffer {
+	float u_Defused;
+	float u_Specular;
+	float u_Opacity;
+};
+
+layout(std140, binding = 3) uniform EntityUniformBuffer {
 	mat4 u_TransformMat;
 	mat4 u_NormalMat;
 };
@@ -188,25 +197,21 @@ void main()
 		float attenuation = 1.0 / dot(directionToLight, directionToLight);
 		directionToLight = normalize(directionToLight);
 
-		float cosAng = -1.0*cos(light.angle);
-		float dotDir = dot(directionToLight, normalize(light.direction));
-
-		//TODO: 1/(dotDir-cosAnd)*sharpnessV
-		if(dotDir > cosAng) continue;
+		float edgeCutoff = clamp(1-((acos(dot(normalize(directionToLight), normalize(-light.direction)))-light.angle) / light.edgeAngle), 0, 1);
 
 		float cosAngIncidence = max(dot(surfaceNormal, directionToLight), 0);
 		vec3 intensity = light.color.xyz * light.color.w * attenuation;
 
-		diffuseLight += intensity * cosAngIncidence;
+		diffuseLight += intensity * cosAngIncidence * edgeCutoff;
 
 		vec3 specHalfAng = normalize(directionToLight + viewDirection);
 		float blinnTerm = dot(surfaceNormal, specHalfAng);
 		blinnTerm = clamp(blinnTerm, 0, 1);
 		blinnTerm = pow(blinnTerm, 512.0);
-		specLight += intensity * blinnTerm;
+		specLight += intensity * blinnTerm * edgeCutoff;
 	}
 
-	o_Color = vec4((diffuseLight + specLight) * fragColor.xyz, 1.0); // vec4(); // vec4((diffuseLight + specLight), 1.0) * fragColor;
+	o_Color = vec4((diffuseLight*u_Defused + specLight*u_Specular) * fragColor.xyz, u_Opacity); // vec4(); // vec4((diffuseLight + specLight), 1.0) * fragColor;
 	
 	//o_Color = vec4((surfaceNormal.x+1)/2, (surfaceNormal.y+1)/2, (surfaceNormal.z+1)/2, 1.0);
 }

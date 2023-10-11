@@ -7,17 +7,17 @@ namespace C78E {
 	{
 	public:
 		Mesh();
+		Mesh(const Mesh&) = default;
 		Mesh(std::vector<Vertex> vertecies, std::vector<uint32_t> indicies);
-		Mesh(const char* file);
-
-		//void setData(std::vector<Vertex>& vertecies, std::vector<uint32_t>& indicies = std::vector<uint32_t>());
-		//void setData(void* vertecies, uint32_t vertexCount, void* indicies = nullptr, uint32_t indexCount = 0);
+		Mesh(std::string filepath);
 
 		std::vector<Vertex>& getVertexData();
 		std::vector<uint32_t>& getIndexData();
 
-
+		std::string getName() { return m_Name; }
+		void setName(std::string name) { m_Name = name; }
 	private:
+		std::string m_Name;
 		Ref<std::vector<Vertex>> m_Vertecies;
 		Ref<std::vector<uint32_t>> m_Indicies;
 
