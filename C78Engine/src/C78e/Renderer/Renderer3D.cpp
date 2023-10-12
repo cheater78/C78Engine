@@ -32,7 +32,9 @@ namespace C78E {
 		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = s_Data.whiteTexture;
 		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->load("assets/textures/Top.png");
 		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->load("assets/textures/Test000.png");
-		
+		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->load("assets/textures/WoodenCrate.jpg");
+		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = C78E::TextureManager::get()->load("assets/textures/GravelFloor.jpg");
+
 		s_Data.cameraUniformBuffer = UniformBuffer::Create(sizeof(CameraUniform), 0);
 	}
 

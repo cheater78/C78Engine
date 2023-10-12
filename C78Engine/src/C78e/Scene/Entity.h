@@ -52,6 +52,11 @@ namespace C78E {
 		UUID getUUID() { return getComponent<IDComponent>(); }
 		const std::string& getName() { return getComponent<TagComponent>(); }
 
+		TransformComponent& getTransform() { return getComponent<TransformComponent>(); }
+		TransformComponent& setTransform(glm::vec3 translation) { auto& transform = getTransform(); transform.Translation = translation; return transform; }
+		TransformComponent& setTransform(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f)) { auto& transform = getTransform(); transform.Translation = translation; transform.Rotation = rotation; transform.Scale = scale; return transform; }
+		TransformComponent& transform(glm::vec3 translate, glm::vec3 rotate = glm::vec3(0.f, 0.f, 0.f), glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f)) { auto& transform = getTransform(); transform.Translation += translate; transform.Rotation += rotate; transform.Scale *= scale; return transform;	}
+
 		bool operator==(const Entity& other) const { return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene; }
 		bool operator!=(const Entity& other) const { return !(*this == other); }
 

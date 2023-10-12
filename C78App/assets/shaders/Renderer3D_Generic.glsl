@@ -90,7 +90,7 @@ struct SpotLight {
 	float edgeAngle;
 };
 
-layout(std140, binding = 1) uniform SceneLightUniform{
+layout(std140, binding = 1) uniform SceneLightUniform {
 	AmbientLight u_AmbientLight;
 
 	DirectLight u_DirectLights[10];
@@ -112,106 +112,96 @@ layout(std140, binding = 3) uniform EntityUniformBuffer {
 	mat4 u_NormalMat;
 };
 
-void main()
-{
-	vec4 fragColor = v_Color;
 
-	switch(int(v_TexIndex))
-	{
-		case  0: fragColor *= texture(u_Textures[ 0], v_TexCoord); break;
-		case  1: fragColor *= texture(u_Textures[ 1], v_TexCoord); break;
-		case  2: fragColor *= texture(u_Textures[ 2], v_TexCoord); break;
-		case  3: fragColor *= texture(u_Textures[ 3], v_TexCoord); break;
-		case  4: fragColor *= texture(u_Textures[ 4], v_TexCoord); break;
-		case  5: fragColor *= texture(u_Textures[ 5], v_TexCoord); break;
-		case  6: fragColor *= texture(u_Textures[ 6], v_TexCoord); break;
-		case  7: fragColor *= texture(u_Textures[ 7], v_TexCoord); break;
-		case  8: fragColor *= texture(u_Textures[ 8], v_TexCoord); break;
-		case  9: fragColor *= texture(u_Textures[ 9], v_TexCoord); break;
-		case 10: fragColor *= texture(u_Textures[10], v_TexCoord); break;
-		case 11: fragColor *= texture(u_Textures[11], v_TexCoord); break;
-		case 12: fragColor *= texture(u_Textures[12], v_TexCoord); break;
-		case 13: fragColor *= texture(u_Textures[13], v_TexCoord); break;
-		case 14: fragColor *= texture(u_Textures[14], v_TexCoord); break;
-		case 15: fragColor *= texture(u_Textures[15], v_TexCoord); break;
-		case 16: fragColor *= texture(u_Textures[16], v_TexCoord); break;
-		case 17: fragColor *= texture(u_Textures[17], v_TexCoord); break;
-		case 18: fragColor *= texture(u_Textures[18], v_TexCoord); break;
-		case 19: fragColor *= texture(u_Textures[19], v_TexCoord); break;
-		case 20: fragColor *= texture(u_Textures[20], v_TexCoord); break;
-		case 21: fragColor *= texture(u_Textures[21], v_TexCoord); break;
-		case 22: fragColor *= texture(u_Textures[22], v_TexCoord); break;
-		case 23: fragColor *= texture(u_Textures[23], v_TexCoord); break;
-		case 24: fragColor *= texture(u_Textures[24], v_TexCoord); break;
-		case 25: fragColor *= texture(u_Textures[25], v_TexCoord); break;
-		case 26: fragColor *= texture(u_Textures[26], v_TexCoord); break;
-		case 27: fragColor *= texture(u_Textures[27], v_TexCoord); break;
-		case 28: fragColor *= texture(u_Textures[28], v_TexCoord); break;
-		case 29: fragColor *= texture(u_Textures[29], v_TexCoord); break;
-		case 30: fragColor *= texture(u_Textures[30], v_TexCoord); break;
-		case 31: fragColor *= texture(u_Textures[31], v_TexCoord); break;
+vec4 textureColor(int textureIndex, vec4 tintColor, vec2 textureCoordinate) {
+	switch(textureIndex) {
+		case  0: tintColor *= texture(u_Textures[ 0], textureCoordinate); break;
+		case  1: tintColor *= texture(u_Textures[ 1], textureCoordinate); break;
+		case  2: tintColor *= texture(u_Textures[ 2], textureCoordinate); break;
+		case  3: tintColor *= texture(u_Textures[ 3], textureCoordinate); break;
+		case  4: tintColor *= texture(u_Textures[ 4], textureCoordinate); break;
+		case  5: tintColor *= texture(u_Textures[ 5], textureCoordinate); break;
+		case  6: tintColor *= texture(u_Textures[ 6], textureCoordinate); break;
+		case  7: tintColor *= texture(u_Textures[ 7], textureCoordinate); break;
+		case  8: tintColor *= texture(u_Textures[ 8], textureCoordinate); break;
+		case  9: tintColor *= texture(u_Textures[ 9], textureCoordinate); break;
+		case 10: tintColor *= texture(u_Textures[10], textureCoordinate); break;
+		case 11: tintColor *= texture(u_Textures[11], textureCoordinate); break;
+		case 12: tintColor *= texture(u_Textures[12], textureCoordinate); break;
+		case 13: tintColor *= texture(u_Textures[13], textureCoordinate); break;
+		case 14: tintColor *= texture(u_Textures[14], textureCoordinate); break;
+		case 15: tintColor *= texture(u_Textures[15], textureCoordinate); break;
+		case 16: tintColor *= texture(u_Textures[16], textureCoordinate); break;
+		case 17: tintColor *= texture(u_Textures[17], textureCoordinate); break;
+		case 18: tintColor *= texture(u_Textures[18], textureCoordinate); break;
+		case 19: tintColor *= texture(u_Textures[19], textureCoordinate); break;
+		case 20: tintColor *= texture(u_Textures[20], textureCoordinate); break;
+		case 21: tintColor *= texture(u_Textures[21], textureCoordinate); break;
+		case 22: tintColor *= texture(u_Textures[22], textureCoordinate); break;
+		case 23: tintColor *= texture(u_Textures[23], textureCoordinate); break;
+		case 24: tintColor *= texture(u_Textures[24], textureCoordinate); break;
+		case 25: tintColor *= texture(u_Textures[25], textureCoordinate); break;
+		case 26: tintColor *= texture(u_Textures[26], textureCoordinate); break;
+		case 27: tintColor *= texture(u_Textures[27], textureCoordinate); break;
+		case 28: tintColor *= texture(u_Textures[28], textureCoordinate); break;
+		case 29: tintColor *= texture(u_Textures[29], textureCoordinate); break;
+		case 30: tintColor *= texture(u_Textures[30], textureCoordinate); break;
+		case 31: tintColor *= texture(u_Textures[31], textureCoordinate); break;
 	}
+	return tintColor;
+}
 
-	if (fragColor.a == 0.0)
-		discard;
+struct FragmentLight {
+	vec3 ambientLight;
+	vec3 specularLight;
+};
+
+FragmentLight calculateFragmentLighting(vec4 lightColor, vec3 fragmentDirectionToLight, vec3 fragmentSurfaceNormal, vec3 viewDirection) {
+	FragmentLight fragmentLighting;
 	
+	vec3 attenuatedLightColor = lightColor.xyz * lightColor.w * (1.0 / dot(fragmentDirectionToLight, fragmentDirectionToLight));
+	
+	fragmentLighting.ambientLight = attenuatedLightColor * max(dot(fragmentSurfaceNormal, normalize(fragmentDirectionToLight)), 0);
+	fragmentLighting.specularLight = attenuatedLightColor * pow(clamp(dot(fragmentSurfaceNormal, normalize(fragmentDirectionToLight + viewDirection)), 0, 1), 512.0);
+	return fragmentLighting;
+}
+
+void main() {
+	vec4 fragColor = textureColor(int(v_TexIndex), v_Color, v_TexCoord);
+	if (fragColor.a == 0.0) discard;
+
 	vec3 diffuseLight = u_AmbientLight.color.xyz * u_AmbientLight.color.w;
 	vec3 specLight = vec3(0.0);
 	vec3 surfaceNormal = normalize(v_WorldNormal);
+	vec3 viewDirection = normalize(u_InvViewMat[3].xyz - v_WorldPos);
 
-	vec3 camWorldPos = u_InvViewMat[3].xyz;
-	vec3 viewDirection = normalize(camWorldPos - v_WorldPos);
+	if(dot(viewDirection, surfaceNormal) < 0) discard;													//BackFace Culling
 
 	for(int i = 0; i < u_DirectLightCount; i++){
 		DirectLight light = u_DirectLights[i];
-
-		float cosAngIncidence = max(dot(surfaceNormal, -light.direction), 0);
-		vec3 intensity = light.color.xyz * light.color.w;
-
-		diffuseLight += intensity * cosAngIncidence;
+		diffuseLight += light.color.xyz * light.color.w * max(dot(surfaceNormal, -light.direction), 0);
 	}
 
 	for(int i = 0; i < u_PointLightCount; i++){
 		PointLight light = u_PointLights[i];
-
 		vec3 directionToLight = light.position - v_WorldPos;
-		float attenuation = 1.0 / dot(directionToLight, directionToLight);
-		directionToLight = normalize(directionToLight);
 
-		float cosAngIncidence = max(dot(surfaceNormal, directionToLight), 0);
-		vec3 intensity = light.color.xyz * light.color.w * attenuation;
-
-		diffuseLight += intensity * cosAngIncidence;
-
-		vec3 specHalfAng = normalize(directionToLight + viewDirection);
-		float blinnTerm = dot(surfaceNormal, specHalfAng);
-		blinnTerm = clamp(blinnTerm, 0, 1);
-		blinnTerm = pow(blinnTerm, 512.0);
-		specLight += intensity * blinnTerm;
+		FragmentLight fragmentLight = calculateFragmentLighting(light.color, directionToLight , surfaceNormal, viewDirection);
+		diffuseLight += fragmentLight.ambientLight;
+		specLight += fragmentLight.specularLight;
 	}
 
 	for(int i = 0; i < u_SpotLightCount; i++){
 		SpotLight light = u_SpotLights[i];
-
 		vec3 directionToLight = light.position - v_WorldPos;
-		float attenuation = 1.0 / dot(directionToLight, directionToLight);
-		directionToLight = normalize(directionToLight);
 
 		float edgeCutoff = clamp(1-((acos(dot(normalize(directionToLight), normalize(-light.direction)))-light.angle) / light.edgeAngle), 0, 1);
+		if(edgeCutoff == 0.0) continue;
 
-		float cosAngIncidence = max(dot(surfaceNormal, directionToLight), 0);
-		vec3 intensity = light.color.xyz * light.color.w * attenuation;
-
-		diffuseLight += intensity * cosAngIncidence * edgeCutoff;
-
-		vec3 specHalfAng = normalize(directionToLight + viewDirection);
-		float blinnTerm = dot(surfaceNormal, specHalfAng);
-		blinnTerm = clamp(blinnTerm, 0, 1);
-		blinnTerm = pow(blinnTerm, 512.0);
-		specLight += intensity * blinnTerm * edgeCutoff;
+		FragmentLight fragmentLight = calculateFragmentLighting(light.color, directionToLight , surfaceNormal, viewDirection);
+		diffuseLight += fragmentLight.ambientLight * edgeCutoff;
+		specLight += fragmentLight.specularLight * edgeCutoff;
 	}
 
-	o_Color = vec4((diffuseLight*u_Defused + specLight*u_Specular) * fragColor.xyz, u_Opacity); // vec4(); // vec4((diffuseLight + specLight), 1.0) * fragColor;
-	
-	//o_Color = vec4((surfaceNormal.x+1)/2, (surfaceNormal.y+1)/2, (surfaceNormal.z+1)/2, 1.0);
+	o_Color = vec4((diffuseLight*u_Defused + specLight*u_Specular) * fragColor.xyz, u_Opacity * fragColor.w);
 }

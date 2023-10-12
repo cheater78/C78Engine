@@ -17,15 +17,16 @@ public:
     }
 
     void onAttach() {
+        //Create Scene and Camera
         m_Scene = C78E::createRef<C78E::Scene>();
         C78E::Entity camera = m_Scene->createEntity("MainCamera");
         auto& camComponent = camera.addComponent<C78E::CameraComponent>();
         camComponent.Primary = true;
         camComponent.Camera.SetPerspective(glm::radians<float>(45.f), 0.01f, 10000.f);
         camComponent.Camera.SetViewportSize(m_Window.getWidth(), m_Window.getHeight());
-        auto& camTransform = camera.getComponent<C78E::TransformComponent>();
-        camTransform.Translation = glm::vec3(0.f, 1.f, -2.f);
+        camera.setTransform(glm::vec3(0.f, 5.f, -6.f), glm::vec3(30.f / 360.f * glm::two_pi<float>(), 0.f, 0.f));
         
+        //Init Renderer
         C78E::RenderCommand::init();
         C78E::RenderCommand::setClearColor(glm::vec4(.1f, .2f, .25f, 1.f));
         C78E::Renderer3D::init();
@@ -35,9 +36,10 @@ public:
 
         // Meshes
         C78E::ModelManager::get()->load("RedTriag", C78E::GenericShape::Triangle::getMesh(glm::vec4(1.f, 0.f, 0.f, 1.f), 0));
-        C78E::ModelManager::get()->load("quad1", C78E::GenericShape::Quad::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 1));
+        C78E::ModelManager::get()->load("quad", C78E::GenericShape::Quad::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 4));
         C78E::ModelManager::get()->load("cube2", C78E::GenericShape::Cube::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 2));
         C78E::ModelManager::get()->load("cube1", C78E::GenericShape::Cube::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 1));
+        C78E::ModelManager::get()->load("cube3", C78E::GenericShape::Cube::getMesh(glm::vec4(1.f, 1.f, 1.f, 1.f), 3));
 
         //Materials
         C78E::Material defaultMaterial(
@@ -51,64 +53,58 @@ public:
 
         //Lights
         m_AmbientLight = m_Scene->createEntity("AmbientLight");
-        auto& ambientLight = m_AmbientLight.addComponent<C78E::AmbientLightComponent>();
+        m_AmbientLight.addComponent<C78E::AmbientLightComponent>();
 
         m_DirectLight = m_Scene->createEntity("DirectLight");
-        auto& directLight = m_DirectLight.addComponent<C78E::DirectLightComponent>();
-        directLight.direction = { 0.f, -1.f, 0.f };
-        directLight.color = {1.f, 1.f, 1.f, .1f};
+        m_DirectLight.addComponent<C78E::DirectLightComponent>(glm::vec3{ 0.f, -1.f, 0.f }, glm::vec4{ 1.f, 1.f, 1.f, .1f });
 
         m_PointLight = m_Scene->createEntity("PointLight");
-        auto& pointLight =  m_PointLight.addComponent<C78E::PointLightComponent>();
-        pointLight.color = { 1.f, 1.f, 1.f, 1.f };
-        auto& pointLightTrans = m_PointLight.getComponent<C78E::TransformComponent>();
-        pointLightTrans.Translation = glm::vec3(0.f, .5f, 0.f);
+        m_PointLight.addComponent<C78E::PointLightComponent>().color = { 1.f, 1.f, 1.f, 50.f };
+        m_PointLight.setTransform(glm::vec3(0.f, 10.f, 8.f));
 
         m_SpotLight = m_Scene->createEntity("SpotLight");
-        auto& spotLight = m_SpotLight.addComponent<C78E::SpotLightComponent>();
-        auto& spotLightTrans = m_SpotLight.getComponent<C78E::TransformComponent>();
-        spotLightTrans.Translation = glm::vec3(4.f, 1.f, -4.f);
-        spotLightTrans.Scale = glm::vec3(0.1f, 0.1f, 0.1f);
-        spotLight.direction = {0.f, -1.f, 0.f};
-        spotLight.color = { 1.f, 0.f, 0.f, 1.f };
-        spotLight.angle = 30.f / 180.f * glm::pi<float>();
-        spotLight.edgeAngle = 0.f;
+        m_SpotLight.addComponent<C78E::SpotLightComponent>(glm::vec3(), glm::vec3{ 1.f, -0.5f, 0.8f }, glm::vec4{ 1.f, 1.f, 1.f, 30.f }, 30.f / 180.f * glm::pi<float>(), 2.f / 180.f * glm::pi<float>());
+        m_SpotLight.setTransform(glm::vec3(-4.f, 2.5f, -3.f));
+
 
         
         //Objects
-
-        C78E::Entity triag = m_Scene->createEntity("Triag");
-        auto& triagMesh = triag.addComponent<C78E::MeshComponent>();
-        triagMesh.mesh = C78E::ModelManager::get()->get("RedTriag");
-        auto& triagMat = triag.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        triagMat.setShader(C78E::ShaderLibrary::get()->get("Renderer3D_Generic"));
-        auto& triagTrans = triag.getComponent<C78E::TransformComponent>();
-        triagTrans.Translation = glm::vec3(0.f, 1.5f, 5.f);
-        triagTrans.Scale = glm::vec3(5.f, 5.f, 1.f);
-        
         C78E::Entity quad = m_Scene->createEntity("Quad");
-        auto& quadMesh = quad.addComponent<C78E::MeshComponent>();
-        quadMesh.mesh = C78E::ModelManager::get()->get("quad1");
-        auto& quadMat = quad.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        auto& quadTrans = quad.getComponent<C78E::TransformComponent>();
-        quadTrans.Translation = glm::vec3(0.f, -.00001f, 0.f);
-        quadTrans.Rotation = glm::vec3(1.f*glm::half_pi<float>(), 0.f, 0.f);
-        quadTrans.Scale = glm::vec3(10.f, 10.f, 1.f);
+        quad.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("quad");
+        quad.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        quad.setTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f * glm::half_pi<float>(), 0.f, 0.f), glm::vec3(10.f, 10.f, 1.f));
+
 
         C78E::Entity cube = m_Scene->createEntity("Cube");
-        auto& cubeMesh = cube.addComponent<C78E::MeshComponent>();
-        cubeMesh.mesh = C78E::ModelManager::get()->get("cube2");
-        auto& cubeMat = cube.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        auto& cubeTrans = cube.getComponent<C78E::TransformComponent>();
-        cubeTrans.Translation = glm::vec3(-2.f, 0.51f, 0.f);
+        cube.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube2");
+        cube.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        cube.setTransform(glm::vec3(0.f, 1.f, 8.f));
         
         C78E::Entity cube2 = m_Scene->createEntity("Cube");
-        auto& cube2Mesh = cube2.addComponent<C78E::MeshComponent>();
-        cube2Mesh.mesh = C78E::ModelManager::get()->get("cube1");
-        auto& cube2Mat = cube2.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        auto& cube2Trans = cube2.getComponent<C78E::TransformComponent>();
-        cube2Trans.Translation = glm::vec3(4.f, 1.01f, 2.f);
-        cube2Trans.Scale = glm::vec3(2.f, 2.f, 2.f);
+        cube2.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube3");
+        cube2.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        cube2.setTransform(glm::vec3(-1.f, 0.75f, 1.f), glm::vec3(), glm::vec3(1.5f, 1.5f, 1.5f));
+
+
+        C78E::Entity cube3 = m_Scene->createEntity("Cube");
+        cube3.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
+        cube3.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        cube3.setTransform(glm::vec3(4.f, 1.0f, 4.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
+
+        C78E::Entity cube4 = m_Scene->createEntity("Cube");
+        cube4.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
+        cube4.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        cube4.setTransform(glm::vec3(2.f, 1.0f, 4.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
+
+        C78E::Entity cube5 = m_Scene->createEntity("Cube");
+        cube5.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
+        cube5.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        cube5.setTransform(glm::vec3(4.f, 3.0f, 4.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
+
+        C78E::Entity cube6 = m_Scene->createEntity("Cube");
+        cube6.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
+        cube6.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        cube6.setTransform(glm::vec3(4.f, 1.0f, 2.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
     }
 
     void onDetach() {
