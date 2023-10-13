@@ -24,3 +24,6 @@
 [submodule "C78Engine/vendor/msdf-atlas-gen"]
 	path = C78Engine/vendor/msdf-atlas-gen
 	url = https://github.com/TheCherno/msdf-atlas-gen.git
+[submodule "C78Engine/vendor/entt"]
+	path = C78Engine/vendor/entt
+	url = https://github.com/cheater78/entt.git
