@@ -1,8 +1,7 @@
 #include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "C78E/Renderer/Assets/Texture/RawImage.h"
 
 namespace C78E {
 
@@ -12,8 +11,11 @@ namespace C78E {
 		{
 			switch (format)
 			{
-				case ImageFormat::RGB8:  return GL_RGB;
-				case ImageFormat::RGBA8: return GL_RGBA;
+				case ImageFormat::R8:		return GL_RED;
+				case ImageFormat::RG8:		return GL_RG;
+				case ImageFormat::RGB8:		return GL_RGB;
+				case ImageFormat::RGBA8:	return GL_RGBA;
+				case ImageFormat::RGBA32F:	return GL_RGBA;
 			}
 
 			C78_CORE_ASSERT(false);
@@ -24,8 +26,11 @@ namespace C78E {
 		{
 			switch (format)
 			{
-			case ImageFormat::RGB8:  return GL_RGB8;
-			case ImageFormat::RGBA8: return GL_RGBA8;
+				case ImageFormat::R8:		return GL_R8;
+				case ImageFormat::RG8:		return GL_RG8;
+				case ImageFormat::RGB8:		return GL_RGB8;
+				case ImageFormat::RGBA8:	return GL_RGBA8;
+				case ImageFormat::RGBA32F:	return GL_RGBA32F;
 			}
 
 			C78_CORE_ASSERT(false);
@@ -37,8 +42,6 @@ namespace C78E {
 	OpenGLTexture2D::OpenGLTexture2D(const TextureSpecification& specification)
 		: m_Specification(specification), m_Width(m_Specification.Width), m_Height(m_Specification.Height)
 	{
-		//C78_PROFILE_FUNCTION();
-
 		m_InternalFormat = Utils::C78EImageFormatToGLInternalFormat(m_Specification.Format);
 		m_DataFormat = Utils::C78EImageFormatToGLDataFormat(m_Specification.Format);
 
@@ -54,45 +57,21 @@ namespace C78E {
 		m_Name = "<unknown>";
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
-		: m_Path(path)
-	{
-		//C78_PROFILE_FUNCTION();
-
-		int width, height, channels;
-		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = nullptr;
-		{
-			//C78_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
-			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		}
-			
-		if (data)
+	OpenGLTexture2D::OpenGLTexture2D(RawImage& image)
+	{	
+		if (image.isValid())
 		{
 			m_IsLoaded = true;
 
-			m_Width = width;
-			m_Height = height;
+			m_Width = image.getWidth();
+			m_Height = image.getHeight();
+			m_InternalFormat = Utils::C78EImageFormatToGLInternalFormat(image.getFormat());
+			m_DataFormat = Utils::C78EImageFormatToGLDataFormat(image.getFormat());
 
-			GLenum internalFormat = 0, dataFormat = 0;
-			if (channels == 4)
-			{
-				internalFormat = GL_RGBA8;
-				dataFormat = GL_RGBA;
-			}
-			else if (channels == 3)
-			{
-				internalFormat = GL_RGB8;
-				dataFormat = GL_RGB;
-			}
-
-			m_InternalFormat = internalFormat;
-			m_DataFormat = dataFormat;
-
-			C78_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
+			C78_CORE_ASSERT(m_InternalFormat & m_DataFormat, "Format not supported!");
 
 			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-			glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
+			glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
 
 			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -100,11 +79,9 @@ namespace C78E {
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-
-			stbi_image_free(data);
+			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, image.getData());
 		}
-		m_Name = std::filesystem::getName(path);
+		m_Name = std::filesystem::getName(image.getName());
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
@@ -128,5 +105,52 @@ namespace C78E {
 		//C78_PROFILE_FUNCTION();
 
 		glBindTextureUnit(slot, m_RendererID);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	OpenGLCubeMap::OpenGLCubeMap(std::vector<RawImage>& images) {
+		C78_CORE_ASSERT(images.size() == 6, "CubeMap data vector must have exactly 6 imgs!");
+		C78_CORE_ASSERT(images[0].getHeight() == images[0].getWidth(), "CubeMap Textures must be sqares!");
+
+		glGenTextures(1, &m_RendererID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
+
+		uint32_t side = 0;
+		m_Size = images[0].getWidth();
+		m_Format = images[0].getFormat();
+		for (auto& image : images) {
+			C78_CORE_ASSERT(image.getWidth() == m_Size && image.getHeight() == m_Size && image.getFormat() == m_Format, "CubeMap Textures must be all the same size!");
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + side, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, image.getData());
+			side++;
+		}
+
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+
+	}
+
+	OpenGLCubeMap::~OpenGLCubeMap() {
+		if (m_RendererID)
+			glDeleteTextures(1, &m_RendererID);
+	}
+
+	void OpenGLCubeMap::bind(uint32_t slot) const {
+		glActiveTexture(GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
 	}
 }

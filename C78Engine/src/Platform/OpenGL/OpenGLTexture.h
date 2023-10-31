@@ -10,7 +10,7 @@ namespace C78E {
 	{
 	public:
 		OpenGLTexture2D(const TextureSpecification& specification);
-		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(RawImage& image);
 		OpenGLTexture2D(const OpenGLTexture2D&) = default;
 		virtual ~OpenGLTexture2D();
 
@@ -43,6 +43,20 @@ namespace C78E {
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;
+	};
+
+
+	class OpenGLCubeMap : public CubeMap {
+	public:
+		OpenGLCubeMap(std::vector<RawImage>& images);
+		~OpenGLCubeMap();
+
+		void bind(uint32_t slot = 0) const override;
+
+	private:
+		uint32_t m_Size = 1024;
+		ImageFormat m_Format = ImageFormat::R8;
+		uint32_t m_RendererID = 0;
 	};
 
 }

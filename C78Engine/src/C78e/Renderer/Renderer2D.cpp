@@ -9,8 +9,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "MSDFData.h"
-
 namespace C78E {
 
 	struct QuadVertex

@@ -32,6 +32,7 @@ public:
         C78E::Renderer3D::init();
 
         //Shaders
+        C78E::ShaderLibrary::get()->load("assets/shaders/SkyBox.glsl");
         C78E::ShaderLibrary::get()->load("assets/shaders/Renderer3D_Generic.glsl");
 
         // Meshes
@@ -129,6 +130,8 @@ public:
             auto& rot = camTrans.Rotation;
             rot += glm::vec3( 0.f, C78E::Input::getMouseX() * delta * MouseSens, 0.f );
             rot += glm::vec3( C78E::Input::getMouseY() * delta * MouseSens, 0.f, 0.f );
+            if (rot.x < -glm::half_pi<float>()) rot.x = -glm::half_pi<float>();
+            if (rot.x >  glm::half_pi<float>()) rot.x =  glm::half_pi<float>();
             C78E::Input::setMousePosition(0, 0);
 
             const glm::vec3 lookat = glm::normalize(glm::vec3{ sin(rot.y), .0f, cos(rot.y) });

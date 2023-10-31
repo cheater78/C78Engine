@@ -30,6 +30,7 @@
 #include "C78E/Renderer/Assets/Model/ModelManager.h"
 #include "C78E/Renderer/Assets/Shader/Shader.h"
 #include "C78E/Renderer/Assets/Shader/ShaderLibrary.h"
+#include "C78E/Renderer/Assets/Texture/RawImage.h"
 #include "C78E/Renderer/Assets/Texture/Texture.h"
 #include "C78E/Renderer/Assets/Texture/TextureManager.h"
 

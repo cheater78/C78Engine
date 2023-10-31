@@ -1,19 +1,11 @@
 #pragma once
 
 #include "C78E/Core/Core.h"
+#include "C78E/Renderer/Assets/Texture/RawImage.h"
 
 #include <string>
 
 namespace C78E {
-
-	enum class ImageFormat
-	{
-		None = 0,
-		R8,
-		RGB8,
-		RGBA8,
-		RGBA32F
-	};
 
 	struct TextureSpecification
 	{
@@ -51,7 +43,17 @@ namespace C78E {
 	{
 	public:
 		static Ref<Texture2D> create(const TextureSpecification& specification);
+		static Ref<Texture2D> create(RawImage& image);
 		static Ref<Texture2D> create(const std::string& path);
+
+	};
+
+	class CubeMap{
+	public:
+		static Ref<CubeMap> create(std::vector<RawImage>& images);
+
+		virtual void bind(uint32_t slot = 0) const = 0;
+
 	};
 
 }

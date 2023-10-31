@@ -9,8 +9,8 @@
 #include "C78E/Renderer/UniformBuffer.h"
 #include "C78E/Renderer/RenderCommand.h"
 #include "C78E/Renderer/Assets/Texture/TextureManager.h"
-
-#include "MSDFData.h"
+#include "C78E/Renderer/GenericShape.h"
+#include "Assets/Shader/ShaderLibrary.h"
 
 namespace C78E {
 
@@ -25,8 +25,19 @@ namespace C78E {
 		int32_t samplers[s_Data.MaxTextureSlots];
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
-
-		//s_Data.shader = Shader::create("assets/shaders/Renderer3D_Generic.glsl");
+		
+		{
+			RawImage img1{ "assets/textures/Top.png", true };
+			RawImage img2{ "assets/textures/Bot.png", true };
+			RawImage img3{ "assets/textures/Side.png", true };
+			img1.expandLeft(img2);
+			img1.expandRight(img3);
+			RawImage img4{ img1 };
+			img1.expandTop(img4);
+			img1.expandBot(img4);
+			auto texComp = Texture2D::create(img1);
+			C78E::TextureManager::get()->add("Composite", texComp);
+		}
 
 		s_Data.TextureSlotIndex = 0;
 		s_Data.TextureSlots[s_Data.TextureSlotIndex++] = s_Data.whiteTexture;
@@ -51,6 +62,41 @@ namespace C78E {
 	}
 
 	void Renderer3D::submit(Ref<Scene> scene) {
+
+		//SkyBox
+		{
+			C78E::ShaderLibrary::get()->get("SkyBox")->Bind();
+
+			std::vector<RawImage> skyBoxImgs = {
+			{"assets/textures/Test000.png", true},
+			{"assets/textures/Test000.png", true},
+			{"assets/textures/Test000.png", true},
+			{"assets/textures/Test000.png", true},
+			{"assets/textures/Test000.png", true},
+			{"assets/textures/Test000.png", true}
+			};
+
+			//TODO - to s_Data
+			auto cubeMap = CubeMap::create(skyBoxImgs);
+			cubeMap->bind(0);
+
+			auto vbo = VertexBuffer::Create(GenericShape::CubeMap::getVertexData().data(), GenericShape::CubeMap::getVertexData().size());
+			vbo->Bind();
+			vbo->SetLayout({ { ShaderDataType::Float3, "a_Position"} });
+			auto ibo = IndexBuffer::Create(GenericShape::CubeMap::getIndexData().data(), GenericShape::CubeMap::getIndexData().size());
+			ibo->Bind();
+			auto vao = VertexArray::Create();
+			vao->AddVertexBuffer(vbo);
+			vao->SetIndexBuffer(ibo);
+			vao->Bind();
+			RenderCommand::drawIndexed(vao, GenericShape::CubeMap::getIndexData().size());
+
+		}
+		
+
+
+
+
 		SceneLightUniform sceneLightUniform{};
 
 		auto ambientLights = scene->getAllEntitiesWith<AmbientLightComponent>();
@@ -134,6 +180,7 @@ namespace C78E {
 			RenderCommand::drawIndexed(s_Data.vertexArray);
 			s_Data.Stats.DrawCalls++;
 		}
+
 	}
 
 	void Renderer3D::setShader(std::string shader) {
