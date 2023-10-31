@@ -17,7 +17,6 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 include "C78Engine/vendor/GLFW"
 include "C78Engine/vendor/Glad"
 include "C78Engine/vendor/imgui"
-include "C78Engine/vendor/msdf-atlas-gen"
 
 filter "system:windows"
 	argsym = "/"
@@ -52,8 +51,6 @@ project "C78Engine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.msdf_atlas_gen}",
-		"%{IncludeDir.msdfgen}",
 		"%{IncludeDir.VulkanSDK}",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/tinyobjloader"
@@ -64,7 +61,6 @@ project "C78Engine"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"msdf-atlas-gen",
 	}
 	
 	filter "action:vs*"

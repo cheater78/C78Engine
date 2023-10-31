@@ -4,7 +4,6 @@
 #include "SceneCamera.h"
 #include "C78E/Core/Types.h"
 #include "C78E/Core/UUID.h"
-#include "C78E/Renderer/Font.h"
 #include "C78E/Renderer/Assets/Model/Mesh.h"
 #include "C78E/Renderer/Assets/Material/Material.h"
 
@@ -126,15 +125,6 @@ namespace C78E {
 		}
 	};
 
-	struct TextComponent
-	{
-		std::string TextString;
-		Ref<Font> FontAsset = Font::GetDefault();
-		glm::vec4 Color{ 1.0f };
-		float Kerning = 0.0f;
-		float LineSpacing = 0.0f;
-	};
-
 	
 	template<typename... Component>
 	struct ComponentGroup
@@ -160,8 +150,7 @@ namespace C78E {
 		CircleRendererComponent,
 		CameraComponent,
 		ScriptComponent,
-		NativeScriptComponent,
-		TextComponent
+		NativeScriptComponent
 	>;
 	
 }

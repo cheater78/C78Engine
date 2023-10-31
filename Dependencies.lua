@@ -9,11 +9,12 @@ IncludeDir["Glad"] = 		"%{wks.location}/C78Engine/vendor/Glad"
 IncludeDir["ImGui"] = 		"%{wks.location}/C78Engine/vendor/ImGui"
 IncludeDir["glm"] = 		"%{wks.location}/C78Engine/vendor/glm"
 IncludeDir["entt"] = 		"%{wks.location}/C78Engine/vendor/entt/single_include"
+
+IncludeDir["VulkanSDK"] = 	"%{VULKAN_SDK}/Include"
 IncludeDir["shaderc"] = 	"%{VULKAN_SDK}/Include/shaderc"
 IncludeDir["SPIRV_Cross"] = "%{VULKAN_SDK}/Include/spirv_cross"
-IncludeDir["VulkanSDK"] = 	"%{VULKAN_SDK}/Include"
-IncludeDir["msdfgen"] = 	"%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdfgen"
-IncludeDir["msdf_atlas_gen"] = "%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdf-atlas-gen"
+
+
 
 LibraryDir = {}
 LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"

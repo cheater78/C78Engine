@@ -152,7 +152,7 @@ namespace C78E {
 
 		if (mainCamera)
 		{
-			/*
+			
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
 			// Draw sprites
@@ -162,7 +162,7 @@ namespace C78E {
 				{
 					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					Renderer2D::DrawSprite(transform.getTransform(), sprite, (int)entity);
 				}
 			}
 
@@ -173,11 +173,12 @@ namespace C78E {
 				{
 					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
 
-					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+					Renderer2D::DrawCircle(transform.getTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
 				}
 			}
 
 			// Draw text
+			/*
 			{
 				auto view = m_Registry.view<TransformComponent, TextComponent>();
 				for (auto entity : view)
@@ -281,6 +282,7 @@ namespace C78E {
 		}
 
 		// Draw text
+		/*
 		{
 			auto view = m_Registry.view<TransformComponent, TextComponent>();
 			for (auto entity : view)
@@ -290,7 +292,7 @@ namespace C78E {
 				Renderer2D::DrawString(text.TextString, transform.getTransform(), text, (int)entity);
 			}
 		}
-
+		*/
 		Renderer2D::EndScene();
 	}
   
@@ -366,11 +368,6 @@ namespace C78E {
 
 	template<>
 	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::onComponentAdded<TextComponent>(Entity entity, TextComponent& component)
 	{
 	}
 

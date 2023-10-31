@@ -549,7 +549,7 @@ namespace C78E {
 		else
 			DrawQuad(transform, src.Color, entityID);
 	}
-
+	/*
 	void Renderer2D::DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID)
 	{
 		const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
@@ -662,12 +662,12 @@ namespace C78E {
 			}
 		}
 	}
-
+	
 	void Renderer2D::DrawString(const std::string& string, const glm::mat4& transform, const TextComponent& component, int entityID)
 	{
 		DrawString(string, component.FontAsset, transform, { component.Color, component.Kerning, component.LineSpacing }, entityID);
 	}
-
+	*/
 	float Renderer2D::GetLineWidth()
 	{
 		return s_Data.LineWidth;

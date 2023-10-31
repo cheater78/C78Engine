@@ -159,9 +159,6 @@
     <ClInclude Include="src\C78E\Renderer\EditorCamera.h">
       <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78E\Renderer\Font.h">
-      <Filter>C78E\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\C78E\Renderer\Framebuffer.h">
       <Filter>C78E\Renderer</Filter>
     </ClInclude>
@@ -311,9 +308,6 @@
       <Filter>C78E\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\C78E\Renderer\EditorCamera.cpp">
-      <Filter>C78E\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\C78E\Renderer\Font.cpp">
       <Filter>C78E\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\C78E\Renderer\Framebuffer.cpp">
