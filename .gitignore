@@ -410,5 +410,7 @@ vendor/premake/*
 .idea/
 
 *.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 *.sln
 *Makefile
