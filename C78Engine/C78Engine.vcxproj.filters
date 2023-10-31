@@ -1,35 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="C78e">
-      <UniqueIdentifier>{7CBE827C-68F5-830D-11E2-6910FDF7FF0E}</UniqueIdentifier>
+    <Filter Include="C78E">
+      <UniqueIdentifier>{5CBE827C-48F5-830D-F1E1-6910DDF7FF0E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Core">
-      <UniqueIdentifier>{5450A2F6-C0BA-566D-09F9-071375A234C2}</UniqueIdentifier>
+    <Filter Include="C78E\Core">
+      <UniqueIdentifier>{343CFDAB-A0A6-B122-E9E4-62C8558E8F77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Events">
-      <UniqueIdentifier>{E0C6992D-4C7C-1223-D570-0CFA41250927}</UniqueIdentifier>
+    <Filter Include="C78E\Events">
+      <UniqueIdentifier>{C02A5FA5-2CE0-D79A-B5D4-D1712189CE9E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\ImGui">
-      <UniqueIdentifier>{A62057CB-92D8-9818-FBDF-7174E7B63309}</UniqueIdentifier>
+    <Filter Include="C78E\ImGui">
+      <UniqueIdentifier>{86880F2C-7240-5179-DB47-2AD5C71EEC69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Renderer">
-      <UniqueIdentifier>{A20D22F2-0ECE-9D28-D708-E7A54388E204}</UniqueIdentifier>
+    <Filter Include="C78E\Renderer">
+      <UniqueIdentifier>{82E9CF70-EEA9-4BA7-B7E4-942423649083}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Renderer\Assets">
-      <UniqueIdentifier>{446A4C93-30F9-D55C-D917-EA57C585E602}</UniqueIdentifier>
+    <Filter Include="C78E\Renderer\Assets">
+      <UniqueIdentifier>{242A1038-10B9-9901-B9D7-ADFCA545AAA7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Renderer\Assets\Model">
-      <UniqueIdentifier>{84763E5F-7086-EA2F-D93F-4F4EC56ED9C8}</UniqueIdentifier>
+    <Filter Include="C78E\Renderer\Assets\Material">
+      <UniqueIdentifier>{4201CD4A-AE19-B474-77C6-430EE39D480E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Renderer\Assets\Texture">
-      <UniqueIdentifier>{A493AC2D-904E-9CD9-3906-152425A0E669}</UniqueIdentifier>
+    <Filter Include="C78E\Renderer\Assets\Model">
+      <UniqueIdentifier>{649E8A58-50AE-3629-B967-9B47A59625C2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Scene">
-      <UniqueIdentifier>{991807CC-85D0-4819-EED7-2175DAAEE309}</UniqueIdentifier>
+    <Filter Include="C78E\Renderer\Assets\Shader">
+      <UniqueIdentifier>{4A095D77-B616-8B5D-3FFD-8648AB095714}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C78e\Utils">
-      <UniqueIdentifier>{DCAC34CC-C864-7619-316C-4F751D43110A}</UniqueIdentifier>
+    <Filter Include="C78E\Renderer\Assets\Texture">
+      <UniqueIdentifier>{8433A2AA-70EE-9156-19A6-0AA10540DCE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78E\Scene">
+      <UniqueIdentifier>{7980BF2C-6538-017A-CE3F-DAD5BA169C6A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C78E\Utils">
+      <UniqueIdentifier>{BC14ED2C-A8CC-2E7A-11D4-07D6FDAAC96A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
@@ -45,164 +51,176 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\C78E.h" />
-    <ClInclude Include="src\C78EPCH.h" />
-    <ClInclude Include="src\C78e\Core\Application.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Application.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Assert.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Assert.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Buffer.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Buffer.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Console.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Console.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Core.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Core.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\EntryPoint.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\EntryPoint.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\FileSystem.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\FileSystem.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Input.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Input.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\KeyCodes.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\KeyCodes.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Layer.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Layer.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\LayerStack.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\LayerStack.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Log.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Log.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\MouseCodes.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\MouseCodes.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\PlatformDetection.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\PlatformDetection.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Timer.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\StdUtils.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Timestep.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Timer.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Types.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Timestep.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\UUID.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\Types.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\Window.h">
-      <Filter>C78e\Core</Filter>
+    <ClInclude Include="src\C78E\Core\UUID.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Events\ApplicationEvent.h">
-      <Filter>C78e\Events</Filter>
+    <ClInclude Include="src\C78E\Core\Window.h">
+      <Filter>C78E\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Events\Event.h">
-      <Filter>C78e\Events</Filter>
+    <ClInclude Include="src\C78E\Events\ApplicationEvent.h">
+      <Filter>C78E\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Events\KeyEvent.h">
-      <Filter>C78e\Events</Filter>
+    <ClInclude Include="src\C78E\Events\Event.h">
+      <Filter>C78E\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Events\MouseEvent.h">
-      <Filter>C78e\Events</Filter>
+    <ClInclude Include="src\C78E\Events\KeyEvent.h">
+      <Filter>C78E\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\ImGui\ImGuiLayer.h">
-      <Filter>C78e\ImGui</Filter>
+    <ClInclude Include="src\C78E\Events\MouseEvent.h">
+      <Filter>C78E\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Assets\Model\Mesh.h">
-      <Filter>C78e\Renderer\Assets\Model</Filter>
+    <ClInclude Include="src\C78E\ImGui\ImGuiLayer.h">
+      <Filter>C78E\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Assets\Model\ModelManager.h">
-      <Filter>C78e\Renderer\Assets\Model</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Material\Material.h">
+      <Filter>C78E\Renderer\Assets\Material</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Assets\Texture\Texture.h">
-      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Material\MaterialSystem.h">
+      <Filter>C78E\Renderer\Assets\Material</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Assets\Texture\TextureManager.h">
-      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Model\Mesh.h">
+      <Filter>C78E\Renderer\Assets\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Buffer.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Model\ModelManager.h">
+      <Filter>C78E\Renderer\Assets\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Camera.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Shader\Shader.h">
+      <Filter>C78E\Renderer\Assets\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\EditorCamera.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Shader\ShaderLibrary.h">
+      <Filter>C78E\Renderer\Assets\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Font.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Texture\Texture.h">
+      <Filter>C78E\Renderer\Assets\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Framebuffer.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Assets\Texture\TextureManager.h">
+      <Filter>C78E\Renderer\Assets\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\GenericShape.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Buffer.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\GraphicsContext.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Camera.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\MSDFData.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\EditorCamera.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\OrthographicCamera.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Font.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\OrthographicCameraController.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Framebuffer.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\RenderCommand.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\GenericShape.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Renderer.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\GraphicsContext.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Renderer2D.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\MSDFData.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Renderer3D.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\OrthographicCamera.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\RendererAPI.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\OrthographicCameraController.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\Assets\Shader\Shader.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\RenderCommand.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\UniformBuffer.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Renderer.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Renderer\VertexArray.h">
-      <Filter>C78e\Renderer</Filter>
+    <ClInclude Include="src\C78E\Renderer\Renderer2D.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Scene\Components.h">
-      <Filter>C78e\Scene</Filter>
+    <ClInclude Include="src\C78E\Renderer\Renderer3D.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Scene\Entity.h">
-      <Filter>C78e\Scene</Filter>
+    <ClInclude Include="src\C78E\Renderer\RendererAPI.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Scene\Scene.h">
-      <Filter>C78e\Scene</Filter>
+    <ClInclude Include="src\C78E\Renderer\UniformBuffer.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Scene\SceneCamera.h">
-      <Filter>C78e\Scene</Filter>
+    <ClInclude Include="src\C78E\Renderer\VertexArray.h">
+      <Filter>C78E\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Scene\ScriptableEntity.h">
-      <Filter>C78e\Scene</Filter>
+    <ClInclude Include="src\C78E\Scene\Components.h">
+      <Filter>C78E\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Utils\PlatformUtils.h">
-      <Filter>C78e\Utils</Filter>
+    <ClInclude Include="src\C78E\Scene\Entity.h">
+      <Filter>C78E\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\C78E\Scene\Scene.h">
+      <Filter>C78E\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78E\Scene\SceneCamera.h">
+      <Filter>C78E\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78E\Scene\ScriptableEntity.h">
+      <Filter>C78E\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78E\Utils\PlatformUtils.h">
+      <Filter>C78E\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\C78e.h" />
+    <ClInclude Include="src\C78ePCH.h" />
     <ClInclude Include="src\Platform\Linux\LinuxWindow.h">
       <Filter>Platform\Linux</Filter>
     </ClInclude>
@@ -233,109 +251,114 @@
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="src\C78e\Core\StdUtils.h" />
-    <ClInclude Include="src\C78e\Renderer\Assets\Material\Material.h" />
-    <ClInclude Include="src\C78e\Renderer\Assets\Shader\ShaderLibrary.h" />
-    <ClInclude Include="src\C78e\Renderer\Assets\Material\MaterialSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\C78EPCH.cpp" />
-    <ClCompile Include="src\C78e\Core\Application.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\Application.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Core\Console.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\Console.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Core\FileSystem.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\FileSystem.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Core\Layer.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\Layer.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Core\LayerStack.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\LayerStack.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Core\Log.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\Log.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Core\UUID.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\UUID.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Core\Window.cpp">
-      <Filter>C78e\Core</Filter>
+    <ClCompile Include="src\C78E\Core\Window.cpp">
+      <Filter>C78E\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\ImGui\ImGuiBuild.cpp">
-      <Filter>C78e\ImGui</Filter>
+    <ClCompile Include="src\C78E\ImGui\ImGuiBuild.cpp">
+      <Filter>C78E\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\ImGui\ImGuiLayer.cpp">
-      <Filter>C78e\ImGui</Filter>
+    <ClCompile Include="src\C78E\ImGui\ImGuiLayer.cpp">
+      <Filter>C78E\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Model\Mesh.cpp">
-      <Filter>C78e\Renderer\Assets\Model</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Material\Material.cpp">
+      <Filter>C78E\Renderer\Assets\Material</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Model\ModelManager.cpp">
-      <Filter>C78e\Renderer\Assets\Model</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Material\MaterialSystem.cpp">
+      <Filter>C78E\Renderer\Assets\Material</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Texture\Texture.cpp">
-      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Model\Mesh.cpp">
+      <Filter>C78E\Renderer\Assets\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Texture\TextureManager.cpp">
-      <Filter>C78e\Renderer\Assets\Texture</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Model\ModelManager.cpp">
+      <Filter>C78E\Renderer\Assets\Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Buffer.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Shader\Shader.cpp">
+      <Filter>C78E\Renderer\Assets\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\EditorCamera.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Shader\ShaderLibrary.cpp">
+      <Filter>C78E\Renderer\Assets\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Font.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Texture\Texture.cpp">
+      <Filter>C78E\Renderer\Assets\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Framebuffer.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Assets\Texture\TextureManager.cpp">
+      <Filter>C78E\Renderer\Assets\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\GraphicsContext.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Buffer.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\OrthographicCamera.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\EditorCamera.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\OrthographicCameraController.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Font.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\RenderCommand.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Framebuffer.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Renderer.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\GraphicsContext.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Renderer2D.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\OrthographicCamera.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Renderer3D.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\OrthographicCameraController.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\RendererAPI.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\RenderCommand.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Shader\Shader.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Renderer.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\UniformBuffer.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Renderer2D.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\VertexArray.cpp">
-      <Filter>C78e\Renderer</Filter>
+    <ClCompile Include="src\C78E\Renderer\Renderer3D.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Scene\Entity.cpp">
-      <Filter>C78e\Scene</Filter>
+    <ClCompile Include="src\C78E\Renderer\RendererAPI.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Scene\Scene.cpp">
-      <Filter>C78e\Scene</Filter>
+    <ClCompile Include="src\C78E\Renderer\UniformBuffer.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Scene\SceneCamera.cpp">
-      <Filter>C78e\Scene</Filter>
+    <ClCompile Include="src\C78E\Renderer\VertexArray.cpp">
+      <Filter>C78E\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\C78E\Scene\Entity.cpp">
+      <Filter>C78E\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78E\Scene\Scene.cpp">
+      <Filter>C78E\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78E\Scene\SceneCamera.cpp">
+      <Filter>C78E\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\C78ePCH.cpp" />
     <ClCompile Include="src\Platform\Linux\LinuxWindow.cpp">
       <Filter>Platform\Linux</Filter>
     </ClCompile>
@@ -372,8 +395,5 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\C78e\Renderer\Assets\Material\Material.cpp" />
-    <ClCompile Include="src\C78e\Renderer\Assets\Shader\ShaderLibrary.cpp" />
-    <ClCompile Include="src\C78e\Renderer\Assets\Material\MaterialSystem.cpp" />
   </ItemGroup>
 </Project>

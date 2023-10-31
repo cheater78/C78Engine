@@ -14,8 +14,8 @@ workspace "C78Engine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "C78Engine/vendor/glfw"
-include "C78Engine/vendor/glad"
+include "C78Engine/vendor/GLFW"
+include "C78Engine/vendor/Glad"
 include "C78Engine/vendor/imgui"
 include "C78Engine/vendor/msdf-atlas-gen"
 
@@ -48,7 +48,6 @@ project "C78Engine"
 		"%{prj.name}/src/",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.IMGUI}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
@@ -69,8 +68,8 @@ project "C78Engine"
 	}
 	
 	filter "action:vs*"
-	    pchheader "C78EPCH.h"
-		pchsource "C78Engine/src/C78EPCH.cpp"
+	    pchheader "C78ePCH.h"
+		pchsource "C78Engine/src/C78ePCH.cpp"
 
 
 	filter "system:windows"
@@ -160,6 +159,7 @@ project "C78App"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.stb}",
 		"C78Engine/vendor/",
+		"%{IncludeDir.VulkanSDK}",
 		"C78Engine/src"
 	}
 

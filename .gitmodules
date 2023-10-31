@@ -26,7 +26,3 @@
 [submodule "C78Engine/vendor/imgui"]
 	path = C78Engine/vendor/imgui
 	url = https://github.com/cheater78/ImGui.git
-
-[submodule "C78Engine/vendor/msdf-atlas-gen"]
-	path = C78Engine/vendor/msdf-atlas-gen
-	url = https://github.com/cheater78/msdf-atlas-gen.git

@@ -1,8 +1,8 @@
 #include "C78EPCH.h"
-	#include "Font.h"
 
+#include "Font.h"
 
-#undef INFINITE
+//#undef INFINITE
 #include "msdf-atlas-gen.h"
 #include "FontGeometry.h"
 #include "GlyphGeometry.h"
