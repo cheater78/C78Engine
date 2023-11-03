@@ -7,6 +7,8 @@
 #include "C78E/Renderer/VertexArray.h"
 #include "C78E/Renderer/UniformBuffer.h"
 #include "C78E/Renderer/Assets/Shader/Shader.h"
+#include "C78E/Renderer/Assets/Texture/Texture.h"
+#include "C78E/Renderer/Assets/Texture/RawImage.h"
 
 namespace C78E {
 
@@ -58,6 +60,9 @@ namespace C78E {
 			CameraUniform cameraUniform;
 			Ref<UniformBuffer> entityMaterialUniformBuffer;
 			Ref<UniformBuffer> entityUniformBuffer;
+
+			Ref<RawImage> skyBox;
+			Ref<CubeMap> skyBoxCubeMap;
 		};
 
 		static Renderer3DData s_Data;

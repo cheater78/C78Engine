@@ -23,6 +23,18 @@ namespace C78E {
 			s_RendererAPI->clear();
 		}
 
+		static void enableDepthTest(bool enable) {
+			s_RendererAPI->enableDepthTest(enable);
+		}
+
+		static void setDepthFunc(RendererAPI::DepthFunc func) {
+			s_RendererAPI->setDepthFunc(func);
+		}
+		
+		static void setDepthWrite(bool enable) {
+			s_RendererAPI->setDepthWrite(enable);
+		}
+
 		static void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) {
 			s_RendererAPI->drawIndexed(vertexArray, indexCount);
 		}

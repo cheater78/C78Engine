@@ -24,7 +24,7 @@ public:
         camComponent.Primary = true;
         camComponent.Camera.SetPerspective(glm::radians<float>(45.f), 0.01f, 10000.f);
         camComponent.Camera.SetViewportSize(m_Window.getWidth(), m_Window.getHeight());
-        camera.setTransform(glm::vec3(0.f, 5.f, -6.f), glm::vec3(30.f / 360.f * glm::two_pi<float>(), 0.f, 0.f));
+        camera.setTransform(glm::vec3(0.f, 0.f, -10.f), glm::vec3(0.f / 360.f * glm::two_pi<float>(), 0.f, 0.f));
         
         //Init Renderer
         C78E::RenderCommand::init();
@@ -32,8 +32,10 @@ public:
         C78E::Renderer3D::init();
 
         //Shaders
-        C78E::ShaderLibrary::get()->load("assets/shaders/SkyBox.glsl");
+        C78E::ShaderLibrary::get()->load("assets/shaders/Renderer3D_SkyBox.glsl");
         C78E::ShaderLibrary::get()->load("assets/shaders/Renderer3D_Generic.glsl");
+        C78E::ShaderLibrary::get()->load("assets/shaders/Renderer3D_PointLight.glsl");
+        C78E::ShaderLibrary::get()->load("assets/shaders/Renderer3D_SpotLight.glsl");
 
         // Meshes
         C78E::ModelManager::get()->load("RedTriag", C78E::GenericShape::Triangle::getMesh(glm::vec4(1.f, 0.f, 0.f, 1.f), 0));
@@ -60,8 +62,8 @@ public:
         m_DirectLight.addComponent<C78E::DirectLightComponent>(glm::vec3{ 0.f, -1.f, 0.f }, glm::vec4{ 1.f, 1.f, 1.f, .1f });
 
         m_PointLight = m_Scene->createEntity("PointLight");
-        m_PointLight.addComponent<C78E::PointLightComponent>().color = { 1.f, 1.f, 1.f, 50.f };
-        m_PointLight.setTransform(glm::vec3(0.f, 10.f, 8.f));
+        m_PointLight.addComponent<C78E::PointLightComponent>().color = { 1.f, 1.f, 1.f, 5.f };
+        m_PointLight.setTransform(glm::vec3(0.f, 5.f, 8.f));
 
         m_SpotLight = m_Scene->createEntity("SpotLight");
         m_SpotLight.addComponent<C78E::SpotLightComponent>(glm::vec3(), glm::vec3{ 1.f, -0.5f, 0.8f }, glm::vec4{ 1.f, 1.f, 1.f, 30.f }, 30.f / 180.f * glm::pi<float>(), 2.f / 180.f * glm::pi<float>());

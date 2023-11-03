@@ -13,6 +13,10 @@ namespace C78E {
 		virtual void setClearColor(const glm::vec4& color) override;
 		virtual void clear() override;
 
+		virtual void enableDepthTest(bool enable) override;
+		virtual void setDepthFunc(DepthFunc func) override;
+		virtual void setDepthWrite(bool enable) override;
+
 		virtual void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) override;
 		virtual void drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
 		

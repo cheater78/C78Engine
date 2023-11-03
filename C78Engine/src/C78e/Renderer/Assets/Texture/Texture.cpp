@@ -51,4 +51,16 @@ namespace C78E {
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
+
+	Ref<CubeMap> CubeMap::create(Ref<RawImage> crossCubeMap)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL:  return createRef<OpenGLCubeMap>(crossCubeMap);
+		}
+
+		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
 }

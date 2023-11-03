@@ -58,35 +58,35 @@ namespace C78E {
 					*/
 
 					//Front
-					Vertex(glm::vec3{ -.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
 					//Back
-					Vertex(glm::vec3{ +.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, 0.f, +1.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
 					//Right
-					Vertex(glm::vec3{ +.5f, -.5f, +.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, -.5f, -.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, +.5f, -.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, +.5f, +.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, -.5f, -.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, -.5f, +.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, +.5f, +.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, +.5f, -.5f }, color, glm::vec3{ +1.f, 0.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
 					//Left
-					Vertex(glm::vec3{ -.5f, -.5f, -.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, -.5f, +.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, +.5f, +.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, +.5f, -.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, -.5f, +.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, -.5f, -.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, +.5f, -.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, +.5f, +.5f }, color, glm::vec3{ -1.f, 0.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
 					//Top
-					Vertex(glm::vec3{ -.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, +.5f, -.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, +.5f, +.5f }, color, glm::vec3{ 0.f, +1.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID)),
 					//bottom
-					Vertex(glm::vec3{ -.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ +.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
-					Vertex(glm::vec3{ -.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID))
+					Vertex(glm::vec3{ -.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, -.5f, +.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 1.f, 0.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ +.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 1.f, 1.f }, static_cast<float>(texID)),
+					Vertex(glm::vec3{ -.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, -1.f, 0.f }, glm::vec2{ 0.f, 1.f }, static_cast<float>(texID))
 				};
 			}
 			static std::vector<uint32_t> getIndexData() {
@@ -110,35 +110,35 @@ namespace C78E {
 			static std::vector<float> getVertexData() {
 				return std::vector<float>{
 					//Front
-					-.5f, -.5f, +.5f,
-					+.5f, -.5f, +.5f,
-					+.5f, +.5f, +.5f,
-					-.5f, +.5f, +.5f,
+					-1.f, -1.f, +1.f,
+					+1.f, -1.f, +1.f,
+					+1.f, +1.f, +1.f,
+					-1.f, +1.f, +1.f,
 					//Back
-					+.5f, -.5f, -.5f,
-					-.5f, -.5f, -.5f,
-					-.5f, +.5f, -.5f,
-					+.5f, +.5f, -.5f,
+					+1.f, -1.f, -1.f,
+					-1.f, -1.f, -1.f,
+					-1.f, +1.f, -1.f,
+					+1.f, +1.f, -1.f,
 					//Right
-					+.5f, -.5f, +.5f,
-					+.5f, -.5f, -.5f,
-					+.5f, +.5f, -.5f,
-					+.5f, +.5f, +.5f,
+					+1.f, -1.f, +1.f,
+					+1.f, -1.f, -1.f,
+					+1.f, +1.f, -1.f,
+					+1.f, +1.f, +1.f,
 					//Left
-					-.5f, -.5f, -.5f,
-					-.5f, -.5f, +.5f,
-					-.5f, +.5f, +.5f,
-					-.5f, +.5f, -.5f,
+					-1.f, -1.f, -1.f,
+					-1.f, -1.f, +1.f,
+					-1.f, +1.f, +1.f,
+					-1.f, +1.f, -1.f,
 					//Top
-					-.5f, +.5f, +.5f,
-					+.5f, +.5f, +.5f,
-					+.5f, +.5f, -.5f,
-					-.5f, +.5f, -.5f,
+					-1.f, +1.f, +1.f,
+					+1.f, +1.f, +1.f,
+					+1.f, +1.f, -1.f,
+					-1.f, +1.f, -1.f,
 					//bottom
-					-.5f, -.5f, -.5f,
-					+.5f, -.5f, -.5f,
-					+.5f, -.5f, +.5f,
-					-.5f, -.5f, +.5f
+					-1.f, -1.f, -1.f,
+					+1.f, -1.f, -1.f,
+					+1.f, -1.f, +1.f,
+					-1.f, -1.f, +1.f
 				};
 			}
 			static std::vector<uint32_t> getIndexData() {

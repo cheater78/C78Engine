@@ -33,7 +33,7 @@ namespace C78E {
 
 	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 	{
-		C78_CORE_ASSERT(width > 0 && height > 0);
+		if (width <= 0 || height <= 0) return; // Minimized
 		m_AspectRatio = (float)width / (float)height;
 		RecalculateProjection();
 	}

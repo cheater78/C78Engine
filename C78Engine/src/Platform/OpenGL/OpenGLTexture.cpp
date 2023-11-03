@@ -126,6 +126,12 @@ namespace C78E {
 		glGenTextures(1, &m_RendererID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
 
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
 		uint32_t side = 0;
 		m_Size = images[0].getWidth();
 		m_Format = images[0].getFormat();
@@ -134,14 +140,42 @@ namespace C78E {
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + side, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, image.getData());
 			side++;
 		}
+	}
+
+	OpenGLCubeMap::OpenGLCubeMap(Ref<RawImage> crossCubeMap)
+	{
+		C78_CORE_ASSERT(crossCubeMap, "CubeMap data cannot be null!");
+		C78_CORE_ASSERT((uint32_t)crossCubeMap->getFormat() < 5, "Img Format not supported!");
+
+		glGenTextures(1, &m_RendererID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		m_Format = crossCubeMap->getFormat();
 
+		auto map = *crossCubeMap;
+		m_Size = (map.getWidth() / 4 > map.getHeight() / 3) ? (map.getHeight() / 3) : (map.getWidth() / 4);
+		
 
+		auto right	= map.croppedCopy(2*m_Size, 1*m_Size, m_Size, m_Size);
+		auto left	= map.croppedCopy(0*m_Size, 1*m_Size, m_Size, m_Size);
+		auto top	= map.croppedCopy(1*m_Size, 0*m_Size, m_Size, m_Size);
+		auto bot	= map.croppedCopy(1*m_Size, 2*m_Size, m_Size, m_Size);
+		auto front	= map.croppedCopy(1*m_Size, 1*m_Size, m_Size, m_Size);
+		auto back	= map.croppedCopy(3*m_Size, 1*m_Size, m_Size, m_Size);
+
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, right->getData());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, left->getData());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, top->getData());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, bot->getData());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, front->getData());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5, 0, Utils::C78EImageFormatToGLInternalFormat(m_Format), m_Size, m_Size, 0, Utils::C78EImageFormatToGLDataFormat(m_Format), GL_UNSIGNED_BYTE, back->getData());
+
+		
 	}
 
 	OpenGLCubeMap::~OpenGLCubeMap() {

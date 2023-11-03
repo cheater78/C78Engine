@@ -51,6 +51,7 @@ namespace C78E {
 	class CubeMap{
 	public:
 		static Ref<CubeMap> create(std::vector<RawImage>& images);
+		static Ref<CubeMap> create(Ref<RawImage> crossCubeMap);
 
 		virtual void bind(uint32_t slot = 0) const = 0;
 

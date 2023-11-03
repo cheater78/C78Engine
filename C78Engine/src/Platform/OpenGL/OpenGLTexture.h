@@ -49,12 +49,13 @@ namespace C78E {
 	class OpenGLCubeMap : public CubeMap {
 	public:
 		OpenGLCubeMap(std::vector<RawImage>& images);
+		OpenGLCubeMap(Ref<RawImage> crossCubeMap);
 		~OpenGLCubeMap();
 
 		void bind(uint32_t slot = 0) const override;
 
 	private:
-		uint32_t m_Size = 1024;
+		uint32_t m_Size = 1;
 		ImageFormat m_Format = ImageFormat::R8;
 		uint32_t m_RendererID = 0;
 	};

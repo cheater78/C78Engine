@@ -15,6 +15,7 @@ namespace C78E {
 
 	class RawImage {
 	public:
+		RawImage(uint32_t width, uint32_t height, ImageFormat format, void* data);
 		RawImage(const char* file, bool flipvert = false);
 		RawImage(const RawImage& copy);
 		~RawImage();
@@ -34,6 +35,9 @@ namespace C78E {
 		void expandRight(RawImage& image);
 		void expandTop(RawImage& image);
 		void expandBot(RawImage& image);
+
+		Ref<RawImage> croppedCopy(float ox, float oy, float dx, float dy);
+		Ref<RawImage> croppedCopy(uint32_t ox, uint32_t oy, uint32_t dx, uint32_t dy);
 
 	private:
 		std::string m_Name = "<RawImage>";

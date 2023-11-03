@@ -18,9 +18,9 @@ namespace C78E {
 
 	Ref<Texture2D> TextureManager::load(const std::string& filepath)
 	{
-		auto shader = Texture2D::create(filepath);
-		add(shader);
-		return shader;
+		auto texture = Texture2D::create(filepath);
+		add(texture);
+		return texture;
 	}
 
 	Ref<Texture2D> TextureManager::load(const std::string& name, const std::string& filepath)

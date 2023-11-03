@@ -38,6 +38,7 @@ namespace C78E {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 		glEnable(GL_LINE_SMOOTH);
 	}
 
@@ -51,6 +52,21 @@ namespace C78E {
 
 	void OpenGLRendererAPI::clear() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void OpenGLRendererAPI::enableDepthTest(bool enable) {
+		if (enable)
+			glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
+	}
+
+	void OpenGLRendererAPI::setDepthFunc(DepthFunc func) {
+		glDepthFunc(GL_NEVER + (uint32_t)func);
+	}
+
+	void OpenGLRendererAPI::setDepthWrite(bool enable) {
+		glDepthMask(enable);
 	}
 
 	void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount) {
