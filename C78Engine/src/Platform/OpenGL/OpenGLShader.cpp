@@ -104,11 +104,10 @@ namespace C78E {
 			C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
 		}
 
-		m_Name = std::filesystem::getName(filepath);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
-		: m_Name(name)
+		: m_FilePath(name)
 	{
 		//C78_PROFILE_FUNCTION();
 

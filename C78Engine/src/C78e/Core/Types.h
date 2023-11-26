@@ -51,8 +51,9 @@ namespace C78E {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	struct CameraUniform
-	{
+	struct Uniform { };
+
+	struct CameraUniform{
 		glm::mat4 projMat{ 1.f };
 		glm::mat4 viewMat{ 1.f };
 		glm::mat4 invViewMat{ 1.f };
@@ -61,7 +62,7 @@ namespace C78E {
 #define MAX_DIRECT_LIGHTS 10
 #define MAX_POINT_LIGHTS 10
 #define MAX_SPOT_LIGHTS 10
-	struct SceneLightUniform {
+	struct SceneLightUniform{
 		AmbientLight ambientLight{ {1.f, 1.f, 1.f, .1f} };
 
 		DirectLight directLights[MAX_DIRECT_LIGHTS]{};
@@ -72,7 +73,7 @@ namespace C78E {
 		int spotLightCount = 0;
 	};
 
-	struct EntityUniform {
+	struct EntityUniform{
 		glm::mat4 transform;
 		glm::mat4 normalMat;
 	};

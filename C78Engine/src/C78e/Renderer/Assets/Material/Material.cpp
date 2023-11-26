@@ -10,9 +10,6 @@ namespace C78E {
 
 	Material::Material(std::string filename, MaterialProperties props)
 		: m_Material(props)
-	{
-		
-
-	}
+	{ }
 
 }

@@ -147,10 +147,10 @@ namespace C78E {
 		C78_CORE_ASSERT(ox + dx <= 1.f, "Cropped Image must be in bounds!");
 		C78_CORE_ASSERT(oy + dy <= 1.f, "Cropped Image must be in bounds!");
 
-		uint32_t originX = m_Width * ox;
-		uint32_t originY = m_Height * oy;
-		uint32_t width = m_Width * dx;
-		uint32_t height = m_Height * dy;
+		uint32_t originX = static_cast<uint32_t>(m_Width * ox);
+		uint32_t originY = static_cast<uint32_t>(m_Height * oy);
+		uint32_t width = static_cast<uint32_t>(m_Width * dx);
+		uint32_t height = static_cast<uint32_t>(m_Height * dy);
 		
 		return croppedCopy(originX, originY, width, height);
 	}

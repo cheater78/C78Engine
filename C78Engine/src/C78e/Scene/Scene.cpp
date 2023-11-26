@@ -76,6 +76,8 @@ namespace C78E {
 		// Copy components (except IDComponent and TagComponent)
 		copyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
 
+		newScene->m_ActiveCam = other->m_ActiveCam;
+
 		return newScene;
 	}
 
@@ -86,6 +88,7 @@ namespace C78E {
 	Entity Scene::createEntityWithUUID(UUID uuid, const std::string& name) {
 		Entity entity = { m_Registry.create(), this };
 		entity.addComponent<IDComponent>(uuid);
+		entity.addComponent<StateComponent>();
 		entity.addComponent<TransformComponent>();
 		auto& tag = entity.addComponent<TagComponent>();
 		tag = name.empty() ? "Entity" : name;
@@ -131,67 +134,7 @@ namespace C78E {
 
 	void Scene::onUpdateRuntime(Timestep ts) {
 		// Physics
-
-		// Render 2D
-		Camera* mainCamera = nullptr;
-		glm::mat4 cameraTransform;
-		{
-			auto view = m_Registry.view<TransformComponent, CameraComponent>();
-			for (auto entity : view)
-			{
-				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-				
-				if (camera.Primary)
-				{
-					mainCamera = &camera.Camera;
-					cameraTransform = transform.getTransform();
-					break;
-				}
-			}
-		}
-
-		if (mainCamera)
-		{
-			
-			Renderer2D::BeginScene(*mainCamera, cameraTransform);
-
-			// Draw sprites
-			{
-				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-				for (auto entity : group)
-				{
-					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-					Renderer2D::DrawSprite(transform.getTransform(), sprite, (int)entity);
-				}
-			}
-
-			// Draw circles
-			{
-				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-				for (auto entity : view)
-				{
-					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-
-					Renderer2D::DrawCircle(transform.getTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-				}
-			}
-
-			// Draw text
-			/*
-			{
-				auto view = m_Registry.view<TransformComponent, TextComponent>();
-				for (auto entity : view)
-				{
-					auto [transform, text] = view.get<TransformComponent, TextComponent>(entity);
-
-					Renderer2D::DrawString(text.TextString, transform.GetTransform(), text, (int)entity);
-				}
-			}
-
-			Renderer2D::EndScene();
-			*/
-		}
+		
 		
 	}
 
@@ -212,15 +155,15 @@ namespace C78E {
 		}
 	}
 
-	Entity Scene::getPrimaryCameraEntity() {
-		auto view = m_Registry.view<CameraComponent>();
-		for (auto entity : view)
-		{
-			const auto& camera = view.get<CameraComponent>(entity);
-			if (camera.Primary)
-				return Entity{entity, this};
-		}
-		return {};
+	void Scene::setPrimaryCamera(Entity camera) {
+		C78_CORE_ASSERT(camera.hasComponent<CameraComponent>(), "Primary Camera must have a CameraComponent!");
+		C78_CORE_ASSERT(camera.isPartOf(this), "Primary Camera must be part of the Scene!");
+		m_ActiveCam = camera.getUUID();
+	}
+
+	Entity Scene::getPrimaryCamera() {
+		C78_CORE_ASSERT(hasPrimaryCamera(), "Scene currently does not have an Active Cam!");
+		return Entity(m_EntityMap.at(m_ActiveCam), this);
 	}
 
 	void Scene::step(int frames) {
@@ -320,6 +263,8 @@ namespace C78E {
 	template<>
 	void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
 	{
+		if (m_ActiveCam == 0)
+			m_ActiveCam = entity.getUUID();
 		if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
 			component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
 	}
@@ -363,8 +308,6 @@ namespace C78E {
 	void Scene::onComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
 	{
 	}
-
-	
 
 	template<>
 	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)

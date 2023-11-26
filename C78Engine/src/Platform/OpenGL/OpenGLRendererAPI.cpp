@@ -42,6 +42,20 @@ namespace C78E {
 		glEnable(GL_LINE_SMOOTH);
 	}
 
+	uint32_t OpenGLRendererAPI::getMaxTextureSlots(ShaderStage stage) {
+		GLint slots = 16;
+		switch (stage) {
+		case C78E::RendererAPI::VERTEX:			glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &slots); break;
+		case C78E::RendererAPI::TESSELATION:	glGetIntegerv(GL_MAX_TESS_CONTROL_TEXTURE_IMAGE_UNITS, &slots); break;
+		case C78E::RendererAPI::TESSEVALUATION:	glGetIntegerv(GL_MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS, &slots); break;
+		case C78E::RendererAPI::GEOMETRY:		glGetIntegerv(GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS, &slots); break;
+		case C78E::RendererAPI::FRAGMENT:		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &slots); break;
+		case C78E::RendererAPI::COMPUTE:		glGetIntegerv(GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS, &slots); break;
+		default: break;
+		}
+		return static_cast<uint32_t>(slots);
+	}
+
 	void OpenGLRendererAPI::setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
 		glViewport(x, y, width, height);
 	}

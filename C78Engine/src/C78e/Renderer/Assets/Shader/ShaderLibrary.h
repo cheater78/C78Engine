@@ -13,14 +13,16 @@ namespace C78E {
 		ShaderLibrary(const ShaderLibrary&) = delete;
 		~ShaderLibrary() = default;
 
-		void add(const std::string& name, const Ref<Shader>& shader);
-		void add(const Ref<Shader>& shader);
+		bool add(const std::string& name, const Ref<Shader>& shader);
+		bool add(const Ref<Shader>& shader);
 		Ref<Shader> load(const std::string& filepath);
 		Ref<Shader> load(const std::string& name, const std::string& filepath);
 
 		Ref<Shader> get(const std::string& name);
 
 		bool exists(const std::string& name) const;
+
+		std::vector<std::string> getAllKeys();
 	private:
 		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
 

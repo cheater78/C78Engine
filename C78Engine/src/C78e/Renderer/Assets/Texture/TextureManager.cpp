@@ -16,16 +16,16 @@ namespace C78E {
 		add(name, texture);
 	}
 
-	Ref<Texture2D> TextureManager::load(const std::string& filepath)
-	{
-		auto texture = Texture2D::create(filepath);
+	Ref<Texture2D> TextureManager::load(const std::string& filepath) {
+		RawImage img(filepath.c_str(), true);
+		auto texture = Texture2D::create(img);
 		add(texture);
 		return texture;
 	}
 
-	Ref<Texture2D> TextureManager::load(const std::string& name, const std::string& filepath)
-	{
-		auto texture = Texture2D::create(filepath);
+	Ref<Texture2D> TextureManager::load(const std::string& name, const std::string& filepath) {
+		RawImage img(filepath.c_str(), true);
+		auto texture = Texture2D::create(img);
 		add(name, texture);
 		return texture;
 	}

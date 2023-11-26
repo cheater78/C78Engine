@@ -33,7 +33,9 @@ namespace C78E {
 		Entity findEntityByName(std::string_view name);
 		Entity getEntityByUUID(UUID uuid);
 
-		Entity getPrimaryCameraEntity();
+		void setPrimaryCamera(Entity camera);
+		bool hasPrimaryCamera() { return (m_ActiveCam == 0) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
+		Entity getPrimaryCamera();
 
 		bool isRunning() const { return m_IsRunning; }
 		bool isPaused() const { return m_IsPaused; }
@@ -52,16 +54,18 @@ namespace C78E {
 		void renderScene(EditorCamera& camera);
 	private:
 		entt::registry m_Registry;
+		UUID m_ActiveCam{ 0 };
+
+
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 		bool m_IsRunning = false;
 		bool m_IsPaused = false;
 		int m_StepFrames = 0;
 
+
 		std::unordered_map<UUID, entt::entity> m_EntityMap;
 
 		friend class Entity;
-		friend class SceneSerializer;
-		friend class SceneHierarchyPanel;
 	};
 
 }

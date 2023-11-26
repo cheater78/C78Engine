@@ -6,6 +6,7 @@
 #include "C78E/Core/UUID.h"
 #include "C78E/Renderer/Assets/Model/Mesh.h"
 #include "C78E/Renderer/Assets/Material/Material.h"
+#include "C78E/Renderer/Assets/Texture/Texture.h"
 
 namespace C78E {
 	// Forward declaration
@@ -19,6 +20,10 @@ namespace C78E {
 	typedef UUID IDComponent;
 
 	typedef std::string TagComponent;
+
+	struct StateComponent {
+		bool enable = true;
+	};
 
 	struct TransformComponent
 	{
@@ -45,7 +50,6 @@ namespace C78E {
 	struct CameraComponent
 	{
 		SceneCamera Camera;
-		bool Primary = true; // TODO: think about moving to Scene
 		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
@@ -75,8 +79,13 @@ namespace C78E {
 
 	typedef Material MaterialComponent;
 
+	struct TextureComponent {
+		std::vector<Ref<Texture>> textures;
+	};
 
-
+	struct SkyBoxComponent {
+		std::vector<Ref<Texture>> textures;
+	};
 
 
 	struct SpriteRendererComponent
@@ -134,6 +143,7 @@ namespace C78E {
 	using AllComponents = ComponentGroup <
 		IDComponent,
 		TagComponent,
+		StateComponent,
 		TransformComponent,
 
 		CameraComponent,
@@ -145,6 +155,8 @@ namespace C78E {
 
 		MeshComponent,
 		MaterialComponent,
+		TextureComponent,
+		SkyBoxComponent,
 
 		SpriteRendererComponent,
 		CircleRendererComponent,

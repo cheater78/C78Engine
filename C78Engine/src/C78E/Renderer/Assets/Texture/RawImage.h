@@ -13,6 +13,11 @@ namespace C78E {
 		RGBA32F = 5
 	};
 
+	static const uint32_t imageFormatSize(ImageFormat format) {
+		return ((uint32_t)format < 5) ? (uint32_t)format : 16;
+	}
+	
+
 	class RawImage {
 	public:
 		RawImage(uint32_t width, uint32_t height, ImageFormat format, void* data);

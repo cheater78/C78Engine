@@ -7,13 +7,7 @@
 
 namespace C78E {
 
-	struct TextureSpecification
-	{
-		uint32_t Width = 1;
-		uint32_t Height = 1;
-		ImageFormat Format = ImageFormat::RGBA8;
-		bool GenerateMips = true;
-	};
+	
 
 	class Texture
 	{
@@ -21,20 +15,12 @@ namespace C78E {
 		virtual ~Texture() = default;
 
 		virtual std::string getName() const = 0;
+		virtual uint32_t getRendererID() const = 0;
 
-		virtual const TextureSpecification& GetSpecification() const = 0;
+		virtual void setData(void* data, uint32_t size) = 0;
+		virtual void bind(uint32_t slot = 0) const = 0;
 
-		virtual uint32_t GetWidth() const = 0;
-		virtual uint32_t GetHeight() const = 0;
-		virtual uint32_t GetRendererID() const = 0;
-
-		virtual const std::string& GetPath() const = 0;
-
-		virtual void SetData(void* data, uint32_t size) = 0;
-
-		virtual void Bind(uint32_t slot = 0) const = 0;
-
-		virtual bool IsLoaded() const = 0;
+		virtual bool isLoaded() const = 0;
 
 		virtual bool operator==(const Texture& other) const = 0;
 	};
@@ -42,18 +28,36 @@ namespace C78E {
 	class Texture2D : public Texture
 	{
 	public:
+		struct TextureSpecification
+		{
+			uint32_t width = 1;
+			uint32_t height = 1;
+			ImageFormat format = ImageFormat::RGBA8;
+			bool generateMips = true;
+		};
+	public:
 		static Ref<Texture2D> create(const TextureSpecification& specification);
 		static Ref<Texture2D> create(RawImage& image);
-		static Ref<Texture2D> create(const std::string& path);
+		
+		virtual uint32_t getWidth() const = 0;
+		virtual uint32_t getHeight() const = 0;
+		virtual const TextureSpecification& getSpecification() const = 0;
 
 	};
 
-	class CubeMap{
+	class CubeMap : public Texture {
+	public:
+		struct TextureSpecification
+		{
+			uint32_t size = 1;
+			ImageFormat format = ImageFormat::RGBA8;
+		};
 	public:
 		static Ref<CubeMap> create(std::vector<RawImage>& images);
 		static Ref<CubeMap> create(Ref<RawImage> crossCubeMap);
 
-		virtual void bind(uint32_t slot = 0) const = 0;
+		virtual uint32_t getSize() const = 0;
+		virtual const CubeMap::TextureSpecification& getSpecification() const = 0;
 
 	};
 
