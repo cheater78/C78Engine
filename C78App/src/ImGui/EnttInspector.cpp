@@ -13,7 +13,7 @@ void EnttInspector::onImGuiRender(C78E::Ref<C78E::Scene> scene) {
 void EnttInspector::showEntityList(C78E::Ref<C78E::Scene> scene) {
 
     ImGui::Begin("EnttityList");
-    auto& entts = scene->getAllEntitiesWith<C78E::TagComponent, C78E::TransformComponent>();
+    auto entts = scene->getAllEntitiesWith<C78E::TagComponent, C78E::TransformComponent>();
     for (auto entt : entts) {
         ImGui::PushID((int)entt);
         C78E::Entity entity(entt, scene.get());
@@ -92,7 +92,7 @@ void EnttInspector::showInspectorList(C78E::Ref<C78E::Scene> scene) {
     if (entity.hasComponent<C78E::MeshComponent>()) {
         auto& mesh = entity.getComponent<C78E::MeshComponent>();
         ImGui::Text("MeshComponent");
-        ImGui::Text("Name: "); ImGui::SameLine(); ImGui::Text(mesh.mesh.get()->getName().c_str());
+        ImGui::Text("Name: "); ImGui::SameLine(); ImGui::Text(mesh.mesh.get().getName().c_str());
         ImGui::Spacing();
     }
 
@@ -108,7 +108,7 @@ void EnttInspector::showInspectorList(C78E::Ref<C78E::Scene> scene) {
         auto& texs = entity.getComponent<C78E::TextureComponent>();
         ImGui::Text("Textures: ");
         for (auto& tex : texs.textures) {
-            ImGui::Text(tex->getName().c_str());
+            ImGui::Text(tex.get().getName().c_str());
         }
         ImGui::Spacing();
     }
@@ -117,8 +117,8 @@ void EnttInspector::showInspectorList(C78E::Ref<C78E::Scene> scene) {
         ImGui::Text("SkyBoxComponent");
         auto& sbc = entity.getComponent<C78E::SkyBoxComponent>();
         ImGui::Text("Textures: ");
-        for (auto& tex : sbc.textures) {
-            ImGui::Text(tex->getName().c_str());
+        for (auto& tex : sbc.skyboxes) {
+            ImGui::Text(tex.get().getName().c_str());
         }
         ImGui::Spacing();
     }

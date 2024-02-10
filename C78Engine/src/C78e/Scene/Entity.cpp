@@ -1,5 +1,6 @@
 #include "C78EPCH.h"
 #include "Entity.h"
+
 #include "Scene.h"
 
 namespace C78E {
@@ -9,4 +10,4 @@ namespace C78E {
 	{
 	}
 
-}
+	}

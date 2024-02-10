@@ -52,6 +52,7 @@ namespace C78E {
 
 	size_t RawImage::getByteSize() {
 		if ((uint32_t)m_Format <= 4) return static_cast<size_t>(m_Width * m_Height * (uint32_t)m_Format);
+		if (m_Format == ImageFormat::RGBA32F) return static_cast<size_t>(m_Width * m_Height * 4 * 4); //RGBA32F -> 4ch á 4Byte
 		C78_CORE_ASSERT("ImageFormat currently not supported!");
 		return 0;
 	}

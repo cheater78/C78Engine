@@ -13,6 +13,7 @@ namespace C78E {
 		virtual ~Shader() = default;
 
 		virtual void Bind() const = 0;
+		virtual void BindCompute(uint32_t x = 1, uint32_t y = 1, uint32_t z = 1) const = 0;
 		virtual void Unbind() const = 0;
 
 		virtual void SetInt(const std::string& name, int value) = 0;
@@ -27,5 +28,6 @@ namespace C78E {
 
 		static Ref<Shader> create(const std::string& filepath);
 		static Ref<Shader> create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+		static Ref<Shader> create(const std::string& name, const std::string& computeSrc);
 	};
 }

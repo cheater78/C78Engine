@@ -203,5 +203,5 @@ void main() {
 		specLight += fragmentLight.specularLight * edgeCutoff;
 	}
 
-	o_Color = vec4((diffuseLight*u_Defused + specLight*u_Specular) * fragColor.xyz, u_Opacity * fragColor.w);
+	o_Color = vec4((diffuseLight*u_Defused + specLight*u_Specular) * fragColor.xyz, min(u_Opacity * fragColor.w, 1.0) );
 }

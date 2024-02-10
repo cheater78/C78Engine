@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78E/Renderer/Assets/Shader/Shader.h"
+#include "C78E/Assets/Shader/Shader.h"
 #include <glm/glm.hpp>
 
 // TODO: REMOVE!
@@ -13,9 +13,11 @@ namespace C78E {
 	public:
 		OpenGLShader(const std::string& filepath);
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& name, const std::string& computeSrc);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
+		virtual void BindCompute(uint32_t x = 1, uint32_t y = 1, uint32_t z = 1) const override;
 		virtual void Unbind() const override;
 
 		virtual void SetInt(const std::string& name, int value) override;

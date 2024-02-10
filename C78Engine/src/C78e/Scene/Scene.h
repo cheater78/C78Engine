@@ -1,6 +1,6 @@
 #pragma once
-#include "C78E/Scene/Entity.h"
 
+#include "C78E/Core/UUID.h"
 #include "C78E/Core/Timestep.h"
 #include "C78E/Renderer/EditorCamera.h"
 
@@ -34,7 +34,7 @@ namespace C78E {
 		Entity getEntityByUUID(UUID uuid);
 
 		void setPrimaryCamera(Entity camera);
-		bool hasPrimaryCamera() { return (m_ActiveCam == 0) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
+		bool hasPrimaryCamera();
 		Entity getPrimaryCamera();
 
 		bool isRunning() const { return m_IsRunning; }

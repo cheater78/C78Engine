@@ -8,8 +8,6 @@
 
 #include <glm/glm.hpp>
 
-#include "Entity.h"
-
 
 namespace C78E {
 
@@ -160,6 +158,8 @@ namespace C78E {
 		C78_CORE_ASSERT(camera.isPartOf(this), "Primary Camera must be part of the Scene!");
 		m_ActiveCam = camera.getUUID();
 	}
+
+	bool Scene::hasPrimaryCamera() { return (m_ActiveCam == 0) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
 
 	Entity Scene::getPrimaryCamera() {
 		C78_CORE_ASSERT(hasPrimaryCamera(), "Scene currently does not have an Active Cam!");

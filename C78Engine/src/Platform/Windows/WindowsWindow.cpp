@@ -17,10 +17,6 @@ namespace C78E {
 		C78_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Scope<Window> Window::create(const WindowProps& props) {
-		return createScope<WindowsWindow>(props);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProps& props) {
 		init(props);
 	}
@@ -58,7 +54,7 @@ namespace C78E {
 		m_Context->init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		setVSync(true);
+		setVSync(false);
 
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height){

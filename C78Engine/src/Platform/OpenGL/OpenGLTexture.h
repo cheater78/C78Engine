@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78E/Renderer/Assets/Texture/Texture.h"
+#include "C78E/Assets/Texture/Texture.h"
 
 #include <glad.h>
 
@@ -31,8 +31,10 @@ namespace C78E {
 	class OpenGLTexture2D : public Texture2D {
 	public:
 		OpenGLTexture2D(const Texture2D::TextureSpecification& specification);
+		OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID);
+		OpenGLTexture2D(std::string filename);
 		OpenGLTexture2D(RawImage& image);
-		OpenGLTexture2D(const OpenGLTexture2D&) = delete; // Maybe needed!
+		OpenGLTexture2D(const OpenGLTexture2D&) = default; // Maybe needed!
 		virtual ~OpenGLTexture2D();
 
 		virtual std::string getName() const override { return m_Name; }
@@ -42,6 +44,7 @@ namespace C78E {
 		
 		virtual void setData(void* data, uint32_t size) override;
 		virtual void bind(uint32_t slot = 0) const override;
+		virtual void bindImage(uint32_t binding = 0) const override;
 
 		virtual bool isLoaded() const override { return m_IsLoaded; }
 		virtual const Texture2D::TextureSpecification& getSpecification() const override { return m_Specification; }
@@ -73,7 +76,7 @@ namespace C78E {
 		virtual bool isLoaded() const override { return m_IsLoaded; };
 		const CubeMap::TextureSpecification& getSpecification() const override { return m_Specification; };
 
-		bool OpenGLCubeMap::operator==(const Texture& other) const override { return m_RendererID == other.getRendererID(); }
+		bool operator==(const Texture& other) const override { return m_RendererID == other.getRendererID(); }
 	private:
 		std::string m_Name;
 		uint32_t m_RendererID = 0;

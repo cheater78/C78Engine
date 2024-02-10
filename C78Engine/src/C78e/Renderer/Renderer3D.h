@@ -7,9 +7,10 @@
 #include "C78E/Renderer/Buffer.h"
 #include "C78E/Renderer/VertexArray.h"
 #include "C78E/Renderer/UniformBuffer.h"
-#include "C78E/Renderer/Assets/Shader/Shader.h"
-#include "C78E/Renderer/Assets/Texture/Texture.h"
-#include "C78E/Renderer/Assets/Texture/RawImage.h"
+#include "C78E/Assets/Shader/Shader.h"
+#include "C78E/Assets/Texture/Texture.h"
+#include "C78E/Assets/Texture/RawImage.h"
+#include "C78E/Renderer/Framebuffer.h"
 
 namespace C78E {
 
@@ -20,7 +21,6 @@ namespace C78E {
 			uint32_t drawCalls = 0;
 			uint32_t vertecies = 0;
 			uint32_t indicies = 0;
-			float frameTime = 0.f;
 		};
 
 		struct Renderer3DSceneElements {
@@ -38,7 +38,7 @@ namespace C78E {
 		static void submit(Ref<Scene>& scene);
 		static void submit(Entity entity);
 		static void endScene();
-		static void render(std::string scene);
+		static void render(std::string scene, uint32_t width, uint32_t height);
 
 		static void setSceneElements(Renderer3DSceneElements elements) { curr()->elements = elements; }
 		static Ref<Scene> getScene(std::string name) { return curr(name)->scene; }
@@ -78,7 +78,9 @@ namespace C78E {
 
 		
 
-		static std::string s_ActiveScene;
+		static std::string s_ActiveScene;			
+		static Renderer3DPass s_MainPass;
+		static Ref<Framebuffer> s_MainFramebuffer;
 		static std::unordered_map<std::string, Ref<Renderer3DScene>> s_Scenes;
 
 		static Ref<Renderer3DScene> curr() { C78_CORE_ASSERT(!s_ActiveScene.empty(), ""); return s_Scenes.at(s_ActiveScene); }

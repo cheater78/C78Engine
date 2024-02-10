@@ -10,9 +10,9 @@ namespace C78E {
 		virtual ~ScriptableEntity() {}
 
 		template<typename T>
-		T& GetComponent()
+		T& getComponent()
 		{
-			return m_Entity.GetComponent<T>();
+			return m_Entity.getComponent<T>();
 		}
 	protected:
 		virtual void OnCreate() {}

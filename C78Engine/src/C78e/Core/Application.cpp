@@ -1,17 +1,6 @@
 #include "C78EPCH.h"
 #include "Application.h"
 
-#include "Core.h"
-#include "C78E/Events/ApplicationEvent.h"
-#include "C78E/Core/Log.h"
-
-#include <glad.h>
-
-#include "C78E/Renderer/Renderer2D.h"
-#include <C78E/Renderer/UniformBuffer.h>
-#include <C78E/Renderer/RenderCommand.h>
-#include <C78E/Renderer/Assets/Shader/Shader.h>
-
 namespace C78E {
 
 	Application* Application::s_App = nullptr;

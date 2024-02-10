@@ -1,6 +1,6 @@
 #include "C78EPCH.h"
 #include <C78E/Core/Types.h>
-#include "C78E/Renderer/Assets/Model/Mesh.h"
+#include "C78E/Assets/Model/Mesh.h"
 
 namespace C78E {
 	namespace GenericShape {

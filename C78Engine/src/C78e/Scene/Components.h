@@ -4,12 +4,10 @@
 #include "SceneCamera.h"
 #include "C78E/Core/Types.h"
 #include "C78E/Core/UUID.h"
-#include "C78E/Renderer/Assets/Model/Mesh.h"
-#include "C78E/Renderer/Assets/Material/Material.h"
-#include "C78E/Renderer/Assets/Texture/Texture.h"
+#include "C78E/Assets/AssetManager.h"
 
 namespace C78E {
-	// Forward declaration
+	// Forward declarations
 	class Model;
 	class Texture2D;
 	class Font;
@@ -42,7 +40,7 @@ namespace C78E {
 				 * glm::scale(glm::mat4(1.0f), Scale);
 		}
 
-		glm::mat4 TransformComponent::normalMat() {
+		glm::mat4 normalMat() {
 			return glm::mat4(glm::inverseTranspose(getTransform()));
 		}
 	};
@@ -65,26 +63,23 @@ namespace C78E {
 	typedef SpotLight SpotLightComponent;
 	
 	struct MeshComponent {
-		Ref<Mesh> mesh;
+		Asset<Mesh> mesh;
 
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;
-		MeshComponent(std::vector<Vertex> vertecies, std::vector<uint32_t> indicies)
-			: mesh(createRef<Mesh>(vertecies, indicies))
-		{}
-		MeshComponent(const char* file)
-			: mesh(createRef<Mesh>(file))
+		MeshComponent(std::string assetName)
+			: mesh(AssetManager::getMeshAsset(assetName))
 		{}
 	};
 
 	typedef Material MaterialComponent;
 
 	struct TextureComponent {
-		std::vector<Ref<Texture>> textures;
+		std::vector<Asset<Texture2D>> textures;
 	};
 
 	struct SkyBoxComponent {
-		std::vector<Ref<Texture>> textures;
+		std::vector<Asset<CubeMap>> skyboxes;
 	};
 
 

@@ -29,7 +29,7 @@ project "C78Engine"
 	location "C78Engine"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 	staticruntime "off"
 
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
@@ -134,7 +134,7 @@ project "C78App"
 	location "C78App"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 	staticruntime "off"
 
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")

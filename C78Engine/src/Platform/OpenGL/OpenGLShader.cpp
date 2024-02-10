@@ -21,6 +21,8 @@ namespace C78E {
 				return GL_VERTEX_SHADER;
 			if (type == "fragment" || type == "pixel")
 				return GL_FRAGMENT_SHADER;
+			if (type == "compute")
+				return GL_COMPUTE_SHADER;
 
 			C78_CORE_ASSERT(false, "Unknown shader type!");
 			return 0;
@@ -32,6 +34,7 @@ namespace C78E {
 			{
 				case GL_VERTEX_SHADER:   return shaderc_glsl_vertex_shader;
 				case GL_FRAGMENT_SHADER: return shaderc_glsl_fragment_shader;
+				case GL_COMPUTE_SHADER:	 return shaderc_glsl_compute_shader;
 			}
 			C78_CORE_ASSERT(false);
 			return (shaderc_shader_kind)0;
@@ -43,6 +46,7 @@ namespace C78E {
 			{
 				case GL_VERTEX_SHADER:   return "GL_VERTEX_SHADER";
 				case GL_FRAGMENT_SHADER: return "GL_FRAGMENT_SHADER";
+				case GL_COMPUTE_SHADER: return "GL_COMPUTE_SHADER";
 			}
 			C78_CORE_ASSERT(false);
 			return nullptr;
@@ -67,6 +71,7 @@ namespace C78E {
 			{
 				case GL_VERTEX_SHADER:    return ".cached_opengl.vert";
 				case GL_FRAGMENT_SHADER:  return ".cached_opengl.frag";
+				case GL_COMPUTE_SHADER:   return ".cached_opengl.comp";
 			}
 			C78_CORE_ASSERT(false);
 			return "";
@@ -76,8 +81,9 @@ namespace C78E {
 		{
 			switch (stage)
 			{
-			case GL_VERTEX_SHADER:    return ".cached_vulkan.vert";
-			case GL_FRAGMENT_SHADER:  return ".cached_vulkan.frag";
+				case GL_VERTEX_SHADER:    return ".cached_vulkan.vert";
+				case GL_FRAGMENT_SHADER:  return ".cached_vulkan.frag";
+				case GL_COMPUTE_SHADER:	  return ".cached_vulkan.comp";
 			}
 			C78_CORE_ASSERT(false);
 			return "";
@@ -89,27 +95,23 @@ namespace C78E {
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 		: m_FilePath(filepath)
 	{
-		//C78_PROFILE_FUNCTION();
+		Timer timer;
 
 		Utils::CreateCacheDirectoryIfNeeded();
 
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
+		CompileOrGetVulkanBinaries(shaderSources);
+		CompileOrGetOpenGLBinaries();
+		createProgram();
 
-		{
-			Timer timer;
-			CompileOrGetVulkanBinaries(shaderSources);
-			CompileOrGetOpenGLBinaries();
-			createProgram();
-			C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
-		}
-
+		C78_CORE_WARN("Shader creation took {0} ms, from File: {1}", timer.elapsedMillis(), filepath);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_FilePath(name)
 	{
-		//C78_PROFILE_FUNCTION();
+		Timer timer;
 
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -118,19 +120,32 @@ namespace C78E {
 		CompileOrGetVulkanBinaries(sources);
 		CompileOrGetOpenGLBinaries();
 		createProgram();
+
+		C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
+	}
+
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& computeSrc)
+		: m_FilePath(name)
+	{
+		Timer timer;
+
+		std::unordered_map<GLenum, std::string> sources;
+		sources[GL_COMPUTE_SHADER] = computeSrc;
+
+		CompileOrGetVulkanBinaries(sources);
+		CompileOrGetOpenGLBinaries();
+		createProgram();
+
+		C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
 	}
 
 	OpenGLShader::~OpenGLShader()
 	{
-		//C78_PROFILE_FUNCTION();
-
 		glDeleteProgram(m_RendererID);
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
-		//C78_PROFILE_FUNCTION();
-
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
 		if (in)
@@ -145,12 +160,12 @@ namespace C78E {
 			}
 			else
 			{
-				C78_CORE_ERROR("Could not read from file '{0}'", filepath);
+				C78_CORE_ERROR("Could not read from ShaderSourceFile '{0}'", filepath);
 			}
 		}
 		else
 		{
-			C78_CORE_ERROR("Could not open file '{0}'", filepath);
+			C78_CORE_ERROR("Could not open ShaderSourceFile '{0}'", filepath);
 		}
 
 		return result;
@@ -158,8 +173,6 @@ namespace C78E {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
-		//C78_PROFILE_FUNCTION();
-
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -368,62 +381,47 @@ namespace C78E {
 
 	void OpenGLShader::Bind() const
 	{
-		//C78_PROFILE_FUNCTION();
-
 		glUseProgram(m_RendererID);
+	}
+
+	void OpenGLShader::BindCompute(uint32_t x, uint32_t y, uint32_t z) const
+	{
+		glUseProgram(m_RendererID);
+		glDispatchCompute(x, y, z);
+		//TODO: Changable
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
-		//C78_PROFILE_FUNCTION();
-
 		glUseProgram(0);
 	}
 
-	void OpenGLShader::SetInt(const std::string& name, int value)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLShader::SetInt(const std::string& name, int value) {
 		UploadUniformInt(name, value);
 	}
 
-	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
-	{
+	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count) {
 		UploadUniformIntArray(name, values, count);
 	}
 
-	void OpenGLShader::SetFloat(const std::string& name, float value)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLShader::SetFloat(const std::string& name, float value) {
 		UploadUniformFloat(name, value);
 	}
 
-	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value) {
 		UploadUniformFloat2(name, value);
 	}
 
-	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value) {
 		UploadUniformFloat3(name, value);
 	}
 
-	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value) {
 		UploadUniformFloat4(name, value);
 	}
 
-	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value) {
 		UploadUniformMat4(name, value);
 	}
 

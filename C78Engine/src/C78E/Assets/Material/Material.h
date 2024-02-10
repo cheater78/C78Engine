@@ -1,12 +1,14 @@
 #pragma once
 
 #include "C78e/Core/Types.h"
-#include <C78e/Renderer/Assets/Shader/Shader.h>
+#include <C78e/Assets/Shader/Shader.h>
 
 namespace C78E {
-
+	
 	class Material {
 	public:
+		static Ref<Material> create(std::string filename) { return createRef<Material>(); /* dummy for AssetMmg */ }
+
 		Material() = default;
 		Material(Ref<Shader> shader, MaterialProperties props);
 		Material(std::string filename, MaterialProperties props);

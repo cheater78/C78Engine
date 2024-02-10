@@ -1,9 +1,11 @@
 #pragma once
 #include "Components.h"
 
+#include "Scene.h"
+
 namespace C78E {
 
-	class Scene;
+	//class Scene;
 
 	class Entity
 	{
@@ -66,5 +68,4 @@ namespace C78E {
 		entt::entity m_EntityHandle{ entt::null };
 		Scene* m_Scene = nullptr;
 	};
-
 }

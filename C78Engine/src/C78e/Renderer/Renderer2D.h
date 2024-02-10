@@ -2,7 +2,7 @@
 
 #include "C78E/Renderer/OrthographicCamera.h"
 
-#include "C78E/Renderer/Assets/Texture/Texture.h"
+#include "C78E/Assets/Texture/Texture.h"
 
 #include "C78E/Renderer/Camera.h"
 #include "C78E/Renderer/EditorCamera.h"

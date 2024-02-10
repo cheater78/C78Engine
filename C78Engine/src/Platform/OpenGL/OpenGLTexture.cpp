@@ -1,12 +1,12 @@
 #include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
-#include "C78E/Renderer/Assets/Texture/RawImage.h"
+#include "C78E/Assets/Texture/RawImage.h"
 
 namespace C78E {
 
 	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification)
-		: m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false)
+		: m_RendererID(0), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false)
 	{
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
@@ -15,6 +15,48 @@ namespace C78E {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+
+	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID)
+		: m_RendererID(rendererID), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false)
+	{
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+
+	OpenGLTexture2D::OpenGLTexture2D(std::string filename) {
+		RawImage image{filename.c_str(), false};
+		C78_CORE_ASSERT(image.isValid(), "Image must be valid!");
+		m_Name = std::filesystem::getName(image.getName());
+		m_Specification.width = image.getWidth();
+		m_Specification.height = image.getHeight();
+		m_Specification.format = image.getFormat();
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		GLenum type;
+		if (m_Specification.format == ImageFormat::RGBA32F)
+			type = GL_FLOAT;
+		else
+			type = GL_UNSIGNED_BYTE;
+
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), type, image.getData());
+		
+		if (m_Specification.format == ImageFormat::RGBA32F)
+			
+
+		m_IsLoaded = true;
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(RawImage& image) {
@@ -32,9 +74,18 @@ namespace C78E {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, image.getData());
-		
-		m_IsLoaded = true;
+		GLenum type;
+		if (m_Specification.format == ImageFormat::RGBA32F)
+			type = GL_FLOAT;
+		else
+			type = GL_UNSIGNED_BYTE;
+
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), type, image.getData());
+
+		if (m_Specification.format == ImageFormat::RGBA32F)
+
+
+			m_IsLoaded = true;
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D() {
@@ -49,6 +100,10 @@ namespace C78E {
 
 	void OpenGLTexture2D::bind(uint32_t slot) const {
 		glBindTextureUnit(slot, m_RendererID);
+	}
+
+	void OpenGLTexture2D::bindImage(uint32_t binding) const {
+		glBindImageTexture(binding, m_RendererID, 0, GL_TRUE, 0, GL_READ_WRITE, toGLInternalFormat(m_Specification.format));
 	}
 
 

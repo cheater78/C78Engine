@@ -213,13 +213,24 @@ namespace C78E {
 
 	}
 
-	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
-	{
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value) {
 		C78_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
 
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
 		glClearTexImage(m_ColorAttachments[attachmentIndex], 0,
 			Utils::C78EFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+	}
+
+	void OpenGLFramebuffer::BlitToFront() {
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_RendererID);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		
+		glBlitFramebuffer(
+			0, 0, m_Specification.Width, m_Specification.Height,
+			0, 0, m_Specification.Width, m_Specification.Height,
+			GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
+			GL_NEAREST);
+			
 	}
 
 }

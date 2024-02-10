@@ -2,7 +2,7 @@
 #include "C78E/Renderer/Renderer2D.h"
 
 #include "C78E/Renderer/VertexArray.h"
-#include <C78E/Renderer/Assets/Shader/Shader.h>
+#include <C78E/Assets/Shader/Shader.h>
 #include "C78E/Renderer/UniformBuffer.h"
 #include "C78E/Renderer/RenderCommand.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "C78E/Core/Core.h"
+#include "C78E/Assets/Texture/Texture.h"
 
 namespace C78E {
 
@@ -63,6 +64,8 @@ namespace C78E {
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const = 0;
 
 		virtual const FramebufferSpecification& GetSpecification() const = 0;
+
+		virtual void BlitToFront() = 0;
 
 		static Ref<Framebuffer> Create(const FramebufferSpecification& spec);
 	};

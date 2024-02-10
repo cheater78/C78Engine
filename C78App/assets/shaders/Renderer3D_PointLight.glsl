@@ -99,5 +99,5 @@ void main() {
 
 	if(distance >= 1.0) discard;
 
-	o_Color = vec4(v_Color.xzy, 0.1 * v_Color.w * 0.5*(cos(distance*PI) + 1.0) );
+	o_Color = vec4(v_Color.xzy, 0.7 * max(v_Color.w, 1.0) * 0.5*(cos(distance*PI) + 1.0) );
 }

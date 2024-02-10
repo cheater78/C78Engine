@@ -22,6 +22,8 @@ namespace C78E {
 
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { C78_CORE_ASSERT(index < m_ColorAttachments.size()); return m_ColorAttachments[index]; }
 
+		virtual void BlitToFront() override;
+
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
 		uint32_t m_RendererID = 0;
