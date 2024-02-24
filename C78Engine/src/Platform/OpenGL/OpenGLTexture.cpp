@@ -19,15 +19,7 @@ namespace C78E {
 
 	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID)
 		: m_RendererID(rendererID), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false)
-	{
-		glBindTexture(GL_TEXTURE_2D, m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	}
+	{ }
 
 	OpenGLTexture2D::OpenGLTexture2D(std::string filename) {
 		RawImage image{filename.c_str(), false};
@@ -51,11 +43,17 @@ namespace C78E {
 		else
 			type = GL_UNSIGNED_BYTE;
 
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), type, image.getData());
-		
-		if (m_Specification.format == ImageFormat::RGBA32F)
-			
+		GLenum dataFormat = toGLDataFormat(m_Specification.format);
+		if (dataFormat == GL_RGB) {
+			// RGB8 is probably not 4byte aligned, if so skip the next line!
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		}
+		else {
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 0);
+		}
 
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, dataFormat, type, image.getData());
+		
 		m_IsLoaded = true;
 	}
 

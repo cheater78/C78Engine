@@ -8,7 +8,7 @@ namespace C78E {
 
 	Ref<Shader> Shader::create(const std::string& filepath)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLShader>(filepath);
@@ -20,7 +20,7 @@ namespace C78E {
 
 	Ref<Shader> Shader::create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
@@ -32,7 +32,7 @@ namespace C78E {
 
 	Ref<Shader> Shader::create(const std::string& name, const std::string& computeSrc)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLShader>(name, computeSrc);

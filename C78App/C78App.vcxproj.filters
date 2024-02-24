@@ -11,11 +11,13 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\TestLayer.h" />
+    <ClInclude Include="src\ImGui\AssetBrowser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\C78App.cpp" />
     <ClCompile Include="src\ImGui\EnttInspector.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\ImGui\AssetBrowser.cpp" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ namespace C78E {
 
 	Ref<Texture2D> Texture2D::create(const TextureSpecification& specification)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLTexture2D>(specification);
@@ -19,7 +19,7 @@ namespace C78E {
 
 	Ref<Texture2D> Texture2D::create(const TextureSpecification& specification, uint32_t rendererID)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLTexture2D>(specification, rendererID);
@@ -31,7 +31,7 @@ namespace C78E {
 
 	Ref<Texture2D> Texture2D::create(RawImage& image)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLTexture2D>(image);
@@ -43,7 +43,7 @@ namespace C78E {
 
 	Ref<Texture2D> Texture2D::create(std::string filename)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLTexture2D>(filename);
@@ -54,7 +54,7 @@ namespace C78E {
 	}
 
 	Ref<CubeMap> CubeMap::create(std::vector<RawImage>& images) {
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLCubeMap>(images);
@@ -66,7 +66,7 @@ namespace C78E {
 
 	Ref<CubeMap> CubeMap::create(Ref<RawImage> crossCubeMap)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLCubeMap>(crossCubeMap);
@@ -77,7 +77,7 @@ namespace C78E {
 	}
 	Ref<CubeMap> CubeMap::create(std::string filename)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLCubeMap>(createRef<RawImage>(filename.c_str(), false));

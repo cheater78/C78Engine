@@ -9,12 +9,18 @@ namespace C78E {
 		glm::vec4 Color;
 		glm::vec3 Normal;
 		glm::vec2 TexCoord;
-		float TexIndex;
+		float TexIndex = 0.f;
 
 		Vertex() = default;
 		Vertex(glm::vec3 position, glm::vec4 color, glm::vec3 normal, glm::vec2 texCoord, float texIndex)
 			: Position(position), Color(color), Normal(normal), TexCoord(texCoord), TexIndex(texIndex)
 		{}
+		Vertex(const Vertex& other) = default;
+		~Vertex() {}
+
+		bool operator==(const Vertex& other) const {
+			return Position == other.Position && Color == other.Color && Normal == other.Normal && TexCoord == other.TexCoord && TexIndex == other.TexIndex;
+		}
 	};
 
 	struct AmbientLight {
@@ -39,19 +45,10 @@ namespace C78E {
 		float edgeAngle = 0.f;
 	};
 
-	struct MaterialProperties {
-		float defused = 1.0f;
-		float specular = 1.0f;
-		float opacity = 1.0f;
-	};
-
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////                       UniformBuffer Types                      ////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	struct Uniform { };
 
 	struct CameraUniform{
 		glm::mat4 projMat{ 1.f };
@@ -73,10 +70,8 @@ namespace C78E {
 		int spotLightCount = 0;
 	};
 
-	struct EntityUniform{
+	struct EntityModelUniform{
 		glm::mat4 transform;
 		glm::mat4 normalMat;
 	};
-
-	typedef MaterialProperties EntityMaterialUniform;
 }

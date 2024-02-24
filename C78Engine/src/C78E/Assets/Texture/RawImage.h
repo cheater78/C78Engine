@@ -5,12 +5,14 @@
 namespace C78E {
 
 	enum class ImageFormat : uint32_t {
-		None	= 0,
-		R8		= 1,
-		RG8		= 2,
-		RGB8	= 3,
-		RGBA8	= 4,
-		RGBA32F = 5
+		None = 0,
+		R8 = 1,
+		RG8 = 2,
+		RGB8 = 3,
+		RGBA8 = 4,
+		RGBA32F = 5,
+		R32 = 6,
+		D24S8 = 7
 	};
 
 	static const uint32_t imageFormatSize(ImageFormat format) {

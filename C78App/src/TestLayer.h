@@ -10,13 +10,15 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "ImGui/EnttInspector.h"
+#include "ImGui/AssetBrowser.h"
+#include "ImGui/RendererViewport.h"
 
 class TestLayer : public C78E::Layer {
 public:
     TestLayer(C78E::Window& window): Layer("TestLayer"), m_Window(window) { }
 
     /*
-    * +AssetMmg
+    * +AssetMmg, basic AssetViewer, Model Loader (Wavefront)
     * 
     * TD:
     * 
@@ -33,6 +35,9 @@ public:
     * 
     * Inspector
     * 
+    * Material -> AssetFallbacks
+    * Error Handling
+    * 
     * APP -> EDITOR
     * 
     * 
@@ -41,6 +46,12 @@ public:
 
 
     void onAttach() {
+
+        EnttInspector::init();
+        AssetBrowser::init();
+        C78Editor::RendererViewport::init();
+
+
         //Create Scene and Camera
         m_Scene = C78E::createRef<C78E::Scene>();
         C78E::Entity camera = m_Scene->createEntity("MainCamera");
@@ -58,10 +69,9 @@ public:
         C78E::AssetManager::loadShader("PointLight","assets/shaders/Renderer3D_PointLight.glsl");
         C78E::AssetManager::loadShader("SpotLight","assets/shaders/Renderer3D_SpotLight.glsl");
 
-        C78E::AssetManager::loadShader("RayCompute","assets/shaders/Renderer3D_RayTracerCompute.glsl");
+        C78E::AssetManager::loadShader("GenericModel", "assets/shaders/Renderer3D_ModelShader.glsl");
 
-        // Meshes
-        //C78E::AssetManager::loadMesh("ModelName", "Path/To/Model.mdl");
+        C78E::AssetManager::loadShader("RayCompute","assets/shaders/Renderer3D_RayTracerCompute.glsl");
 
         //Textures
         C78E::AssetManager::loadTexture2D("MCGrass", "assets/textures/Top.png");
@@ -69,32 +79,38 @@ public:
         C78E::AssetManager::loadTexture2D("woodBox", "assets/textures/WoodenCrate.jpg");
         C78E::AssetManager::loadTexture2D("gravel", "assets/textures/GravelFloor.jpg");
         
-        C78E::AssetManager::loadCubeMap("NightBox", "assets/textures/SkyBox/MoonSpace.png");
 
-        //Materials
-        C78E::Material defaultMaterial(
-            C78E::AssetManager::getShader("Generic"),
-            {
-                1.0f,
-                1.0f,
-                1.0f
-            }
-        );
+
+
+
+        C78E::AssetManager::loadTexture2D("TreeLeafTexture", "assets/models/Trees/Leaves0156_1_S.png");
+        C78E::AssetManager::loadTexture2D("TreeBarkTexture", "assets/models/Trees/BarkDecidious0194_7_S.jpg");
+
+
+
+
+
+        C78E::AssetManager::loadCubeMap("NightBox", "assets/textures/SkyBox/MoonSpace.png");
 
         //SkyBox
         C78E::Entity skyBox = m_Scene->createEntity("SkyBox");
         skyBox.addComponent<C78E::SkyBoxComponent>().skyboxes = { C78E::AssetManager::getCubeMapAsset("NightBox") };
-        auto& skyBoxMaterial = skyBox.addComponent<C78E::MaterialComponent>(C78E::Material{
-            C78E::AssetManager::getShader("SkyBox"),
-            {}
-            });
+        auto& skyBoxMaterial = skyBox.addComponent<C78E::MaterialComponent>(
+            C78E::Material{
+                C78E::Material::MaterialProperties{},
+                0, C78E::Material::MaterialTextures{},
+                C78E::Material::MaterialPropertiesPBRext{},
+                C78E::Material::MaterialTexturesPBRext{},
+                C78E::AssetManager::getShaderAsset("SkyBox")
+            }
+        );
 
         //Lights
         m_AmbientLight = m_Scene->createEntity("AmbientLight");
         m_AmbientLight.addComponent<C78E::AmbientLightComponent>();
 
         m_DirectLight = m_Scene->createEntity("DirectLight");
-        m_DirectLight.addComponent<C78E::DirectLightComponent>(glm::vec3{ 0.f, -1.f, 0.f }, glm::vec4{ 1.f, 1.f, 1.f, .1f });
+        m_DirectLight.addComponent<C78E::DirectLightComponent>(glm::vec3{ 0.2f, -1.f, 0.2f }, glm::vec4{ 1.f, 1.f, 1.f, .1f });
 
         m_PointLight = m_Scene->createEntity("PointLight");
         m_PointLight.addComponent<C78E::PointLightComponent>().color = { 1.f, 1.f, 1.f, 5.f };
@@ -105,79 +121,38 @@ public:
         m_SpotLight.setTransform(glm::vec3(-4.f, 2.5f, -3.f));
 
 
-        
         //Objects
-        /*
-        C78E::Entity quad = m_Scene->createEntity("RayQuad");
-        quad.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("quad");
-        quad.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("test") };
-        quad.addComponent<C78E::MaterialComponent>(defaultMaterial);
+        C78_INFO("Loading Models....");
 
+        auto vasemodel = C78E::Model::createAll("assets/models/Misc/smooth_vase.obj").at(0);
+        vasemodel->m_Material.getRef()->setShader("GenericModel"); // normally dependend on Mat->illum
+        vasemodel->m_Material.get().getTextures().diffuse = "gravel";
+        C78E::AssetManager::addModel("smoothVase", vasemodel, vasemodel->m_Material.getSource());
+
+        auto entity = m_Scene->createEntity("smoothVase");
+        entity.setTransform(glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{0.5f, 0.f, 0.f} * glm::two_pi<float>());
+        entity.addComponent<C78E::ModelComponent>().models = { C78E::AssetManager::getModelAsset("smoothVase") };
         
-        C78E::Entity quad = m_Scene->createEntity("Quad");
-        quad.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("quad");
-        quad.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("gravel") };
-        quad.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        quad.setTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f * glm::half_pi<float>(), 0.f, 0.f), glm::vec3(10.f, 10.f, 1.f));
-
-
-        C78E::Entity cube = m_Scene->createEntity("Cube");
-        cube.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube2");
-        cube.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("test") };
-        cube.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        cube.setTransform(glm::vec3(0.f, 1.f, 8.f));
+        C78_INFO("Done.");
         
-        C78E::Entity cube2 = m_Scene->createEntity("WoodenCrate");
-        cube2.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube3");
-        cube2.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("woodBox") };
-        cube2.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        cube2.setTransform(glm::vec3(-1.f, 0.75f, 1.f), glm::vec3(), glm::vec3(1.5f, 1.5f, 1.5f));
-        
-        C78E::Entity cube3 = m_Scene->createEntity("Cube");
-        cube3.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
-        cube3.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("mcGrass") };
-        cube3.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        cube3.setTransform(glm::vec3(4.f, 1.0f, 4.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
-
-        C78E::Entity cube4 = m_Scene->createEntity("Cube");
-        cube4.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
-        cube4.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("mcGrass") };
-        cube4.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        cube4.setTransform(glm::vec3(2.f, 1.0f, 4.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
-
-        C78E::Entity cube5 = m_Scene->createEntity("Cube");
-        cube5.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
-        cube5.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("mcGrass") };
-        cube5.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        cube5.setTransform(glm::vec3(4.f, 3.0f, 4.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
-
-        C78E::Entity cube6 = m_Scene->createEntity("Cube");
-        cube6.addComponent<C78E::MeshComponent>().mesh = C78E::ModelManager::get()->get("cube1");
-        cube6.addComponent<C78E::TextureComponent>().textures = { C78E::TextureManager::get()->get("mcGrass") };
-        cube6.addComponent<C78E::MaterialComponent>(defaultMaterial);
-        cube6.setTransform(glm::vec3(4.f, 1.0f, 2.f), glm::vec3(), glm::vec3(2.f, 2.f, 2.f));
-        */
-
         //Init Renderer
         C78E::RenderCommand::init();
         C78E::RenderCommand::setClearColor(glm::vec4(.1f, .2f, .25f, 1.f));
 
-        C78E::Renderer3D::init();
-        C78E::RayTracer3Dgpu::init();
+        C78E::Renderer::init(m_Window.getWidth(), m_Window.getHeight());
+        C78E::Renderer::setDisplayShader("DisplayTex");
+
+        C78E::Renderer::setRenderMode(C78E::Renderer::RASTERIZE_3D);
+        C78E::Renderer::onWindowResize(1960, 1080);
     }
 
-    void onDetach() {
-        C78E::Renderer3D::shutdown();
-    }
+    void onDetach() { }
 
     void onUpdate(C78E::Timestep delta) override {
         m_LastFrameTime = delta;
-        C78E::RenderCommand::setClearColor(glm::vec4(glm::vec3(m_ClearColor) * m_ClearColor.a, 1.f));
 
         m_Scene->onViewportResize(m_Window.getWidth(), m_Window.getHeight());
         auto cameraEntity = m_Scene->getPrimaryCamera();
-        cameraEntity.getComponent<C78E::CameraComponent>().Camera.SetPerspective(glm::radians<float>(m_FOV), 0.01f, 10000.f);
-        
         if (m_MouseCapture) {
             auto& camTrans = cameraEntity.getComponent<C78E::TransformComponent>();
 
@@ -205,20 +180,10 @@ public:
             if (C78E::Input::isKeyPressed(C78E::Key::LeftControl)) { transform -= upDir * (float)delta * MoveSpeed; }
         }
 
-        if (!m_DisplayMode) {
-            C78E::Renderer3D::beginScene("TestScene");
-            C78E::Renderer3D::setSceneElements(m_SceneElements);
-            C78E::Renderer3D::submit(m_Scene);
-            C78E::Renderer3D::endScene();
-
-            C78E::Renderer3D::render("TestScene", m_Window.getWidth(), m_Window.getHeight());
-        }
-        else {
-            C78E::RayTracer3Dgpu::setViewport(m_Window.getWidth(), m_Window.getHeight());
-            C78E::RayTracer3Dgpu::submit(m_Scene);
-            C78E::RayTracer3Dgpu::compute();
-            C78E::RayTracer3Dgpu::display();
-        }
+        C78E::Renderer::submit(m_Scene);
+        C78E::Renderer::render();
+        //C78E::Renderer::display();
+        C78Editor::RendererViewport::onUpdate(C78E::Renderer::getResult());
     }
 
     void onEvent(C78E::Event& e) override {
@@ -243,7 +208,6 @@ public:
   
     bool onWindowResize(C78E::WindowResizeEvent e) {
         C78E::RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
-        m_Scene->getPrimaryCamera().getComponent<C78E::CameraComponent>().Camera.SetViewportSize(e.getWidth(), e.getHeight());
         return true;
     }
 
@@ -252,64 +216,50 @@ public:
 
         {
             ImGui::Begin("DisplayMode");
-            if (ImGui::Button( (m_DisplayMode) ? "RenderMode: RayTrace" : "RenderMode: Rasterize"))
-                m_DisplayMode = !m_DisplayMode;
+            switch (C78E::Renderer::getRenderMode())
+            {
+            case C78E::Renderer::NONE:
+                if (ImGui::Button("NONE"))
+                    C78E::Renderer::setRenderMode(C78E::Renderer::RASTERIZE_2D);
+                break;
+            case C78E::Renderer::RASTERIZE_2D:
+                if (ImGui::Button("RASTERIZE_2D"))
+                    C78E::Renderer::setRenderMode(C78E::Renderer::RASTERIZE_3D);
+                break;
+            case C78E::Renderer::RASTERIZE_3D:
+                if (ImGui::Button("RASTERIZE_3D"))
+                    C78E::Renderer::setRenderMode(C78E::Renderer::RAYTRACE_3D);
+                break;
+            case C78E::Renderer::RAYTRACE_3D:
+                if (ImGui::Button("RAYTRACE_3D"))
+                    C78E::Renderer::setRenderMode(C78E::Renderer::NONE);
+                break;
+            default:
+                break;
+            }
             ImGui::End();
         }
 
         {
             ImGui::Begin("FrameInfo");
             ImGui::Text(("FPS: " + std::to_string((uint32_t)(1 / m_LastFrameTime))).c_str());
-            ImGui::Text("FrameTime: %.3f", m_LastFrameTime*1000);
-            //ImGui::Text(("DrawCalls: " + std::to_string(C78E::Renderer3D::getStats("TestScene").drawCalls)).c_str());
-            //ImGui::Text(("Vertecies: " + std::to_string(C78E::Renderer3D::getStats("TestScene").vertecies)).c_str());
-            //ImGui::Text(("Indicies: " + std::to_string(C78E::Renderer3D::getStats("TestScene").indicies)).c_str());
+            ImGui::Text("FrameTime: %.1f ms", m_LastFrameTime*1000);
             ImGui::End();
         }
 
         {
             ImGui::Begin("Internal");
             ImGui::Text("Camera: ");
-            ImGui::Text(("  Pos: " + std::to_string(glm::round(100.f * m_Scene->getPrimaryCamera().getComponent<C78E::TransformComponent>().Translation) / 100.f, 2)).c_str());
-            ImGui::Text(("  Rot: " + std::to_string(glm::round(100.f * m_Scene->getPrimaryCamera().getComponent<C78E::TransformComponent>().Rotation) / 100.f, 2)).c_str());
-            ImGui::End();
-        }
-        
-        {
-            ImGui::Begin("Tools");
-            uint32_t id = 0;
-            for (auto shaderName : C78E::AssetManager::getAllShader()) {
-                ImGui::PushID(id++);
-                if (ImGui::Button(shaderName.c_str())) {
-                    C78E::AssetManager::loadShader(shaderName);
-                }
-                ImGui::PopID();
-            }
-            ImGui::Text(" ");
-            ImGui::SliderFloat("vFOV", &m_FOV, 22.5f, 135.f);
-            ImGui::SliderFloat4("ClearColor", &m_ClearColor[0], 0.f, 1.f);
-
-            if (ImGui::Button("SkyBox")) {
-                m_SceneElements.skyBox = !m_SceneElements.skyBox;
-            }
-            if (ImGui::Button("TexMesh")) {
-                ImGui::SameLine();
-                m_SceneElements.texMesh = !m_SceneElements.texMesh;
-            }
-            if (ImGui::Button("PointLightSprites")) {
-                ImGui::SameLine();
-                m_SceneElements.pointLightSprites = !m_SceneElements.pointLightSprites;
-            }
-            if (ImGui::Button("SpotLightSprites")) {
-                ImGui::SameLine();
-                m_SceneElements.spotLightSprites = !m_SceneElements.spotLightSprites;
-            }
-
+            ImGui::Text(("  Pos: " + std::to_string(m_Scene->getPrimaryCamera().getComponent<C78E::TransformComponent>().Translation, 2)).c_str());
+            ImGui::Text(("  Rot: " + std::to_string(m_Scene->getPrimaryCamera().getComponent<C78E::TransformComponent>().Rotation, 2)).c_str());
+            ImGui::Text(("  Sca: " + std::to_string(m_Scene->getPrimaryCamera().getComponent<C78E::TransformComponent>().Scale, 2)).c_str());
             ImGui::End();
         }
         
 
         EnttInspector::onImGuiRender(m_Scene);
+        AssetBrowser::onImGuiRender();
+        C78Editor::RendererViewport::onImGuiRender();
     }
 
 
@@ -319,20 +269,11 @@ private:
     bool m_active = true;
     C78E::Timestep m_LastFrameTime = 0;
     bool m_MouseCapture = false;
-    
-    C78E::Renderer3D::Renderer3DSceneElements m_SceneElements{};
     C78E::Ref<C78E::Scene> m_Scene;
 
     C78E::Entity m_AmbientLight;
     C78E::Entity m_DirectLight;
     C78E::Entity m_PointLight;
     C78E::Entity m_SpotLight;
-
-
-    glm::vec4 m_ClearColor{1.f, 1.f, 1.f, .1f};
-    float m_FOV = 45.f;
-
-
-    bool m_DisplayMode = false;
 
 };

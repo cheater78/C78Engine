@@ -1,6 +1,7 @@
 #pragma once
 
 #include "C78E/Renderer/Framebuffer.h"
+#include "C78E/Assets/Texture/Texture.h"
 
 namespace C78E {
 
@@ -16,13 +17,11 @@ namespace C78E {
 		virtual void Unbind() override;
 
 		virtual void Resize(uint32_t width, uint32_t height) override;
-		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
+		virtual uint32_t ReadPixel(uint32_t attachmentIndex, int x, int y) override;
 
 		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
 
-		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { C78_CORE_ASSERT(index < m_ColorAttachments.size()); return m_ColorAttachments[index]; }
-
-		virtual void BlitToFront() override;
+		Ref<Texture2D> getColorAttachment(uint32_t id) override;
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
@@ -32,8 +31,8 @@ namespace C78E {
 		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;
 		FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::None;
 
-		std::vector<uint32_t> m_ColorAttachments;
-		uint32_t m_DepthAttachment = 0;
+		std::vector<Ref<Texture2D>> m_ColorAttachments;
+		Ref<Texture2D> m_DepthAttachment = nullptr;
 	};
 
 }

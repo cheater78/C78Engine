@@ -9,7 +9,7 @@ namespace C78E {
 
 	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLVertexBuffer>(size);
@@ -21,7 +21,7 @@ namespace C78E {
 
 	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLVertexBuffer>(vertices, size);
@@ -33,7 +33,7 @@ namespace C78E {
 
 	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
-		switch (Renderer::GetAPI())
+		switch (Renderer::getAPI())
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLIndexBuffer>(indices, size);

@@ -9,8 +9,33 @@ namespace C78E {
 
 	
 
-	class Texture
-	{
+	class Texture {
+	public:
+		enum TextureType {
+			FLAT,
+			SPHERE,
+			CUBE
+		};
+
+		struct TextureOption {
+			TextureType type = TextureType::FLAT;
+			float sharpness = 1.f;
+			float brightness = 0.f;
+			float contrast = 1.f;
+			glm::vec3 originOffset = { 0.f, 0.f, 0.f };
+			glm::vec3 scale = { 1.f, 1.f, 1.f };
+			glm::vec3 turbulence = { 0.f, 0.f, 0.f };
+			uint32_t textureResolution = UINT32_MAX;
+			bool clamp = false;
+			char imfchan = 'l';
+			bool blenU = true;
+			bool blenV = true;
+			float bumpMultiplier = 1.f;
+
+			//ext
+			std::string colorspace = "";
+		};
+
 	public:
 		virtual ~Texture() = default;
 

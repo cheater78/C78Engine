@@ -1,6 +1,6 @@
 #pragma once
 #include "C78E/Core/Core.h"
-#include "C78E/Core/StdUtils.h"
+#include "C78E/Utils/StdUtils.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>

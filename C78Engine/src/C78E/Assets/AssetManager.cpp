@@ -8,5 +8,6 @@ namespace C78E {
 	AssetLib<CubeMap>		AssetManager::s_CubeMapLib;
 	AssetLib<Mesh>			AssetManager::s_MeshLib;
 	AssetLib<Material>		AssetManager::s_MaterialLib;
+	AssetLib<Model>			AssetManager::s_ModelLib;
 
 }

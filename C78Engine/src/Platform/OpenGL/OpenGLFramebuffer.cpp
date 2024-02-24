@@ -76,7 +76,7 @@ namespace C78E {
 			return false;
 		}
 
-		static GLenum C78EFBTextureFormatToGL(FramebufferTextureFormat format)
+		static GLenum C78EFBTextureFormatToGLFormat(FramebufferTextureFormat format)
 		{
 			switch (format)
 			{
@@ -107,8 +107,8 @@ namespace C78E {
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
-		glDeleteTextures(1, &m_DepthAttachment);
+		m_ColorAttachments.clear();
+		m_DepthAttachment.reset();
 	}
 
 	void OpenGLFramebuffer::Invalidate()
@@ -116,11 +116,8 @@ namespace C78E {
 		if (m_RendererID)
 		{
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
-			glDeleteTextures(1, &m_DepthAttachment);
-			
 			m_ColorAttachments.clear();
-			m_DepthAttachment = 0;
+			m_DepthAttachment.reset();
 		}
 
 		glCreateFramebuffers(1, &m_RendererID);
@@ -131,19 +128,28 @@ namespace C78E {
 		// Attachments
 		if (m_ColorAttachmentSpecifications.size())
 		{
-			m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());
-			Utils::CreateTextures(multisample, m_ColorAttachments.data(), m_ColorAttachments.size());
-
-			for (size_t i = 0; i < m_ColorAttachments.size(); i++)
+			for (size_t i = 0; i < m_ColorAttachmentSpecifications.size(); i++)
 			{
-				Utils::BindTexture(multisample, m_ColorAttachments[i]);
+				uint32_t rID = 0;
+				Utils::CreateTextures(multisample, &rID, 1);
+				
 				switch (m_ColorAttachmentSpecifications[i].TextureFormat)
 				{
 					case FramebufferTextureFormat::RGBA8:
-						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
+						{
+							Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, ImageFormat::RGBA8, false };
+							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
+							Utils::BindTexture(multisample, rID);
+							Utils::AttachColorTexture(rID, m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
+						}
 						break;
 					case FramebufferTextureFormat::RED_INTEGER:
-						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
+						{
+							Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, ImageFormat::R32, false };
+							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
+							Utils::BindTexture(multisample, rID);
+							Utils::AttachColorTexture(rID, m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
+						}
 						break;
 				}
 			}
@@ -151,12 +157,15 @@ namespace C78E {
 
 		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None)
 		{
-			Utils::CreateTextures(multisample, &m_DepthAttachment, 1);
-			Utils::BindTexture(multisample, m_DepthAttachment);
+			uint32_t rID = 0;
+			Utils::CreateTextures(multisample, &rID, 1);
+			Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, ImageFormat::D24S8 };
+			m_DepthAttachment = Texture2D::create(spec, rID);
+			Utils::BindTexture(multisample, rID);
 			switch (m_DepthAttachmentSpecification.TextureFormat)
 			{
 				case FramebufferTextureFormat::DEPTH24STENCIL8:
-					Utils::AttachDepthTexture(m_DepthAttachment, m_Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_Specification.Width, m_Specification.Height);
+					Utils::AttachDepthTexture(rID, m_Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_Specification.Width, m_Specification.Height);
 					break;
 			}
 		}
@@ -202,12 +211,12 @@ namespace C78E {
 		Invalidate();
 	}
 
-	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
+	uint32_t OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
 	{
 		C78_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-		int pixelData;
+		uint32_t pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
 
@@ -215,22 +224,14 @@ namespace C78E {
 
 	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value) {
 		C78_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
-
+		C78_CORE_ASSERT(false, "Implement Texture clear!");
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
-		glClearTexImage(m_ColorAttachments[attachmentIndex], 0,
-			Utils::C78EFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+		//glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::C78EFBTextureFormatToGLFormat(spec.TextureFormat), GL_INT, &value);
 	}
 
-	void OpenGLFramebuffer::BlitToFront() {
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_RendererID);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		
-		glBlitFramebuffer(
-			0, 0, m_Specification.Width, m_Specification.Height,
-			0, 0, m_Specification.Width, m_Specification.Height,
-			GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
-			GL_NEAREST);
-			
+	Ref<Texture2D> OpenGLFramebuffer::getColorAttachment(uint32_t id) {
+		C78_CORE_ASSERT(id < m_ColorAttachments.size(), "ColorAttachmentID is out of bounds!");
+		return m_ColorAttachments.at(id);
 	}
 
 }

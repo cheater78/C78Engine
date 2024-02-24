@@ -3,7 +3,6 @@
 #include "Entity.h"
 
 #include "Components.h"
-#include "C78E/Renderer/Renderer2D.h"
 #include "ScriptableEntity.h"
 
 #include <glm/glm.hpp>
@@ -200,43 +199,6 @@ namespace C78E {
 	
 
 	void Scene::renderScene(EditorCamera& camera) {
-		Renderer2D::BeginScene(camera);
-
-		// Draw sprites
-		{
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
-			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-				Renderer2D::DrawSprite(transform.getTransform(), sprite, (int)entity);
-			}
-		}
-
-		// Draw circles
-		{
-			auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-			for (auto entity : view)
-			{
-				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-
-				Renderer2D::DrawCircle(transform.getTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-			}
-		}
-
-		// Draw text
-		/*
-		{
-			auto view = m_Registry.view<TransformComponent, TextComponent>();
-			for (auto entity : view)
-			{
-				auto [transform, text] = view.get<TransformComponent, TextComponent>(entity);
-
-				Renderer2D::DrawString(text.TextString, transform.getTransform(), text, (int)entity);
-			}
-		}
-		*/
-		Renderer2D::EndScene();
 	}
   
 	template<typename T>
@@ -271,6 +233,11 @@ namespace C78E {
 
 	template<>
 	void Scene::onComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
 	{
 	}
 

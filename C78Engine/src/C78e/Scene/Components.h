@@ -62,6 +62,10 @@ namespace C78E {
 
 	typedef SpotLight SpotLightComponent;
 	
+	struct ModelComponent {
+		std::vector<Asset<Model>> models;
+	};
+
 	struct MeshComponent {
 		Asset<Mesh> mesh;
 
@@ -148,6 +152,7 @@ namespace C78E {
 		PointLightComponent,
 		SpotLightComponent,
 
+		ModelComponent,
 		MeshComponent,
 		MaterialComponent,
 		TextureComponent,

@@ -1,3 +1,4 @@
+#pragma once
 #include <C78E/Core/Core.h>
 
 #define NO_ASSET_NAME "<uninitialized>"
@@ -23,21 +24,7 @@ namespace C78E {
 		AssetLib() = default;
 		AssetLib(const AssetLib&) = delete;
 		~AssetLib() {
-			if (!m_OwnedAssets.empty()) {
-				for (auto kv : m_OwnedAssets) {
-					if (kv.second != nullptr) {
-						delete kv.second;
-					}
-				}
-			}
-			if (!m_AssetHandles.empty()) {
-				for (auto kv : m_AssetHandles) {
-					if (kv.second != nullptr) {
-						kv.second->update(NO_ASSET_NAME, nullptr, NO_ASSET_SOURCE);
-						kv.second->invalidate();
-					}
-				}
-			}
+			// all is Stack allocated
 		}
 
 		/*
@@ -45,12 +32,12 @@ namespace C78E {
 		* if name alr has assigned Assets, they get updated with the new Resource
 		* returns true if a new Asset was added
 		*/
-		bool add(std::string name, Ref<T> asset) {
+		bool add(std::string name, Ref<T> asset, std::string source = NO_ASSET_SOURCE) {
 			auto existing = find(name);
 			for(uint32_t id : existing)
-				m_AssetHandles.at(id)->update(name, asset, NO_ASSET_SOURCE);
+				m_AssetHandles.at(id)->update(name, asset, source);
 			if (!existing.empty()) return false;
-			Asset<T>* instance = new Asset<T>(m_NextFreeID, name, NO_ASSET_SOURCE, asset, this);
+			Asset<T>* instance = new Asset<T>(m_NextFreeID, name, source, asset, this, false);
 			uint32_t index = addHandle(instance);
 			m_OwnedAssets.emplace(index, instance);
 			return true;
@@ -86,6 +73,9 @@ namespace C78E {
 				if (m_OwnedAssets.contains(id)) { //C++20
 					delete m_OwnedAssets.at(id);
 				}
+				if (m_AssetHandles.contains(id)) {
+					m_AssetHandles.erase(id);
+				}
 			}
 			return true;
 		}
@@ -98,6 +88,7 @@ namespace C78E {
 			C78_CORE_ASSERT(!existing.empty(), "Asset can't be loaded, it's non-existent.");
 			for (uint32_t id : existing) {
 				Asset<T>* asset = m_AssetHandles.at(id);
+				if (!asset->loadable()) continue;
 				if (asset->getSource() == NO_ASSET_SOURCE) continue;
 				asset->update(asset->getName(), T::create(asset->getSource()) );
 			}
@@ -111,8 +102,10 @@ namespace C78E {
 			if(existing.empty())
 				addHandle(new Asset<T>(m_NextFreeID, name, filepath, T::create(filepath), this));
 			else {
-				for (uint32_t id : existing)
+				for (uint32_t id : existing) {
+					if (!m_AssetHandles.at(id)->loadable()) continue;
 					m_AssetHandles.at(id)->update(name, T::create(filepath), filepath);
+				}
 			}
 		}
 
@@ -133,6 +126,16 @@ namespace C78E {
 			for (auto& kv : m_AssetHandles)
 				names.emplace(kv.second->getName());
 			return names;
+		}
+
+		/*
+		* Renames an Asset group, identified by name, to another given name
+		*/
+		bool rename(std::string name, std::string newName) {
+			auto existing = find(name);
+			for (uint32_t id : existing)
+				m_AssetHandles.at(id)->rename(newName);
+			return existing.empty();
 		}
 
 	private:
@@ -196,9 +199,9 @@ namespace C78E {
 	template <typename T>
 	class Asset {
 	public:
-		Asset() : m_LibID(-1), m_Name(NO_ASSET_NAME), m_Source(NO_ASSET_SOURCE), m_Asset(nullptr), m_Library(nullptr) { /* should never be used to create an Asset */ }
+		Asset() = default; //dont use to construct, just for dynamic storage types
 		Asset(const Asset<T>& other)
-			: m_LibID(other.m_Library->addHandle(this)), m_Name(other.m_Name), m_Source(other.m_Source), m_Asset(other.m_Asset), m_Library(other.m_Library)
+			: m_LibID(other.m_Library->addHandle(this)), m_Name(other.m_Name), m_Source(other.m_Source), m_Asset(other.m_Asset), m_Library(other.m_Library), m_FileUnique(other.m_FileUnique)
 		{ }
 		~Asset() { if(valid()) m_Library->remHandle(m_LibID); }
 
@@ -207,47 +210,52 @@ namespace C78E {
 
 		/* register the Asset on assignment, bc other might get deleted */
 		Asset& operator=(const Asset& other) {
-			if (this != &other) {
-				this->m_Name = other.m_Name;
-				this->m_Source = other.m_Source;
-				this->m_Asset = other.m_Asset;
-				this->m_Library = other.m_Library;
-				this->m_LibID = m_Library->addHandle(this);
-			}
+			if (this == &other) return *this;
+			this->m_Name = other.m_Name;
+			this->m_Source = other.m_Source;
+			this->m_Asset = other.m_Asset;
+			this->m_Library = other.m_Library;
+			this->m_LibID = m_Library->addHandle(this);
 			return *this;
 		}
 
-		T& get() { return *(m_Asset.get()); }
-		std::string getName() { return m_Name; }
-		std::string getSource() { return m_Source; }
+		Ref<T> getRef()			{ return m_Asset; }
+		T& get()				{ return *(m_Asset.get()); }
+		std::string getName()	{ return m_Name; }
+		std::string getSource()	{ return m_Source; }
 
-		bool valid() { return !(m_Name == NO_ASSET_NAME && m_Source == NO_ASSET_SOURCE) && m_Library != nullptr;  }
+		bool valid()
+		{ return !(m_Name == NO_ASSET_NAME && m_Source == NO_ASSET_SOURCE) && m_Library != nullptr;  }
 
 	private:
-		uint32_t m_LibID;
-		std::string m_Name;
-		std::string m_Source;
-		Ref<T> m_Asset;
-		AssetLib<T>* m_Library;
-		
-		Asset(uint32_t id, std::string name, std::string source, Ref<T> asset, AssetLib<T>* library)
-			: m_LibID(id), m_Name(name), m_Source(source), m_Asset(asset), m_Library(library)
+		Asset(uint32_t id, std::string name, std::string source, Ref<T> asset, AssetLib<T>* library, bool loadable = true)
+			: m_LibID(id), m_Name(name), m_Source(source), m_Asset(asset), m_Library(library), m_FileUnique(loadable)
 		{ }
+
+		void rename(std::string name)
+		{ m_Name = name; }
+
+		void update(std::string name, Ref<T> asset)
+		{ m_Name = name; m_Asset.swap(asset); }
+
+		void update(std::string name, Ref<T> asset, std::string source)
+		{ m_Name = name; m_Asset.swap(asset); m_Source = source; }
+
+		void invalidate()
+		{ m_Library = nullptr; }
+
+		bool loadable()
+		{ return m_FileUnique; }
+
+	private:
+		uint32_t m_LibID = -1;
+		std::string m_Name = NO_ASSET_NAME;
+		std::string m_Source = NO_ASSET_SOURCE;
+		bool m_FileUnique = true;
+		Ref<T> m_Asset = nullptr;
+		AssetLib<T>* m_Library = nullptr;
 		
-		void update(std::string name, Ref<T> asset) {
-			m_Name = name;
-			m_Asset.swap(asset);
-		}
-
-		void update(std::string name, Ref<T> asset, std::string source) { 
-			m_Name = name;
-			m_Asset.swap(asset);
-			m_Source = source;
-		}
-
-		void invalidate() {
-			m_Library = nullptr;
-		}
+		
 
 		friend class AssetLib<T>;
 	};
