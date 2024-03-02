@@ -18,9 +18,12 @@ namespace C78Editor {
 		s_TextureId = s_Texture->getRendererID();
 	}
 
-	void RendererViewport::onImGuiRender() {
+	void RendererViewport::onImGuiRender(bool& captureMouse) {
 		if (s_Texture == nullptr) return;
 		ImGui::Begin("Viewport");
+
+		if (ImGui::IsKeyPressed(ImGuiKey_Escape))
+			captureMouse = !captureMouse;
 
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		uint32_t x = static_cast<uint32_t>(size.x);

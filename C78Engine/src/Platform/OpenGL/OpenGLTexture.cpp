@@ -49,7 +49,7 @@ namespace C78E {
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		}
 		else {
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 0);
+			//glPixelStorei(GL_UNPACK_ALIGNMENT, 0);
 		}
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, dataFormat, type, image.getData());

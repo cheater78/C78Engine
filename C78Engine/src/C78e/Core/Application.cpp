@@ -29,9 +29,6 @@ namespace C78E {
 	}
 
 	void Application::run() {
-
-		
-
 		while (m_Running) {
 			Timestep delta = m_RunTime->elapsed();
 			m_RunTime->reset();
@@ -46,7 +43,6 @@ namespace C78E {
 			m_ImGuiLayer->end();
 
 			m_Window->onUpdate();
-
 		}
 	}
 

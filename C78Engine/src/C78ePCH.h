@@ -16,6 +16,9 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <semaphore>
+#include <thread>
+
 // Platform dependent
 #ifdef C78_PLATFORM_WINDOWS
 	#include <Windows.h>

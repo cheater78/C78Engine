@@ -403,7 +403,7 @@ C78Engine/vendor/VulkanSDK
 C78Engine/vendor/entt
 C78Engine/vendor/imgui
 
-C78App/assets
+C78App/assets/*
 
 bin/
 bin-int/

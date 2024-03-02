@@ -12,6 +12,7 @@
 #include "ImGui/EnttInspector.h"
 #include "ImGui/AssetBrowser.h"
 #include "ImGui/RendererViewport.h"
+#include "ImGui/FileBrowser.h"
 
 class TestLayer : public C78E::Layer {
 public:
@@ -22,8 +23,7 @@ public:
     * 
     * TD:
     * 
-    * Renderers CleanUp
-    * Renderers Base - Abstract Tex?!
+    * Renderers CleanUp -> Ren2D
     * 
     * FileSys,
     * 
@@ -33,12 +33,14 @@ public:
     * 
     * RayTracer
     * 
-    * Inspector
+    * Inspector -> interactive (hot reloads)
     * 
     * Material -> AssetFallbacks
     * Error Handling
     * 
-    * APP -> EDITOR
+    * Entity/Camera Conroller -> KeyboardController (static -> dynamic, modular)
+    * 
+    * APP -> EDITOR -> Projects(+last), ...
     * 
     * 
     */
@@ -47,9 +49,10 @@ public:
 
     void onAttach() {
 
-        EnttInspector::init();
-        AssetBrowser::init();
+        C78Editor::EnttInspector::init();
+        C78Editor::AssetBrowser::init();
         C78Editor::RendererViewport::init();
+        C78Editor::FileBrowser::init();
 
 
         //Create Scene and Camera
@@ -154,11 +157,13 @@ public:
         m_Scene->onViewportResize(m_Window.getWidth(), m_Window.getHeight());
         auto cameraEntity = m_Scene->getPrimaryCamera();
         if (m_MouseCapture) {
+            m_Window.setMouseMode(C78E::MouseMode::DISABLED);
             auto& camTrans = cameraEntity.getComponent<C78E::TransformComponent>();
 
             static const float MouseSens = 0.1f;
             float MoveSpeed = 2.f;
-            if (!C78E::Input::isKeyPressed(C78E::Key::LeftShift)) MoveSpeed *= 3;
+            if (!C78E::Input::isKeyPressed(C78E::Key::LeftShift)) MoveSpeed /= 4;
+            if (!C78E::Input::isKeyPressed(C78E::Key::LeftAlt)) MoveSpeed *= 4;
 
             auto& rot = camTrans.Rotation;
             rot += glm::vec3( 0.f, C78E::Input::getMouseX() * delta * MouseSens, 0.f );
@@ -178,7 +183,7 @@ public:
             if (C78E::Input::isKeyPressed(C78E::Key::D)) { transform -= rightDir * (float)delta * MoveSpeed; }
             if (C78E::Input::isKeyPressed(C78E::Key::Space)) { transform += upDir * (float)delta * MoveSpeed; }
             if (C78E::Input::isKeyPressed(C78E::Key::LeftControl)) { transform -= upDir * (float)delta * MoveSpeed; }
-        }
+        } else m_Window.setMouseMode(C78E::MouseMode::NORMAL);
 
         C78E::Renderer::submit(m_Scene);
         C78E::Renderer::render();
@@ -213,7 +218,7 @@ public:
 
     void onImGuiRender() override {
         if (!m_active) return;
-
+        ImGui::DockSpaceOverViewport(); // For Editor -> one big root DockingSpace
         {
             ImGui::Begin("DisplayMode");
             switch (C78E::Renderer::getRenderMode())
@@ -255,11 +260,11 @@ public:
             ImGui::Text(("  Sca: " + std::to_string(m_Scene->getPrimaryCamera().getComponent<C78E::TransformComponent>().Scale, 2)).c_str());
             ImGui::End();
         }
-        
 
-        EnttInspector::onImGuiRender(m_Scene);
-        AssetBrowser::onImGuiRender();
-        C78Editor::RendererViewport::onImGuiRender();
+        C78Editor::EnttInspector::onImGuiRender(m_Scene);
+        C78Editor::AssetBrowser::onImGuiRender();
+        C78Editor::RendererViewport::onImGuiRender(m_MouseCapture);
+        C78Editor::FileBrowser::onImGuiRender();
     }
 
 

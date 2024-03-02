@@ -66,31 +66,25 @@ namespace C78E {
 		C78_CORE_INFO("ImGui Layer created.");
 	}
 
-	void ImGuiLayer::onDetach()
-	{
+	void ImGuiLayer::onDetach() {
 		C78_CORE_INFO("ImGui Layer stopped.");
 	}
 
-	void ImGuiLayer::onEvent(Event& e)
-	{
-		if (m_BlockEvents)
-		{
+	void ImGuiLayer::onEvent(Event& e) {
+		if (m_BlockEvents) {
 			ImGuiIO& io = ImGui::GetIO();
 			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
 			e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
 		}
 	}
 	
-	void ImGuiLayer::begin()
-	{
-		
+	void ImGuiLayer::begin() {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
 
-	void ImGuiLayer::end()
-	{
+	void ImGuiLayer::end() {
 
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::get();
@@ -147,8 +141,7 @@ namespace C78E {
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 	}
 
-	uint32_t ImGuiLayer::GetActiveWidgetID() const
-	{
+	uint32_t ImGuiLayer::GetActiveWidgetID() const {
 		return GImGui->ActiveId;
 	}
 
