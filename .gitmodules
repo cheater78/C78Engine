@@ -26,3 +26,6 @@
 [submodule "C78Engine/vendor/imgui"]
 	path = C78Engine/vendor/imgui
 	url = https://github.com/cheater78/ImGui.git
+[submodule "C78Engine/vendor/yaml-cpp"]
+	path = C78Engine/vendor/yaml-cpp
+	url = https://github.com/cheater78/yaml-cpp.git
