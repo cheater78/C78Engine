@@ -36,7 +36,6 @@ namespace C78E {
 	public:
 		virtual ~Texture() = default;
 
-		virtual std::string getName() const = 0;
 		virtual uint32_t getRendererID() const = 0;
 
 		virtual void setData(void* data, uint32_t size) = 0;
@@ -45,6 +44,9 @@ namespace C78E {
 		virtual bool isLoaded() const = 0;
 
 		virtual bool operator==(const Texture& other) const = 0;
+	public:
+		// TODO: revisit, Texture loading/handling, 2D and Cubemap don't differ as file rn
+		virtual AssetType getType() { return Asset::AssetType::Texture2D; };
 	};
 
 	class Texture2D : public Texture {

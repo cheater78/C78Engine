@@ -58,7 +58,7 @@ namespace C78E {
 		C78_CORE_ASSERT(metadata.type != Asset::AssetType::None);
 		Ref<Asset> asset = AssetLoader::loadAsset(handle, metadata);
 		if (asset) {
-			asset->m_Handle = handle;
+			asset->m_AssetHandle = handle;
 			m_LoadedAssets[handle] = asset;
 			m_AssetRegistry[handle] = metadata;
 			serializeAssetRegistry();

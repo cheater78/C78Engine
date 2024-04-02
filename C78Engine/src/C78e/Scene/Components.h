@@ -7,31 +7,49 @@
 #include "C78E/Assets/AssetManager.h"
 
 namespace C78E {
-	// Forward declarations
-	class Model;
-	class Texture2D;
-	class Font;
 	class ScriptableEntity;
 
-	//ComponentTypes
+	/*
+	* #############################
+	* Components for Scene Entities
+	* #############################
+	*/
 
-	// mandatory
-	typedef UUID IDComponent;
+	/*
+	* ID Component, uniquely identifying an Entity
+	* mandatory for every Entity
+	* gets auto created on Entity creation
+	*/
+	struct IDComponent {
+		UUID id;
+	};
 
-	typedef std::string TagComponent;
+	/*
+	* Tag Component, closer description of the Entity(e.g. name)
+	* mandatory for every Entity
+	*/
+	struct TagComponent {
+		std::string tag;
+	};
 
+	/*
+	* State Component, whether an Entity is active or should be skipped in any handling
+	* mandatory for every Entity
+	* Entities are enabled by default
+	*/
 	struct StateComponent {
 		bool enable = true;
 	};
 
-	struct TransformComponent
-	{
+	/*
+	* Transform Component, placement information of the Entity in virtual space
+	* mandatory for every Entity
+	*/
+	struct TransformComponent {
 		glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
 
-		TransformComponent() = default;
-		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(const glm::vec3& translation)
 			: Translation(translation) {}
 
@@ -46,16 +64,37 @@ namespace C78E {
 		}
 	};
 
-	// non-mandatory
-	struct CameraComponent
-	{
+	/*
+	* Camera Component, containing data for the Entity to be used as a Camera
+	* (optional)
+	*/
+	struct CameraComponent {
 		SceneCamera Camera;
 		bool FixedAspectRatio = false;
-
-		CameraComponent() = default;
-		CameraComponent(const CameraComponent&) = default;
 	};
-	
+
+	/*
+	* Model Component, AssetHandles for registered Models to be rendered as visual representation of the Entity
+	* (optional)
+	*/
+	struct ModelComponent {
+		std::vector<AssetHandle> models;
+	};
+
+	/*
+	* SkyBox Component, AssetHandles for registered Textures (TODO Cubemaps only?!) to be used as SkyBox for the Scene (TODO blending for multiple?!)
+	* (optional)
+	*/
+	struct SkyBoxComponent {
+		std::vector<AssetHandle> skyboxes;
+	};
+
+
+	//
+	//
+	// LEGACY -> TODO: rework in Material/Shader system
+	//
+	//
 
 	// TODO -> Material
 	typedef AmbientLight AmbientLightComponent;
@@ -66,11 +105,6 @@ namespace C78E {
 
 	typedef SpotLight SpotLightComponent;
 	// ----
-
-
-	struct ModelComponent {
-		std::vector<AssetHandle> models;
-	};
 
 	struct MeshComponent {
 		AssetHandle mesh;
@@ -84,9 +118,7 @@ namespace C78E {
 		std::vector<AssetHandle> textures;
 	};
 
-	struct SkyBoxComponent {
-		std::vector<AssetHandle> skyboxes;
-	};
+	
 
 
 	struct SpriteRendererComponent {
@@ -94,8 +126,6 @@ namespace C78E {
 		AssetHandle texture;
 		float tilingFactor = 1.0f;
 
-		SpriteRendererComponent() = default;
-		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			: color(color) {}
 	};

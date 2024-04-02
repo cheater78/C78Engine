@@ -12,7 +12,8 @@ namespace C78E {
 			: m_Mesh(mesh), m_Material(material) { }
 		Model(const Model& other) = default;
 		~Model() { }
-		
+	public:
+		virtual AssetType getType() { return Asset::AssetType::Model; };
 	public:
 		AssetHandle m_Mesh = 0;
 		AssetHandle m_Material = 0;

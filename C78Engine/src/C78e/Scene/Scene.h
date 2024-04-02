@@ -4,17 +4,19 @@
 #include "C78E/Core/Timestep.h"
 #include "C78E/Renderer/EditorCamera.h"
 
+#include <C78E/Assets/Asset/Asset.h>
+
 namespace C78E {
 
 	class Entity;
 
-	class Scene : public Asset{
+	class Scene : public Asset {
 	public:
 		static Ref<Scene> copy(Ref<Scene> other);
 
 	public:
-		Scene(std::string name = "<unnamed Scene>");
-		~Scene();
+		Scene() = default;
+		~Scene() = default;
 
 		Entity createEntity(const std::string& name = std::string());
 		Entity createEntityWithUUID(UUID uuid, const std::string& name = std::string());
@@ -45,14 +47,15 @@ namespace C78E {
 		template<typename... Components>
 		auto getAllEntitiesWith() { return m_Registry.view<Components...>(); }
 
+	public:
+		virtual AssetType getType() { return Asset::AssetType::Scene; };
+
 	private:
 		template<typename T>
 		void onComponentAdded(Entity entity, T& component);
 
 		void renderScene(EditorCamera& camera);
 	private:
-		//Serialization
-
 		// Entities
 		entt::registry m_Registry;
 		UUID m_ActiveCam{ 0 };

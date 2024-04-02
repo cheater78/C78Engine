@@ -5,9 +5,9 @@
 #include "C78E/Core/Core.h"
 #include "C78E/Core/Log.h"
 #include "C78E/Core/Timestep.h"
-#include "C78E/Core/Application.h"
-#include "C78E/Core/Types.h"
 #include "C78E/Core/UUID.h"
+#include "C78E/Core/Types.h"
+#include "C78E/Core/Application.h"
 
 
 // ImGui

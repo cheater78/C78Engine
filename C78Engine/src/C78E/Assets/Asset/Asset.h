@@ -27,6 +27,7 @@ namespace C78E {
 		struct AssetMeta {
 			AssetType type = AssetType::None;
 			FilePath fileSource;
+			std::string name = "untitled asset";
 
 			operator bool() const { return type != AssetType::None; }
 		};
@@ -41,10 +42,11 @@ namespace C78E {
 		static const AssetMeta c_NullAssetMeta;
 
 	public:
-		virtual AssetType getType() const = 0;
-		virtual std::string toString() const = 0; // Editor serialize
+		virtual AssetType getType() const { return AssetType::None; };
+		// TODO: revisit, found unnecessary -> Serializers for all of them
+		//virtual std::string toString() const = 0; // Editor serialize
 	public:
-		AssetHandle m_Handle;
+		AssetHandle m_AssetHandle;
 	};
 
 }

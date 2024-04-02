@@ -82,6 +82,8 @@ namespace C78E {
 		{ }
 		Material(const Material&) = default;
 		~Material() = default;
+	public:
+		virtual AssetType getType() { return Asset::AssetType::Material; };
 
 	public:
 		AssetHandle m_Shader;

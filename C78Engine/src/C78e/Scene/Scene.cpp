@@ -10,10 +10,6 @@
 
 namespace C78E {
 
-	Scene::Scene(std::string name){ }
-
-	Scene::~Scene() { }
-
 	template<typename... Component>
 	static void copyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap) {
 		([&]()
@@ -49,7 +45,7 @@ namespace C78E {
 	}
 
 	Ref<Scene> Scene::copy(Ref<Scene> other) {
-		Ref<Scene> newScene = createRef<Scene>(other->m_Name);
+		Ref<Scene> newScene = createRef<Scene>();
 
 		newScene->m_ViewportWidth = other->m_ViewportWidth;
 		newScene->m_ViewportHeight = other->m_ViewportHeight;
@@ -60,10 +56,9 @@ namespace C78E {
 
 		// Create entities in new scene
 		auto idView = srcSceneRegistry.view<IDComponent>();
-		for (auto e : idView)
-		{
-			UUID uuid = srcSceneRegistry.get<IDComponent>(e);
-			const auto& name = srcSceneRegistry.get<TagComponent>(e);
+		for (auto e : idView) {
+			UUID uuid = srcSceneRegistry.get<IDComponent>(e).id;
+			const auto& name = srcSceneRegistry.get<TagComponent>(e).tag;
 			Entity newEntity = newScene->createEntityWithUUID(uuid, name);
 			enttMap[uuid] = (entt::entity)newEntity;
 		}
@@ -85,7 +80,7 @@ namespace C78E {
 		entity.addComponent<IDComponent>(uuid);
 		entity.addComponent<StateComponent>();
 		entity.addComponent<TransformComponent>();
-		auto& tag = entity.addComponent<TagComponent>();
+		auto& tag = entity.addComponent<TagComponent>().tag;
 		tag = name.empty() ? "Entity" : name;
 
 		m_EntityMap[uuid] = entity;
@@ -145,7 +140,7 @@ namespace C78E {
 
 	Entity Scene::duplicateEntity(Entity entity) {
 		// Copy name because we're going to modify component data structure
-		std::string name = entity.getName();
+		std::string name = entity.getTag();
 		Entity newEntity = createEntity(name);
 		copyComponentIfExists(AllComponents{}, newEntity, entity);
 		return newEntity;
@@ -156,7 +151,7 @@ namespace C78E {
 		for (auto entity : view)
 		{
 			const TagComponent& tc = view.get<TagComponent>(entity);
-			if (tc == name)
+			if (tc.tag == name)
 				return Entity{ entity, this };
 		}
 		return {};
@@ -177,7 +172,7 @@ namespace C78E {
   
 	template<typename T>
 	void Scene::onComponentAdded(Entity entity, T& component) {
-		//static_assert(sizeof(T) == 0);
+		C78_CORE_WARN("Scene: onComponentAdded - missing Component, Entity: {}", entity.getTag());
 	}
 
 	template<>
@@ -194,7 +189,7 @@ namespace C78E {
 
 	template<>
 	void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& component) {
-		if (m_ActiveCam == 0)
+		if (!m_ActiveCam)
 			m_ActiveCam = entity.getUUID();
 		if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
 			component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);

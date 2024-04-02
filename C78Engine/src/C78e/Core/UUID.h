@@ -12,6 +12,7 @@ namespace C78E {
 
 		operator uint64_t() const { return m_UUID; }
 		operator bool() const { return m_UUID; }
+		friend bool operator<(const UUID& l, const UUID& r) { return l.m_UUID < r.m_UUID; }
 	private:
 		uint64_t m_UUID; // Change to 128 or 256
 	};

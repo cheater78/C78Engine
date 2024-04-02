@@ -6,7 +6,7 @@
 namespace C78E {
 
 	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification)
-		: m_RendererID(0), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false) {
+		: m_RendererID(0), m_Specification(specification), m_IsLoaded(false) {
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
 
@@ -17,7 +17,7 @@ namespace C78E {
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID)
-		: m_RendererID(rendererID), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false)
+		: m_RendererID(rendererID), m_Specification(specification), m_IsLoaded(false)
 	{ }
 
 	OpenGLTexture2D::OpenGLTexture2D(Image& image) {

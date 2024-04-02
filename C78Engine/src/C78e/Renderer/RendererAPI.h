@@ -9,7 +9,7 @@ namespace C78E {
 	class RendererAPI {
 	public:
 		enum class API {
-			None = 0, OpenGL = 1, Vulkan = 2
+			None = 0, OpenGL = 1, Vulkan = 2, DIRECTX = 3, METAL = 4
 		};
 		enum DepthFunc : uint32_t {
 			NEVER = 0, LESS = 1, EQUAL = 2, LEQUAL = 3, GREATER = 4, NOTEQUAL = 5, GEQUAL = 6, ALWAYS = 7

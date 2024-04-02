@@ -19,7 +19,7 @@ namespace C78E {
 		FilePath scriptModulePath;
 	};
 
-	class Project {
+	class Project : public Asset {
 	public:
 		static Ref<Project> create();
 		static Ref<Project> load(const FilePath& path);
@@ -61,6 +61,10 @@ namespace C78E {
 		Ref<AssetManagerBase> getAssetManager() { return m_AssetManager; }
 		Ref<RuntimeAssetManager> getRuntimeAssetManager() { return std::static_pointer_cast<RuntimeAssetManager>(m_AssetManager); }
 		Ref<EditorAssetManager> getEditorAssetManager() { return std::static_pointer_cast<EditorAssetManager>(m_AssetManager); }
+	
+	public:
+		//TODO: does this make sense? - Projects being Assets as well?!
+		virtual AssetType getType() { return Asset::AssetType::Project; };
 
 	private:
 		inline static Ref<Project> s_ActiveProject;

@@ -9,7 +9,6 @@
 
 #include "Scene/EditorCamera.h"
 
-//
 #include <C78E/Project/Project.h>
 
 
@@ -20,42 +19,13 @@ namespace C78Editor {
     class EditorLayer : public C78E::Layer {
     public:
 
-        /*
-        * +AssetMmg, basic AssetViewer, Model Loader (Wavefront), Editor(premake, projStructure)
-        *
-        * TD:
-        *
-        * Renderers CleanUp -> Ren2D
-        *
-        * FileSys,
-        *
-        * Asset-Base
-        * Asset-UUID - AssetIdentifier?! -> resolved "AssetHandle"
-        * Asset Ser/DeSer - Formats/Conventions
-        *
-        * RayTracer
-        *
-        * Inspector -> interactive (hot reloads)
-        *
-        * Material -> AssetFallbacks
-        * Error Handling
-        *
-        * Entity/Camera Conroller -> KeyboardController (static -> dynamic, modular)
-        *
-        * Engine -> base functionality, all runtime tools 
-        * Editor -> scene management, asset hotswap, ser/deser,
-        * Project -> Assets, SerializedScenes
-        *
-        * EditorCam alr in Renderer -> rework
-        *
-        */
-
         EditorLayer(C78E::Window& window) : Layer("EditorLayer"), m_Window(window)
         { }
 
         void onAttach() {
             //Create Scene and Camera for the Editor
             m_EditorScene = C78E::createRef<C78E::Scene>("EditorScene");
+            m_EditorCameraEntity = m_EditorScene->createEntity("EditorCamera;");
 
             // TestProject - C78Project
             

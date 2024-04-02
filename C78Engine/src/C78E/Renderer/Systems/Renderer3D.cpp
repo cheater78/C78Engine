@@ -40,7 +40,7 @@ namespace C78E {
 		s_Width = width; s_Height = height;
 
 		float* data = new float[s_Width * s_Height * 4];
-		RawImage image{ s_Width, s_Height, ImageFormat::RGBA32F, (void*)data };
+		Image image{ s_Width, s_Height, Image::ImageFormat::RGBA32F, (void*)data };
 		delete[] data;
 		s_Result = Texture2D::create(image);
 		s_FrameBuffer->Resize(width, height);

@@ -16,7 +16,8 @@ namespace C78E {
 		{ }
 		Mesh(const Mesh&) = delete;
 		~Mesh() = default;
-
+	public:
+		virtual AssetType getType() { return Asset::AssetType::Mesh; };
 	public:
 		std::vector<Vertex> m_Vertecies;
 		std::vector<uint32_t> m_Indicies;

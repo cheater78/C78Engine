@@ -23,8 +23,6 @@ namespace C78E {
 
 
 	Asset::AssetType Asset::assetTypeFromString(std::string str) {
-		if (str == "AssetType::None")		return AssetType::None;
-
 		if (str == "AssetType::Project")	return AssetType::Project;
 		if (str == "AssetType::Scene")		return AssetType::Scene;
 
@@ -35,6 +33,8 @@ namespace C78E {
 		if (str == "AssetType::Model")		return AssetType::Model;
 		if (str == "AssetType::Mesh")		return AssetType::Mesh;
 		if (str == "AssetType::Material")	return AssetType::Material;
+
+		return AssetType::None;
 	}
 
 	std::string Asset::assetTypeToString(Asset::AssetType type) {
@@ -55,7 +55,5 @@ namespace C78E {
 		default: return "AssetType::None";
 		}
 	}
-
-
 
 }

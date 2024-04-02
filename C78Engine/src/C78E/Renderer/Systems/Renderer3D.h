@@ -9,7 +9,7 @@
 #include "C78E/Renderer/UniformBuffer.h"
 #include "C78E/Assets/Shader/Shader.h"
 #include "C78E/Assets/Texture/Texture.h"
-#include "C78E/Assets/Texture/RawImage.h"
+#include "C78E/Assets/Texture/Image.h"
 #include "C78E/Renderer/Framebuffer.h"
 
 namespace C78E {

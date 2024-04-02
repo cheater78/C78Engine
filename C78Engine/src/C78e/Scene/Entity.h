@@ -52,8 +52,8 @@ namespace C78E {
 		operator entt::entity() const { return m_EntityHandle; }
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }
 
-		UUID getUUID() { return getComponent<IDComponent>(); }
-		const std::string& getName() { return getComponent<TagComponent>(); }
+		UUID getUUID() { return getComponent<IDComponent>().id; }
+		const std::string& getTag() { return getComponent<TagComponent>().tag; }
 
 		TransformComponent& getTransform() { return getComponent<TransformComponent>(); }
 		TransformComponent& setTransform(glm::vec3 translation) { auto& transform = getTransform(); transform.Translation = translation; return transform; }

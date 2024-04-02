@@ -163,7 +163,7 @@ namespace C78E {
 				if (cameraComponent) {
 					auto& cc = deserializedEntity.addComponent<CameraComponent>();
 
-					auto& cameraProps = cameraComponent["Camera"];
+					auto cameraProps = cameraComponent["Camera"];
 					cc.Camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					cc.Camera.SetPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());
@@ -183,7 +183,7 @@ namespace C78E {
 				if (spriteRendererComponent)
 				{
 					auto& src = deserializedEntity.addComponent<SpriteRendererComponent>();
-					src.Color = spriteRendererComponent["Color"].as<glm::vec4>();
+					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
 					if (spriteRendererComponent["TexturePath"])
 					{
 						// NOTE(Yan): legacy, could try and find something in the asset registry that matches?
@@ -193,19 +193,19 @@ namespace C78E {
 					}
 
 					if (spriteRendererComponent["TextureHandle"])
-						src.Texture = spriteRendererComponent["TextureHandle"].as<AssetHandle>();
+						src.texture = spriteRendererComponent["TextureHandle"].as<AssetHandle>();
 
 					if (spriteRendererComponent["TilingFactor"])
-						src.TilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
+						src.tilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
 				}
 
 				auto circleRendererComponent = entity["CircleRendererComponent"];
 				if (circleRendererComponent)
 				{
 					auto& crc = deserializedEntity.addComponent<CircleRendererComponent>();
-					crc.Color = circleRendererComponent["Color"].as<glm::vec4>();
-					crc.Thickness = circleRendererComponent["Thickness"].as<float>();
-					crc.Fade = circleRendererComponent["Fade"].as<float>();
+					crc.color = circleRendererComponent["Color"].as<glm::vec4>();
+					crc.thickness = circleRendererComponent["Thickness"].as<float>();
+					crc.fade = circleRendererComponent["Fade"].as<float>();
 				}
 
 				
