@@ -18,7 +18,7 @@ namespace C78E {
 		~TinyObjectLoader() = delete;
 
 	public:
-		static std::vector<Ref<Model>> loadAllModels(std::string file);
+		static std::vector<Ref<Model>> loadAllModels(std::string file, std::string name = "");
 
 	private:
 		static Ref<Material> toMaterial(const tinyobj::material_t& material);

@@ -7,8 +7,7 @@ namespace C78E {
 
 	//class Scene;
 
-	class Entity
-	{
+	class Entity {
 	public:
 		Entity() = default;
 		Entity(entt::entity handle, Scene* scene);

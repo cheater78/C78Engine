@@ -1,13 +1,12 @@
 #include "C78EPCH.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
-#include "C78E/Assets/Texture/RawImage.h"
+#include "C78E/Assets/Texture/Image.h"
 
 namespace C78E {
 
 	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification)
-		: m_RendererID(0), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false)
-	{
+		: m_RendererID(0), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false) {
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
 
@@ -21,10 +20,8 @@ namespace C78E {
 		: m_RendererID(rendererID), m_Specification(specification), m_Name("<unknown>"), m_IsLoaded(false)
 	{ }
 
-	OpenGLTexture2D::OpenGLTexture2D(std::string filename) {
-		RawImage image{filename.c_str(), false};
+	OpenGLTexture2D::OpenGLTexture2D(Image& image) {
 		C78_CORE_ASSERT(image.isValid(), "Image must be valid!");
-		m_Name = std::filesystem::getName(image.getName());
 		m_Specification.width = image.getWidth();
 		m_Specification.height = image.getHeight();
 		m_Specification.format = image.getFormat();
@@ -38,49 +35,14 @@ namespace C78E {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		GLenum type;
-		if (m_Specification.format == ImageFormat::RGBA32F)
-			type = GL_FLOAT;
-		else
-			type = GL_UNSIGNED_BYTE;
-
-		GLenum dataFormat = toGLDataFormat(m_Specification.format);
-		if (dataFormat == GL_RGB) {
-			// RGB8 is probably not 4byte aligned, if so skip the next line!
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		}
-		else {
-			//glPixelStorei(GL_UNPACK_ALIGNMENT, 0);
-		}
-
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, dataFormat, type, image.getData());
-		
-		m_IsLoaded = true;
-	}
-
-	OpenGLTexture2D::OpenGLTexture2D(RawImage& image) {
-		C78_CORE_ASSERT(image.isValid(), "Image must be valid!");
-		m_Name = std::filesystem::getName(image.getName());
-		m_Specification.width = image.getWidth();
-		m_Specification.height = image.getHeight();
-		m_Specification.format = image.getFormat();
-
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		GLenum type;
-		if (m_Specification.format == ImageFormat::RGBA32F)
+		if (m_Specification.format == Image::ImageFormat::RGBA32F)
 			type = GL_FLOAT;
 		else
 			type = GL_UNSIGNED_BYTE;
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), type, image.getData());
 
-		if (m_Specification.format == ImageFormat::RGBA32F)
+		if (m_Specification.format == Image::ImageFormat::RGBA32F)
 
 
 			m_IsLoaded = true;
@@ -91,7 +53,7 @@ namespace C78E {
 	}
 
 	void OpenGLTexture2D::setData(void* data, uint32_t size) {
-		C78_CORE_ASSERT(size == m_Specification.width * m_Specification.height * imageFormatSize(m_Specification.format), "Data fit the Texture!");
+		C78_CORE_ASSERT(size == m_Specification.width * m_Specification.height * Image::imageFormatSize(m_Specification.format), "Data fit the Texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, data);
 		m_IsLoaded = true;
 	}
@@ -117,7 +79,7 @@ namespace C78E {
 
 
 	OpenGLCubeMap::OpenGLCubeMap(CubeMap::TextureSpecification& specification)
-		: m_Name("<unknown>"), m_IsLoaded(false), m_Specification(specification)
+		: m_IsLoaded(false), m_Specification(specification)
 	{
 		glGenTextures(1, &m_RendererID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
@@ -129,8 +91,8 @@ namespace C78E {
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	}
 
-	OpenGLCubeMap::OpenGLCubeMap(std::vector<RawImage>& images)
-		: m_Name("<unknownqm>"), m_IsLoaded(true) 
+	OpenGLCubeMap::OpenGLCubeMap(std::vector<Image>& images)
+		: m_IsLoaded(true) 
 	{
 		C78_CORE_ASSERT(images.size() == 6, "CubeMap data vector must have exactly 6 imgs!");
 		C78_CORE_ASSERT(images[0].getHeight() == images[0].getWidth(), "CubeMap Textures must be sqares!");
@@ -153,9 +115,8 @@ namespace C78E {
 		}
 	}
 
-	OpenGLCubeMap::OpenGLCubeMap(Ref<RawImage> crossCubeMap)
-		: m_Name(crossCubeMap->getName()), m_IsLoaded(true)
-	{
+	OpenGLCubeMap::OpenGLCubeMap(Ref<Image> crossCubeMap)
+		: m_IsLoaded(true) {
 		C78_CORE_ASSERT(crossCubeMap, "CubeMap data cannot be null!");
 		C78_CORE_ASSERT((uint32_t)crossCubeMap->getFormat() < 5, "Img Format not supported!");
 		m_Specification.size = std::min<uint32_t>(crossCubeMap->getWidth() / 4, crossCubeMap->getHeight() / 3);
@@ -193,9 +154,9 @@ namespace C78E {
 	}
 	
 	void OpenGLCubeMap::setData(void* data, uint32_t size) {
-		C78_CORE_ASSERT(m_Specification.size * m_Specification.size * imageFormatSize(m_Specification.format) * 12 != size, "Data must fit CubeMap!"); //Maybe Broky
+		C78_CORE_ASSERT(m_Specification.size * m_Specification.size * Image::imageFormatSize(m_Specification.format) * 12 != size, "Data must fit CubeMap!"); //Maybe Broky
 		uint32_t dim = m_Specification.size;
-		RawImage crossCubeMap(dim, dim, m_Specification.format, data);
+		Image crossCubeMap(dim, dim, m_Specification.format, data);
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0, 0, toGLInternalFormat(m_Specification.format), dim, dim, 0, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, crossCubeMap.croppedCopy(2 * dim, 1 * dim, dim, dim)->getData());
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, toGLInternalFormat(m_Specification.format), dim, dim, 0, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, crossCubeMap.croppedCopy(0 * dim, 1 * dim, dim, dim)->getData());
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2, 0, toGLInternalFormat(m_Specification.format), dim, dim, 0, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, crossCubeMap.croppedCopy(1 * dim, 0 * dim, dim, dim)->getData());

@@ -7,8 +7,7 @@
 
 namespace C78E {
 
-	class Shader
-	{
+	class Shader {
 	public:
 		virtual ~Shader() = default;
 

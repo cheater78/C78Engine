@@ -1,6 +1,6 @@
 #pragma once
 
-#include <C78E/Assets/Texture/RawImage.h>
+#include <C78E/Assets/Texture/Texture.h>
 #include <C78E/Assets/AssetManager.h>
 
 #include <C78E/Renderer/Buffer.h>
@@ -24,7 +24,7 @@ namespace C78E {
 
 	private:
 		static uint32_t s_Width, s_Height;
-		static Asset<Shader> s_RayComputeShader;
+		static AssetHandle s_RayComputeShader;
 		static Ref<Texture2D> s_Result;
 	};
 }

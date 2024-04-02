@@ -6,79 +6,67 @@
 namespace C78E {
 
 	// Non-owning raw buffer class
-	struct Buffer
-	{
-		uint8_t* Data = nullptr;
-		uint64_t Size = 0;
+	struct Buffer {
+		uint8_t* data = nullptr;
+		uint64_t size = 0;
 
 		Buffer() = default;
 
-		Buffer(uint64_t size)
-		{
-			Allocate(size);
+		Buffer(uint64_t size) {
+			allocate(size);
 		}
 
 		Buffer(const Buffer&) = default;
 
-		static Buffer Copy(Buffer other)
-		{
-			Buffer result(other.Size);
-			memcpy(result.Data, other.Data, other.Size);
+		static Buffer copy(Buffer other) {
+			Buffer result(other.size);
+			memcpy(result.data, other.data, other.size);
 			return result;
 		}
 
-		void Allocate(uint64_t size)
-		{
-			Release();
+		void allocate(uint64_t size) {
+			release();
 
-			Data = new uint8_t[size];
-			Size = size;
+			data = new uint8_t[size];
+			size = size;
 		}
 
-		void Release()
-		{
-			delete[] Data;
-			Data = nullptr;
-			Size = 0;
+		void release() {
+			delete[] data;
+			data = nullptr;
+			size = 0;
 		}
 
 		template<typename T>
-		T* As()
-		{
-			return (T*)Data;
+		T* as() {
+			return (T*)data;
 		}
 
-		operator bool() const
-		{
-			return (bool)Data;
+		operator bool() const {
+			return (bool)data;
 		}
 
 	};
 
-	struct ScopedBuffer
-	{
+	struct ScopedBuffer {
 		ScopedBuffer(Buffer buffer)
 			: m_Buffer(buffer)
-		{
-		}
+		{ }
 
 		ScopedBuffer(uint64_t size)
 			: m_Buffer(size)
-		{
+		{ }
+
+		~ScopedBuffer() {
+			m_Buffer.release();
 		}
 
-		~ScopedBuffer()
-		{
-			m_Buffer.Release();
-		}
-
-		uint8_t* Data() { return m_Buffer.Data; }
-		uint64_t Size() { return m_Buffer.Size; }
+		uint8_t* data() { return m_Buffer.data; }
+		uint64_t size() { return m_Buffer.size; }
 
 		template<typename T>
-		T* As()
-		{
-			return m_Buffer.As<T>();
+		T* as() {
+			return m_Buffer.as<T>();
 		}
 
 		operator bool() const { return m_Buffer; }

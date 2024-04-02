@@ -1,19 +1,14 @@
 #include "C78EPCH.h"
 #include "C78E/ImGui/ImGuiLayer.h"
 
-#include <imgui.h>
-#include <imgui_internal.h>
-
-#include <backends/imgui_impl_opengl3.h>
-#include <backends/imgui_impl_glfw.h>
-
 #include "C78E/Core/Application.h"
-
 #include "C78E/Renderer/RendererAPI.h"
 
-// TEMPORARY
-#include <glad.h>
 #include <GLFW/glfw3.h>
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <Platform/OpenGL/ImGui/imgui_impl_opengl3.h>
+#include <Platform/OpenGL/ImGui/imgui_impl_glfw.h>
 
 namespace C78E {
 
@@ -141,7 +136,7 @@ namespace C78E {
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 	}
 
-	uint32_t ImGuiLayer::GetActiveWidgetID() const {
+	uint32_t ImGuiLayer::getActiveWidgetID() const {
 		return GImGui->ActiveId;
 	}
 

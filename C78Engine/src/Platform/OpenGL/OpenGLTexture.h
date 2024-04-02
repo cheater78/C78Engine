@@ -6,43 +6,41 @@
 
 namespace C78E {
 
-	static GLenum toGLDataFormat(ImageFormat format) {
+	static GLenum toGLDataFormat(Image::ImageFormat format) {
 		switch (format) {
-		case ImageFormat::R8:		return GL_RED;
-		case ImageFormat::R32:		return GL_RED_INTEGER;
-		case ImageFormat::RG8:		return GL_RG;
-		case ImageFormat::RGB8:		return GL_RGB;
-		case ImageFormat::RGBA8:	return GL_RGBA;
-		case ImageFormat::RGBA32F:	return GL_RGBA;
-		case ImageFormat::D24S8:	return GL_DEPTH_STENCIL_ATTACHMENT;
-		default: C78_CORE_ASSERT(false); return 0;
+		case Image::ImageFormat::R8:		return GL_RED;
+		case Image::ImageFormat::R32:		return GL_RED_INTEGER;
+		case Image::ImageFormat::RG8:		return GL_RG;
+		case Image::ImageFormat::RGB8:		return GL_RGB;
+		case Image::ImageFormat::RGBA8:		return GL_RGBA;
+		case Image::ImageFormat::RGBA32F:	return GL_RGBA;
+		case Image::ImageFormat::D24S8:		return GL_DEPTH_STENCIL_ATTACHMENT;
+		default: C78_CORE_ASSERT(false);	return 0;
 		}
 	}
 
-	static GLenum toGLInternalFormat(ImageFormat format) {
+	static GLenum toGLInternalFormat(Image::ImageFormat format) {
 		switch (format) {
-		case ImageFormat::R8:		return GL_R8;
-		case ImageFormat::R32:		return GL_R32I;
-		case ImageFormat::RG8:		return GL_RG8;
-		case ImageFormat::RGB8:		return GL_RGB8;
-		case ImageFormat::RGBA8:	return GL_RGBA8;
-		case ImageFormat::RGBA32F:	return GL_RGBA32F;
-		case ImageFormat::D24S8:	return GL_DEPTH24_STENCIL8;
-		default: C78_CORE_ASSERT(false); return 0;
+		case Image::ImageFormat::R8:		return GL_R8;
+		case Image::ImageFormat::R32:		return GL_R32I;
+		case Image::ImageFormat::RG8:		return GL_RG8;
+		case Image::ImageFormat::RGB8:		return GL_RGB8;
+		case Image::ImageFormat::RGBA8:		return GL_RGBA8;
+		case Image::ImageFormat::RGBA32F:	return GL_RGBA32F;
+		case Image::ImageFormat::D24S8:		return GL_DEPTH24_STENCIL8;
+		default: C78_CORE_ASSERT(false);	return 0;
 		}
 	}
 
 	class OpenGLTexture2D : public Texture2D {
 	public:
 		OpenGLTexture2D(const Texture2D::TextureSpecification& specification);
-		OpenGLTexture2D(std::string filename);
-		OpenGLTexture2D(RawImage& image);
+		OpenGLTexture2D(Image& image);
 		OpenGLTexture2D(const OpenGLTexture2D&) = default; // Maybe needed!
 		virtual ~OpenGLTexture2D();
 
 		OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID); // Do Not Use
 
-		virtual std::string getName() const override { return m_Name; }
 		virtual uint32_t getWidth() const override { return m_Specification.width;  }
 		virtual uint32_t getHeight() const override { return m_Specification.height; }
 		virtual uint32_t getRendererID() const override { return m_RendererID; }
@@ -58,7 +56,6 @@ namespace C78E {
 	private:
 		
 	private:
-		std::string m_Name;
 		uint32_t m_RendererID;
 		Texture2D::TextureSpecification m_Specification;
 
@@ -70,11 +67,10 @@ namespace C78E {
 	class OpenGLCubeMap : public CubeMap {
 	public:
 		OpenGLCubeMap(CubeMap::TextureSpecification& specification);
-		OpenGLCubeMap(std::vector<RawImage>& images);
-		OpenGLCubeMap(Ref<RawImage> crossCubeMap);
+		OpenGLCubeMap(std::vector<Image>& images);
+		OpenGLCubeMap(Ref<Image> crossCubeMap);
 		~OpenGLCubeMap();
 
-		virtual std::string getName() const override { return m_Name; };
 		uint32_t getSize() const override { return m_Specification.size; };
 		virtual uint32_t getRendererID() const override { return m_RendererID; };
 
@@ -86,7 +82,6 @@ namespace C78E {
 
 		bool operator==(const Texture& other) const override { return m_RendererID == other.getRendererID(); }
 	private:
-		std::string m_Name;
 		uint32_t m_RendererID = 0;
 		CubeMap::TextureSpecification m_Specification;
 

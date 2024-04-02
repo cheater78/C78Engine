@@ -15,6 +15,7 @@ namespace C78E {
 
 	//ComponentTypes
 
+	// mandatory
 	typedef UUID IDComponent;
 
 	typedef std::string TagComponent;
@@ -45,6 +46,7 @@ namespace C78E {
 		}
 	};
 
+	// non-mandatory
 	struct CameraComponent
 	{
 		SceneCamera Camera;
@@ -54,6 +56,8 @@ namespace C78E {
 		CameraComponent(const CameraComponent&) = default;
 	};
 	
+
+	// TODO -> Material
 	typedef AmbientLight AmbientLightComponent;
 
 	typedef DirectLight DirectLightComponent;
@@ -61,75 +65,68 @@ namespace C78E {
 	typedef PointLight PointLightComponent;
 
 	typedef SpotLight SpotLightComponent;
-	
+	// ----
+
+
 	struct ModelComponent {
-		std::vector<Asset<Model>> models;
+		std::vector<AssetHandle> models;
 	};
 
 	struct MeshComponent {
-		Asset<Mesh> mesh;
-
-		MeshComponent() = default;
-		MeshComponent(const MeshComponent&) = default;
-		MeshComponent(std::string assetName)
-			: mesh(AssetManager::getMeshAsset(assetName))
-		{}
+		AssetHandle mesh;
 	};
 
-	typedef Material MaterialComponent;
+	struct MaterialComponent {
+		AssetHandle material;
+	};
 
 	struct TextureComponent {
-		std::vector<Asset<Texture2D>> textures;
+		std::vector<AssetHandle> textures;
 	};
 
 	struct SkyBoxComponent {
-		std::vector<Asset<CubeMap>> skyboxes;
+		std::vector<AssetHandle> skyboxes;
 	};
 
 
-	struct SpriteRendererComponent
-	{
-		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
-		Ref<Texture2D> Texture;
-		float TilingFactor = 1.0f;
+	struct SpriteRendererComponent {
+		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		AssetHandle texture;
+		float tilingFactor = 1.0f;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
-			: Color(color) {}
+			: color(color) {}
 	};
 
-	struct CircleRendererComponent
-	{
-		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
-		float Thickness = 1.0f;
-		float Fade = 0.005f;
+	struct CircleRendererComponent {
+		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		float thickness = 1.0f;
+		float fade = 0.005f;
 
 		CircleRendererComponent() = default;
 		CircleRendererComponent(const CircleRendererComponent&) = default;
 	};
 
 
-	struct ScriptComponent
-	{
-		std::string ClassName;
+	struct ScriptComponent {
+		std::string className;
 
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent&) = default;
 	};
 
-	struct NativeScriptComponent
-	{
-		ScriptableEntity* Instance = nullptr;
+	struct NativeScriptComponent {
+		ScriptableEntity* instance = nullptr;
 
-		ScriptableEntity*(*InstantiateScript)();
-		void (*DestroyScript)(NativeScriptComponent*);
+		ScriptableEntity*(*instantiateScript)();
+		void (*destroyScript)(NativeScriptComponent*);
 
 		template<typename T>
-		void Bind()
-		{
-			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
-			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+		void Bind() {
+			instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			destroyScript = [](NativeScriptComponent* nsc) { delete nsc->instance; nsc->instance = nullptr; };
 		}
 	};
 

@@ -1,26 +1,21 @@
 #pragma once
 
 #include <C78E/Core/Types.h>
-#include <C78E/Assets/AssetLib.h>
-#include <C78E/Assets/Mesh/Mesh.h>
-#include <C78E/Assets/Material/Material.h>
-#include <C78E/Assets/Texture/Texture.h>
+#include <C78E/Assets/Asset/Asset.h>
 
 namespace C78E {
 
-	class Model {
+	class Model : public Asset {
 	public:
 		Model() = default;
-		Model(const Asset<Mesh>& mesh, const Asset<Material>& material);
+		Model(const AssetHandle mesh, const AssetHandle material)
+			: m_Mesh(mesh), m_Material(material) { }
 		Model(const Model& other) = default;
-		~Model();
-
-		static Ref<Model> create(std::string file);
-		static std::vector<Ref<Model>> createAll(std::string file);
+		~Model() { }
 		
 	public:
-		Asset<Mesh> m_Mesh;
-		Asset<Material> m_Material;
+		AssetHandle m_Mesh = 0;
+		AssetHandle m_Material = 0;
 	};
 
 }

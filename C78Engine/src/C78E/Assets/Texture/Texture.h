@@ -1,15 +1,12 @@
 #pragma once
 
 #include "C78E/Core/Core.h"
-#include "C78E/Assets/Texture/RawImage.h"
-
-#include <string>
+#include "C78E/Assets/Asset/Asset.h"
+#include "C78E/Assets/Texture/Image.h"
 
 namespace C78E {
 
-	
-
-	class Texture {
+	class Texture : public Asset {
 	public:
 		enum TextureType {
 			FLAT,
@@ -50,21 +47,18 @@ namespace C78E {
 		virtual bool operator==(const Texture& other) const = 0;
 	};
 
-	class Texture2D : public Texture
-	{
+	class Texture2D : public Texture {
 	public:
-		struct TextureSpecification
-		{
+		struct TextureSpecification {
 			uint32_t width = 1;
 			uint32_t height = 1;
-			ImageFormat format = ImageFormat::RGBA8;
+			Image::ImageFormat format = Image::ImageFormat::RGBA8;
 			bool generateMips = true;
 		};
 	public:
 		static Ref<Texture2D> create(const TextureSpecification& specification);
 		static Ref<Texture2D> create(const TextureSpecification& specification, uint32_t rendererID);
-		static Ref<Texture2D> create(RawImage& image);
-		static Ref<Texture2D> create(std::string filename);
+		static Ref<Texture2D> create(Image& image);
 		
 		virtual void bindImage(uint32_t binding = 0) const = 0;
 
@@ -76,15 +70,13 @@ namespace C78E {
 
 	class CubeMap : public Texture {
 	public:
-		struct TextureSpecification
-		{
+		struct TextureSpecification {
 			uint32_t size = 1;
-			ImageFormat format = ImageFormat::RGBA8;
+			Image::ImageFormat format = Image::ImageFormat::RGBA8;
 		};
 	public:
-		static Ref<CubeMap> create(std::vector<RawImage>& images);
-		static Ref<CubeMap> create(Ref<RawImage> crossCubeMap);
-		static Ref<CubeMap> create(std::string filename);
+		static Ref<CubeMap> create(std::vector<Image>& images);
+		static Ref<CubeMap> create(Ref<Image> crossCubeMap);
 
 		virtual uint32_t getSize() const = 0;
 		virtual const CubeMap::TextureSpecification& getSpecification() const = 0;

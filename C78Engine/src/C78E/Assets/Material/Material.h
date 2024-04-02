@@ -1,13 +1,12 @@
 #pragma once
 
 #include <C78e/Core/Types.h>
-#include <C78E/Assets/AssetLib.h>
+#include <C78E/Assets/Asset/Asset.h>
 #include <C78E/Assets/Texture/Texture.h>
-#include <C78E/Assets/Shader/Shader.h>
 
 namespace C78E {
 
-	class Material {
+	class Material : public Asset {
 	public:
 		struct MaterialProperties {
 						glm::vec3 ambient = { 1.f, 1.f, 1.f };			// Ka: Ambient Color Reaction [0,1]³
@@ -65,48 +64,31 @@ namespace C78E {
 		};
 
 	public:
-		static Ref<Material> create(std::string filename);
-		static Ref<Material> create(std::string filename, uint32_t index);
-		static std::vector<Ref<Material>> createAll(std::string filename);
-
-	public:
 		Material() = default;
-		Material
-		(	
+		Material(
+			AssetHandle shader,
 			MaterialProperties materialProperties,
 			uint32_t illuminationModel,
 			MaterialTextures materialTextures,
 			MaterialPropertiesPBRext materialPropertiesPBRext = {},
 			MaterialTexturesPBRext materialTexturesPBRext = {}
-		);
-		Material
-		(
-			MaterialProperties materialProperties,
-			uint32_t illuminationModel,
-			MaterialTextures materialTextures,
-			MaterialPropertiesPBRext materialPropertiesPBRext,
-			MaterialTexturesPBRext materialTexturesPBRext,
-			Asset<Shader> shader
-		);
+		)
+			: m_Shader(shader),
+			m_MaterialProperties(materialProperties),
+			m_IlluminationModel(illuminationModel),
+			m_Textures(materialTextures),
+			m_PBRMaterialProperties(materialPropertiesPBRext),
+			m_PBRTextures(materialTexturesPBRext)
+		{ }
 		Material(const Material&) = default;
+		~Material() = default;
 
-		void setShader(std::string name);
-		Asset<Shader>& getShader();
-
-		MaterialProperties& getProperties();
-		MaterialTextures& getTextures();
-
-	private:
-		static bool verifyMTL(std::string file);
-
-	private:
-		MaterialProperties m_Material;
+	public:
+		AssetHandle m_Shader;
+		MaterialProperties m_MaterialProperties;
 		uint32_t m_IlluminationModel;
 		MaterialTextures m_Textures;
-		MaterialPropertiesPBRext m_PBRMaterial;
+		MaterialPropertiesPBRext m_PBRMaterialProperties;
 		MaterialTexturesPBRext m_PBRTextures;
-
-		Asset<Shader> m_Shader;
-		
 	};
 }

@@ -1,21 +1,20 @@
 #pragma once
 #include <C78E/Core/Types.h>
+#include <C78E/Assets/Asset/Asset.h>
 
 namespace C78E {
 
-	class Mesh
-	{
+	class Mesh : public Asset {
 	public:
-		static Ref<Mesh> create(std::string filename) { return createRef<Mesh>(); /* dummy for AssetMmg */ }
 
-		Mesh() = default;
+		Mesh() = delete;
 		Mesh(const std::vector<Vertex>&vertecies)
 			: m_Vertecies(vertecies), m_Indicies(), m_HasIndicies(false)
 		{ }
 		Mesh(const std::vector<Vertex>& vertecies, const std::vector<uint32_t>& indicies)
 			: m_Vertecies(vertecies), m_Indicies(indicies), m_HasIndicies(true)
 		{ }
-		Mesh(const Mesh&) = default;
+		Mesh(const Mesh&) = delete;
 		~Mesh() = default;
 
 	public:

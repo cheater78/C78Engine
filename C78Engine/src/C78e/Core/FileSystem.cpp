@@ -3,12 +3,11 @@
 
 namespace C78E {
 
-	Buffer FileSystem::ReadFileBinary(const std::filesystem::path& filepath)
+	Buffer FileSystem::ReadFileBinary(const FilePath& filepath)
 	{
 		std::ifstream stream(filepath, std::ios::binary | std::ios::ate);
 
-		if (!stream)
-		{
+		if (!stream) {
 			// Failed to open the file
 			return {};
 		}
@@ -18,14 +17,13 @@ namespace C78E {
 		stream.seekg(0, std::ios::beg);
 		uint64_t size = end - stream.tellg();
 
-		if (size == 0)
-		{
+		if (size == 0) {
 			// File is empty
 			return {};
 		}
 
 		Buffer buffer(size);
-		stream.read(buffer.As<char>(), size);
+		stream.read(buffer.as<char>(), size);
 		stream.close();
 		return buffer;
 	}

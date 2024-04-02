@@ -398,17 +398,16 @@ FodyWeavers.xsd
 *.sln.iml
 
 
-#Custom
-C78Engine/vendor/VulkanSDK
-C78Engine/vendor/entt
-C78Engine/vendor/imgui
-
-C78App/assets/*
-
+# Directories
 bin/
 bin-int/
 
-vendor/premake/*
+C78Editor/assets
+C78Project/assets
+
+
+
+vendor/premake
 .idea/
 
 *.vcxproj

@@ -5,6 +5,8 @@
 #include <C78E/Scene/SceneCamera.h>
 #include <C78E/Scene/Scene.h>
 
+#include <C78E/Assets/Texture/Texture.h>
+
 namespace C78E {
 
 	class Renderer {
@@ -41,7 +43,7 @@ namespace C78E {
 	private:
 		struct DisplayAssets {
 			bool init = false;
-			Asset<Shader> displayShader;
+			AssetHandle displayShader;
 			Ref<VertexBuffer> vertexBuffer = nullptr;
 			Ref<IndexBuffer> indexBuffer = nullptr;
 			Ref<VertexArray> vertexArray = nullptr;

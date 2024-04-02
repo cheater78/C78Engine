@@ -26,7 +26,7 @@ namespace C78E {
 		
 		void SetDarkThemeColors();
 
-		uint32_t GetActiveWidgetID() const;
+		uint32_t getActiveWidgetID() const;
 	private:
 		bool m_BlockEvents = true;
 

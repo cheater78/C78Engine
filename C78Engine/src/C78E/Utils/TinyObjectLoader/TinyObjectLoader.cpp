@@ -4,12 +4,11 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
-
-#include <C78E/Assets/AssetManager.h>
+#include <C78E/Assets/Mesh/Mesh.h>
 
 namespace C78E {
 
-    std::vector<Ref<Model>> TinyObjectLoader::loadAllModels(std::string file) {
+    std::vector<Ref<Model>> TinyObjectLoader::loadAllModels(std::string file, std::string name) {
         std::vector<Ref<Model>> models;
 
 
@@ -32,6 +31,8 @@ namespace C78E {
         // Loop over shapes
         for (size_t s = 0; s < shapes.size(); s++) {
             std::string shapeName = shapes[s].name;
+
+            if (name != "" && name != shapeName) continue;
 
             std::unordered_map<Vertex, uint32_t> uniqueVertecies{};
             std::vector<Vertex> vertecies{};

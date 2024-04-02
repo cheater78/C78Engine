@@ -4,19 +4,17 @@
 #include "C78E/Core/Timestep.h"
 #include "C78E/Renderer/EditorCamera.h"
 
-
-
 namespace C78E {
 
 	class Entity;
 
-	class Scene
-	{
+	class Scene : public Asset{
 	public:
-		Scene();
-		~Scene();
-
 		static Ref<Scene> copy(Ref<Scene> other);
+
+	public:
+		Scene(std::string name = "<unnamed Scene>");
+		~Scene();
 
 		Entity createEntity(const std::string& name = std::string());
 		Entity createEntityWithUUID(UUID uuid, const std::string& name = std::string());
@@ -53,19 +51,21 @@ namespace C78E {
 
 		void renderScene(EditorCamera& camera);
 	private:
+		//Serialization
+
+		// Entities
 		entt::registry m_Registry;
 		UUID m_ActiveCam{ 0 };
+		std::unordered_map<UUID, entt::entity> m_EntityMap;
 
-
+		// Runtime
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 		bool m_IsRunning = false;
 		bool m_IsPaused = false;
 		int m_StepFrames = 0;
 
-
-		std::unordered_map<UUID, entt::entity> m_EntityMap;
-
 		friend class Entity;
+		friend class SceneSerializer;
 	};
 
 }

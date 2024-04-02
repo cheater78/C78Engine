@@ -3986,11 +3986,11 @@ typedef void (APIENTRYP PFNGLENABLEVERTEXATTRIBARRAYPROC)(GLuint index);
 GLAPI PFNGLENABLEVERTEXATTRIBARRAYPROC glad_glEnableVertexAttribArray;
 #define glEnableVertexAttribArray glad_glEnableVertexAttribArray
 typedef void (APIENTRYP PFNGLGETACTIVEATTRIBPROC)(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
-GLAPI PFNGLGETACTIVEATTRIBPROC glad_glGetActiveAttrib;
-#define glGetActiveAttrib glad_glGetActiveAttrib
+GLAPI PFNGLGETACTIVEATTRIBPROC glad_glgetActiveAttrib;
+#define glgetActiveAttrib glad_glgetActiveAttrib
 typedef void (APIENTRYP PFNGLGETACTIVEUNIFORMPROC)(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
-GLAPI PFNGLGETACTIVEUNIFORMPROC glad_glGetActiveUniform;
-#define glGetActiveUniform glad_glGetActiveUniform
+GLAPI PFNGLGETACTIVEUNIFORMPROC glad_glgetActiveUniform;
+#define glgetActiveUniform glad_glgetActiveUniform
 typedef void (APIENTRYP PFNGLGETATTACHEDSHADERSPROC)(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *shaders);
 GLAPI PFNGLGETATTACHEDSHADERSPROC glad_glGetAttachedShaders;
 #define glGetAttachedShaders glad_glGetAttachedShaders
@@ -4520,20 +4520,20 @@ typedef void (APIENTRYP PFNGLGETUNIFORMINDICESPROC)(GLuint program, GLsizei unif
 GLAPI PFNGLGETUNIFORMINDICESPROC glad_glGetUniformIndices;
 #define glGetUniformIndices glad_glGetUniformIndices
 typedef void (APIENTRYP PFNGLGETACTIVEUNIFORMSIVPROC)(GLuint program, GLsizei uniformCount, const GLuint *uniformIndices, GLenum pname, GLint *params);
-GLAPI PFNGLGETACTIVEUNIFORMSIVPROC glad_glGetActiveUniformsiv;
-#define glGetActiveUniformsiv glad_glGetActiveUniformsiv
+GLAPI PFNGLGETACTIVEUNIFORMSIVPROC glad_glgetActiveUniformsiv;
+#define glgetActiveUniformsiv glad_glgetActiveUniformsiv
 typedef void (APIENTRYP PFNGLGETACTIVEUNIFORMNAMEPROC)(GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformName);
-GLAPI PFNGLGETACTIVEUNIFORMNAMEPROC glad_glGetActiveUniformName;
-#define glGetActiveUniformName glad_glGetActiveUniformName
+GLAPI PFNGLGETACTIVEUNIFORMNAMEPROC glad_glgetActiveUniformName;
+#define glgetActiveUniformName glad_glgetActiveUniformName
 typedef GLuint (APIENTRYP PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint program, const GLchar *uniformBlockName);
 GLAPI PFNGLGETUNIFORMBLOCKINDEXPROC glad_glGetUniformBlockIndex;
 #define glGetUniformBlockIndex glad_glGetUniformBlockIndex
 typedef void (APIENTRYP PFNGLGETACTIVEUNIFORMBLOCKIVPROC)(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint *params);
-GLAPI PFNGLGETACTIVEUNIFORMBLOCKIVPROC glad_glGetActiveUniformBlockiv;
-#define glGetActiveUniformBlockiv glad_glGetActiveUniformBlockiv
+GLAPI PFNGLGETACTIVEUNIFORMBLOCKIVPROC glad_glgetActiveUniformBlockiv;
+#define glgetActiveUniformBlockiv glad_glgetActiveUniformBlockiv
 typedef void (APIENTRYP PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName);
-GLAPI PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC glad_glGetActiveUniformBlockName;
-#define glGetActiveUniformBlockName glad_glGetActiveUniformBlockName
+GLAPI PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC glad_glgetActiveUniformBlockName;
+#define glgetActiveUniformBlockName glad_glgetActiveUniformBlockName
 typedef void (APIENTRYP PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
 GLAPI PFNGLUNIFORMBLOCKBINDINGPROC glad_glUniformBlockBinding;
 #define glUniformBlockBinding glad_glUniformBlockBinding
@@ -4862,14 +4862,14 @@ typedef GLuint (APIENTRYP PFNGLGETSUBROUTINEINDEXPROC)(GLuint program, GLenum sh
 GLAPI PFNGLGETSUBROUTINEINDEXPROC glad_glGetSubroutineIndex;
 #define glGetSubroutineIndex glad_glGetSubroutineIndex
 typedef void (APIENTRYP PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)(GLuint program, GLenum shadertype, GLuint index, GLenum pname, GLint *values);
-GLAPI PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC glad_glGetActiveSubroutineUniformiv;
-#define glGetActiveSubroutineUniformiv glad_glGetActiveSubroutineUniformiv
+GLAPI PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC glad_glgetActiveSubroutineUniformiv;
+#define glgetActiveSubroutineUniformiv glad_glgetActiveSubroutineUniformiv
 typedef void (APIENTRYP PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)(GLuint program, GLenum shadertype, GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name);
-GLAPI PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC glad_glGetActiveSubroutineUniformName;
-#define glGetActiveSubroutineUniformName glad_glGetActiveSubroutineUniformName
+GLAPI PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC glad_glgetActiveSubroutineUniformName;
+#define glgetActiveSubroutineUniformName glad_glgetActiveSubroutineUniformName
 typedef void (APIENTRYP PFNGLGETACTIVESUBROUTINENAMEPROC)(GLuint program, GLenum shadertype, GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name);
-GLAPI PFNGLGETACTIVESUBROUTINENAMEPROC glad_glGetActiveSubroutineName;
-#define glGetActiveSubroutineName glad_glGetActiveSubroutineName
+GLAPI PFNGLGETACTIVESUBROUTINENAMEPROC glad_glgetActiveSubroutineName;
+#define glgetActiveSubroutineName glad_glgetActiveSubroutineName
 typedef void (APIENTRYP PFNGLUNIFORMSUBROUTINESUIVPROC)(GLenum shadertype, GLsizei count, const GLuint *indices);
 GLAPI PFNGLUNIFORMSUBROUTINESUIVPROC glad_glUniformSubroutinesuiv;
 #define glUniformSubroutinesuiv glad_glUniformSubroutinesuiv
@@ -5203,8 +5203,8 @@ typedef void (APIENTRYP PFNGLGETINTERNALFORMATIVPROC)(GLenum target, GLenum inte
 GLAPI PFNGLGETINTERNALFORMATIVPROC glad_glGetInternalformativ;
 #define glGetInternalformativ glad_glGetInternalformativ
 typedef void (APIENTRYP PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)(GLuint program, GLuint bufferIndex, GLenum pname, GLint *params);
-GLAPI PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC glad_glGetActiveAtomicCounterBufferiv;
-#define glGetActiveAtomicCounterBufferiv glad_glGetActiveAtomicCounterBufferiv
+GLAPI PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC glad_glgetActiveAtomicCounterBufferiv;
+#define glgetActiveAtomicCounterBufferiv glad_glgetActiveAtomicCounterBufferiv
 typedef void (APIENTRYP PFNGLBINDIMAGETEXTUREPROC)(GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format);
 GLAPI PFNGLBINDIMAGETEXTUREPROC glad_glBindImageTexture;
 #define glBindImageTexture glad_glBindImageTexture
@@ -10667,8 +10667,8 @@ typedef GLint (APIENTRYP PFNGLGETUNIFORMLOCATIONARBPROC)(GLhandleARB programObj,
 GLAPI PFNGLGETUNIFORMLOCATIONARBPROC glad_glGetUniformLocationARB;
 #define glGetUniformLocationARB glad_glGetUniformLocationARB
 typedef void (APIENTRYP PFNGLGETACTIVEUNIFORMARBPROC)(GLhandleARB programObj, GLuint index, GLsizei maxLength, GLsizei *length, GLint *size, GLenum *type, GLcharARB *name);
-GLAPI PFNGLGETACTIVEUNIFORMARBPROC glad_glGetActiveUniformARB;
-#define glGetActiveUniformARB glad_glGetActiveUniformARB
+GLAPI PFNGLGETACTIVEUNIFORMARBPROC glad_glgetActiveUniformARB;
+#define glgetActiveUniformARB glad_glgetActiveUniformARB
 typedef void (APIENTRYP PFNGLGETUNIFORMFVARBPROC)(GLhandleARB programObj, GLint location, GLfloat *params);
 GLAPI PFNGLGETUNIFORMFVARBPROC glad_glGetUniformfvARB;
 #define glGetUniformfvARB glad_glGetUniformfvARB
@@ -11212,8 +11212,8 @@ typedef void (APIENTRYP PFNGLBINDATTRIBLOCATIONARBPROC)(GLhandleARB programObj, 
 GLAPI PFNGLBINDATTRIBLOCATIONARBPROC glad_glBindAttribLocationARB;
 #define glBindAttribLocationARB glad_glBindAttribLocationARB
 typedef void (APIENTRYP PFNGLGETACTIVEATTRIBARBPROC)(GLhandleARB programObj, GLuint index, GLsizei maxLength, GLsizei *length, GLint *size, GLenum *type, GLcharARB *name);
-GLAPI PFNGLGETACTIVEATTRIBARBPROC glad_glGetActiveAttribARB;
-#define glGetActiveAttribARB glad_glGetActiveAttribARB
+GLAPI PFNGLGETACTIVEATTRIBARBPROC glad_glgetActiveAttribARB;
+#define glgetActiveAttribARB glad_glgetActiveAttribARB
 typedef GLint (APIENTRYP PFNGLGETATTRIBLOCATIONARBPROC)(GLhandleARB programObj, const GLcharARB *name);
 GLAPI PFNGLGETATTRIBLOCATIONARBPROC glad_glGetAttribLocationARB;
 #define glGetAttribLocationARB glad_glGetAttribLocationARB
@@ -15752,8 +15752,8 @@ typedef GLint (APIENTRYP PFNGLGETVARYINGLOCATIONNVPROC)(GLuint program, const GL
 GLAPI PFNGLGETVARYINGLOCATIONNVPROC glad_glGetVaryingLocationNV;
 #define glGetVaryingLocationNV glad_glGetVaryingLocationNV
 typedef void (APIENTRYP PFNGLGETACTIVEVARYINGNVPROC)(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name);
-GLAPI PFNGLGETACTIVEVARYINGNVPROC glad_glGetActiveVaryingNV;
-#define glGetActiveVaryingNV glad_glGetActiveVaryingNV
+GLAPI PFNGLGETACTIVEVARYINGNVPROC glad_glgetActiveVaryingNV;
+#define glgetActiveVaryingNV glad_glgetActiveVaryingNV
 typedef void (APIENTRYP PFNGLGETTRANSFORMFEEDBACKVARYINGNVPROC)(GLuint program, GLuint index, GLint *location);
 GLAPI PFNGLGETTRANSFORMFEEDBACKVARYINGNVPROC glad_glGetTransformFeedbackVaryingNV;
 #define glGetTransformFeedbackVaryingNV glad_glGetTransformFeedbackVaryingNV

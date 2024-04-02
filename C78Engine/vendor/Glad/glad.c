@@ -1156,16 +1156,16 @@ PFNGLGENTRANSFORMFEEDBACKSPROC glad_glGenTransformFeedbacks = NULL;
 PFNGLGENVERTEXARRAYSPROC glad_glGenVertexArrays = NULL;
 PFNGLGENERATEMIPMAPPROC glad_glGenerateMipmap = NULL;
 PFNGLGENERATETEXTUREMIPMAPPROC glad_glGenerateTextureMipmap = NULL;
-PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC glad_glGetActiveAtomicCounterBufferiv = NULL;
-PFNGLGETACTIVEATTRIBPROC glad_glGetActiveAttrib = NULL;
-PFNGLGETACTIVESUBROUTINENAMEPROC glad_glGetActiveSubroutineName = NULL;
-PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC glad_glGetActiveSubroutineUniformName = NULL;
-PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC glad_glGetActiveSubroutineUniformiv = NULL;
-PFNGLGETACTIVEUNIFORMPROC glad_glGetActiveUniform = NULL;
-PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC glad_glGetActiveUniformBlockName = NULL;
-PFNGLGETACTIVEUNIFORMBLOCKIVPROC glad_glGetActiveUniformBlockiv = NULL;
-PFNGLGETACTIVEUNIFORMNAMEPROC glad_glGetActiveUniformName = NULL;
-PFNGLGETACTIVEUNIFORMSIVPROC glad_glGetActiveUniformsiv = NULL;
+PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC glad_glgetActiveAtomicCounterBufferiv = NULL;
+PFNGLGETACTIVEATTRIBPROC glad_glgetActiveAttrib = NULL;
+PFNGLGETACTIVESUBROUTINENAMEPROC glad_glgetActiveSubroutineName = NULL;
+PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC glad_glgetActiveSubroutineUniformName = NULL;
+PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC glad_glgetActiveSubroutineUniformiv = NULL;
+PFNGLGETACTIVEUNIFORMPROC glad_glgetActiveUniform = NULL;
+PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC glad_glgetActiveUniformBlockName = NULL;
+PFNGLGETACTIVEUNIFORMBLOCKIVPROC glad_glgetActiveUniformBlockiv = NULL;
+PFNGLGETACTIVEUNIFORMNAMEPROC glad_glgetActiveUniformName = NULL;
+PFNGLGETACTIVEUNIFORMSIVPROC glad_glgetActiveUniformsiv = NULL;
 PFNGLGETATTACHEDSHADERSPROC glad_glGetAttachedShaders = NULL;
 PFNGLGETATTRIBLOCATIONPROC glad_glGetAttribLocation = NULL;
 PFNGLGETBOOLEANI_VPROC glad_glGetBooleani_v = NULL;
@@ -2898,7 +2898,7 @@ PFNGLGETOBJECTPARAMETERIVARBPROC glad_glGetObjectParameterivARB = NULL;
 PFNGLGETINFOLOGARBPROC glad_glGetInfoLogARB = NULL;
 PFNGLGETATTACHEDOBJECTSARBPROC glad_glGetAttachedObjectsARB = NULL;
 PFNGLGETUNIFORMLOCATIONARBPROC glad_glGetUniformLocationARB = NULL;
-PFNGLGETACTIVEUNIFORMARBPROC glad_glGetActiveUniformARB = NULL;
+PFNGLGETACTIVEUNIFORMARBPROC glad_glgetActiveUniformARB = NULL;
 PFNGLGETUNIFORMFVARBPROC glad_glGetUniformfvARB = NULL;
 PFNGLGETUNIFORMIVARBPROC glad_glGetUniformivARB = NULL;
 PFNGLGETSHADERSOURCEARBPROC glad_glGetShaderSourceARB = NULL;
@@ -2989,7 +2989,7 @@ PFNGLGETVERTEXATTRIBFVARBPROC glad_glGetVertexAttribfvARB = NULL;
 PFNGLGETVERTEXATTRIBIVARBPROC glad_glGetVertexAttribivARB = NULL;
 PFNGLGETVERTEXATTRIBPOINTERVARBPROC glad_glGetVertexAttribPointervARB = NULL;
 PFNGLBINDATTRIBLOCATIONARBPROC glad_glBindAttribLocationARB = NULL;
-PFNGLGETACTIVEATTRIBARBPROC glad_glGetActiveAttribARB = NULL;
+PFNGLGETACTIVEATTRIBARBPROC glad_glgetActiveAttribARB = NULL;
 PFNGLGETATTRIBLOCATIONARBPROC glad_glGetAttribLocationARB = NULL;
 PFNGLDEPTHRANGEARRAYDVNVPROC glad_glDepthRangeArraydvNV = NULL;
 PFNGLDEPTHRANGEINDEXEDDNVPROC glad_glDepthRangeIndexeddNV = NULL;
@@ -4105,7 +4105,7 @@ PFNGLBINDBUFFERBASENVPROC glad_glBindBufferBaseNV = NULL;
 PFNGLTRANSFORMFEEDBACKVARYINGSNVPROC glad_glTransformFeedbackVaryingsNV = NULL;
 PFNGLACTIVEVARYINGNVPROC glad_glActiveVaryingNV = NULL;
 PFNGLGETVARYINGLOCATIONNVPROC glad_glGetVaryingLocationNV = NULL;
-PFNGLGETACTIVEVARYINGNVPROC glad_glGetActiveVaryingNV = NULL;
+PFNGLGETACTIVEVARYINGNVPROC glad_glgetActiveVaryingNV = NULL;
 PFNGLGETTRANSFORMFEEDBACKVARYINGNVPROC glad_glGetTransformFeedbackVaryingNV = NULL;
 PFNGLTRANSFORMFEEDBACKSTREAMATTRIBSNVPROC glad_glTransformFeedbackStreamAttribsNV = NULL;
 PFNGLBINDTRANSFORMFEEDBACKNVPROC glad_glBindTransformFeedbackNV = NULL;
@@ -4996,8 +4996,8 @@ static void load_GL_VERSION_2_0(GLADloadproc load) {
 	glad_glDetachShader = (PFNGLDETACHSHADERPROC)load("glDetachShader");
 	glad_glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC)load("glDisableVertexAttribArray");
 	glad_glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)load("glEnableVertexAttribArray");
-	glad_glGetActiveAttrib = (PFNGLGETACTIVEATTRIBPROC)load("glGetActiveAttrib");
-	glad_glGetActiveUniform = (PFNGLGETACTIVEUNIFORMPROC)load("glGetActiveUniform");
+	glad_glgetActiveAttrib = (PFNGLGETACTIVEATTRIBPROC)load("glgetActiveAttrib");
+	glad_glgetActiveUniform = (PFNGLGETACTIVEUNIFORMPROC)load("glgetActiveUniform");
 	glad_glGetAttachedShaders = (PFNGLGETATTACHEDSHADERSPROC)load("glGetAttachedShaders");
 	glad_glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC)load("glGetAttribLocation");
 	glad_glGetProgramiv = (PFNGLGETPROGRAMIVPROC)load("glGetProgramiv");
@@ -5179,11 +5179,11 @@ static void load_GL_VERSION_3_1(GLADloadproc load) {
 	glad_glPrimitiveRestartIndex = (PFNGLPRIMITIVERESTARTINDEXPROC)load("glPrimitiveRestartIndex");
 	glad_glCopyBufferSubData = (PFNGLCOPYBUFFERSUBDATAPROC)load("glCopyBufferSubData");
 	glad_glGetUniformIndices = (PFNGLGETUNIFORMINDICESPROC)load("glGetUniformIndices");
-	glad_glGetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)load("glGetActiveUniformsiv");
-	glad_glGetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)load("glGetActiveUniformName");
+	glad_glgetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)load("glgetActiveUniformsiv");
+	glad_glgetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)load("glgetActiveUniformName");
 	glad_glGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)load("glGetUniformBlockIndex");
-	glad_glGetActiveUniformBlockiv = (PFNGLGETACTIVEUNIFORMBLOCKIVPROC)load("glGetActiveUniformBlockiv");
-	glad_glGetActiveUniformBlockName = (PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)load("glGetActiveUniformBlockName");
+	glad_glgetActiveUniformBlockiv = (PFNGLGETACTIVEUNIFORMBLOCKIVPROC)load("glgetActiveUniformBlockiv");
+	glad_glgetActiveUniformBlockName = (PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)load("glgetActiveUniformBlockName");
 	glad_glUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)load("glUniformBlockBinding");
 	glad_glBindBufferRange = (PFNGLBINDBUFFERRANGEPROC)load("glBindBufferRange");
 	glad_glBindBufferBase = (PFNGLBINDBUFFERBASEPROC)load("glBindBufferBase");
@@ -5301,9 +5301,9 @@ static void load_GL_VERSION_4_0(GLADloadproc load) {
 	glad_glGetUniformdv = (PFNGLGETUNIFORMDVPROC)load("glGetUniformdv");
 	glad_glGetSubroutineUniformLocation = (PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC)load("glGetSubroutineUniformLocation");
 	glad_glGetSubroutineIndex = (PFNGLGETSUBROUTINEINDEXPROC)load("glGetSubroutineIndex");
-	glad_glGetActiveSubroutineUniformiv = (PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)load("glGetActiveSubroutineUniformiv");
-	glad_glGetActiveSubroutineUniformName = (PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)load("glGetActiveSubroutineUniformName");
-	glad_glGetActiveSubroutineName = (PFNGLGETACTIVESUBROUTINENAMEPROC)load("glGetActiveSubroutineName");
+	glad_glgetActiveSubroutineUniformiv = (PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)load("glgetActiveSubroutineUniformiv");
+	glad_glgetActiveSubroutineUniformName = (PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)load("glgetActiveSubroutineUniformName");
+	glad_glgetActiveSubroutineName = (PFNGLGETACTIVESUBROUTINENAMEPROC)load("glgetActiveSubroutineName");
 	glad_glUniformSubroutinesuiv = (PFNGLUNIFORMSUBROUTINESUIVPROC)load("glUniformSubroutinesuiv");
 	glad_glGetUniformSubroutineuiv = (PFNGLGETUNIFORMSUBROUTINEUIVPROC)load("glGetUniformSubroutineuiv");
 	glad_glGetProgramStageiv = (PFNGLGETPROGRAMSTAGEIVPROC)load("glGetProgramStageiv");
@@ -5419,7 +5419,7 @@ static void load_GL_VERSION_4_2(GLADloadproc load) {
 	glad_glDrawElementsInstancedBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)load("glDrawElementsInstancedBaseInstance");
 	glad_glDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)load("glDrawElementsInstancedBaseVertexBaseInstance");
 	glad_glGetInternalformativ = (PFNGLGETINTERNALFORMATIVPROC)load("glGetInternalformativ");
-	glad_glGetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)load("glGetActiveAtomicCounterBufferiv");
+	glad_glgetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)load("glgetActiveAtomicCounterBufferiv");
 	glad_glBindImageTexture = (PFNGLBINDIMAGETEXTUREPROC)load("glBindImageTexture");
 	glad_glMemoryBarrier = (PFNGLMEMORYBARRIERPROC)load("glMemoryBarrier");
 	glad_glTexStorage1D = (PFNGLTEXSTORAGE1DPROC)load("glTexStorage1D");
@@ -6435,7 +6435,7 @@ static void load_GL_ARB_separate_shader_objects(GLADloadproc load) {
 }
 static void load_GL_ARB_shader_atomic_counters(GLADloadproc load) {
 	if(!GLAD_GL_ARB_shader_atomic_counters) return;
-	glad_glGetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)load("glGetActiveAtomicCounterBufferiv");
+	glad_glgetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)load("glgetActiveAtomicCounterBufferiv");
 }
 static void load_GL_ARB_shader_image_load_store(GLADloadproc load) {
 	if(!GLAD_GL_ARB_shader_image_load_store) return;
@@ -6479,7 +6479,7 @@ static void load_GL_ARB_shader_objects(GLADloadproc load) {
 	glad_glGetInfoLogARB = (PFNGLGETINFOLOGARBPROC)load("glGetInfoLogARB");
 	glad_glGetAttachedObjectsARB = (PFNGLGETATTACHEDOBJECTSARBPROC)load("glGetAttachedObjectsARB");
 	glad_glGetUniformLocationARB = (PFNGLGETUNIFORMLOCATIONARBPROC)load("glGetUniformLocationARB");
-	glad_glGetActiveUniformARB = (PFNGLGETACTIVEUNIFORMARBPROC)load("glGetActiveUniformARB");
+	glad_glgetActiveUniformARB = (PFNGLGETACTIVEUNIFORMARBPROC)load("glgetActiveUniformARB");
 	glad_glGetUniformfvARB = (PFNGLGETUNIFORMFVARBPROC)load("glGetUniformfvARB");
 	glad_glGetUniformivARB = (PFNGLGETUNIFORMIVARBPROC)load("glGetUniformivARB");
 	glad_glGetShaderSourceARB = (PFNGLGETSHADERSOURCEARBPROC)load("glGetShaderSourceARB");
@@ -6492,9 +6492,9 @@ static void load_GL_ARB_shader_subroutine(GLADloadproc load) {
 	if(!GLAD_GL_ARB_shader_subroutine) return;
 	glad_glGetSubroutineUniformLocation = (PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC)load("glGetSubroutineUniformLocation");
 	glad_glGetSubroutineIndex = (PFNGLGETSUBROUTINEINDEXPROC)load("glGetSubroutineIndex");
-	glad_glGetActiveSubroutineUniformiv = (PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)load("glGetActiveSubroutineUniformiv");
-	glad_glGetActiveSubroutineUniformName = (PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)load("glGetActiveSubroutineUniformName");
-	glad_glGetActiveSubroutineName = (PFNGLGETACTIVESUBROUTINENAMEPROC)load("glGetActiveSubroutineName");
+	glad_glgetActiveSubroutineUniformiv = (PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)load("glgetActiveSubroutineUniformiv");
+	glad_glgetActiveSubroutineUniformName = (PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)load("glgetActiveSubroutineUniformName");
+	glad_glgetActiveSubroutineName = (PFNGLGETACTIVESUBROUTINENAMEPROC)load("glgetActiveSubroutineName");
 	glad_glUniformSubroutinesuiv = (PFNGLUNIFORMSUBROUTINESUIVPROC)load("glUniformSubroutinesuiv");
 	glad_glGetUniformSubroutineuiv = (PFNGLGETUNIFORMSUBROUTINEUIVPROC)load("glGetUniformSubroutineuiv");
 	glad_glGetProgramStageiv = (PFNGLGETPROGRAMSTAGEIVPROC)load("glGetProgramStageiv");
@@ -6615,11 +6615,11 @@ static void load_GL_ARB_transpose_matrix(GLADloadproc load) {
 static void load_GL_ARB_uniform_buffer_object(GLADloadproc load) {
 	if(!GLAD_GL_ARB_uniform_buffer_object) return;
 	glad_glGetUniformIndices = (PFNGLGETUNIFORMINDICESPROC)load("glGetUniformIndices");
-	glad_glGetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)load("glGetActiveUniformsiv");
-	glad_glGetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)load("glGetActiveUniformName");
+	glad_glgetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)load("glgetActiveUniformsiv");
+	glad_glgetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)load("glgetActiveUniformName");
 	glad_glGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)load("glGetUniformBlockIndex");
-	glad_glGetActiveUniformBlockiv = (PFNGLGETACTIVEUNIFORMBLOCKIVPROC)load("glGetActiveUniformBlockiv");
-	glad_glGetActiveUniformBlockName = (PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)load("glGetActiveUniformBlockName");
+	glad_glgetActiveUniformBlockiv = (PFNGLGETACTIVEUNIFORMBLOCKIVPROC)load("glgetActiveUniformBlockiv");
+	glad_glgetActiveUniformBlockName = (PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)load("glgetActiveUniformBlockName");
 	glad_glUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)load("glUniformBlockBinding");
 	glad_glBindBufferRange = (PFNGLBINDBUFFERRANGEPROC)load("glBindBufferRange");
 	glad_glBindBufferBase = (PFNGLBINDBUFFERBASEPROC)load("glBindBufferBase");
@@ -6788,7 +6788,7 @@ static void load_GL_ARB_vertex_shader(GLADloadproc load) {
 	glad_glEnableVertexAttribArrayARB = (PFNGLENABLEVERTEXATTRIBARRAYARBPROC)load("glEnableVertexAttribArrayARB");
 	glad_glDisableVertexAttribArrayARB = (PFNGLDISABLEVERTEXATTRIBARRAYARBPROC)load("glDisableVertexAttribArrayARB");
 	glad_glBindAttribLocationARB = (PFNGLBINDATTRIBLOCATIONARBPROC)load("glBindAttribLocationARB");
-	glad_glGetActiveAttribARB = (PFNGLGETACTIVEATTRIBARBPROC)load("glGetActiveAttribARB");
+	glad_glgetActiveAttribARB = (PFNGLGETACTIVEATTRIBARBPROC)load("glgetActiveAttribARB");
 	glad_glGetAttribLocationARB = (PFNGLGETATTRIBLOCATIONARBPROC)load("glGetAttribLocationARB");
 	glad_glGetVertexAttribdvARB = (PFNGLGETVERTEXATTRIBDVARBPROC)load("glGetVertexAttribdvARB");
 	glad_glGetVertexAttribfvARB = (PFNGLGETVERTEXATTRIBFVARBPROC)load("glGetVertexAttribfvARB");
@@ -8536,7 +8536,7 @@ static void load_GL_NV_transform_feedback(GLADloadproc load) {
 	glad_glTransformFeedbackVaryingsNV = (PFNGLTRANSFORMFEEDBACKVARYINGSNVPROC)load("glTransformFeedbackVaryingsNV");
 	glad_glActiveVaryingNV = (PFNGLACTIVEVARYINGNVPROC)load("glActiveVaryingNV");
 	glad_glGetVaryingLocationNV = (PFNGLGETVARYINGLOCATIONNVPROC)load("glGetVaryingLocationNV");
-	glad_glGetActiveVaryingNV = (PFNGLGETACTIVEVARYINGNVPROC)load("glGetActiveVaryingNV");
+	glad_glgetActiveVaryingNV = (PFNGLGETACTIVEVARYINGNVPROC)load("glgetActiveVaryingNV");
 	glad_glGetTransformFeedbackVaryingNV = (PFNGLGETTRANSFORMFEEDBACKVARYINGNVPROC)load("glGetTransformFeedbackVaryingNV");
 	glad_glTransformFeedbackStreamAttribsNV = (PFNGLTRANSFORMFEEDBACKSTREAMATTRIBSNVPROC)load("glTransformFeedbackStreamAttribsNV");
 }

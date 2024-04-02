@@ -62,9 +62,14 @@ namespace C78E {
 		SceneLightUniform sceneLightUniform{};
 
 		auto ambientLights = rScene.scene->getAllEntitiesWith<AmbientLightComponent>();
-		C78_ASSERT(ambientLights.size() == 1, "Every Scene needs exactly one AmbientLight!");
-		Entity ambientLightEntity(*ambientLights.begin(), rScene.scene.get());
-		sceneLightUniform.ambientLight = ambientLightEntity.getComponent<AmbientLightComponent>();
+		if (ambientLights.size() == 1) {
+			Entity ambientLightEntity(*ambientLights.begin(), rScene.scene.get());
+			sceneLightUniform.ambientLight = ambientLightEntity.getComponent<AmbientLightComponent>();
+		}
+		else {
+			sceneLightUniform.ambientLight.color = { 1.f, .1f, .8f, 1.f };
+		}
+
 
 
 		for (auto& enttity : rScene.scene->getAllEntitiesWith<DirectLightComponent>()) {
@@ -110,7 +115,7 @@ namespace C78E {
 			auto indicies = GenericShape::CubeMap::getIndexData();
 
 			uint32_t passes = 1;
-			Ref<Shader> shader = skyBoxEntity.getComponent<MaterialComponent>().getShader();
+			Ref<Shader> shader = skyBoxEntity.getComponent<MaterialComponent>().material.getRef()->getShader();
 			Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertecies.data(), static_cast<uint32_t>(vertecies.size() * sizeof(float)));
 			vertexBuffer->SetLayout({ { ShaderDataType::Float3, "a_Position"} });
 			Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indicies.data(), static_cast<uint32_t>(indicies.size()));
@@ -146,7 +151,7 @@ namespace C78E {
 			Entity entity(enttity, rScene.scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
 			Mesh& mesh = entity.getComponent<MeshComponent>().mesh.get();
-			Material& material = entity.getComponent<MaterialComponent>();
+			Material& material = entity.getComponent<MaterialComponent>().material.get();
 
 
 			uint32_t passes = 1;
@@ -209,7 +214,8 @@ namespace C78E {
 			for (Asset<Model> model : models) {
 				uint32_t passes = 1;
 
-				Asset<Shader> shader = model.get().m_Material.get().getShader();
+				C78_CORE_WARN("impl Shadersystem based on illumination models!");
+				Asset<Shader> shader = AssetManager::getShaderAsset("Generic");
 				Asset<Material> material = model.get().m_Material;
 				Material::MaterialTextures materialTextures = model.get().m_Material.get().getTextures();
 				Asset<Mesh> mesh = model.get().m_Mesh;

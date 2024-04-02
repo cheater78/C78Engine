@@ -137,7 +137,7 @@ namespace C78E {
 				{
 					case FramebufferTextureFormat::RGBA8:
 						{
-							Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, ImageFormat::RGBA8, false };
+							Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, Image::ImageFormat::RGBA8, false };
 							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
 							Utils::BindTexture(multisample, rID);
 							Utils::AttachColorTexture(rID, m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
@@ -145,7 +145,7 @@ namespace C78E {
 						break;
 					case FramebufferTextureFormat::RED_INTEGER:
 						{
-							Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, ImageFormat::R32, false };
+							Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, Image::ImageFormat::R32, false };
 							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
 							Utils::BindTexture(multisample, rID);
 							Utils::AttachColorTexture(rID, m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
@@ -159,7 +159,7 @@ namespace C78E {
 		{
 			uint32_t rID = 0;
 			Utils::CreateTextures(multisample, &rID, 1);
-			Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, ImageFormat::D24S8 };
+			Texture2D::TextureSpecification spec{ m_Specification.Width, m_Specification.Height, Image::ImageFormat::D24S8 };
 			m_DepthAttachment = Texture2D::create(spec, rID);
 			Utils::BindTexture(multisample, rID);
 			switch (m_DepthAttachmentSpecification.TextureFormat)

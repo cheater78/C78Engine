@@ -10,11 +10,9 @@
 
 namespace C78E {
 
-	Scene::Scene() {
-	}
+	Scene::Scene(std::string name){ }
 
-	Scene::~Scene() {
-	}
+	Scene::~Scene() { }
 
 	template<typename... Component>
 	static void copyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap) {
@@ -51,7 +49,7 @@ namespace C78E {
 	}
 
 	Ref<Scene> Scene::copy(Ref<Scene> other) {
-		Ref<Scene> newScene = createRef<Scene>();
+		Ref<Scene> newScene = createRef<Scene>(other->m_Name);
 
 		newScene->m_ViewportWidth = other->m_ViewportWidth;
 		newScene->m_ViewportHeight = other->m_ViewportHeight;
@@ -102,37 +100,13 @@ namespace C78E {
 
 	void Scene::onRuntimeStart() {
 		m_IsRunning = true;
-		/*
-		OnPhysics2DStart();
-
-		// Scripting
-		{
-			ScriptEngine::OnRuntimeStart(this);
-			// Instantiate all script entities
-
-			auto view = m_Registry.view<ScriptComponent>();
-			for (auto e : view)
-			{
-				Entity entity = { e, this };
-				ScriptEngine::OnCreateEntity(entity);
-			}
-		}
-		*/
 	}
 
 	void Scene::onRuntimeStop() {
 		m_IsRunning = false;
-		/*
-		OnPhysics2DStop();
-
-		ScriptEngine::OnRuntimeStop();
-		*/
 	}
 
 	void Scene::onUpdateRuntime(Timestep ts) {
-		// Physics
-		
-		
 	}
 
 	void Scene::onViewportResize(uint32_t width, uint32_t height) {
@@ -158,7 +132,7 @@ namespace C78E {
 		m_ActiveCam = camera.getUUID();
 	}
 
-	bool Scene::hasPrimaryCamera() { return (m_ActiveCam == 0) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
+	bool Scene::hasPrimaryCamera() { return (m_ActiveCam) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
 
 	Entity Scene::getPrimaryCamera() {
 		C78_CORE_ASSERT(hasPrimaryCamera(), "Scene currently does not have an Active Cam!");
@@ -189,7 +163,7 @@ namespace C78E {
 	}
 
 	Entity Scene::getEntityByUUID(UUID uuid) {
-		// TODO(Yan): Maybe should be assert
+		// TODO: Maybe should be assert
 		if (m_EntityMap.find(uuid) != m_EntityMap.end())
 			return { m_EntityMap.at(uuid), this };
 
@@ -202,29 +176,24 @@ namespace C78E {
 	}
   
 	template<typename T>
-	void Scene::onComponentAdded(Entity entity, T& component)
-	{
+	void Scene::onComponentAdded(Entity entity, T& component) {
 		//static_assert(sizeof(T) == 0);
 	}
 
 	template<>
-	void Scene::onComponentAdded<IDComponent>(Entity entity, IDComponent& component)
-	{
+	void Scene::onComponentAdded<IDComponent>(Entity entity, IDComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& component)
-	{
+	void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
-	{
+	void Scene::onComponentAdded<TransformComponent>(Entity entity, TransformComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
-	{
+	void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& component) {
 		if (m_ActiveCam == 0)
 			m_ActiveCam = entity.getUUID();
 		if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
@@ -232,53 +201,43 @@ namespace C78E {
 	}
 
 	template<>
-	void Scene::onComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
-	{
+	void Scene::onComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<ModelComponent>(Entity entity, ModelComponent& component)
-	{
+	void Scene::onComponentAdded<ModelComponent>(Entity entity, ModelComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
-	{
+	void Scene::onComponentAdded<MeshComponent>(Entity entity, MeshComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<AmbientLightComponent>(Entity entity, AmbientLightComponent& component)
-	{
+	void Scene::onComponentAdded<AmbientLightComponent>(Entity entity, AmbientLightComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<DirectLightComponent>(Entity entity, DirectLightComponent& component)
-	{
+	void Scene::onComponentAdded<DirectLightComponent>(Entity entity, DirectLightComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<PointLightComponent>(Entity entity, PointLightComponent& component)
-	{
+	void Scene::onComponentAdded<PointLightComponent>(Entity entity, PointLightComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component)
-	{
+	void Scene::onComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
-	{
+	void Scene::onComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
-	{
+	void Scene::onComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component) {
 	}
 
 	template<>
-	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
-	{
+	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component) {
 	}
 
 }
