@@ -3,6 +3,10 @@
 
 namespace C78E {
 
+	/*
+	* MaterialLoader
+	* Wavefront -> 
+	*/
 	class MaterialLoader {
 	public:
 		// AssetMetadata filepath is relative to project asset directory

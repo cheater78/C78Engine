@@ -6,9 +6,14 @@ namespace C78E {
 	const std::map<FilePath, Asset::AssetType> Asset::c_AssetExtensionMap = {
 		{ ".pce", Asset::AssetType::Project },
 		{ ".sce", Asset::AssetType::Scene },
+
 		{ ".png", Asset::AssetType::Texture2D },
 		{ ".jpg", Asset::AssetType::Texture2D },
 		{ ".jpeg", Asset::AssetType::Texture2D },
+
+		{ ".stl", Asset::AssetType::Model },
+		{ ".mtl", Asset::AssetType::Material },
+
 		{ ".glsl", Asset::AssetType::Shader },
 		{ ".hlsl", Asset::AssetType::Shader }
 	};

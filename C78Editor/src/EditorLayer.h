@@ -127,12 +127,7 @@ namespace C78Editor {
             C78E::Renderer::onWindowResize(1960, 1080);
         }
 
-        void onDetach() {
-
-
-
-            C78_INFO("Done.");
-        }
+        void onDetach() { }
 
         void onUpdate(C78E::Timestep delta) override {
             m_LastFrameTime = delta;
