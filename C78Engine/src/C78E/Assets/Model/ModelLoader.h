@@ -11,7 +11,7 @@ namespace C78E {
 		// Load from filepath
 		static Ref<Model> loadModel(const FilePath& path);
 	private:
-
+		static Ref<Model> loadWavefrontModel(AssetHandle handle, const Asset::AssetMeta& meta);
 	};
 
 }

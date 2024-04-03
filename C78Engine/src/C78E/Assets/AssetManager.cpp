@@ -151,4 +151,17 @@ namespace C78E {
 		return true;
 	}
 
+	AssetHandle EditorAssetManager::addAsset(Asset::AssetMeta meta, Ref<Asset> asset) {
+		AssetHandle handle; // generate new handle
+		C78_CORE_ASSERT(meta.type != Asset::AssetType::None);
+		if (asset) {
+			asset->m_AssetHandle = handle;
+			m_LoadedAssets[handle] = asset;
+			m_AssetRegistry[handle] = meta;
+			serializeAssetRegistry();
+			return handle;
+		}
+		return 0;
+	}
+
 }

@@ -1,7 +1,9 @@
 #pragma once
 
+#include <C78E/Assets/Mesh/Mesh.h>
 #include <C78E/Assets/Material/Material.h>
 #include <C78E/Assets/Texture/Texture.h>
+#include <C78E/Assets/Model/Model.h>
 
 namespace tinyobj {
 	struct material_t;
@@ -9,17 +11,23 @@ namespace tinyobj {
 }
 
 namespace C78E {
-	class Model;
 
-	class TinyObjectLoader {
+	class WavefrontLoader {
 	public:
-		TinyObjectLoader() = delete;
-		TinyObjectLoader(const TinyObjectLoader& other) = delete;
-		~TinyObjectLoader() = delete;
-
+		struct WavefrontModel {
+			std::map<uint64_t, uint64_t> parts;
+			std::map<uint64_t, Ref<Mesh>> meshes;
+			std::map<uint64_t, std::string> meshNames;
+			std::map<uint64_t, Ref<Material>> materials;
+			std::map<uint64_t, std::string> materialNames;
+		};
 	public:
-		static std::vector<Ref<Model>> loadAllModels(std::string file, std::string name = "");
+		static Ref<WavefrontModel> loadModel(FilePath file);
 
+	private:
+		WavefrontLoader() = delete;
+		WavefrontLoader(const WavefrontLoader& other) = delete;
+		~WavefrontLoader() = delete;
 	private:
 		static Ref<Material> toMaterial(const tinyobj::material_t& material);
 		static Material::MaterialProperties toMaterialProperties(const tinyobj::material_t& material);

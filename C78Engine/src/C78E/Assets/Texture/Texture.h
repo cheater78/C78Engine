@@ -11,7 +11,12 @@ namespace C78E {
 		enum TextureType {
 			FLAT,
 			SPHERE,
-			CUBE
+			CUBE_TOP,
+			CUBE_BOTTOM,
+			CUBE_FRONT,
+			CUBE_BACK,
+			CUBE_LEFT,
+			CUBE_RIGHT
 		};
 
 		struct TextureOption {

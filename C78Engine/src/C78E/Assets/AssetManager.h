@@ -42,17 +42,24 @@ namespace C78E {
 
 		void serializeAssetRegistry();
 		bool deserializeAssetRegistry();
+	protected:
+		// TODO: memory-only assets
+		AssetHandle addAsset(Asset::AssetMeta meta, Ref<Asset> asset);
 	private:
 		AssetRegistry m_AssetRegistry;
 		AssetMap m_LoadedAssets;
 
-		// TODO: memory-only assets
+		friend class ModelLoader;
 	};
 
 	class RuntimeAssetManager : public AssetManagerBase {
 	public:
 		//TODO
+
+		//loadAssets -> Assetpack.file(keep full Header in mem) -> Project -> current Scene -> all
+
 	private:
+		AssetMap m_LoadedAssets;
 	};
 
 }

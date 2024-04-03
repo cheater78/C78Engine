@@ -1,38 +1,43 @@
 #include <C78ePCH.h>
-#include "TinyObjectLoader.h"
+#include "WavefrontLoader.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
-#include <C78E/Assets/Mesh/Mesh.h>
-
 namespace C78E {
 
-    std::vector<Ref<Model>> TinyObjectLoader::loadAllModels(std::string file, std::string name) {
-        std::vector<Ref<Model>> models;
+    Ref<WavefrontLoader::WavefrontModel> WavefrontLoader::loadModel(FilePath file) {
+        C78_CORE_ASSERT(file.extension() == ".stl", "WavefrontLoader::loadModel: cannot parse non .stl files!");
 
+        Ref<WavefrontModel> model = createRef<WavefrontModel>();
 
-        std::vector<std::string> path = std::split(file, '/');
         tinyobj::ObjReaderConfig reader_config;
-        //reader_config.mtl_search_path = ""; // Path to material files
+        // Path to material files must be in the same directory as the .stl
+        //reader_config.mtl_search_path = ""; 
 
         tinyobj::ObjReader reader;
 
-        if (!reader.ParseFromFile(file, reader_config))
-            C78_CORE_ASSERT(false, "Model: create -> failed to read ModelFile, TOL: " + reader.Error());
+        if (!reader.ParseFromFile(file.string(), reader_config))
+            C78_CORE_ERROR("WavefrontLoader::loadModel: failed to read ModelFile: \n   " + reader.Error());
 
         if (!reader.Warning().empty())
-            C78_CORE_WARN("Model: create -> Warn TOL: " + reader.Warning());
+            C78_CORE_WARN("WavefrontLoader::loadModel: Reader Warn: \n   " + reader.Warning());
 
         auto& attrib = reader.GetAttrib();
         auto& shapes = reader.GetShapes();
         auto& materials = reader.GetMaterials();
 
+        // copy all materials
+        for (uint64_t mat_id = 0; mat_id < materials.size(); mat_id++) {
+            model->materialNames.emplace(mat_id, materials.at(mat_id).name);
+            model->materials.emplace(mat_id, WavefrontLoader::toMaterial(materials.at(mat_id)));
+        }
+
+        uint64_t meshID = 0;
         // Loop over shapes
         for (size_t s = 0; s < shapes.size(); s++) {
-            std::string shapeName = shapes[s].name;
-
-            if (name != "" && name != shapeName) continue;
+            tinyobj::shape_t shape = shapes[s];
+            std::string shapeName = shape.name;
 
             std::unordered_map<Vertex, uint32_t> uniqueVertecies{};
             std::vector<Vertex> vertecies{};
@@ -42,6 +47,7 @@ namespace C78E {
             uint32_t materialID = -1;
             std::string materialName = "";
             size_t index_offset = 0;
+            
             for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
                 size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
 
@@ -50,20 +56,22 @@ namespace C78E {
                 materialName = materials[material_id].name;
 
                 if (material_id != materialID) {
-                    // Material Changed -> Save Current Model(if not first run),
-                    // and add new Material to Lib
+                    // Material Changed -> Save Current Model(if not first run)
                     if (materialID != -1) {
                         // Material Changed and not first run -> Save Current Model and start a new one
                         Ref<Mesh> mesh = createRef<Mesh>(vertecies, indecies);
-                        AssetManager::addMesh(shapeName + "_" + materialName, mesh, file);
-                        models.push_back(createRef<Model>(AssetManager::getMeshAsset(shapeName), AssetManager::getMaterialAsset(materialName)));
+                        model->meshes.emplace(meshID, mesh);
+                        model->meshNames.emplace(meshID, shapeName);
+
+                        model->parts.emplace(meshID, materialID);
+
+                        meshID++;
 
                         uniqueVertecies.clear();
                         vertecies.clear();
                         indecies.clear();
                     }
                     materialID = material_id;
-                    AssetManager::addMaterial(materialName, toMaterial(materials[material_id]), file);
                 }
                 
 
@@ -112,14 +120,18 @@ namespace C78E {
             }
 
             Ref<Mesh> mesh = createRef<Mesh>(vertecies, indecies);
-            AssetManager::addMesh(shapeName + "_" + materialName, mesh, file);
-            models.push_back(createRef<Model>(AssetManager::getMeshAsset(shapeName + "_" + materialName), AssetManager::getMaterialAsset(materialName)));
+            model->meshes.emplace(meshID, mesh);
+            model->meshNames.emplace(meshID, shapeName);
+
+            model->parts.emplace(meshID, materialID);
+
+            meshID++;
         }
-        return models;
+        return model;
     }
 
 
-    Ref<Material> TinyObjectLoader::toMaterial(const tinyobj::material_t& material) {
+    Ref<Material> WavefrontLoader::toMaterial(const tinyobj::material_t& material) {
         return createRef<Material>(
             toMaterialProperties(material),
             material.illum,
@@ -129,7 +141,7 @@ namespace C78E {
         );
     }
 
-    Material::MaterialProperties TinyObjectLoader::toMaterialProperties(const tinyobj::material_t& material) {
+    Material::MaterialProperties WavefrontLoader::toMaterialProperties(const tinyobj::material_t& material) {
         return {
             glm::vec3{ material.ambient[0], material.ambient[1], material.ambient[2] },
             glm::vec3{ material.diffuse[0], material.diffuse[1], material.diffuse[2] },
@@ -142,7 +154,7 @@ namespace C78E {
         };
     }
 
-    Material::MaterialTextures TinyObjectLoader::toMaterialTextures(const tinyobj::material_t& material) {
+    Material::MaterialTextures WavefrontLoader::toMaterialTextures(const tinyobj::material_t& material) {
         return {
             material.ambient_texname,
             material.diffuse_texname,
@@ -163,7 +175,7 @@ namespace C78E {
         };
     }
 
-    Material::MaterialPropertiesPBRext TinyObjectLoader::toMaterialPropertiesPBRext(const tinyobj::material_t& material)
+    Material::MaterialPropertiesPBRext WavefrontLoader::toMaterialPropertiesPBRext(const tinyobj::material_t& material)
     {
         return {
             material.roughness,
@@ -176,7 +188,7 @@ namespace C78E {
         };
     }
 
-    Material::MaterialTexturesPBRext TinyObjectLoader::toMaterialTexturesPBRext(const tinyobj::material_t& material)
+    Material::MaterialTexturesPBRext WavefrontLoader::toMaterialTexturesPBRext(const tinyobj::material_t& material)
     {
         return {
             material.ambient_texname,
@@ -192,8 +204,7 @@ namespace C78E {
         };
     }
 
-    Texture::TextureOption TinyObjectLoader::toMaterialTextureOption(const tinyobj::texture_option_t& texOpt)
-    {
+    Texture::TextureOption WavefrontLoader::toMaterialTextureOption(const tinyobj::texture_option_t& texOpt) {
         return {
                 ((texOpt.type >= 2) ? (Texture::TextureType)2 : (Texture::TextureType)texOpt.type), //TODO: Rework
                 texOpt.sharpness,
