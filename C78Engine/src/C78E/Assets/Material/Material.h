@@ -20,47 +20,32 @@ namespace C78E {
 		};
 
 		struct MaterialTextures {
-			std::string ambient;             // map_Ka. For ambient or ambient occlusion.
-			std::string diffuse;             // map_Kd
-			std::string specular;            // map_Ks
-			std::string specularHighlight;	 // map_Ns
-			std::string bump;                // map_bump, map_Bump, bump
-			std::string displacement;        // disp
-			std::string alpha;               // map_d
-			std::string reflection;          // refl
-
-			Texture::TextureOption ambientOpt;
-			Texture::TextureOption diffuseOpt;
-			Texture::TextureOption specularOpt;
-			Texture::TextureOption specularHighlightOpt;
-			Texture::TextureOption bumpOpt;
-			Texture::TextureOption displacementOpt;
-			Texture::TextureOption alphaOpt;
-			Texture::TextureOption reflectionOpt;
+			AssetHandle ambient = 0;             // map_Ka. For ambient or ambient occlusion.
+			AssetHandle diffuse = 0;             // map_Kd
+			AssetHandle specular = 0;            // map_Ks
+			AssetHandle specularHighlight = 0;	 // map_Ns
+			AssetHandle bump = 0;                // map_bump, map_Bump, bump
+			AssetHandle displacement = 0;        // disp
+			AssetHandle alpha = 0;               // map_d
+			AssetHandle reflection = 0;          // refl
 		};
 
 		struct MaterialPropertiesPBRext {
-			float roughness;            // [0, 1] default 0
-			float metallic;             // [0, 1] default 0
-			float sheen;                // [0, 1] default 0
-			float clearcoat_thickness;  // [0, 1] default 0
-			float clearcoat_roughness;  // [0, 1] default 0
-			float anisotropy;           // aniso. [0, 1] default 0
-			float anisotropy_rotation;  // anisor. [0, 1] default 0
+			float roughness = 0;            // [0, 1] default 0
+			float metallic = 0;             // [0, 1] default 0
+			float sheen = 0;                // [0, 1] default 0
+			float clearcoat_thickness = 0;  // [0, 1] default 0
+			float clearcoat_roughness = 0;  // [0, 1] default 0
+			float anisotropy = 0;           // [0, 1] default 0
+			float anisotropy_rotation = 0;  // [0, 1] default 0
 		};
 
 		struct MaterialTexturesPBRext {
-			std::string roughness_texname;  // map_Pr
-			std::string metallic_texname;   // map_Pm
-			std::string sheen_texname;      // map_Ps
-			std::string emissive_texname;   // map_Ke
-			std::string normal_texname;     // norm. For normal mapping.
-
-			Texture::TextureOption roughnessOpt;
-			Texture::TextureOption metallicOpt;
-			Texture::TextureOption sheenOpt;
-			Texture::TextureOption emissiveOpt;
-			Texture::TextureOption normalOpt;
+			AssetHandle roughness = 0;		// map_Pr
+			AssetHandle metallic = 0;		// map_Pm
+			AssetHandle sheen = 0;			// map_Ps
+			AssetHandle emissive = 0;		// map_Ke
+			AssetHandle normal = 0;			// norm. For normal mapping.
 		};
 
 	public:
@@ -76,9 +61,9 @@ namespace C78E {
 			: m_Shader(shader),
 			m_MaterialProperties(materialProperties),
 			m_IlluminationModel(illuminationModel),
-			m_Textures(materialTextures),
-			m_PBRMaterialProperties(materialPropertiesPBRext),
-			m_PBRTextures(materialTexturesPBRext)
+			m_MaterialTextures(materialTextures),
+			m_MaterialPropertiesPBRext(materialPropertiesPBRext),
+			m_MaterialTexturesPBRext(materialTexturesPBRext)
 		{ }
 		Material(const Material&) = default;
 		~Material() = default;
@@ -87,10 +72,10 @@ namespace C78E {
 
 	public:
 		AssetHandle m_Shader;
-		MaterialProperties m_MaterialProperties;
 		uint32_t m_IlluminationModel;
-		MaterialTextures m_Textures;
-		MaterialPropertiesPBRext m_PBRMaterialProperties;
-		MaterialTexturesPBRext m_PBRTextures;
+		MaterialProperties m_MaterialProperties;
+		MaterialTextures m_MaterialTextures;
+		MaterialPropertiesPBRext m_MaterialPropertiesPBRext;
+		MaterialTexturesPBRext m_MaterialTexturesPBRext;
 	};
 }

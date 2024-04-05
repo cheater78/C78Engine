@@ -10,11 +10,12 @@
 namespace C78E {
 	uint32_t RayTracer3D::s_Width = 1;
 	uint32_t RayTracer3D::s_Height = 1;
-	Asset<Shader> RayTracer3D::s_RayComputeShader;
+	AssetHandle RayTracer3D::s_RayComputeShader;
 	Ref<Texture2D> RayTracer3D::s_Result = nullptr;
 
 	void RayTracer3D::init(uint32_t width, uint32_t height) {
-		s_RayComputeShader = C78E::AssetManager::getShaderAsset("RayCompute");
+		C78_CORE_ERROR("impl!");
+		//s_RayComputeShader = C78E::AssetManager::getShaderAsset("RayCompute");
 
 		onWindowResize(width, height);
 	}
@@ -25,7 +26,7 @@ namespace C78E {
 		s_Width = width; s_Height = height;
 
 		float* data = new float[s_Width * s_Height * 4];
-		RawImage image{ s_Width, s_Height, ImageFormat::RGBA32F, (void*)data };
+		Image image{ s_Width, s_Height, Image::ImageFormat::RGBA32F, (void*)data };
 		delete[] data;
 		s_Result = Texture2D::create(image);
 	}
@@ -47,7 +48,8 @@ namespace C78E {
 		{
 			s_Result->bindImage(0);
 			camUniformBuffer->bind(1);
-			s_RayComputeShader.get().BindCompute(static_cast<uint32_t>(std::ceil(s_Width / 8)), static_cast<uint32_t>(std::ceil(s_Height / 4)));
+			C78_CORE_ERROR("impl!");
+			//s_RayComputeShader.get().BindCompute(static_cast<uint32_t>(std::ceil(s_Width / 8)), static_cast<uint32_t>(std::ceil(s_Height / 4)));
 		}
 	}
 

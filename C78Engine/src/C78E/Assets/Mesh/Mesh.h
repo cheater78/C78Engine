@@ -24,6 +24,6 @@ namespace C78E {
 	private:
 
 	private:
-		bool m_HasIndicies = false;
+		bool m_HasIndicies = false; // TODO: unused...
 	};
 }

@@ -27,7 +27,8 @@ namespace C78E {
 	}
 
 	void Renderer::setDisplayShader(std::string name) {
-		s_DisplayAssets.displayShader = AssetManager::getShaderAsset(name);
+		C78_CORE_ERROR("impl!");
+		//s_DisplayAssets.displayShader = AssetManager::getShaderAsset(name);
 		s_DisplayAssets.init = true;
 	}
 
@@ -79,7 +80,8 @@ namespace C78E {
 		if (!s_DisplayAssets.init || !s_Result) return;
 		RenderCommand::clear();
 
-		s_DisplayAssets.displayShader.get().Bind();
+		C78_CORE_ERROR("impl!");
+		//s_DisplayAssets.displayShader.get().Bind();
 		s_Result->bind(0);
 		RenderCommand::drawIndexed(s_DisplayAssets.vertexArray);
 	}

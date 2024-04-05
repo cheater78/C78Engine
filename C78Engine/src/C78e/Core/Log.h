@@ -24,11 +24,13 @@ namespace C78E {
 		static void init();
 
 		inline static std::shared_ptr<spdlog::logger>& getCoreLogger() { return s_CoreLogger;  }
+		inline static std::shared_ptr<spdlog::logger>& getEditorLogger() { return s_EditorLogger;  }
 		inline static std::shared_ptr<spdlog::logger>& getClientLogger() { return s_ClientLogger;  }
 		inline static std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt>& getRingBufferSink() { return s_RingbufferSink; }
 
 	private:
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
+		static std::shared_ptr<spdlog::logger> s_EditorLogger;
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;
 
 		static std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt> s_RingbufferSink;
@@ -66,6 +68,12 @@ inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
 #define C78_CORE_INFO(...)      { ::C78E::Log::getCoreLogger()->info(__VA_ARGS__);		}
 #define C78_CORE_TRACE(...)     { ::C78E::Log::getCoreLogger()->trace(__VA_ARGS__);		}
 
+#define C78_EDITOR_FATAL(...)	{ ::C78E::Log::getEditorLogger()->critical(__VA_ARGS__);	}
+#define C78_EDITOR_ERROR(...)	{ ::C78E::Log::getEditorLogger()->error(__VA_ARGS__);		}
+#define C78_EDITOR_WARN(...)	{ ::C78E::Log::getEditorLogger()->warn(__VA_ARGS__);		}
+#define C78_EDITOR_INFO(...)	{ ::C78E::Log::getEditorLogger()->info(__VA_ARGS__);		}
+#define C78_EDITOR_TRACE(...)	{ ::C78E::Log::getEditorLogger()->trace(__VA_ARGS__);		}
+
 #define C78_FATAL(...)          { ::C78E::Log::getClientLogger()->critical(__VA_ARGS__);}
 #define C78_ERROR(...)          { ::C78E::Log::getClientLogger()->error(__VA_ARGS__);	}
 #define C78_WARN(...)           { ::C78E::Log::getClientLogger()->warn(__VA_ARGS__);	}
@@ -80,6 +88,12 @@ inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
 #define C78_CORE_INFO(...)      { ::C78E::Log::getCoreLogger()->info(__VA_ARGS__);		}
 #define C78_CORE_TRACE(...)     { ::C78E::Log::getCoreLogger()->trace(__VA_ARGS__);		}
 
+#define C78_EDITOR_FATAL(...)	{ ::C78E::Log::getEditorLogger()->critical(__VA_ARGS__);	}
+#define C78_EDITOR_ERROR(...)	{ ::C78E::Log::getEditorLogger()->error(__VA_ARGS__);		}
+#define C78_EDITOR_WARN(...)	{ ::C78E::Log::getEditorLogger()->warn(__VA_ARGS__);		}
+#define C78_EDITOR_INFO(...)	{ ::C78E::Log::getEditorLogger()->info(__VA_ARGS__);		}
+#define C78_EDITOR_TRACE(...)	{ ::C78E::Log::getEditorLogger()->trace(__VA_ARGS__);		}
+
 #define C78_FATAL(...)          { ::C78E::Log::getClientLogger()->critical(__VA_ARGS__);}
 #define C78_ERROR(...)          { ::C78E::Log::getClientLogger()->error(__VA_ARGS__);	}
 #define C78_WARN(...)           { ::C78E::Log::getClientLogger()->warn(__VA_ARGS__);	}
@@ -93,6 +107,12 @@ inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
 #define C78_CORE_WARN(...)		{														}
 #define C78_CORE_INFO(...)		{														}
 #define C78_CORE_TRACE(...)		{														}
+
+#define C78_EDITOR_FATAL(...)	{														}
+#define C78_EDITOR_ERROR(...)	{														}
+#define C78_EDITOR_WARN(...)	{														}
+#define C78_EDITOR_INFO(...)	{														}
+#define C78_EDITOR_TRACE(...)	{														}
 
 #define C78_FATAL(...)			{														}
 #define C78_ERROR(...)			{														}

@@ -52,6 +52,10 @@ namespace C78E {
 	public:
 		// TODO: revisit, Texture loading/handling, 2D and Cubemap don't differ as file rn
 		virtual AssetType getType() { return Asset::AssetType::Texture2D; };
+	public:
+		// virtual
+	private:
+		TextureOption m_Option; //TODO: all u need to know abt this texture -> process on creation
 	};
 
 	class Texture2D : public Texture {

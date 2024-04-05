@@ -1,4 +1,7 @@
 #include "EntityInspector.h"
+#include <C78E/Assets/Model/Model.h>
+#include <C78E/Project/Project.h>
+#include <C78E/Assets/Material/Material.h>
 
 namespace C78Editor {
 
@@ -11,6 +14,9 @@ namespace C78Editor {
     static constexpr ImGuiTabBarFlags s_EntityInspectorTableFlags = ImGuiTableFlags_Borders | ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_PreciseWidths;
     static constexpr ImGuiTableColumnFlags s_EntityInspectorTableColFlags = 0;
     static constexpr ImGuiTableColumnFlags s_EntityInspectorTableHighlightRowFlags = ImGuiTableRowFlags_Headers;
+
+    static constexpr uint64_t indentStep = 2;
+    static constexpr char indentChar = ' ';
 
     void EntityInspector::init() {
         s_ID = 0;
@@ -50,7 +56,7 @@ namespace C78Editor {
                 //--------------------------------------------
                 ImGui::TableNextColumn();
                 // Name
-                if (ImGui::SmallButton(std::string(entity.getComponent<C78E::TagComponent>() + " (" + std::to_string((uint32_t)entt) + ")").c_str())) {
+                if (ImGui::SmallButton(std::string(entity.getComponent<C78E::TagComponent>().tag + " (" + std::to_string((uint32_t)entt) + ")").c_str())) {
                     s_ID = (uint32_t)entt;
                     shouldShow("/Inspector") = true;
                 }
@@ -77,110 +83,143 @@ namespace C78Editor {
             ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg1, ImGui::GetColorU32(ImVec4(0.05f, 0.1f, 0.13f, 1.f)));
             ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.15f, 0.1f, 0.13f, 1.f)));
 
-            insID(element + "/ID", entity, 0);
-            insTag(element + "/Tag", entity, 0);
-            insState(element + "/State", entity, 0);
-            insTransform(element + "/Transform", entity, 0);
+            
+            insIDComponent(element, entity, 0);
+            insTagComponent(element, entity, 0);
+            insStateComponent(element, entity, 0);
+            insTransformComponent(element, entity, 0);
 
             if (entity.hasComponent<C78E::CameraComponent>()) // Camera Component
-                insCamera(element, entity, 0);
+                insCameraComponent(element, entity, 0);
 
             if (entity.hasComponent<C78E::AmbientLightComponent>()) // Ambient Light Component
-                insAmbinentLight(element, entity, 0);
+                insAmbinentLightComponent(element, entity, 0);
                 
             if (entity.hasComponent<C78E::DirectLightComponent>()) // Direct Light Component
-                insDirectLight(element, entity, 0);
+                insDirectLightComponent(element, entity, 0);
 
             if (entity.hasComponent<C78E::PointLightComponent>()) // Point Light Component
-                insPointLight(element, entity, 0);
+                insPointLightComponent(element, entity, 0);
 
             if (entity.hasComponent<C78E::SpotLightComponent>()) // Spot Light Component
-                insSpotLight(element, entity, 0);
+                insSpotLightComponent(element, entity, 0);
 
             if (entity.hasComponent<C78E::ModelComponent>()) // Model Component
-                insModel(element, entity, 0);
+                insModelComponent(element, entity, 0);
 
             if (entity.hasComponent<C78E::MeshComponent>()) // Mesh Component
-                insMesh(element, entity, 0);
+                insMeshComponent(element, entity, 0);
             
             if (entity.hasComponent<C78E::MaterialComponent>()) // Material Component
-                insMaterial(element, entity, 0);
+                insMaterialComponent(element, entity, 0);
             
             if (entity.hasComponent<C78E::TextureComponent>()) // Texture Component
-                insTexture(element, entity, 0);
+                insTextureComponent(element, entity, 0);
 
             if (entity.hasComponent<C78E::SkyBoxComponent>()) // SkyBox Component
-                insSkyBox(element, entity, 0);
+                insSkyBoxComponent(element, entity, 0);
 
             ImGui::EndTable();
         }
         ImGui::End();
     }
 
-    void EntityInspector::insID(std::string element, C78E::Entity& entity, uint32_t indent) {
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
+    /*
+    * EntityInspector::insData
+    * inserts any primitive immutable Data
+    * std::to_string(const T& data) must be defined!
+    */
+    template<typename T>
+    inline void EntityInspector::insData(std::string element, std::string title, const T& data, uint32_t indent, ImGuiTableRowFlags rowFlags, ImGuiTableColumnFlags colFlagsLabel, ImGuiTableColumnFlags colFlagsData) {
+        ImGui::TableNextRow(rowFlags);
         {
-            ImGui::TableNextColumn();
+            ImGui::TableNextColumn(colFlagsLabel);
             // Identifier
-            ImGui::Text(indentStr("ID ", indent).c_str());
+            ImGui::Text(indentStr(title, indent).c_str());
             //--------------------------------------------
-            ImGui::TableNextColumn();
+            ImGui::TableNextColumn(colFlagsData);
             // Value
-            ImGui::Text(std::to_string(entity.getComponent<C78E::IDComponent>()).c_str());
+            ImGui::Text(std::to_string(data).c_str());
             //--------------------------------------------
         }
     }
 
-    void EntityInspector::insTag(std::string element, C78E::Entity& entity, uint32_t indent) {
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
+    /*
+    * EntityInspector::insDataOptToggleElement
+    * inserts any primitive immutable Data with the Option to toggle the visibility of "element"
+    * std::to_string(const T& data) must be defined!
+    */
+    template<typename T>
+    inline void EntityInspector::insDataOptToggleElement(std::string element, std::string title, const T& data, uint32_t indent, ImGuiTableRowFlags rowFlags, ImGuiTableColumnFlags colFlagsLabel, ImGuiTableColumnFlags colFlagsData) {
+        ImGui::TableNextRow(rowFlags);
         {
-            ImGui::TableNextColumn();
+            ImGui::TableNextColumn(colFlagsLabel);
             // Identifier
-            ImGui::Text(indentStr("Name ", indent).c_str());
+            ImGui::Text(indentStr(title, indent).c_str());
             //--------------------------------------------
-            ImGui::TableNextColumn();
+            ImGui::TableNextColumn(colFlagsData);
             // Value
-            ImGui::Text(entity.getComponent<C78E::TagComponent>().c_str());
+            if (ImGui::Button(std::to_string(data).c_str()))
+                toggleShow(element);
             //--------------------------------------------
         }
     }
 
-    void EntityInspector::insState(std::string element, C78E::Entity& entity, uint32_t indent) {
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
+    /*
+    * EntityInspector::insDataOptToggleData
+    * inserts any binary Type of Data with the Option to toggle it to its current counterstate
+    * data must be one of state0 or state1, which have to be the only two possible states of T
+    * std::to_string(const T& data) must be defined!
+    */
+    template<typename T>
+    void EntityInspector::insDataOptToggleData(std::string element, std::string title, const T& data, const T& state0, const T& state1, uint32_t indent, ImGuiTableRowFlags rowFlags, ImGuiTableColumnFlags colFlagsLabel, ImGuiTableColumnFlags colFlagsData) {
+        C78_EDITOR_ASSERT(data == state0 || data == state1, "EntityInspector::insDataOptToggleData: data can only be one of the two specified states!");
+        ImGui::TableNextRow(rowFlags);
         {
-            ImGui::TableNextColumn();
+            ImGui::TableNextColumn(colFlagsLabel);
             // Identifier
-            ImGui::Text(indentStr("Active ", indent).c_str());
+            ImGui::Text(indentStr(title, indent).c_str());
             //--------------------------------------------
-            ImGui::TableNextColumn();
+            ImGui::TableNextColumn(colFlagsData);
             // Value
-            if (ImGui::Button((entity.getComponent<C78E::StateComponent>().enable) ? "True" : "False")) {
-                entity.getComponent<C78E::StateComponent>().enable = !entity.getComponent<C78E::StateComponent>().enable;
-            }
+            if (ImGui::Button(std::to_string(data).c_str()))
+                if (data == state0)
+                    data = state1;
+                else
+                    data = state0;
             //--------------------------------------------
         }
     }
 
-    void EntityInspector::insTransform(std::string element, C78E::Entity& entity, uint32_t indent) {
-        element += "/TransformComponent";
+
+
+    /*
+    * 
+    * Components
+    * 
+    */
+
+    void EntityInspector::insIDComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        insData<C78E::UUID>(element + "/UUID", "UUID", entity.getUUID(), 0, s_EntityInspectorTableHighlightRowFlags);
+    }
+
+    void EntityInspector::insTagComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        insData<std::string>(element + "/Tag", "Tag", entity.getTag(), 0, s_EntityInspectorTableHighlightRowFlags);
+    }
+
+    void EntityInspector::insStateComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        insDataOptToggleData<bool>(element + "/State", "State", entity.getComponent<C78E::StateComponent>().enable, false, true, 0, s_EntityInspectorTableHighlightRowFlags);
+    }
+
+    void EntityInspector::insTransformComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        element += "/Transform";
         glm::vec3& translation = entity.getComponent<C78E::TransformComponent>().Translation;
         glm::vec3& rotation = entity.getComponent<C78E::TransformComponent>().Rotation;
         glm::vec3& scale = entity.getComponent<C78E::TransformComponent>().Scale;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Transform", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button("Show Transform"))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "Transform Component", "Show", indent, s_EntityInspectorTableHighlightRowFlags);
 
-        if (shouldShow(element + "/details")) {
+        if (shouldShow(element)) {
             ImGui::TableNextRow();
             {
                 ImGui::TableNextColumn();
@@ -190,7 +229,7 @@ namespace C78Editor {
                 ImGui::TableNextColumn();
                 // Value
                 ImGui::PushItemWidth(-1);
-                ImGui::DragFloat3((element + "/details" + "/translation").c_str(), &translation[0], 0.01f, -128.f, 128.f);
+                ImGui::DragFloat3((element + "/translation").c_str(), &translation[0], 0.01f, -128.f, 128.f);
                 ImGui::PopItemWidth();
                 //--------------------------------------------
             }
@@ -203,7 +242,7 @@ namespace C78Editor {
                 ImGui::TableNextColumn();
                 // Value
                 ImGui::PushItemWidth(-1);
-                ImGui::DragFloat3((element + "/details" + "/rotation").c_str(), &rotation[0], 0.01f, -128.f, 128.f);
+                ImGui::DragFloat3((element + "/rotation").c_str(), &rotation[0], 0.01f, -128.f, 128.f);
                 ImGui::PopItemWidth();
                 //--------------------------------------------
             }
@@ -216,54 +255,22 @@ namespace C78Editor {
                 ImGui::TableNextColumn();
                 // Value
                 ImGui::PushItemWidth(-1);
-                ImGui::DragFloat3((element + "/details" + "/scale").c_str(), &scale[0], 0.01f, -128.f, 128.f);
+                ImGui::DragFloat3((element + "/scale").c_str(), &scale[0], 0.01f, -128.f, 128.f);
                 ImGui::PopItemWidth();
                 //--------------------------------------------
             }
         }
     }
 
-    void EntityInspector::insCamera(std::string element, C78E::Entity& entity, uint32_t indent) {
-        element += "/CameraComponent";
+    void EntityInspector::insCameraComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        element += "/Camera";
         C78E::SceneCamera& camera = entity.getComponent<C78E::CameraComponent>().Camera;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Camera", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button("Show Camera"))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "Camera Component", "Show", indent, s_EntityInspectorTableHighlightRowFlags);
 
+        if (shouldShow(element)) {
 
-        if (shouldShow(element + "/details")) {
-
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("ProjectionType", indent+1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                if (ImGui::Button(
-                    (camera.GetProjectionType() == C78E::SceneCamera::ProjectionType::Perspective)
-                    ? std::string("Perspective").c_str() : std::string("Orthogonal").c_str()
-                )) {
-                    if (camera.GetProjectionType() == C78E::SceneCamera::ProjectionType::Perspective) {
-                        camera.SetProjectionType(C78E::SceneCamera::ProjectionType::Orthographic);
-                    }
-                    else {
-                        camera.SetProjectionType(C78E::SceneCamera::ProjectionType::Perspective);
-                    }
-                }
-                //--------------------------------------------
-            }
+            insDataOptToggleData<C78E::SceneCamera::ProjectionType>(element, "Projection Type", camera.GetProjectionType(), C78E::SceneCamera::ProjectionType::Orthographic, C78E::SceneCamera::ProjectionType::Perspective, indent);
 
             ImGui::TableNextRow();
             {
@@ -349,24 +356,13 @@ namespace C78Editor {
         }
     }
 
-    void EntityInspector::insAmbinentLight(std::string element, C78E::Entity& entity, uint32_t indent) {
-        element += "/AmbientLightComponent";
+    void EntityInspector::insAmbinentLightComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        element += "/AmbientLight";
         glm::vec4& color = entity.getComponent<C78E::AmbientLightComponent>().color;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("AmbientLight ", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(std::string("Show AmbientLight").c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "AmbientLight Component", "Show", indent, s_EntityInspectorTableHighlightRowFlags);
 
-        if (shouldShow(element + "/details")) {
+        if (shouldShow(element)) {
             ImGui::TableNextRow();
             {
                 ImGui::TableNextColumn();
@@ -383,25 +379,14 @@ namespace C78Editor {
         }
     }
 
-    void EntityInspector::insDirectLight(std::string element, C78E::Entity& entity, uint32_t indent) {
-        element += "/DirectLightComponent";
+    void EntityInspector::insDirectLightComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        element += "/DirectLight";
         glm::vec4& color = entity.getComponent<C78E::DirectLightComponent>().color;
         glm::vec3& direction = entity.getComponent<C78E::DirectLightComponent>().direction;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("DirectionalLight", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(std::string("Show DirectionalLight").c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "DirectionalLight Component", "Show", indent, s_EntityInspectorTableHighlightRowFlags);
 
-        if (shouldShow(element + "/details")) {
+        if (shouldShow(element)) {
             ImGui::TableNextRow();
             {
                 ImGui::TableNextColumn();
@@ -431,25 +416,14 @@ namespace C78Editor {
         }
     }
 
-    void EntityInspector::insPointLight(std::string element, C78E::Entity& entity, uint32_t indent) {
-        element += "/PointLightComponent";
+    void EntityInspector::insPointLightComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        element += "/PointLight";
         glm::vec4& color = entity.getComponent<C78E::PointLightComponent>().color;
         glm::vec3& position = entity.getComponent<C78E::PointLightComponent>().position;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("PointLight", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(std::string("Show PointLight").c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "PointLight Component", "Show", indent, s_EntityInspectorTableHighlightRowFlags);
 
-        if (shouldShow(element + "/details")) {
+        if (shouldShow(element)) {
             ImGui::TableNextRow();
             {
                 ImGui::TableNextColumn();
@@ -479,28 +453,17 @@ namespace C78Editor {
         }
     }
 
-    void EntityInspector::insSpotLight(std::string element, C78E::Entity& entity, uint32_t indent) {
-        element += "/SpotLightComponent";
+    void EntityInspector::insSpotLightComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        element += "/SpotLight";
         glm::vec4& color = entity.getComponent<C78E::SpotLightComponent>().color;
         glm::vec3& position = entity.getComponent<C78E::SpotLightComponent>().position;
         glm::vec3& direction = entity.getComponent<C78E::SpotLightComponent>().direction;
         float& angle = entity.getComponent<C78E::SpotLightComponent>().angle;
         float& edgeAngle = entity.getComponent<C78E::SpotLightComponent>().edgeAngle;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("SpotLight", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(std::string("Show SpotLight").c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "SpotLight Component", "Show", indent, s_EntityInspectorTableHighlightRowFlags);
 
-        if (shouldShow(element + "/details")) {
+        if (shouldShow(element)) {
             ImGui::TableNextRow();
             {
                 ImGui::TableNextColumn();
@@ -569,553 +532,228 @@ namespace C78Editor {
         }
     }
 
-    void EntityInspector::insModel(std::string element, C78E::Entity& entity, uint32_t indent) {
-        element += "/ModelComponent";
-        auto& models = entity.getComponent<C78E::ModelComponent>().models;
+    void EntityInspector::insModelComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
+        element += "/Model";
+        auto modelHandle = entity.getComponent<C78E::ModelComponent>().model;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Model", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(std::string("Show Models").c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
-
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Models", indent + 1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(models.size()).c_str());
-                //--------------------------------------------
-            }
-
-            uint32_t mid = 0;
-            for (auto& model : models) { // Per Model Asset
-                ImGui::TableNextRow();
-                {
-                    ImGui::TableNextColumn();
-                    // Identifier
-                    ImGui::Text(indentStr("#" + std::to_string(mid++), indent + 1).c_str());
-                    //--------------------------------------------
-                    ImGui::TableNextColumn();
-                    // Value
-                    ImGui::Text(model.getName().c_str());
-                    //--------------------------------------------
-                }
-                ImGui::TableNextRow();
-                {
-                    ImGui::TableNextColumn();
-                    // Identifier
-                    ImGui::Text(indentStr("Source", indent + 2).c_str());
-                    //--------------------------------------------
-                    ImGui::TableNextColumn();
-                    // Value
-                    ImGui::Text(model.getSource().c_str());
-                    //--------------------------------------------
-                }
-
-                insMesh(element, model.getRef()->m_Mesh, indent + 2);
-                insMaterial(element, model.getRef()->m_Material, indent + 2);
-            }
-        }
+        // TODO: maybe unfold completly... one more step: ModelComp -> Model -> ModelData, now ModelComp = Model in viewer
+        insAsset(element, "ModelComponent", modelHandle, indent);
     }
 
-    void EntityInspector::insMesh(std::string element, C78E::Entity& entity, uint32_t indent) {
+    void EntityInspector::insMeshComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
         element += "/MeshComponent";
         auto& mesh = entity.getComponent<C78E::MeshComponent>().mesh;
-        insMesh(element, mesh, indent);
+        insAsset(element, "MeshComponent", mesh, indent);
     }
 
-    void EntityInspector::insMaterial(std::string element, C78E::Entity& entity, uint32_t indent) {
+    void EntityInspector::insMaterialComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
         element += "/MaterialComponent";
         auto& material = entity.getComponent<C78E::MaterialComponent>().material;
-        insMaterial(element, material, indent);
+        insAsset(element, "MaterialComponent", material, indent);
     }
 
-    void EntityInspector::insShader(std::string element, C78E::Asset<C78E::Shader> shader, uint32_t indent) {
-        element += "/MaterialComponent";
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Name", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(shader.getName().c_str());
-            //--------------------------------------------
-        }
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Source", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(shader.getSource().c_str());
-            //--------------------------------------------
-        }
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Texture", indent + 1).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(shader.getName().c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
-
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Name", indent).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(shader.getRef()->getName().c_str());
-                //--------------------------------------------
-            }
-        }
-    }
-
-    void EntityInspector::insTexture(std::string element, C78E::Entity& entity, uint32_t indent) {
+    void EntityInspector::insTextureComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
         element += "/TextureComponent";
         auto& textures = entity.getComponent<C78E::TextureComponent>().textures;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Texture", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(std::string("Show Textures").c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "Texture Component", "Show Textures (" + std::to_string(textures.size()) + ")", indent, s_EntityInspectorTableHighlightRowFlags);
 
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text("Textures ");
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(textures.size()).c_str());
-                //--------------------------------------------
-            }
-            for (auto& texture : textures) {
-                insTexture(element, texture, indent + 1);
+        if (shouldShow(element)) {
+            uint32_t tid = 0;
+            for (C78E::AssetHandle textureHandle : textures) {
+                insAsset(element, "Texture #" + std::to_string(tid), textureHandle, indent + indentStep);
+                tid++;
             }
         }
     }
 
-    void EntityInspector::insSkyBox(std::string element, C78E::Entity& entity, uint32_t indent) {
+    void EntityInspector::insSkyBoxComponent(std::string element, C78E::Entity& entity, uint32_t indent) {
         element += "/SkyBoxComponent";
         auto& skyboxes = entity.getComponent<C78E::SkyBoxComponent>().skyboxes;
 
-        ImGui::TableNextRow(s_EntityInspectorTableHighlightRowFlags);
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("SkyBoxes", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(std::string("Show Textures").c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+        insDataOptToggleElement(element, "SkyBox Component", "Show SkyBoxes (" + std::to_string(skyboxes.size()) + ")", indent, s_EntityInspectorTableHighlightRowFlags);
 
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text("CubeMaps ");
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(skyboxes.size()).c_str());
-                //--------------------------------------------
-            }
-            for (auto& texture : skyboxes) {
-                insCubeMap(element, texture, indent + 1);
+        if (shouldShow(element)) {
+            uint32_t sid = 0;
+            for (C78E::AssetHandle skyboxHandle : skyboxes) {
+                insAsset(element, "Texture #" + std::to_string(sid), skyboxHandle, indent + indentStep);
+                sid++;
             }
         }
     }
 
-    void EntityInspector::insModel(std::string element, C78E::Asset<C78E::Model> model, uint32_t indent) {
-        element += "/Model";
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Name", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(model.getName().c_str());
-            //--------------------------------------------
-        }
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Source", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(model.getSource().c_str());
-            //--------------------------------------------
+
+
+
+    /*
+    * 
+    * Assets
+    * 
+    */
+
+    void EntityInspector::insAsset(std::string element, std::string title, C78E::AssetHandle assetHandle, uint32_t indent) {
+        element += title;
+
+        C78E::Asset::AssetMeta assetMeta = C78E::Project::getActive()->getEditorAssetManager()->getMeta(assetHandle);
+
+        insDataOptToggleElement<std::string>(element, title, assetMeta.name, indent);
+
+        if (shouldShow(element)) {
+            insData<C78E::AssetHandle>(element, "UUID", assetHandle, indent + indentStep); // TODO: DropDownMenu for Asset hotSwap of the same type
+            insData<std::string>(element, "Name", assetMeta.name, indent + indentStep); // TODO: DropDownMenu for Asset hotSwap of the same type
+            insData<std::string>(element, "Source", assetMeta.fileSource, indent + indentStep);
+
+            switch (assetMeta.type) {
+            case C78E::Asset::AssetType::None: C78_EDITOR_ERROR("EntityInspector::insAsset: Can't show AssetType::None!"); break;
+            case C78E::Asset::AssetType::Model: insModel(element, assetHandle, indent + indentStep); break;
+            case C78E::Asset::AssetType::Mesh: insMesh(element, assetHandle, indent + indentStep); break;
+            case C78E::Asset::AssetType::Material: insMaterial(element, assetHandle, indent + indentStep); break;
+            case C78E::Asset::AssetType::Shader: insShader(element, assetHandle, indent + indentStep); break;
+            case C78E::Asset::AssetType::Texture2D: insTexture(element, assetHandle, indent + indentStep); break;
+
+            default: C78_EDITOR_ERROR("EntityInspector::insAsset: Can't show Project or Scene!"); break;
+            }
+
         }
 
-        insMesh(element, model.getRef()->m_Mesh, indent + 1);
-        insMaterial(element, model.getRef()->m_Material, indent + 1);
     }
 
-    void EntityInspector::insMesh(std::string element, C78E::Asset<C78E::Mesh> mesh, uint32_t indent) {
-        element += "/Mesh";
+    void EntityInspector::insShader(std::string element, C78E::AssetHandle shaderHandle, uint32_t indent) {
+        C78E::Ref<C78E::Shader> shader = C78E::AssetManager::getAsset<C78E::Shader>(shaderHandle);
 
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Mesh", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(mesh.getName().c_str())) // TODO: HotSwap
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
-
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Name", indent + 1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(mesh.getName().c_str());
-                //--------------------------------------------
-            }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Source", indent + 1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(mesh.getSource().c_str());
-                //--------------------------------------------
-            }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Vertecies", indent + 1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(mesh.getRef()->m_Vertecies.size()).c_str());
-                //--------------------------------------------
-            }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Indecies", indent + 1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(mesh.getRef()->m_Indicies.size()).c_str());
-                //--------------------------------------------
-            }
-        }
+        //TODO: think about Shaders props
     }
 
-    void EntityInspector::insMaterial(std::string element, C78E::Asset<C78E::Material> material, uint32_t indent) {
-        element += "/Material";
 
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Material", indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(material.getName().c_str())) // TODO: HotSwap
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
+    void EntityInspector::insModel(std::string element, C78E::AssetHandle modelHandle, uint32_t indent) {
+        C78E::Ref<C78E::Model> modelRef = C78E::AssetManager::getAsset<C78E::Model>(modelHandle);
 
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Name", indent + 1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(material.getName().c_str());
-                //--------------------------------------------
-            }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Source", indent + 1).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(material.getSource().c_str());
-                //--------------------------------------------
-            }
+        std::string submodelBaseElement = element + "/submodels";
+        insDataOptToggleElement<std::string>(submodelBaseElement, "SubModels", "Show SubModels (" + std::to_string(modelRef->m_Parts.size()) + ")", indent, s_EntityInspectorTableHighlightRowFlags);
 
-            insShader(element, material.getRef()->getShader(), indent + 1);
+        if (shouldShow(submodelBaseElement)) {
+            uint32_t mid = 0;
+            for (C78E::Model::ModelPart modelPart : modelRef->m_Parts) {
+                std::string submodelElement = submodelBaseElement + "/" + std::to_string(mid);
 
-            // Material Textures
-            {
-                auto& matTextures = material.getRef()->getTextures();
+                C78E::AssetHandle meshHandle = modelPart.m_Mesh;
+                C78E::Ref<C78E::Mesh> meshRef = C78E::AssetManager::getAsset<C78E::Mesh>(meshHandle);
+                C78E::Asset::AssetMeta meshMeta = C78E::Project::getActive()->getEditorAssetManager()->getMeta(meshHandle);
 
-                ImGui::TableNextRow();
-                {
-                    ImGui::TableNextColumn();
-                    // Identifier
-                    ImGui::Text(indentStr("MaterialTextures", indent + 1).c_str());
-                    //--------------------------------------------
-                    ImGui::TableNextColumn();
-                    // Value
-                    ImGui::Text("");
-                    //--------------------------------------------
+                C78E::AssetHandle materialHandle = modelPart.m_Material;
+                C78E::Ref<C78E::Material> materialRef = C78E::AssetManager::getAsset<C78E::Material>(materialHandle);
+                C78E::Asset::AssetMeta materialMeta = C78E::Project::getActive()->getEditorAssetManager()->getMeta(materialHandle);
+
+                insDataOptToggleElement<std::string>(submodelElement, "SubModel #" + std::to_string(mid), "Show SubModel (" + meshMeta.name + "," + materialMeta.name + ")", indent + indentStep);
+                
+                if (shouldShow(submodelElement)) {
+                    insAsset(submodelElement, "Mesh", meshHandle, indent + 2 * indentStep);
+                    insAsset(submodelElement, "Material", materialHandle, indent + 2 * indentStep);
                 }
-
-                insMaterialTexture(element, "ambient", matTextures.ambient, matTextures.ambientOpt, indent + 2);
-                insMaterialTexture(element, "diffuse", matTextures.diffuse, matTextures.diffuseOpt, indent + 2);
-                insMaterialTexture(element, "specular", matTextures.specular, matTextures.specularOpt, indent + 2);
-                insMaterialTexture(element, "specularHighlight", matTextures.specularHighlight, matTextures.specularHighlightOpt, indent + 2);
-                insMaterialTexture(element, "bump", matTextures.bump, matTextures.bumpOpt, indent + 2);
-                insMaterialTexture(element, "displacement", matTextures.displacement, matTextures.displacementOpt, indent + 2);
-                insMaterialTexture(element, "alpha", matTextures.alpha, matTextures.alphaOpt, indent + 2);
-                insMaterialTexture(element, "reflection", matTextures.reflection, matTextures.reflectionOpt, indent + 2);
+                mid++;
             }
         }
     }
 
-    void EntityInspector::insTexture(std::string element, C78E::Asset<C78E::Texture2D> texture, uint32_t indent) {
-        element += "/Texture";
-        ImGui::TableNextRow();
+    void EntityInspector::insMesh(std::string element, C78E::AssetHandle meshHandle, uint32_t indent) {
+        C78E::Ref<C78E::Mesh> meshRef = C78E::AssetManager::getAsset<C78E::Mesh>(meshHandle);
+
+        insData<size_t>(element, "Vertecies", meshRef->m_Vertecies.size(), indent);
+        insData<size_t>(element, "Indecies", meshRef->m_Indicies.size(), indent);
+    }
+
+    void EntityInspector::insMaterial(std::string element, C78E::AssetHandle materialHandle, uint32_t indent) {
+        C78E::Ref<C78E::Material> materialRef = C78E::AssetManager::getAsset<C78E::Material>(materialHandle);
+        
+        insAsset(element, "Shader", materialRef->m_Shader, indent);
+
+        insData<uint32_t>(element, "Illumination Model", materialRef->m_IlluminationModel, indent);
+
+        //MaterialProperties
         {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Name", indent + 1).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(texture.getName().c_str());
-            //--------------------------------------------
-        }
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Source", indent + 1).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(texture.getSource().c_str());
-            //--------------------------------------------
-        }
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Texture", indent + 1).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(texture.getName().c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
+            std::string materialPropertiesElement = element + "/MaterialProperties";
+            C78E::Material::MaterialProperties& props = materialRef->m_MaterialProperties;
+            
+            insDataOptToggleElement<std::string>(materialPropertiesElement, "MaterialProperties", "Show", indent);
+
+            if (shouldShow(materialPropertiesElement)) {
+                insData<glm::vec3>(materialPropertiesElement, "Ambient (Ka)", props.ambient, indent);
+                insData<glm::vec3>(materialPropertiesElement, "Diffuse (Kd)", props.diffuse, indent);
+                insData<glm::vec3>(materialPropertiesElement, "Specular (Ks)", props.specular, indent);
+                insData<glm::vec3>(materialPropertiesElement, "Transmittance (Tf)", props.transmittance, indent);
+                insData<glm::vec3>(materialPropertiesElement, "Emission (Ke)", props.emission, indent);
+                insData<float>(materialPropertiesElement, "Shininess (Ns)", props.shininess, indent);
+                insData<float>(materialPropertiesElement, "Index Of Refraction (Ni)", props.ior, indent);
+                insData<float>(materialPropertiesElement, "Dissolve (d)", props.dissolve, indent);
+            }
         }
 
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Name", indent + 2).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(texture.getRef()->getName().c_str());
-                //--------------------------------------------
+        //MaterialTextures
+        {
+            std::string materialTexturesElement = element + "/MaterialTextures";
+            C78E::Material::MaterialTextures& texs = materialRef->m_MaterialTextures;
+
+            insDataOptToggleElement<std::string>(materialTexturesElement, "MaterialTextures", "Show", indent);
+
+            if (shouldShow(materialTexturesElement)) {
+                insAsset(materialTexturesElement, "Ambient (map_Ka)", texs.ambient, indent);
+                insAsset(materialTexturesElement, "Diffuse (map_Kd)", texs.diffuse, indent);
+                insAsset(materialTexturesElement, "Specular (map_Ks)", texs.specular, indent);
+                insAsset(materialTexturesElement, "Specular Highlight (map_Ns)", texs.specularHighlight, indent);
+                insAsset(materialTexturesElement, "Bump (map_bump)", texs.bump, indent);
+                insAsset(materialTexturesElement, "Displacment (disp)", texs.displacement, indent);
+                insAsset(materialTexturesElement, "Alpha (map_d)", texs.alpha, indent);
+                insAsset(materialTexturesElement, "Reflection (refl)", texs.reflection, indent);
             }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Width", indent + 2).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(texture.getRef()->getWidth()).c_str());
-                //--------------------------------------------
+        }
+
+        //MaterialPropertiesPBRext
+        {
+            std::string materialPropertiesPBRextElement = element + "/MaterialPropertiesPBRext";
+            C78E::Material::MaterialPropertiesPBRext& props = materialRef->m_MaterialPropertiesPBRext;
+
+            insDataOptToggleElement<std::string>(materialPropertiesPBRextElement, "MaterialPropertiesPBRext", "Show", indent);
+
+            if (shouldShow(materialPropertiesPBRextElement)) {
+                insData<float>(materialPropertiesPBRextElement, "Roughness", props.roughness, indent);
+                insData<float>(materialPropertiesPBRextElement, "Metallic", props.metallic, indent);
+                insData<float>(materialPropertiesPBRextElement, "Sheen", props.sheen, indent);
+                insData<float>(materialPropertiesPBRextElement, "Clearcoat_thickness", props.clearcoat_thickness, indent);
+                insData<float>(materialPropertiesPBRextElement, "Clearcoat_roughness", props.clearcoat_roughness, indent);
+                insData<float>(materialPropertiesPBRextElement, "Anisotropy", props.anisotropy, indent);
+                insData<float>(materialPropertiesPBRextElement, "Anisotropy Rotation", props.anisotropy_rotation, indent);
             }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Height", indent + 2).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(texture.getRef()->getHeight()).c_str());
-                //--------------------------------------------
-            }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Data", indent + 2).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImVec2 space = ImGui::GetContentRegionAvail();
-                ImGui::Image((ImTextureID)texture.getRef()->getRendererID(), space);
-                //--------------------------------------------
+        }
+
+        //MaterialTexturesPBRext
+        {
+            std::string materialTexturesPBRextElement = element + "/MaterialTexturesPBRext";
+            C78E::Material::MaterialTexturesPBRext& texs = materialRef->m_MaterialTexturesPBRext;
+
+            insDataOptToggleElement<std::string>(materialTexturesPBRextElement, "MaterialTexturesPBRext", "Show", indent);
+
+            if (shouldShow(materialTexturesPBRextElement)) {
+                insAsset(materialTexturesPBRextElement, "Roughness", texs.roughness, indent);
+                insAsset(materialTexturesPBRextElement, "Metallic", texs.metallic, indent);
+                insAsset(materialTexturesPBRextElement, "Sheen", texs.sheen, indent);
+                insAsset(materialTexturesPBRextElement, "Emissive", texs.emissive, indent);
+                insAsset(materialTexturesPBRextElement, "Normal", texs.normal, indent);
             }
         }
     }
 
-    void EntityInspector::insCubeMap(std::string element, C78E::Asset<C78E::CubeMap> texture, uint32_t indent) {
-        element += "/CubeMap";
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Name", indent + 1).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(texture.getName().c_str());
-            //--------------------------------------------
-        }
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Source", indent + 1).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            ImGui::Text(texture.getSource().c_str());
-            //--------------------------------------------
-        }
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr("Texture", indent + 1).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (ImGui::Button(texture.getName().c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
 
-        if (shouldShow(element + "/details")) {
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Name", indent + 2).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(texture.getRef()->getName().c_str());
-                //--------------------------------------------
-            }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Size", indent + 2).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImGui::Text(std::to_string(texture.getRef()->getSize()).c_str());
-                //--------------------------------------------
-            }
-            ImGui::TableNextRow();
-            {
-                ImGui::TableNextColumn();
-                // Identifier
-                ImGui::Text(indentStr("Data", indent + 2).c_str());
-                //--------------------------------------------
-                ImGui::TableNextColumn();
-                // Value
-                ImVec2 space = ImGui::GetContentRegionAvail();
-                ImGui::Image((ImTextureID)texture.getRef()->getRendererID(), space);
-                //--------------------------------------------
-            }
-        }
+    void EntityInspector::insTexture(std::string element, C78E::AssetHandle textureHandle, uint32_t indent) {
+        C78E::Ref<C78E::Texture> textureRef = C78E::AssetManager::getAsset<C78E::Texture>(textureHandle);
+            
+
     }
 
-    void EntityInspector::insMaterialTexture(std::string element, std::string name, std::string& texture, C78E::Texture::TextureOption option, uint32_t indent) {
-        element += "/MaterialTexture" + name;
-        ImGui::TableNextRow();
-        {
-            ImGui::TableNextColumn();
-            // Identifier
-            ImGui::Text(indentStr(name, indent).c_str());
-            //--------------------------------------------
-            ImGui::TableNextColumn();
-            // Value
-            if (texture == "") {
-                ImGui::Text("unset");
-                return;
-            }
-            if (ImGui::Button(("Show " + name).c_str()))
-                toggleShow(element + "/details");
-            //--------------------------------------------
-        }
-        if (shouldShow(element + "/details")) {
-            C78E::Asset<C78E::Texture2D> texAsset = C78E::AssetManager::getTexture2DAsset(texture);
-            insTexture(element, texAsset, indent + 1);
-        }
-    }
+    
 
     std::string EntityInspector::indentStr(std::string str, uint32_t ind) {
-        static const std::string indentationSpacer = "   ";
         for (uint32_t i = 0; i < ind; i++)
-            str = indentationSpacer + str;
+            str = indentChar + str;
         return str;
     }
 

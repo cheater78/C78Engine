@@ -78,7 +78,7 @@ namespace C78E {
 	* (optional)
 	*/
 	struct ModelComponent {
-		std::vector<AssetHandle> models;
+		AssetHandle model;
 	};
 
 	/*

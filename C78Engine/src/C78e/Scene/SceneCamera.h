@@ -12,7 +12,7 @@ namespace C78E {
 		virtual ~SceneCamera() = default;
 
 		
-		ProjectionType GetProjectionType() const { return m_ProjectionType; }
+		ProjectionType& GetProjectionType() { return m_ProjectionType; }
 		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; RecalculateProjection(); }
 
 

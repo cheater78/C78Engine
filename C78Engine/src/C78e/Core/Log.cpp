@@ -21,21 +21,40 @@ namespace C78E {
 		std::vector<spdlog::sink_ptr> sinks;
 		sinks.push_back(s_FileLoggerSink);
 		sinks.push_back(s_RingbufferSink);
-		auto coreSink = std::make_shared<spdlog::sinks::stderr_color_sink_mt>();
-		coreSink->set_pattern("%^[%T] %n: %v%$");
-		sinks.push_back(coreSink);
 
-		s_CoreLogger = std::make_shared<spdlog::logger>("C78E", sinks.begin(), sinks.end());
-		s_CoreLogger->set_level(spdlog::level::trace);
+		{
+			auto coreSink = std::make_shared<spdlog::sinks::stderr_color_sink_mt>();
+			coreSink->set_pattern("%^[%T] %n: %v%$");
+			sinks.push_back(coreSink);
 
-		sinks.pop_back();
-		auto appSink = std::make_shared<spdlog::sinks::stderr_color_sink_mt>();
-		appSink->set_pattern("%^[%T] %n: %v%$");
-		sinks.push_back(appSink);
+			s_CoreLogger = std::make_shared<spdlog::logger>("C78E", sinks.begin(), sinks.end());
+			s_CoreLogger->set_level(spdlog::level::trace);
 
+			sinks.pop_back();
+		}
 
-		s_ClientLogger = std::make_shared<spdlog::logger>("APP", sinks.begin(), sinks.end());
-		s_ClientLogger->set_level(spdlog::level::trace);
+		{
+			auto editorSink = std::make_shared<spdlog::sinks::stderr_color_sink_mt>();
+			editorSink->set_pattern("%^[%T] %n: %v%$");
+			sinks.push_back(editorSink);
+
+			s_EditorLogger = std::make_shared<spdlog::logger>("C78EDITOR", sinks.begin(), sinks.end());
+			s_EditorLogger->set_level(spdlog::level::trace);
+
+			sinks.pop_back();
+		}
+
+		{
+			auto appSink = std::make_shared<spdlog::sinks::stderr_color_sink_mt>();
+			appSink->set_pattern("%^[%T] %n: %v%$");
+			sinks.push_back(appSink);
+
+			s_ClientLogger = std::make_shared<spdlog::logger>("C78APP", sinks.begin(), sinks.end());
+			s_ClientLogger->set_level(spdlog::level::trace);
+
+			sinks.pop_back();
+		}
+
 	}
 
 
