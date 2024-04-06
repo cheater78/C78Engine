@@ -15,7 +15,7 @@ namespace C78E {
 		// Load from filepath
 		static Ref<Material> loadMaterial(const FilePath& path);
 	private:
-
+		static Ref<Material> loadWavefrontMaterial(const FilePath& path, const std::string& name);
 	};
 
 }

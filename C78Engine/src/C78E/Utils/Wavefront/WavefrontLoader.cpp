@@ -130,6 +130,35 @@ namespace C78E {
         return model;
     }
 
+    Ref<WavefrontLoader::WavefrontMaterial> WavefrontLoader::loadMaterial(FilePath file) {
+        C78_CORE_TRACE("WavefrontLoader::loadMaterial: loading File: {}", file.string());
+        std::string matId;
+        std::vector<tinyobj::material_t> materials;
+        std::map<std::string, int> matMap;
+        std::string warn;
+        std::string err = "";
+
+        tinyobj::MaterialFileReader reader(file.parent_path().string());
+        reader(matId, &materials, &matMap, &warn, &err);
+
+        if (!warn.empty()) C78_CORE_WARN("WavefrontLoader::loadMaterial: tinyobj warn:\n   {}", warn);
+
+        if (!err.empty()) {
+            C78_CORE_ERROR("WavefrontLoader::loadMaterial: Failed to load File: {} :\n   {}", file.string(), err);
+            C78_ASSERT(false);
+            return createRef<WavefrontMaterial>();
+        }
+
+        Ref<WavefrontMaterial> material = createRef<WavefrontMaterial>();
+        for (auto& kv : matMap) {
+            material->materialNames.emplace(kv.second, kv.first);
+            material->materials.emplace(kv.second, toMaterial(materials.at(kv.second)));
+            C78_CORE_TRACE("WavefrontLoader::loadMaterial:   - {}", kv.first);
+        }
+
+        return material;
+    }
+
 
     Ref<Material> WavefrontLoader::toMaterial(const tinyobj::material_t& material) {
         return createRef<Material>(
@@ -175,8 +204,7 @@ namespace C78E {
         };
     }
 
-    Material::MaterialPropertiesPBRext WavefrontLoader::toMaterialPropertiesPBRext(const tinyobj::material_t& material)
-    {
+    Material::MaterialPropertiesPBRext WavefrontLoader::toMaterialPropertiesPBRext(const tinyobj::material_t& material) {
         return {
             material.roughness,
             material.metallic,
@@ -188,8 +216,7 @@ namespace C78E {
         };
     }
 
-    Material::MaterialTexturesPBRext WavefrontLoader::toMaterialTexturesPBRext(const tinyobj::material_t& material)
-    {
+    Material::MaterialTexturesPBRext WavefrontLoader::toMaterialTexturesPBRext(const tinyobj::material_t& material) {
         return {
             material.ambient_texname,
             material.metallic_texname,

@@ -21,9 +21,13 @@ namespace C78E {
 			std::map<uint64_t, Ref<Material>> materials;
 			std::map<uint64_t, std::string> materialNames;
 		};
+		struct WavefrontMaterial {
+			std::map<uint64_t, Ref<Material>> materials;
+			std::map<uint64_t, std::string> materialNames;
+		};
 	public:
 		static Ref<WavefrontModel> loadModel(FilePath file);
-
+		static Ref<WavefrontMaterial> loadMaterial(FilePath file);
 	private:
 		WavefrontLoader() = delete;
 		WavefrontLoader(const WavefrontLoader& other) = delete;
