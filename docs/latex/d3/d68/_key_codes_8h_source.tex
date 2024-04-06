@@ -1,0 +1,150 @@
+\doxysection{Key\+Codes.\+h}
+\hypertarget{_key_codes_8h_source}{}\label{_key_codes_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/KeyCodes.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/KeyCodes.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keyword}{namespace\ }C78E}
+\DoxyCodeLine{00004\ \{}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{keyword}{using\ }KeyCode\ =\ uint16\_t;}
+\DoxyCodeLine{00006\ \ \ \ \ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{namespace\ }Key}
+\DoxyCodeLine{00008\ \ \ \ \ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ enum\ :\ KeyCode}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ From\ glfw3.h}}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ Space\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 32,}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ Apostrophe\ \ \ \ \ \ \ \ \ \ =\ 39,\ \textcolor{comment}{/*\ '\ */}}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ Comma\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 44,\ \textcolor{comment}{/*\ ,\ */}}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ Minus\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 45,\ \textcolor{comment}{/*\ -\/\ */}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ Period\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 46,\ \textcolor{comment}{/*\ .\ */}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ Slash\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 47,\ \textcolor{comment}{/*\ /\ */}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ D0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 48,\ \textcolor{comment}{/*\ 0\ */}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ D1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 49,\ \textcolor{comment}{/*\ 1\ */}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ D2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 50,\ \textcolor{comment}{/*\ 2\ */}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ D3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 51,\ \textcolor{comment}{/*\ 3\ */}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ D4\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 52,\ \textcolor{comment}{/*\ 4\ */}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ D5\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 53,\ \textcolor{comment}{/*\ 5\ */}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ D6\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 54,\ \textcolor{comment}{/*\ 6\ */}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ D7\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 55,\ \textcolor{comment}{/*\ 7\ */}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ D8\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 56,\ \textcolor{comment}{/*\ 8\ */}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ D9\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 57,\ \textcolor{comment}{/*\ 9\ */}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ Semicolon\ \ \ \ \ \ \ \ \ \ \ =\ 59,\ \textcolor{comment}{/*\ ;\ */}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ Equal\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 61,\ \textcolor{comment}{/*\ =\ */}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ A\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 65,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ B\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 66,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ C\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 67,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ D\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 68,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ E\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 69,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ F\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 70,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ G\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 71,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ H\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 72,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ I\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 73,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ J\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 74,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ K\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 75,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ L\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 76,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ M\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 77,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ N\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 78,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ O\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 79,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ P\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 80,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ Q\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 81,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ R\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 82,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ S\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 83,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ T\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 84,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ U\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 85,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ V\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 86,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ W\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 87,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ X\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 88,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ Y\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 89,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ Z\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 90,}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ LeftBracket\ \ \ \ \ \ \ \ \ =\ 91,\ \ \textcolor{comment}{/*\ [\ */}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ Backslash\ \ \ \ \ \ \ \ \ \ \ =\ 92,\ \ \textcolor{comment}{/*\ \(\backslash\)\ */}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ RightBracket\ \ \ \ \ \ \ \ =\ 93,\ \ \textcolor{comment}{/*\ ]\ */}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ GraveAccent\ \ \ \ \ \ \ \ \ =\ 96,\ \ \textcolor{comment}{/*\ \`{}\ */}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ World1\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 161,\ \textcolor{comment}{/*\ non-\/US\ \#1\ */}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ World2\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 162,\ \textcolor{comment}{/*\ non-\/US\ \#2\ */}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Function\ keys\ */}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ Escape\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 256,}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ Enter\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 257,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ Tab\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 258,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ Backspace\ \ \ \ \ \ \ \ \ \ \ =\ 259,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ Insert\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 260,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ Delete\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 261,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ Right\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 262,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ Left\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 263,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ Down\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 264,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ Up\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 265,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ PageUp\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 266,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ PageDown\ \ \ \ \ \ \ \ \ \ \ \ =\ 267,}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ Home\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 268,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ End\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 269,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ CapsLock\ \ \ \ \ \ \ \ \ \ \ \ =\ 280,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ ScrollLock\ \ \ \ \ \ \ \ \ \ =\ 281,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ NumLock\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 282,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ PrintScreen\ \ \ \ \ \ \ \ \ =\ 283,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ Pause\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 284,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ F1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 290,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ F2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 291,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ F3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 292,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ F4\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 293,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ F5\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 294,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ F6\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 295,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ F7\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 296,}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ F8\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 297,}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ F9\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 298,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ F10\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 299,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ F11\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 300,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ F12\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 301,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ F13\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 302,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ F14\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 303,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ F15\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 304,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ F16\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 305,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ F17\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 306,}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ F18\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 307,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ F19\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 308,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ F20\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 309,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ F21\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 310,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ F22\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 311,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ F23\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 312,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ F24\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 313,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ F25\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 314,}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Keypad\ */}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ KP0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 320,}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ KP1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 321,}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ KP2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 322,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ KP3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 323,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ KP4\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 324,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ KP5\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 325,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ KP6\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 326,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ KP7\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 327,}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ KP8\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 328,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ KP9\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 329,}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ KPDecimal\ \ \ \ \ \ \ \ \ \ \ =\ 330,}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ KPDivide\ \ \ \ \ \ \ \ \ \ \ \ =\ 331,}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ KPMultiply\ \ \ \ \ \ \ \ \ \ =\ 332,}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ KPSubtract\ \ \ \ \ \ \ \ \ \ =\ 333,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ KPAdd\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 334,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ KPEnter\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 335,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ KPEqual\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 336,}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ LeftShift\ \ \ \ \ \ \ \ \ \ \ =\ 340,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ LeftControl\ \ \ \ \ \ \ \ \ =\ 341,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ LeftAlt\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 342,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ LeftSuper\ \ \ \ \ \ \ \ \ \ \ =\ 343,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ RightShift\ \ \ \ \ \ \ \ \ \ =\ 344,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ RightControl\ \ \ \ \ \ \ \ =\ 345,}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ RightAlt\ \ \ \ \ \ \ \ \ \ \ \ =\ 346,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ RightSuper\ \ \ \ \ \ \ \ \ \ =\ 347,}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ Menu\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 348}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00143\ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,254 @@
+\doxysection{C78E\+::Open\+GLCube\+Map Class Reference}
+\hypertarget{class_c78_e_1_1_open_g_l_cube_map}{}\label{class_c78_e_1_1_open_g_l_cube_map}\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+
+
+Inheritance diagram for C78E\+::Open\+GLCube\+Map\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Open\+GLCube\+Map\+:
+% FIG 1
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_texture_aaa8068bce35e01740cfe8f623ba2be32}\label{class_c78_e_1_1_texture_aaa8068bce35e01740cfe8f623ba2be32} 
+enum {\bfseries Texture\+Type} \{ \newline
+{\bfseries FLAT}
+, {\bfseries SPHERE}
+, {\bfseries CUBE\+\_\+\+TOP}
+, {\bfseries CUBE\+\_\+\+BOTTOM}
+, \newline
+{\bfseries CUBE\+\_\+\+FRONT}
+, {\bfseries CUBE\+\_\+\+BACK}
+, {\bfseries CUBE\+\_\+\+LEFT}
+, {\bfseries CUBE\+\_\+\+RIGHT}
+ \}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e}\label{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e} 
+enum {\bfseries Asset\+Type} \+: uint8\+\_\+t \{ \newline
+{\bfseries None} = 0
+, {\bfseries Project} = 1
+, {\bfseries Scene} = 2
+, {\bfseries Texture2D}
+, \newline
+{\bfseries Shader}
+, {\bfseries Model}
+, {\bfseries Mesh}
+, {\bfseries Material}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_aed5faf1109ef2ec176d4bc4d3e7c7916}\label{class_c78_e_1_1_open_g_l_cube_map_aed5faf1109ef2ec176d4bc4d3e7c7916} 
+{\bfseries Open\+GLCube\+Map} (\mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{Cube\+Map\+::\+Texture\+Specification}} \&specification)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_a0e70a48be73fe4a5c6bee1ef6a5916f5}\label{class_c78_e_1_1_open_g_l_cube_map_a0e70a48be73fe4a5c6bee1ef6a5916f5} 
+{\bfseries Open\+GLCube\+Map} (std\+::vector$<$ \mbox{\hyperlink{class_c78_e_1_1_image}{Image}} $>$ \&images)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_ab353a9e66322a6e4b36254ec2b739a24}\label{class_c78_e_1_1_open_g_l_cube_map_ab353a9e66322a6e4b36254ec2b739a24} 
+{\bfseries Open\+GLCube\+Map} (Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_image}{Image}} $>$ cross\+Cube\+Map)
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map_ab6bf4c50bc90820b65250609047315ba}{get\+Size}} () const override
+\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map_aece5c0ab04569a75fbcaf2900186b6dd}{get\+Renderer\+ID}} () const override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map_abec2c30fe374dec82a6642df897a2bc7}{set\+Data}} (void \texorpdfstring{$\ast$}{*}data, uint32\+\_\+t size) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map_ab98a20129c72e73fbb3c86cd7b7a8bc3}{bind}} (uint32\+\_\+t slot=0) const override
+\item 
+virtual bool \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map_ac5cf4ff9858ed52abe9782903ce8318e}{is\+Loaded}} () const override
+\item 
+const \mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{Cube\+Map\+::\+Texture\+Specification}} \& \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map_a77ea99f5d625a34a77ed995ccfdbc63d}{get\+Specification}} () const override
+\item 
+bool \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map_a1dac77bd44867e98753b24fc6475fae0}{operator==}} (const \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}} \&other) const override
+\item 
+\Hypertarget{class_c78_e_1_1_texture_acf83be49b95c60bbe6f1b3b918adf9fa}\label{class_c78_e_1_1_texture_acf83be49b95c60bbe6f1b3b918adf9fa} 
+virtual Asset\+Type {\bfseries get\+Type} ()
+\item 
+\Hypertarget{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38}\label{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38} 
+virtual Asset\+Type {\bfseries get\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_cube_map_a58886b541590c6b0ffd28aa3bc91d6e4}\label{class_c78_e_1_1_cube_map_a58886b541590c6b0ffd28aa3bc91d6e4} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_cube_map}{Cube\+Map}} $>$ {\bfseries create} (std\+::vector$<$ \mbox{\hyperlink{class_c78_e_1_1_image}{Image}} $>$ \&images)
+\item 
+\Hypertarget{class_c78_e_1_1_cube_map_a33cdacf39ecfb8d8999aca3afa04eeb3}\label{class_c78_e_1_1_cube_map_a33cdacf39ecfb8d8999aca3afa04eeb3} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_cube_map}{Cube\+Map}} $>$ {\bfseries create} (Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_image}{Image}} $>$ cross\+Cube\+Map)
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}{file\+To\+Asset\+Type}} (const File\+Path \&file\+Path)
+\item 
+static std\+::string \mbox{\hyperlink{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}{asset\+Type\+To\+String}} (Asset\+Type type)
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}{asset\+Type\+From\+String}} (std\+::string str)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4}\label{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4} 
+\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{Asset\+Handle}} {\bfseries m\+\_\+\+Asset\+Handle}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::map$<$ File\+Path, Asset\+Type $>$ \mbox{\hyperlink{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}{c\+\_\+\+Asset\+Extension\+Map}}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1}\label{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1} 
+static const \mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset\+Meta}} {\bfseries c\+\_\+\+Null\+Asset\+Meta} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}\label{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!assetTypeFromString@{assetTypeFromString}}
+\index{assetTypeFromString@{assetTypeFromString}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{assetTypeFromString()}{assetTypeFromString()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::asset\+Type\+From\+String (\begin{DoxyParamCaption}\item[{std\+::string}]{str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Deserializes a std\+::string to Asset\+::\+Asset\+Type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & the string containing the serialized Asset\+::\+Asset\+Type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the deserialized Asset\+::\+Asset\+Type 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}\label{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!assetTypeToString@{assetTypeToString}}
+\index{assetTypeToString@{assetTypeToString}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{assetTypeToString()}{assetTypeToString()}}
+{\footnotesize\ttfamily std\+::string C78\+E\+::\+Asset\+::asset\+Type\+To\+String (\begin{DoxyParamCaption}\item[{Asset\+::\+Asset\+Type}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Serializes a Asset\+::\+Asset\+Type to a std\+::string.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the Asset\+::\+Asset\+Type to serialize \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the serialized Asset\+::\+Asset\+Type as std\+::string 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_ab98a20129c72e73fbb3c86cd7b7a8bc3}\label{class_c78_e_1_1_open_g_l_cube_map_ab98a20129c72e73fbb3c86cd7b7a8bc3} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!bind@{bind}}
+\index{bind@{bind}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{bind()}{bind()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLCube\+Map\+::bind (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{slot = {\ttfamily 0} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_texture}{C78\+E\+::\+Texture}}.
+
+\Hypertarget{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}\label{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!fileToAssetType@{fileToAssetType}}
+\index{fileToAssetType@{fileToAssetType}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{fileToAssetType()}{fileToAssetType()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::file\+To\+Asset\+Type (\begin{DoxyParamCaption}\item[{const File\+Path \&}]{file\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Determines the Asset\+::\+Asset\+Type of an arbituary file based on its extension, using the Asset\+::c\+\_\+\+Asset\+Extension\+Map.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Path} & the C78\+E\+::\+File\+Path of the file in question \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the Asset\+::\+Asset\+Type of the file 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_aece5c0ab04569a75fbcaf2900186b6dd}\label{class_c78_e_1_1_open_g_l_cube_map_aece5c0ab04569a75fbcaf2900186b6dd} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!getRendererID@{getRendererID}}
+\index{getRendererID@{getRendererID}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{getRendererID()}{getRendererID()}}
+{\footnotesize\ttfamily virtual uint32\+\_\+t C78\+E\+::\+Open\+GLCube\+Map\+::get\+Renderer\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_texture}{C78\+E\+::\+Texture}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_ab6bf4c50bc90820b65250609047315ba}\label{class_c78_e_1_1_open_g_l_cube_map_ab6bf4c50bc90820b65250609047315ba} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!getSize@{getSize}}
+\index{getSize@{getSize}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily uint32\+\_\+t C78\+E\+::\+Open\+GLCube\+Map\+::get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_cube_map}{C78\+E\+::\+Cube\+Map}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_a77ea99f5d625a34a77ed995ccfdbc63d}\label{class_c78_e_1_1_open_g_l_cube_map_a77ea99f5d625a34a77ed995ccfdbc63d} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!getSpecification@{getSpecification}}
+\index{getSpecification@{getSpecification}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{getSpecification()}{getSpecification()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{Cube\+Map\+::\+Texture\+Specification}} \& C78\+E\+::\+Open\+GLCube\+Map\+::get\+Specification (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_cube_map}{C78\+E\+::\+Cube\+Map}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_ac5cf4ff9858ed52abe9782903ce8318e}\label{class_c78_e_1_1_open_g_l_cube_map_ac5cf4ff9858ed52abe9782903ce8318e} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!isLoaded@{isLoaded}}
+\index{isLoaded@{isLoaded}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{isLoaded()}{isLoaded()}}
+{\footnotesize\ttfamily virtual bool C78\+E\+::\+Open\+GLCube\+Map\+::is\+Loaded (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_texture}{C78\+E\+::\+Texture}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_a1dac77bd44867e98753b24fc6475fae0}\label{class_c78_e_1_1_open_g_l_cube_map_a1dac77bd44867e98753b24fc6475fae0} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!operator==@{operator==}}
+\index{operator==@{operator==}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool C78\+E\+::\+Open\+GLCube\+Map\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_texture}{C78\+E\+::\+Texture}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_cube_map_abec2c30fe374dec82a6642df897a2bc7}\label{class_c78_e_1_1_open_g_l_cube_map_abec2c30fe374dec82a6642df897a2bc7} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!setData@{setData}}
+\index{setData@{setData}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{setData()}{setData()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLCube\+Map\+::set\+Data (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{data,  }\item[{uint32\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_texture}{C78\+E\+::\+Texture}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}\label{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346} 
+\index{C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}!c\_AssetExtensionMap@{c\_AssetExtensionMap}}
+\index{c\_AssetExtensionMap@{c\_AssetExtensionMap}!C78E::OpenGLCubeMap@{C78E::OpenGLCubeMap}}
+\doxysubsubsection{\texorpdfstring{c\_AssetExtensionMap}{c\_AssetExtensionMap}}
+{\footnotesize\ttfamily const std\+::map$<$ File\+Path, Asset\+::\+Asset\+Type $>$ C78\+E\+::\+Asset\+::c\+\_\+\+Asset\+Extension\+Map\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.pce"{}},\ Asset::AssetType::Project\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.sce"{}},\ Asset::AssetType::Scene\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.png"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpeg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.stl"{}},\ Asset::AssetType::Model\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.mtl"{}},\ Asset::AssetType::Material\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.glsl"{}},\ Asset::AssetType::Shader\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.hlsl"{}},\ Asset::AssetType::Shader\ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLTexture.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLTexture.\+cpp\end{DoxyCompactItemize}

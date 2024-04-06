@@ -1,0 +1,98 @@
+\doxysection{Open\+GLTexture.\+h}
+\hypertarget{_open_g_l_texture_8h_source}{}\label{_open_g_l_texture_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/Platform/OpenGL/OpenGLTexture.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/Platform/OpenGL/OpenGLTexture.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Assets/Texture/Texture.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <glad.h>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{static}\ GLenum\ toGLDataFormat(Image::ImageFormat\ format)\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (format)\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::R8:\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RED;}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::R32:\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RED\_INTEGER;}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RG8:\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RG;}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RGB8:\ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RGB;}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RGBA8:\ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RGBA;}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RGBA32F:\ \ \ \textcolor{keywordflow}{return}\ GL\_RGBA;}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::D24S8:\ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_DEPTH\_STENCIL\_ATTACHMENT;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ C78\_CORE\_ASSERT(\textcolor{keyword}{false});\ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ GLenum\ toGLInternalFormat(Image::ImageFormat\ format)\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (format)\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::R8:\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_R8;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::R32:\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_R32I;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RG8:\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RG8;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RGB8:\ \ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RGB8;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RGBA8:\ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_RGBA8;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::RGBA32F:\ \ \ \textcolor{keywordflow}{return}\ GL\_RGBA32F;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Image::ImageFormat::D24S8:\ \ \ \ \ \textcolor{keywordflow}{return}\ GL\_DEPTH24\_STENCIL8;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ C78\_CORE\_ASSERT(\textcolor{keyword}{false});\ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{OpenGLTexture2D}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_texture2_d}{Texture2D}}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{OpenGLTexture2D}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{Texture2D::TextureSpecification}}\&\ specification);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{OpenGLTexture2D}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{Texture2D::TextureSpecification}}\&\ specification,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_buffer}{Buffer}}\&\ data);}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{OpenGLTexture2D}}(\mbox{\hyperlink{class_c78_e_1_1_image}{Image}}\&\ image);}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{OpenGLTexture2D}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{OpenGLTexture2D}}\&)\ =\ \textcolor{keywordflow}{default};\ \textcolor{comment}{//\ Maybe\ needed!}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{\string~OpenGLTexture2D}}();}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_texture2_d}{OpenGLTexture2D}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{Texture2D::TextureSpecification}}\&\ specification,\ uint32\_t\ rendererID);\ \textcolor{comment}{//\ Do\ Not\ Use}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getWidth()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_Specification.width;\ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getHeight()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_Specification.height;\ \}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getRendererID()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_RendererID;\ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setData(\textcolor{keywordtype}{void}*\ data,\ uint32\_t\ size)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ bind(uint32\_t\ slot\ =\ 0)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ bindImage(uint32\_t\ binding\ =\ 0)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ isLoaded()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_IsLoaded;\ \}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{Texture2D::TextureSpecification}}\&\ getSpecification()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_Specification;\ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}}\&\ other)\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_RendererID\ ==\ other.getRendererID();\ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ uint32\_t\ m\_RendererID;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{Texture2D::TextureSpecification}}\ m\_Specification;}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_IsLoaded\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map}{OpenGLCubeMap}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_cube_map}{CubeMap}}\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map}{OpenGLCubeMap}}(\mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{CubeMap::TextureSpecification}}\&\ specification);}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map}{OpenGLCubeMap}}(std::vector<Image>\&\ images);}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map}{OpenGLCubeMap}}(Ref<Image>\ crossCubeMap);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_cube_map}{\string~OpenGLCubeMap}}();}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ uint32\_t\ getSize()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_Specification.size;\ \};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getRendererID()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_RendererID;\ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setData(\textcolor{keywordtype}{void}*\ data,\ uint32\_t\ size)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ bind(uint32\_t\ slot\ =\ 0)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ isLoaded()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_IsLoaded;\ \};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{CubeMap::TextureSpecification}}\&\ getSpecification()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_Specification;\ \};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}}\&\ other)\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ m\_RendererID\ ==\ other.getRendererID();\ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ uint32\_t\ m\_RendererID\ =\ 0;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{CubeMap::TextureSpecification}}\ m\_Specification;}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_IsLoaded\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00090\ \ \ \ \ \};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \}}
+
+\end{DoxyCode}

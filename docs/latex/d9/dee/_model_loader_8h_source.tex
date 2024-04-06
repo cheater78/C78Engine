@@ -1,0 +1,23 @@
+\doxysection{Model\+Loader.\+h}
+\hypertarget{_model_loader_8h_source}{}\label{_model_loader_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Model/ModelLoader.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Model/ModelLoader.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}Model.h"{}}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_model_loader}{ModelLoader}}\ \{}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00008\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ AssetMetadata\ filepath\ is\ relative\ to\ project\ asset\ directory}}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Model>\ importModel(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset::AssetMeta}}\&\ meta);}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Load\ from\ filepath}}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Model>\ loadModel(\textcolor{keyword}{const}\ FilePath\&\ path);}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Model>\ loadWavefrontModel(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset::AssetMeta}}\&\ meta);}
+\DoxyCodeLine{00015\ \ \ \ \ \};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \}}
+
+\end{DoxyCode}

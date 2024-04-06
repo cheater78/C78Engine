@@ -1,0 +1,66 @@
+\doxysection{C78E\+::Renderer Class Reference}
+\hypertarget{class_c78_e_1_1_renderer}{}\label{class_c78_e_1_1_renderer}\index{C78E::Renderer@{C78E::Renderer}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a87859a74a0f1d2a45ea730c1e4e00375}\label{class_c78_e_1_1_renderer_a87859a74a0f1d2a45ea730c1e4e00375} 
+enum {\bfseries Render\+Mode} \{ {\bfseries NONE}
+, {\bfseries RASTERIZE\+\_\+2D}
+, {\bfseries RASTERIZE\+\_\+3D}
+, {\bfseries RAYTRACE\+\_\+3D}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a29d884686b9bb8175bddc963bf6a9f60}\label{class_c78_e_1_1_renderer_a29d884686b9bb8175bddc963bf6a9f60} 
+static void {\bfseries init} (uint32\+\_\+t width, uint32\+\_\+t height)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a5e9db9a93c7a156fbff6892a6976a230}\label{class_c78_e_1_1_renderer_a5e9db9a93c7a156fbff6892a6976a230} 
+static void {\bfseries shutdown} ()
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a469868de5d7c4683203e7c809dd2f9a1}\label{class_c78_e_1_1_renderer_a469868de5d7c4683203e7c809dd2f9a1} 
+static void {\bfseries set\+Display\+Shader} (std\+::string name)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_ad2e1ef78a54765428e06fd98accfa288}\label{class_c78_e_1_1_renderer_ad2e1ef78a54765428e06fd98accfa288} 
+static void {\bfseries on\+Window\+Resize} (uint32\+\_\+t width, uint32\+\_\+t height)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a637e73fb35ae309edb02f57d2fa6c347}\label{class_c78_e_1_1_renderer_a637e73fb35ae309edb02f57d2fa6c347} 
+static void {\bfseries begin\+Scene} (\mbox{\hyperlink{class_c78_e_1_1_scene_camera}{Scene\+Camera}} \&camera)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a77615aace0a0fd36d249f8f419b5a940}\label{class_c78_e_1_1_renderer_a77615aace0a0fd36d249f8f419b5a940} 
+static void {\bfseries begin\+Scene} (\mbox{\hyperlink{class_c78_e_1_1_editor_camera}{Editor\+Camera}} \&camera)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a4d540cf10a68de85fbb65af4851f7d18}\label{class_c78_e_1_1_renderer_a4d540cf10a68de85fbb65af4851f7d18} 
+static void {\bfseries submit} (Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_scene}{Scene}} $>$ scene)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a393a8d6d3f745cc3153a38eabd7af2ff}\label{class_c78_e_1_1_renderer_a393a8d6d3f745cc3153a38eabd7af2ff} 
+static void {\bfseries submit} (Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}} $>$ entity)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_ae13c82208ea9e9867956d5576038cdc1}\label{class_c78_e_1_1_renderer_ae13c82208ea9e9867956d5576038cdc1} 
+static void {\bfseries end\+Scene} ()
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a10f59398973b88e55b379864ee242cc7}\label{class_c78_e_1_1_renderer_a10f59398973b88e55b379864ee242cc7} 
+static void {\bfseries render} ()
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_aeb29176b28a79337a45f1be59a1cfdeb}\label{class_c78_e_1_1_renderer_aeb29176b28a79337a45f1be59a1cfdeb} 
+static void {\bfseries display} ()
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a50cc93a2b81ff0f345b9fbfbcc352f1b}\label{class_c78_e_1_1_renderer_a50cc93a2b81ff0f345b9fbfbcc352f1b} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_texture2_d}{Texture2D}} $>$ {\bfseries get\+Result} ()
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a6c02e55e6198bd8313a779a6d10f2263}\label{class_c78_e_1_1_renderer_a6c02e55e6198bd8313a779a6d10f2263} 
+static void {\bfseries set\+Render\+Mode} (Render\+Mode mode)
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a52ec15f0962fc523007696acce8827ad}\label{class_c78_e_1_1_renderer_a52ec15f0962fc523007696acce8827ad} 
+static Render\+Mode {\bfseries get\+Render\+Mode} ()
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_ae28b86c0a6534aeb93a7b97a76342dc6}\label{class_c78_e_1_1_renderer_ae28b86c0a6534aeb93a7b97a76342dc6} 
+static Renderer\+API\+::\+API {\bfseries get\+API} ()
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Renderer/Renderer.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Renderer/Renderer.\+cpp\end{DoxyCompactItemize}

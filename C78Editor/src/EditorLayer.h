@@ -2,6 +2,10 @@
 #include <C78E.h>
 #include <C78Elibs.h>
 
+
+
+
+
 #include "Tools/FileManager.h"
 #include "Tools/EntityInspector.h"
 #include "Tools/Viewport.h"
@@ -9,6 +13,10 @@
 #include "Scene/EditorCamera.h"
 
 #include <C78E/Project/Project.h>
+
+
+
+#include "UI/ProjectManager.h"
 
 
 namespace C78Editor {
@@ -22,6 +30,9 @@ namespace C78Editor {
         { }
 
         void onAttach() {
+
+            ProjectManager::init();
+
             //Create Scene and Camera for the Editor
             m_EditorScene = C78E::createRef<C78E::Scene>();
             m_EditorCameraEntity = m_EditorScene->createEntity("EditorCamera;");
@@ -37,6 +48,10 @@ namespace C78Editor {
 
         void onUpdate(C78E::Timestep delta) override {
             m_LastFrameTime = delta;
+
+            ProjectManager::onUpdate();
+
+
 
             m_EditorScene->onViewportResize(m_Window.getWidth(), m_Window.getHeight());
             if (m_MouseCapture) {
@@ -55,6 +70,9 @@ namespace C78Editor {
         }
 
         bool onKeyPressed(C78E::KeyPressedEvent e) {
+
+            if(ProjectManager::onKeyPressedEvent(e)) return true;
+
             return false;
         }
 
@@ -66,6 +84,9 @@ namespace C78Editor {
         void onImGuiRender() override {
             if (!m_active) return;
             ImGui::DockSpaceOverViewport(); // For Editor -> one big root DockingSpace
+
+            if (ProjectManager::onImGuiRender()) return;
+
 
             {
                 ImGui::Begin("FrameInfo");
@@ -91,9 +112,6 @@ namespace C78Editor {
 
         C78E::Ref<C78E::Scene> m_EditorScene;
         C78E::Entity m_EditorCameraEntity;
-
-        C78E::Ref<C78E::Project> m_Project = nullptr;
-        
     };
 
 }

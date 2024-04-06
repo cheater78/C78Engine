@@ -36,7 +36,11 @@
 
 
 // Assets
+#include <C78E/Project/Project.h>
+
 #include "C78E/Assets/AssetManager.h"
+
+
 #include "C78E/Assets/Texture/Image.h"
 #include "C78E/Assets/Texture/TextureLoader.h"
 
@@ -46,6 +50,11 @@
 #include "C78E/Scene/ScriptableEntity.h"
 #include "C78E/Scene/SceneSerializer.h"
 #include "C78E/Renderer/GenericShape.h"
+
+
+// Utils
+#include <C78E/Utils/PlatformUtils.h>
+#include <C78E/Utils/yaml-cpp/YamlUtils.h>
 
 
 #ifdef C78E_ENTRYPOINT

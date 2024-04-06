@@ -1,20 +1,6 @@
 #pragma once
 
 /*
-* ImGui
-*/
-#include <imgui.h>
-
-/*
-* GLM
-*/
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-/*
 * Std
 */
 #include <iostream>
@@ -36,3 +22,22 @@
 
 #include <semaphore>
 #include <thread>
+
+/*
+* ImGui
+*/
+#include <imgui.h>
+
+/*
+* GLM
+*/
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+/*
+* YAML
+*/
+#include <yaml-cpp/yaml.h>

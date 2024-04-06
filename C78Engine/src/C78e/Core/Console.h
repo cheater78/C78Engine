@@ -32,7 +32,7 @@ namespace C78E {
 
     private:
         std::string m_Title = "";
-        bool m_Visible = true;
+        bool m_Visible = false;
         //TODO: make variable
         KeyCode m_ToggleVisibleKey = Key::RightControl;
 

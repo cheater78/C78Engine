@@ -3,8 +3,7 @@
 
 namespace C78E {
 
-	Buffer FileSystem::ReadFileBinary(const FilePath& filepath)
-	{
+	Buffer FileSystem::readFileBinary(const FilePath& filepath) {
 		std::ifstream stream(filepath, std::ios::binary | std::ios::ate);
 
 		if (!stream) {

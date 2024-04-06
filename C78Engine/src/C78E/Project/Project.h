@@ -27,6 +27,8 @@ namespace C78E {
 
 		static Ref<Project> getActive() { return s_ActiveProject; }
 
+		static void close() { s_ActiveProject = nullptr; }
+
 		static const FilePath& getActiveProjectDirectory() {
 			C78_CORE_ASSERT(s_ActiveProject);
 			return s_ActiveProject->getProjectDirectory();

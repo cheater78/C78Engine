@@ -1,0 +1,47 @@
+\doxysection{Orthographic\+Camera\+Controller.\+h}
+\hypertarget{_orthographic_camera_controller_8h_source}{}\label{_orthographic_camera_controller_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/OrthographicCameraController.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/OrthographicCameraController.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Renderer/OrthographicCamera.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Timestep.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}C78E/Events/ApplicationEvent.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}C78E/Events/MouseEvent.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_orthographic_camera_controller}{OrthographicCameraController}}}
+\DoxyCodeLine{00012\ \ \ \ \ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_orthographic_camera_controller}{OrthographicCameraController}}(\textcolor{keywordtype}{float}\ aspectRatio,\ \textcolor{keywordtype}{bool}\ rotation\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ OnUpdate(\mbox{\hyperlink{class_c78_e_1_1_timestep}{Timestep}}\ ts);}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ OnEvent(\mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\&\ e);}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ OnResize(\textcolor{keywordtype}{float}\ width,\ \textcolor{keywordtype}{float}\ height);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_orthographic_camera}{OrthographicCamera}}\&\ GetCamera()\ \{\ \textcolor{keywordflow}{return}\ m\_Camera;\ \}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_orthographic_camera}{OrthographicCamera}}\&\ GetCamera()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Camera;\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ GetZoomLevel()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_ZoomLevel;\ \}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetZoomLevel(\textcolor{keywordtype}{float}\ level)\ \{\ m\_ZoomLevel\ =\ level;\ \}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ OnMouseScrolled(\mbox{\hyperlink{class_c78_e_1_1_mouse_scrolled_event}{MouseScrolledEvent}}\&\ e);}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ OnWindowResized(\mbox{\hyperlink{class_c78_e_1_1_window_resize_event}{WindowResizeEvent}}\&\ e);}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ m\_AspectRatio;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ m\_ZoomLevel\ =\ 1.0f;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_orthographic_camera}{OrthographicCamera}}\ m\_Camera;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_Rotation;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ glm::vec3\ m\_CameraPosition\ =\ \{\ 0.0f,\ 0.0f,\ 0.0f\ \};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ m\_CameraRotation\ =\ 0.0f;\ \textcolor{comment}{//In\ degrees,\ in\ the\ anti-\/clockwise\ direction}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ m\_CameraTranslationSpeed\ =\ 5.0f,\ m\_CameraRotationSpeed\ =\ 180.0f;}
+\DoxyCodeLine{00039\ \ \ \ \ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \}}
+
+\end{DoxyCode}

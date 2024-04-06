@@ -1,0 +1,41 @@
+\doxysection{Layer\+Stack.\+h}
+\hypertarget{_layer_stack_8h_source}{}\label{_layer_stack_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/LayerStack.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/LayerStack.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Core.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Layer.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_layer_stack}{LayerStack}}}
+\DoxyCodeLine{00011\ \ \ \ \ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_layer_stack}{LayerStack}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_layer_stack}{\string~LayerStack}}();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ pushLayer(Ref<Layer>\ layer);}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ pushOverlay(Ref<Layer>\ overlay);}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ popLayer(Ref<Layer>\ layer);}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ popOverlay(Ref<Layer>\ overlay);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::iterator\ begin()\ \{\ \textcolor{keywordflow}{return}\ m\_Layers.begin();\ \}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::iterator\ end()\ \{\ \textcolor{keywordflow}{return}\ m\_Layers.end();\ \}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::reverse\_iterator\ rbegin()\ \{\ \textcolor{keywordflow}{return}\ m\_Layers.rbegin();\ \}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::reverse\_iterator\ rend()\ \{\ \textcolor{keywordflow}{return}\ m\_Layers.rend();\ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::const\_iterator\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Layers.begin();\ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::const\_iterator\ end()\textcolor{keyword}{\ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Layers.end();\ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::const\_reverse\_iterator\ rbegin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Layers.rbegin();\ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>::const\_reverse\_iterator\ rend()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Layers.rend();\ \}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ std::vector<Ref<Layer>>\ m\_Layers;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ m\_LayerInsertIndex\ =\ 0;}
+\DoxyCodeLine{00033\ \ \ \ \ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,140 @@
+\doxysection{Buffer.\+h}
+\hypertarget{_renderer_2_buffer_8h_source}{}\label{_renderer_2_buffer_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/Buffer.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/Buffer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{keyword}{enum\ class}\ ShaderDataType}
+\DoxyCodeLine{00006\ \ \ \ \ \{}
+\DoxyCodeLine{00007\ \ \ \ \ \ \ \ \ None\ =\ 0,\ Float,\ Float2,\ Float3,\ Float4,\ Mat3,\ Mat4,\ Int,\ Int2,\ Int3,\ Int4,\ Bool}
+\DoxyCodeLine{00008\ \ \ \ \ \};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{static}\ uint32\_t\ ShaderDataTypeSize(ShaderDataType\ type)}
+\DoxyCodeLine{00011\ \ \ \ \ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (type)}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float:\ \ \ \ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float2:\ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 2;}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float3:\ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 3;}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float4:\ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 4;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Mat3:\ \ \ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 3\ *\ 3;}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Mat4:\ \ \ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 4\ *\ 4;}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int:\ \ \ \ \ \ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int2:\ \ \ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 2;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int3:\ \ \ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 3;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int4:\ \ \ \ \ \textcolor{keywordflow}{return}\ 4\ *\ 4;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Bool:\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ C78\_CORE\_ASSERT(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}Unknown\ ShaderDataType!"{}});}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00029\ \ \ \ \ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_buffer_element}{BufferElement}}}
+\DoxyCodeLine{00032\ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::string\ Name;}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ ShaderDataType\ Type;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ uint32\_t\ Size;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ Offset;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ Normalized;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_buffer_element}{BufferElement}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_buffer_element}{BufferElement}}(ShaderDataType\ type,\ \textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keywordtype}{bool}\ normalized\ =\ \textcolor{keyword}{false})}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Name(name),\ Type(type),\ Size(ShaderDataTypeSize(type)),\ Offset(0),\ Normalized(normalized)}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ uint32\_t\ GetComponentCount()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{\ \ \ \ \ \ \ \ }\{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (Type)}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float:\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float2:\ \ \textcolor{keywordflow}{return}\ 2;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float3:\ \ \textcolor{keywordflow}{return}\ 3;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Float4:\ \ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Mat3:\ \ \ \ \textcolor{keywordflow}{return}\ 3;\ \textcolor{comment}{//\ 3*\ float3}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Mat4:\ \ \ \ \textcolor{keywordflow}{return}\ 4;\ \textcolor{comment}{//\ 4*\ float4}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int:\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int2:\ \ \ \ \textcolor{keywordflow}{return}\ 2;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int3:\ \ \ \ \textcolor{keywordflow}{return}\ 3;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Int4:\ \ \ \ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ShaderDataType::Bool:\ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ C78\_CORE\_ASSERT(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}Unknown\ ShaderDataType!"{}});}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_buffer_layout}{BufferLayout}}}
+\DoxyCodeLine{00069\ \ \ \ \ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_buffer_layout}{BufferLayout}}()\ \{\}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_buffer_layout}{BufferLayout}}(std::initializer\_list<BufferElement>\ elements)}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ :\ m\_Elements(elements)}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ CalculateOffsetsAndStride();}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ uint32\_t\ GetStride()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Stride;\ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<BufferElement>\&\ GetElements()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Elements;\ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ std::vector<BufferElement>::iterator\ begin()\ \{\ \textcolor{keywordflow}{return}\ m\_Elements.begin();\ \}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ std::vector<BufferElement>::iterator\ end()\ \{\ \textcolor{keywordflow}{return}\ m\_Elements.end();\ \}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ std::vector<BufferElement>::const\_iterator\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Elements.begin();\ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ std::vector<BufferElement>::const\_iterator\ end()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Elements.end();\ \}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ CalculateOffsetsAndStride()}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ offset\ =\ 0;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ m\_Stride\ =\ 0;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ element\ :\ m\_Elements)}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ element.Offset\ =\ offset;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset\ +=\ element.Size;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_Stride\ +=\ element.Size;}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ std::vector<BufferElement>\ m\_Elements;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ uint32\_t\ m\_Stride\ =\ 0;}
+\DoxyCodeLine{00101\ \ \ \ \ \};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_vertex_buffer}{VertexBuffer}}}
+\DoxyCodeLine{00104\ \ \ \ \ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_c78_e_1_1_vertex_buffer}{\string~VertexBuffer}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Bind()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Unbind()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetData(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ data,\ uint32\_t\ size)\ =\ 0;}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_buffer_layout}{BufferLayout}}\&\ GetLayout()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetLayout(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_buffer_layout}{BufferLayout}}\&\ layout)\ =\ 0;}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<VertexBuffer>\ Create(uint32\_t\ size);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<VertexBuffer>\ Create(\textcolor{keywordtype}{float}*\ vertices,\ uint32\_t\ size);}
+\DoxyCodeLine{00118\ \ \ \ \ \};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{//\ Currently\ C78E\ only\ supports\ 32-\/bit\ index\ buffers}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_index_buffer}{IndexBuffer}}}
+\DoxyCodeLine{00122\ \ \ \ \ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_c78_e_1_1_index_buffer}{\string~IndexBuffer}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Bind()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Unbind()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ GetCount()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<IndexBuffer>\ Create(uint32\_t*\ indices,\ uint32\_t\ count);}
+\DoxyCodeLine{00132\ \ \ \ \ \};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \}}
+
+\end{DoxyCode}

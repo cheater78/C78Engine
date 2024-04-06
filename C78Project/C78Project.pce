@@ -1,0 +1,6 @@
+Project:
+  Name: C78Project
+  StartScene: 0
+  AssetDirectory: ./C78Project/assets
+  AssetRegistryPath: ./C78Project/assets/AssetRegistry.yml
+  ScriptModulePath: ./C78Project/assets/scripts

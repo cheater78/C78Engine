@@ -1,0 +1,316 @@
+\doxysection{C78E\+::Open\+GLShader Class Reference}
+\hypertarget{class_c78_e_1_1_open_g_l_shader}{}\label{class_c78_e_1_1_open_g_l_shader}\index{C78E::OpenGLShader@{C78E::OpenGLShader}}
+
+
+Inheritance diagram for C78E\+::Open\+GLShader\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Open\+GLShader\+:
+% FIG 1
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e}\label{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e} 
+enum {\bfseries Asset\+Type} \+: uint8\+\_\+t \{ \newline
+{\bfseries None} = 0
+, {\bfseries Project} = 1
+, {\bfseries Scene} = 2
+, {\bfseries Texture2D}
+, \newline
+{\bfseries Shader}
+, {\bfseries Model}
+, {\bfseries Mesh}
+, {\bfseries Material}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a6c18a6d63f1ce5a403ea217d2d56fbfe}\label{class_c78_e_1_1_open_g_l_shader_a6c18a6d63f1ce5a403ea217d2d56fbfe} 
+{\bfseries Open\+GLShader} (const std\+::string \&filepath)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a631c0fa7e4342bc4584b1b437fa352e3}\label{class_c78_e_1_1_open_g_l_shader_a631c0fa7e4342bc4584b1b437fa352e3} 
+{\bfseries Open\+GLShader} (const std\+::string \&name, const std\+::string \&vertex\+Src, const std\+::string \&fragment\+Src)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a547ce1b661baefb6d4ea71388b5c175b}\label{class_c78_e_1_1_open_g_l_shader_a547ce1b661baefb6d4ea71388b5c175b} 
+{\bfseries Open\+GLShader} (const std\+::string \&name, const std\+::string \&compute\+Src)
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_a1f2b9b021206ad6c7db98923ac4d1c98}{Bind}} () const override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_a2283df453193dc58301274c29c32a11c}{Bind\+Compute}} (uint32\+\_\+t x=1, uint32\+\_\+t y=1, uint32\+\_\+t z=1) const override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_aa4d14afdf1ed920308f120be18f61688}{Unbind}} () const override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_a0112dcc441a3da08007f467ac9fb0e48}{Set\+Int}} (const std\+::string \&name, int value) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_a88b4a1a8be3d6a672390af4dd1730d6b}{Set\+Int\+Array}} (const std\+::string \&name, int \texorpdfstring{$\ast$}{*}values, uint32\+\_\+t count) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_aa5b2b582a498360d9cf1bc492fbbd84b}{Set\+Float}} (const std\+::string \&name, float value) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_afd60e033f4278ebb1f84f7ba3b0dd704}{Set\+Float2}} (const std\+::string \&name, const glm\+::vec2 \&value) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_a081243e9c6f3fd5e3e11801277edeee7}{Set\+Float3}} (const std\+::string \&name, const glm\+::vec3 \&value) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_a651948a58d04e18bfa71d496024f2491}{Set\+Float4}} (const std\+::string \&name, const glm\+::vec4 \&value) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_ad986ef461cc1ba9261383ef06de67984}{Set\+Mat4}} (const std\+::string \&name, const glm\+::mat4 \&value) override
+\item 
+virtual const std\+::string \& \mbox{\hyperlink{class_c78_e_1_1_open_g_l_shader_a33fc1567cd266ca236c15d8534961f87}{get\+Name}} () const override
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a61963824ef0c821b4819fece72db7f16}\label{class_c78_e_1_1_open_g_l_shader_a61963824ef0c821b4819fece72db7f16} 
+void {\bfseries Upload\+Uniform\+Int} (const std\+::string \&name, int value)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a961785eebb3113845c8a758644a97571}\label{class_c78_e_1_1_open_g_l_shader_a961785eebb3113845c8a758644a97571} 
+void {\bfseries Upload\+Uniform\+Int\+Array} (const std\+::string \&name, int \texorpdfstring{$\ast$}{*}values, uint32\+\_\+t count)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a9a308d6bcd378bfff583a8fe20e583b2}\label{class_c78_e_1_1_open_g_l_shader_a9a308d6bcd378bfff583a8fe20e583b2} 
+void {\bfseries Upload\+Uniform\+Float} (const std\+::string \&name, float value)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a40ab7b86b98a7a4ed12e619ddcf6a7c4}\label{class_c78_e_1_1_open_g_l_shader_a40ab7b86b98a7a4ed12e619ddcf6a7c4} 
+void {\bfseries Upload\+Uniform\+Float2} (const std\+::string \&name, const glm\+::vec2 \&value)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_aefed876de0438d0f0bd75c2969d2ccf4}\label{class_c78_e_1_1_open_g_l_shader_aefed876de0438d0f0bd75c2969d2ccf4} 
+void {\bfseries Upload\+Uniform\+Float3} (const std\+::string \&name, const glm\+::vec3 \&value)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a5790da55bb3fcc4ab9e73594f0649cd9}\label{class_c78_e_1_1_open_g_l_shader_a5790da55bb3fcc4ab9e73594f0649cd9} 
+void {\bfseries Upload\+Uniform\+Float4} (const std\+::string \&name, const glm\+::vec4 \&value)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_ac0928b9f252586d127284adbf259c04f}\label{class_c78_e_1_1_open_g_l_shader_ac0928b9f252586d127284adbf259c04f} 
+void {\bfseries Upload\+Uniform\+Mat3} (const std\+::string \&name, const glm\+::mat3 \&matrix)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a82e09f4b232101994690270b94d605c8}\label{class_c78_e_1_1_open_g_l_shader_a82e09f4b232101994690270b94d605c8} 
+void {\bfseries Upload\+Uniform\+Mat4} (const std\+::string \&name, const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{class_c78_e_1_1_shader_ad6b03a39de834132090c0d37f97710b1}\label{class_c78_e_1_1_shader_ad6b03a39de834132090c0d37f97710b1} 
+Asset\+::\+Asset\+Type {\bfseries get\+Type} ()
+\item 
+\Hypertarget{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38}\label{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38} 
+virtual Asset\+Type {\bfseries get\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_shader_a2f3a8b51584e61934d6575aaf661a251}\label{class_c78_e_1_1_shader_a2f3a8b51584e61934d6575aaf661a251} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_shader}{Shader}} $>$ {\bfseries create} (const std\+::string \&filepath)
+\item 
+\Hypertarget{class_c78_e_1_1_shader_a3cd49b24d3d0deda8f153b347d144f14}\label{class_c78_e_1_1_shader_a3cd49b24d3d0deda8f153b347d144f14} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_shader}{Shader}} $>$ {\bfseries create} (const std\+::string \&name, const std\+::string \&vertex\+Src, const std\+::string \&fragment\+Src)
+\item 
+\Hypertarget{class_c78_e_1_1_shader_a4d10f61f01a99b46fd75b2b44b17af93}\label{class_c78_e_1_1_shader_a4d10f61f01a99b46fd75b2b44b17af93} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_shader}{Shader}} $>$ {\bfseries create} (const std\+::string \&name, const std\+::string \&compute\+Src)
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}{file\+To\+Asset\+Type}} (const File\+Path \&file\+Path)
+\item 
+static std\+::string \mbox{\hyperlink{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}{asset\+Type\+To\+String}} (Asset\+Type type)
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}{asset\+Type\+From\+String}} (std\+::string str)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4}\label{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4} 
+\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{Asset\+Handle}} {\bfseries m\+\_\+\+Asset\+Handle}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::map$<$ File\+Path, Asset\+Type $>$ \mbox{\hyperlink{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}{c\+\_\+\+Asset\+Extension\+Map}}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1}\label{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1} 
+static const \mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset\+Meta}} {\bfseries c\+\_\+\+Null\+Asset\+Meta} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}\label{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!assetTypeFromString@{assetTypeFromString}}
+\index{assetTypeFromString@{assetTypeFromString}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{assetTypeFromString()}{assetTypeFromString()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::asset\+Type\+From\+String (\begin{DoxyParamCaption}\item[{std\+::string}]{str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Deserializes a std\+::string to Asset\+::\+Asset\+Type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & the string containing the serialized Asset\+::\+Asset\+Type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the deserialized Asset\+::\+Asset\+Type 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}\label{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!assetTypeToString@{assetTypeToString}}
+\index{assetTypeToString@{assetTypeToString}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{assetTypeToString()}{assetTypeToString()}}
+{\footnotesize\ttfamily std\+::string C78\+E\+::\+Asset\+::asset\+Type\+To\+String (\begin{DoxyParamCaption}\item[{Asset\+::\+Asset\+Type}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Serializes a Asset\+::\+Asset\+Type to a std\+::string.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the Asset\+::\+Asset\+Type to serialize \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the serialized Asset\+::\+Asset\+Type as std\+::string 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a1f2b9b021206ad6c7db98923ac4d1c98}\label{class_c78_e_1_1_open_g_l_shader_a1f2b9b021206ad6c7db98923ac4d1c98} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!Bind@{Bind}}
+\index{Bind@{Bind}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{Bind()}{Bind()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Bind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a2283df453193dc58301274c29c32a11c}\label{class_c78_e_1_1_open_g_l_shader_a2283df453193dc58301274c29c32a11c} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!BindCompute@{BindCompute}}
+\index{BindCompute@{BindCompute}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{BindCompute()}{BindCompute()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Bind\+Compute (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{x = {\ttfamily 1},  }\item[{uint32\+\_\+t}]{y = {\ttfamily 1},  }\item[{uint32\+\_\+t}]{z = {\ttfamily 1} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}\label{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!fileToAssetType@{fileToAssetType}}
+\index{fileToAssetType@{fileToAssetType}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{fileToAssetType()}{fileToAssetType()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::file\+To\+Asset\+Type (\begin{DoxyParamCaption}\item[{const File\+Path \&}]{file\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Determines the Asset\+::\+Asset\+Type of an arbituary file based on its extension, using the Asset\+::c\+\_\+\+Asset\+Extension\+Map.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Path} & the C78\+E\+::\+File\+Path of the file in question \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the Asset\+::\+Asset\+Type of the file 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a33fc1567cd266ca236c15d8534961f87}\label{class_c78_e_1_1_open_g_l_shader_a33fc1567cd266ca236c15d8534961f87} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!getName@{getName}}
+\index{getName@{getName}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily virtual const std\+::string \& C78\+E\+::\+Open\+GLShader\+::get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_aa5b2b582a498360d9cf1bc492fbbd84b}\label{class_c78_e_1_1_open_g_l_shader_aa5b2b582a498360d9cf1bc492fbbd84b} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!SetFloat@{SetFloat}}
+\index{SetFloat@{SetFloat}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{SetFloat()}{SetFloat()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Set\+Float (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{float}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_afd60e033f4278ebb1f84f7ba3b0dd704}\label{class_c78_e_1_1_open_g_l_shader_afd60e033f4278ebb1f84f7ba3b0dd704} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!SetFloat2@{SetFloat2}}
+\index{SetFloat2@{SetFloat2}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{SetFloat2()}{SetFloat2()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Set\+Float2 (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const glm\+::vec2 \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a081243e9c6f3fd5e3e11801277edeee7}\label{class_c78_e_1_1_open_g_l_shader_a081243e9c6f3fd5e3e11801277edeee7} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!SetFloat3@{SetFloat3}}
+\index{SetFloat3@{SetFloat3}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{SetFloat3()}{SetFloat3()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Set\+Float3 (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const glm\+::vec3 \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a651948a58d04e18bfa71d496024f2491}\label{class_c78_e_1_1_open_g_l_shader_a651948a58d04e18bfa71d496024f2491} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!SetFloat4@{SetFloat4}}
+\index{SetFloat4@{SetFloat4}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{SetFloat4()}{SetFloat4()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Set\+Float4 (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const glm\+::vec4 \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a0112dcc441a3da08007f467ac9fb0e48}\label{class_c78_e_1_1_open_g_l_shader_a0112dcc441a3da08007f467ac9fb0e48} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!SetInt@{SetInt}}
+\index{SetInt@{SetInt}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{SetInt()}{SetInt()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Set\+Int (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{int}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_a88b4a1a8be3d6a672390af4dd1730d6b}\label{class_c78_e_1_1_open_g_l_shader_a88b4a1a8be3d6a672390af4dd1730d6b} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!SetIntArray@{SetIntArray}}
+\index{SetIntArray@{SetIntArray}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{SetIntArray()}{SetIntArray()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Set\+Int\+Array (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{int \texorpdfstring{$\ast$}{*}}]{values,  }\item[{uint32\+\_\+t}]{count }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_ad986ef461cc1ba9261383ef06de67984}\label{class_c78_e_1_1_open_g_l_shader_ad986ef461cc1ba9261383ef06de67984} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!SetMat4@{SetMat4}}
+\index{SetMat4@{SetMat4}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{SetMat4()}{SetMat4()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Set\+Mat4 (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const glm\+::mat4 \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_shader_aa4d14afdf1ed920308f120be18f61688}\label{class_c78_e_1_1_open_g_l_shader_aa4d14afdf1ed920308f120be18f61688} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!Unbind@{Unbind}}
+\index{Unbind@{Unbind}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{Unbind()}{Unbind()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLShader\+::\+Unbind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_shader}{C78\+E\+::\+Shader}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}\label{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346} 
+\index{C78E::OpenGLShader@{C78E::OpenGLShader}!c\_AssetExtensionMap@{c\_AssetExtensionMap}}
+\index{c\_AssetExtensionMap@{c\_AssetExtensionMap}!C78E::OpenGLShader@{C78E::OpenGLShader}}
+\doxysubsubsection{\texorpdfstring{c\_AssetExtensionMap}{c\_AssetExtensionMap}}
+{\footnotesize\ttfamily const std\+::map$<$ File\+Path, Asset\+::\+Asset\+Type $>$ C78\+E\+::\+Asset\+::c\+\_\+\+Asset\+Extension\+Map\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.pce"{}},\ Asset::AssetType::Project\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.sce"{}},\ Asset::AssetType::Scene\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.png"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpeg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.stl"{}},\ Asset::AssetType::Model\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.mtl"{}},\ Asset::AssetType::Material\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.glsl"{}},\ Asset::AssetType::Shader\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.hlsl"{}},\ Asset::AssetType::Shader\ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLShader.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLShader.\+cpp\end{DoxyCompactItemize}

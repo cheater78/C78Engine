@@ -1,0 +1,43 @@
+\doxysection{Entry\+Point.\+h}
+\hypertarget{_entry_point_8h_source}{}\label{_entry_point_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/EntryPoint.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/EntryPoint.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Application.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifdef\ C78\_PLATFORM\_WINDOWS}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{class_c78_e_1_1_application}{C78E::Application}}*\ C78E::createApplication();}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keywordtype}{int}\ main(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}**\ argv)}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ C78E::Log::init();}
+\DoxyCodeLine{00012\ \ \ \ \ C78\_CORE\_INFO(\textcolor{stringliteral}{"{}Logger\ started..."{}});}
+\DoxyCodeLine{00013\ \ \ \ \ C78\_INFO(\textcolor{stringliteral}{"{}Logger\ started..."{}});}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{auto}\ app\ =\ C78E::createApplication();}
+\DoxyCodeLine{00016\ \ \ \ \ app-\/>run();}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{delete}\ app;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00019\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#elif\ C78\_PLATFORM\_LINUX}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{class_c78_e_1_1_application}{C78E::Application}}*\ C78E::createApplication();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keywordtype}{int}\ main(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}**\ argv)}
+\DoxyCodeLine{00026\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ C78E::Log::init();}
+\DoxyCodeLine{00028\ \ \ \ \ C78\_CORE\_INFO(\textcolor{stringliteral}{"{}Logger\ started..."{}});}
+\DoxyCodeLine{00029\ \ \ \ \ C78\_INFO(\textcolor{stringliteral}{"{}Logger\ started..."{}});}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{auto}\ app\ =\ C78E::createApplication();}
+\DoxyCodeLine{00032\ \ \ \ \ app-\/>run();}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{delete}\ app;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00035\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ C78\_PLATFORM\_WINDOWS}}
+
+\end{DoxyCode}

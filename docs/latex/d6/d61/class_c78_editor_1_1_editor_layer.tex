@@ -1,0 +1,99 @@
+\doxysection{C78\+Editor\+::Editor\+Layer Class Reference}
+\hypertarget{class_c78_editor_1_1_editor_layer}{}\label{class_c78_editor_1_1_editor_layer}\index{C78Editor::EditorLayer@{C78Editor::EditorLayer}}
+
+
+Inheritance diagram for C78\+Editor\+::Editor\+Layer\+:
+% FIG 0
+
+
+Collaboration diagram for C78\+Editor\+::Editor\+Layer\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_editor_1_1_editor_layer_af5982c78503575c1b594b8b0c11cef1b}\label{class_c78_editor_1_1_editor_layer_af5982c78503575c1b594b8b0c11cef1b} 
+{\bfseries Editor\+Layer} (\mbox{\hyperlink{class_c78_e_1_1_window}{C78\+E\+::\+Window}} \&window)
+\item 
+void \mbox{\hyperlink{class_c78_editor_1_1_editor_layer_a72731f92a9d6ef068c22556f3d1d6f23}{on\+Attach}} ()
+\item 
+void \mbox{\hyperlink{class_c78_editor_1_1_editor_layer_a712c1b53083168e826a8a8188f5ffa11}{on\+Detach}} ()
+\item 
+void \mbox{\hyperlink{class_c78_editor_1_1_editor_layer_ad3b6109a49a40446b28ec2611d674449}{on\+Update}} (\mbox{\hyperlink{class_c78_e_1_1_timestep}{C78\+E\+::\+Timestep}} delta) override
+\item 
+void \mbox{\hyperlink{class_c78_editor_1_1_editor_layer_ad646bbb5c748d76ec0138af45ae5ff73}{on\+Event}} (\mbox{\hyperlink{class_c78_e_1_1_event}{C78\+E\+::\+Event}} \&e) override
+\item 
+\Hypertarget{class_c78_editor_1_1_editor_layer_ad6fe5190947f23bb13bf70e08a9cbe2e}\label{class_c78_editor_1_1_editor_layer_ad6fe5190947f23bb13bf70e08a9cbe2e} 
+bool {\bfseries on\+Key\+Pressed} (\mbox{\hyperlink{class_c78_e_1_1_key_pressed_event}{C78\+E\+::\+Key\+Pressed\+Event}} e)
+\item 
+\Hypertarget{class_c78_editor_1_1_editor_layer_ac56e90920f2331b0a9de2eacd9821149}\label{class_c78_editor_1_1_editor_layer_ac56e90920f2331b0a9de2eacd9821149} 
+bool {\bfseries on\+Window\+Resize} (\mbox{\hyperlink{class_c78_e_1_1_window_resize_event}{C78\+E\+::\+Window\+Resize\+Event}} e)
+\item 
+void \mbox{\hyperlink{class_c78_editor_1_1_editor_layer_ace0a35c681d51e02af720fd4830ea2b7}{on\+Im\+Gui\+Render}} () override
+\item 
+\Hypertarget{class_c78_e_1_1_layer_a18364200c060c5146225a8c66b10ceb5}\label{class_c78_e_1_1_layer_a18364200c060c5146225a8c66b10ceb5} 
+const std\+::string \& {\bfseries get\+Name} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_layer_ab725efbad7c30d4c3016afc24976c1b3}\label{class_c78_e_1_1_layer_ab725efbad7c30d4c3016afc24976c1b3} 
+std\+::string {\bfseries m\+\_\+\+Debug\+Name}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_editor_1_1_editor_layer_a72731f92a9d6ef068c22556f3d1d6f23}\label{class_c78_editor_1_1_editor_layer_a72731f92a9d6ef068c22556f3d1d6f23} 
+\index{C78Editor::EditorLayer@{C78Editor::EditorLayer}!onAttach@{onAttach}}
+\index{onAttach@{onAttach}!C78Editor::EditorLayer@{C78Editor::EditorLayer}}
+\doxysubsubsection{\texorpdfstring{onAttach()}{onAttach()}}
+{\footnotesize\ttfamily void C78\+Editor\+::\+Editor\+Layer\+::on\+Attach (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_c78_editor_1_1_editor_layer_a712c1b53083168e826a8a8188f5ffa11}\label{class_c78_editor_1_1_editor_layer_a712c1b53083168e826a8a8188f5ffa11} 
+\index{C78Editor::EditorLayer@{C78Editor::EditorLayer}!onDetach@{onDetach}}
+\index{onDetach@{onDetach}!C78Editor::EditorLayer@{C78Editor::EditorLayer}}
+\doxysubsubsection{\texorpdfstring{onDetach()}{onDetach()}}
+{\footnotesize\ttfamily void C78\+Editor\+::\+Editor\+Layer\+::on\+Detach (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_c78_editor_1_1_editor_layer_ad646bbb5c748d76ec0138af45ae5ff73}\label{class_c78_editor_1_1_editor_layer_ad646bbb5c748d76ec0138af45ae5ff73} 
+\index{C78Editor::EditorLayer@{C78Editor::EditorLayer}!onEvent@{onEvent}}
+\index{onEvent@{onEvent}!C78Editor::EditorLayer@{C78Editor::EditorLayer}}
+\doxysubsubsection{\texorpdfstring{onEvent()}{onEvent()}}
+{\footnotesize\ttfamily void C78\+Editor\+::\+Editor\+Layer\+::on\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c78_e_1_1_event}{C78\+E\+::\+Event}} \&}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_c78_editor_1_1_editor_layer_ace0a35c681d51e02af720fd4830ea2b7}\label{class_c78_editor_1_1_editor_layer_ace0a35c681d51e02af720fd4830ea2b7} 
+\index{C78Editor::EditorLayer@{C78Editor::EditorLayer}!onImGuiRender@{onImGuiRender}}
+\index{onImGuiRender@{onImGuiRender}!C78Editor::EditorLayer@{C78Editor::EditorLayer}}
+\doxysubsubsection{\texorpdfstring{onImGuiRender()}{onImGuiRender()}}
+{\footnotesize\ttfamily void C78\+Editor\+::\+Editor\+Layer\+::on\+Im\+Gui\+Render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_c78_editor_1_1_editor_layer_ad3b6109a49a40446b28ec2611d674449}\label{class_c78_editor_1_1_editor_layer_ad3b6109a49a40446b28ec2611d674449} 
+\index{C78Editor::EditorLayer@{C78Editor::EditorLayer}!onUpdate@{onUpdate}}
+\index{onUpdate@{onUpdate}!C78Editor::EditorLayer@{C78Editor::EditorLayer}}
+\doxysubsubsection{\texorpdfstring{onUpdate()}{onUpdate()}}
+{\footnotesize\ttfamily void C78\+Editor\+::\+Editor\+Layer\+::on\+Update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c78_e_1_1_timestep}{C78\+E\+::\+Timestep}}}]{delta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Editor/src/Editor\+Layer.\+h\end{DoxyCompactItemize}

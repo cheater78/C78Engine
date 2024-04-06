@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   Asset.cpp
+ * \brief  Implentation of class Asset
+ * 
+ * \author c78
+ * \date   April 2024
+ *********************************************************************/
 #include "C78ePCH.h"
 #include "Asset.h"
 
@@ -20,6 +27,13 @@ namespace C78E {
 		{ ".hlsl", Asset::AssetType::Shader }
 	};
 
+	/**
+	 * Determines the Asset::AssetType of an arbituary file based on its extension,
+	 * using the Asset::c_AssetExtensionMap.
+	 * 
+	 * \param filePath the C78E::FilePath of the file in question
+	 * \return the Asset::AssetType of the file
+	 */
 	Asset::AssetType Asset::fileToAssetType(const FilePath& filePath) {
 		if (c_AssetExtensionMap.find(filePath.extension()) == c_AssetExtensionMap.end()) {
 			C78_CORE_ERROR("File \"{}\" is not supported as an Asset, cannot fetch AssetType!", filePath);
@@ -28,22 +42,12 @@ namespace C78E {
 		return c_AssetExtensionMap.at(filePath.extension());
 	}
 
-
-	Asset::AssetType Asset::assetTypeFromString(std::string str) {
-		if (str == "AssetType::Project")	return AssetType::Project;
-		if (str == "AssetType::Scene")		return AssetType::Scene;
-
-		if (str == "AssetType::Texture2D")	return AssetType::Texture2D;
-
-		if (str == "AssetType::Shader")		return AssetType::Shader;
-
-		if (str == "AssetType::Model")		return AssetType::Model;
-		if (str == "AssetType::Mesh")		return AssetType::Mesh;
-		if (str == "AssetType::Material")	return AssetType::Material;
-
-		return AssetType::None;
-	}
-
+	/**
+	 * Serializes a Asset::AssetType to a std::string.
+	 * 
+	 * \param type the Asset::AssetType to serialize
+	 * \return the serialized Asset::AssetType as std::string
+	 */
 	std::string Asset::assetTypeToString(Asset::AssetType type) {
 		switch (type) {
 		case C78E::Asset::AssetType::None:			return "AssetType::None";
@@ -61,6 +65,27 @@ namespace C78E {
 
 		default: return "AssetType::None";
 		}
+	}
+
+	/**
+	 * Deserializes a std::string to Asset::AssetType.
+	 * 
+	 * \param str the string containing the serialized Asset::AssetType
+	 * \return the deserialized Asset::AssetType
+	 */
+	Asset::AssetType Asset::assetTypeFromString(std::string str) {
+		if (str == "AssetType::Project")	return AssetType::Project;
+		if (str == "AssetType::Scene")		return AssetType::Scene;
+
+		if (str == "AssetType::Texture2D")	return AssetType::Texture2D;
+
+		if (str == "AssetType::Shader")		return AssetType::Shader;
+
+		if (str == "AssetType::Model")		return AssetType::Model;
+		if (str == "AssetType::Mesh")		return AssetType::Mesh;
+		if (str == "AssetType::Material")	return AssetType::Material;
+
+		return AssetType::None;
 	}
 
 }

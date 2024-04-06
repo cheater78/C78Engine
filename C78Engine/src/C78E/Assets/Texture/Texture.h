@@ -68,6 +68,7 @@ namespace C78E {
 		};
 	public:
 		static Ref<Texture2D> create(const TextureSpecification& specification);
+		static Ref<Texture2D> create(const TextureSpecification& specification, const Buffer& data);
 		static Ref<Texture2D> create(const TextureSpecification& specification, uint32_t rendererID);
 		static Ref<Texture2D> create(Image& image);
 		

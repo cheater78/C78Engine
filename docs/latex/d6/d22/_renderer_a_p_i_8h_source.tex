@@ -1,0 +1,51 @@
+\doxysection{Renderer\+API.\+h}
+\hypertarget{_renderer_a_p_i_8h_source}{}\label{_renderer_a_p_i_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/RendererAPI.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/RendererAPI.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Renderer/VertexArray.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{RendererAPI}}\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ API\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ None\ =\ 0,\ OpenGL\ =\ 1,\ Vulkan\ =\ 2,\ DIRECTX\ =\ 3,\ METAL\ =\ 4}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ DepthFunc\ :\ uint32\_t\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ NEVER\ =\ 0,\ LESS\ =\ 1,\ EQUAL\ =\ 2,\ LEQUAL\ =\ 3,\ GREATER\ =\ 4,\ NOTEQUAL\ =\ 5,\ GEQUAL\ =\ 6,\ ALWAYS\ =\ 7}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ ShaderStage\ :\ uint32\_t\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ VERTEX\ =\ 0,\ TESSELATION\ =\ 1,\ TESSEVALUATION\ =\ 2,\ GEOMETRY\ =\ 3,\ FRAGMENT\ =\ 4,\ COMPUTE\ =\ 5}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{\string~RendererAPI}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ init()\ =\ 0;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getMaxTextureSlots(ShaderStage\ stage)\ =\ 0;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setViewport(uint32\_t\ x,\ uint32\_t\ y,\ uint32\_t\ width,\ uint32\_t\ height)\ =\ 0;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setClearColor(\textcolor{keyword}{const}\ glm::vec4\&\ color)\ =\ 0;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ enableDepthTest(\textcolor{keywordtype}{bool}\ enable)\ =\ 0;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setDepthFunc(DepthFunc\ func)\ =\ 0;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setDepthWrite(\textcolor{keywordtype}{bool}\ enable)\ =\ 0;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ clear()\ =\ 0;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ drawIndexed(\textcolor{keyword}{const}\ Ref<VertexArray>\&\ vertexArray,\ uint32\_t\ indexCount\ =\ 0)\ =\ 0;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ drawLines(\textcolor{keyword}{const}\ Ref<VertexArray>\&\ vertexArray,\ uint32\_t\ vertexCount)\ =\ 0;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setLineWidth(\textcolor{keywordtype}{float}\ width)\ =\ 0;}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ API\ getAPI()\ \{\ \textcolor{keywordflow}{return}\ s\_API;\ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Scope<RendererAPI>\ create();}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ API\ s\_API;}
+\DoxyCodeLine{00043\ \ \ \ \ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}}
+
+\end{DoxyCode}

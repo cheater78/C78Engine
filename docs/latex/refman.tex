@@ -1,0 +1,487 @@
+  % Handle batch mode
+  % to overcome problems with too many open files
+  \let\mypdfximage\pdfximage\def\pdfximage{\immediate\mypdfximage}
+  \pdfminorversion=7
+  % Set document class depending on configuration
+  \documentclass[twoside]{book}
+  %% moved from doxygen.sty due to workaround for LaTex 2019 version and unmaintained tabu package
+  \usepackage{ifthen}
+  \ifx\requestedLaTeXdate\undefined
+    \usepackage{array}
+  \else
+    \usepackage{array}[=2016-10-06]
+  \fi
+  %%
+  % Packages required by doxygen
+  \makeatletter
+  \providecommand\IfFormatAtLeastTF{\@ifl@t@r\fmtversion}
+  % suppress package identification of infwarerr as it contains the word "warning"
+  \let\@@protected@wlog\protected@wlog
+  \def\protected@wlog#1{\wlog{package info suppressed}}
+  \RequirePackage{infwarerr}
+  \let\protected@wlog\@@protected@wlog
+  \makeatother
+  \IfFormatAtLeastTF{2016/01/01}{}{\usepackage{fixltx2e}} % for \textsubscript
+  \IfFormatAtLeastTF{2015/01/01}{\pdfsuppresswarningpagegroup=1}{}
+  \usepackage{doxygen}
+  \usepackage{graphicx}
+  \usepackage[utf8]{inputenc}
+  \usepackage{makeidx}
+  \PassOptionsToPackage{warn}{textcomp}
+  \usepackage{textcomp}
+  \usepackage[nointegrals]{wasysym}
+  \usepackage{ifxetex}
+  % NLS support packages
+  % Define default fonts
+  % Font selection
+  \usepackage[T1]{fontenc}
+  % set main and monospaced font
+  \usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+\renewcommand{\familydefault}{\sfdefault}
+  \doxyallsectionsfont{%
+    \fontseries{bc}\selectfont%
+    \color{darkgray}%
+  }
+  \renewcommand{\DoxyLabelFont}{%
+    \fontseries{bc}\selectfont%
+    \color{darkgray}%
+  }
+  \newcommand{\+}{\discretionary{\mbox{\scriptsize$\hookleftarrow$}}{}{}}
+   % Arguments of doxygenemoji:
+   % 1) ':<text>:' form of the emoji, already LaTeX-escaped
+   % 2) file with the name of the emoji without the .png extension
+   % in case image exist use this otherwise use the ':<text>:' form
+   \newcommand{\doxygenemoji}[2]{%
+     \IfFileExists{./#2.png}{\raisebox{-0.1em}{\includegraphics[height=0.9em]{./#2.png}}}{#1}%
+   }
+  % Page & text layout
+  \usepackage{geometry}
+  \geometry{%
+    a4paper,%
+    top=2.5cm,%
+    bottom=2.5cm,%
+    left=2.5cm,%
+    right=2.5cm%
+  }
+  \usepackage{changepage}
+  % Allow a bit of overflow to go unnoticed by other means
+  \tolerance=750
+  \hfuzz=15pt
+  \hbadness=750
+  \setlength{\emergencystretch}{15pt}
+  \setlength{\parindent}{0cm}
+  \newcommand{\doxynormalparskip}{\setlength{\parskip}{3ex plus 2ex minus 2ex}}
+  \newcommand{\doxytocparskip}{\setlength{\parskip}{1ex plus 0ex minus 0ex}}
+  \doxynormalparskip
+  % Redefine paragraph/subparagraph environments, using sectsty fonts
+  \makeatletter
+  \renewcommand{\paragraph}{%
+    \@startsection{paragraph}{4}{0ex}{-1.0ex}{1.0ex}{%
+      \normalfont\normalsize\bfseries\SS@parafont%
+    }%
+  }
+  \renewcommand{\subparagraph}{%
+    \@startsection{subparagraph}{5}{0ex}{-1.0ex}{1.0ex}{%
+      \normalfont\normalsize\bfseries\SS@subparafont%
+    }%
+  }
+  \makeatother
+  \makeatletter
+  \newcommand\hrulefilll{\leavevmode\leaders\hrule\hskip 0pt plus 1filll\kern\z@}
+  \makeatother
+  % Headers & footers
+  \usepackage{fancyhdr}
+  \pagestyle{fancyplain}
+  \renewcommand{\footrulewidth}{0.4pt}
+  \fancypagestyle{fancyplain}{
+    \fancyhf{}
+    \fancyhead[LE, RO]{\bfseries\thepage}
+    \fancyhead[LO]{\bfseries\rightmark}
+    \fancyhead[RE]{\bfseries\leftmark}
+    \fancyfoot[LO, RE]{\bfseries\scriptsize Generated on Sat Apr 6 2024 15\+:48\+:51 for C78\+Engine by Doxygen }
+  }
+  \fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[LO, RE]{\bfseries\scriptsize Generated on Sat Apr 6 2024 15\+:48\+:51 for C78\+Engine by Doxygen }
+    \renewcommand{\headrulewidth}{0pt}
+  }
+  \pagestyle{fancyplain}
+  \renewcommand{\chaptermark}[1]{%
+    \markboth{#1}{}%
+  }
+  \renewcommand{\sectionmark}[1]{%
+    \markright{\thesection\ #1}%
+  }
+  % ToC, LoF, LoT, bibliography, and index
+  % Indices & bibliography
+  \usepackage{natbib}
+  \usepackage[titles]{tocloft}
+  \setcounter{tocdepth}{3}
+  \setcounter{secnumdepth}{5}
+  % creating indexes
+  \makeindex
+  \usepackage{newunicodechar}
+  \makeatletter
+    \def\doxynewunicodechar#1#2{%
+    \@tempswafalse
+    \edef\nuc@tempa{\detokenize{#1}}%
+    \if\relax\nuc@tempa\relax
+      \nuc@emptyargerr
+    \else
+      \edef\@tempb{\expandafter\@car\nuc@tempa\@nil}%
+      \nuc@check
+      \if@tempswa
+        \@namedef{u8:\nuc@tempa}{#2}%
+      \fi
+    \fi
+  }
+  \makeatother
+  \doxynewunicodechar{⁻}{${}^{-}$}% Superscript minus
+  \doxynewunicodechar{²}{${}^{2}$}% Superscript two
+  \doxynewunicodechar{³}{${}^{3}$}% Superscript three
+  % Hyperlinks
+    % Hyperlinks (required, but should be loaded last)
+    \ifpdf
+      \usepackage[pdftex,pagebackref=true]{hyperref}
+    \else
+      \ifxetex
+        \usepackage[pagebackref=true]{hyperref}
+      \else
+        \usepackage[ps2pdf,pagebackref=true]{hyperref}
+      \fi
+    \fi
+    \hypersetup{%
+      colorlinks=true,%
+      linkcolor=blue,%
+      citecolor=blue,%
+      unicode,%
+      pdftitle={C78\+Engine},%
+      pdfsubject={}%
+    }
+  % Custom commands used by the header
+  % Custom commands
+  \newcommand{\clearemptydoublepage}{%
+    \newpage{\pagestyle{empty}\cleardoublepage}%
+  }
+  % caption style definition
+  \usepackage{caption}
+  \captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
+  % in page table of contents
+  \IfFormatAtLeastTF{2023/05/01}{\usepackage[deeplevels]{etoc}}{\usepackage[deeplevels]{etoc_doxygen}}
+  \etocsettocstyle{\doxytocparskip}{\doxynormalparskip}
+  \etocsetlevel{subsubsubsection}{4}
+  \etocsetlevel{subsubsubsubsection}{5}
+  \etocsetlevel{subsubsubsubsubsection}{6}
+  \etocsetlevel{subsubsubsubsubsubsection}{7}
+  \etocsetlevel{paragraph}{8}
+  \etocsetlevel{subparagraph}{9}
+  % prevent numbers overlap the titles in toc
+  \renewcommand{\numberline}[1]{#1~}
+% End of preamble, now comes the document contents
+%===== C O N T E N T S =====
+\begin{document}
+  \raggedbottom
+  % Titlepage & ToC
+    % To avoid duplicate page anchors due to reuse of same numbers for
+    % the index (be it as roman numbers)
+    \hypersetup{pageanchor=false,
+                bookmarksnumbered=true,
+                pdfencoding=unicode
+               }
+  \pagenumbering{alph}
+  \begin{titlepage}
+  \vspace*{7cm}
+  \begin{center}%
+  {\Large C78\+Engine}\\
+  [1ex]\large v0.\+0 \\
+  \vspace*{1cm}
+  {\large Generated on Sat Apr 6 2024 15\+:48\+:51 for C78\+Engine by Doxygen 1.10.0}\\
+    \vspace*{0.5cm}
+    {\small Sat Apr 6 2024 15:48:51}
+  \end{center}
+  \end{titlepage}
+  \clearemptydoublepage
+  \pagenumbering{roman}
+  \tableofcontents
+  \clearemptydoublepage
+  \pagenumbering{arabic}
+  % re-enable anchors again
+  \hypersetup{pageanchor=true}
+%--- Begin generated contents ---
+\chapter{Hierarchical Index}
+\input{hierarchy}
+\chapter{Class Index}
+\input{annotated}
+\chapter{File Index}
+\input{files}
+\chapter{Class Documentation}
+\input{de/d55/struct_c78_e_1_1_ambient_light}
+\input{d0/dc0/class_applayer}
+\input{d1/ddd/class_c78_e_1_1_application}
+\input{d4/dc4/class_c78_e_1_1_app_render_event}
+\input{dc/df5/class_c78_e_1_1_app_tick_event}
+\input{d9/d9e/class_c78_e_1_1_app_update_event}
+\input{da/d85/class_c78_e_1_1_asset}
+\input{d6/d0e/class_c78_e_1_1_asset_loader}
+\input{d7/d80/class_c78_e_1_1_asset_manager}
+\input{d7/d2c/class_c78_e_1_1_asset_manager_base}
+\input{d2/d32/struct_c78_e_1_1_asset_1_1_asset_meta}
+\input{df/d5e/struct_c78_e_1_1_buffer}
+\input{d2/d2c/struct_c78_e_1_1_buffer_element}
+\input{d4/ded/class_c78_e_1_1_buffer_layout}
+\input{d2/d42/class_c78_app}
+\input{db/d5d/class_c78_editor_1_1_c78_editor}
+\input{d8/dbc/class_c78_e_1_1_camera}
+\input{d6/db5/struct_c78_e_1_1_camera_component}
+\input{df/dc1/struct_c78_e_1_1_camera_uniform}
+\input{d3/db3/struct_c78_e_1_1_circle_renderer_component}
+\input{d1/d88/struct_c78_e_1_1_component_group}
+\input{d3/da6/class_c78_e_1_1_console}
+\input{da/d8c/struct_y_a_m_l_1_1convert_3_01_c78_e_1_1_u_u_i_d_01_4}
+\input{de/d94/struct_y_a_m_l_1_1convert_3_01glm_1_1vec2_01_4}
+\input{d3/de2/struct_y_a_m_l_1_1convert_3_01glm_1_1vec3_01_4}
+\input{dc/d4c/struct_y_a_m_l_1_1convert_3_01glm_1_1vec4_01_4}
+\input{dc/d26/class_c78_e_1_1_generic_shape_1_1_cube}
+\input{d9/da8/class_c78_e_1_1_cube_map}
+\input{d5/d65/class_c78_e_1_1_generic_shape_1_1_cube_map}
+\input{d1/d53/struct_c78_e_1_1_direct_light}
+\input{d0/ddf/class_c78_e_1_1_editor_asset_manager}
+\input{d4/de6/class_c78_e_1_1_editor_camera}
+\input{de/dca/class_c78_editor_1_1_editor_camera}
+\input{d6/d61/class_c78_editor_1_1_editor_layer}
+\input{d8/d36/class_c78_editor_1_1_editor_main_menu}
+\input{d0/df4/class_c78_editor_1_1_editor_main_menu_bar}
+\input{de/d3f/class_c78_e_1_1_entity}
+\input{d0/d88/class_c78_editor_1_1_entity_inspector}
+\input{da/d41/struct_c78_e_1_1_entity_model_uniform}
+\input{d5/d13/class_c78_e_1_1_event}
+\input{d3/d79/class_c78_e_1_1_event_dispatcher}
+\input{df/de8/class_c78_e_1_1_file_dialogs}
+\input{dc/d7a/class_c78_editor_1_1_file_manager}
+\input{d8/d5d/class_c78_e_1_1_file_system}
+\input{d3/d47/class_c78_e_1_1_framebuffer}
+\input{d7/d89/struct_c78_e_1_1_framebuffer_attachment_specification}
+\input{db/d08/struct_c78_e_1_1_framebuffer_specification}
+\input{d7/d1a/struct_c78_e_1_1_framebuffer_texture_specification}
+\input{df/d19/class_c78_e_1_1_graphics_context}
+\input{d8/dcf/structstd_1_1hash}
+\input{df/dc4/structstd_1_1hash_3_01_c78_e_1_1_u_u_i_d_01_4}
+\input{d1/d49/structstd_1_1hash_3_01_c78_e_1_1_vertex_01_4}
+\input{de/d6b/structstd_1_1hash_3_01glm_1_1vec1_01_4}
+\input{d2/d74/structstd_1_1hash_3_01glm_1_1vec2_01_4}
+\input{d5/dfd/structstd_1_1hash_3_01glm_1_1vec3_01_4}
+\input{d3/dd9/structstd_1_1hash_3_01glm_1_1vec4_01_4}
+\input{da/da0/struct_c78_e_1_1_i_d_component}
+\input{db/d6f/class_c78_e_1_1_image}
+\input{d4/d6c/union_im_g_l3_w_procs}
+\input{d5/d6e/struct_im_gui___impl_glfw___data}
+\input{d2/d04/struct_im_gui___impl_glfw___viewport_data}
+\input{dc/d45/struct_im_gui___impl_open_g_l3___data}
+\input{d2/d86/struct_im_gui___impl_vulkan___data}
+\input{de/d2c/struct_im_gui___impl_vulkan___init_info}
+\input{d1/dca/struct_im_gui___impl_vulkan___viewport_data}
+\input{d6/df7/struct_im_gui___impl_vulkan_h___frame}
+\input{d4/dfb/struct_im_gui___impl_vulkan_h___frame_render_buffers}
+\input{d5/d82/struct_im_gui___impl_vulkan_h___frame_semaphores}
+\input{de/d27/struct_im_gui___impl_vulkan_h___window}
+\input{d5/d15/struct_im_gui___impl_vulkan_h___window_render_buffers}
+\input{dd/d75/class_c78_e_1_1_im_gui_layer}
+\input{d0/dd6/class_c78_e_1_1_index_buffer}
+\input{db/da0/class_c78_e_1_1_input}
+\input{d1/da3/class_c78_e_1_1_key_event}
+\input{d8/dce/class_c78_e_1_1_key_pressed_event}
+\input{d6/d91/class_c78_e_1_1_key_released_event}
+\input{d2/dba/class_c78_e_1_1_key_typed_event}
+\input{d6/d0b/class_c78_e_1_1_layer}
+\input{d3/dce/class_c78_e_1_1_layer_stack}
+\input{de/db7/class_c78_e_1_1_generic_shape_1_1_line}
+\input{d9/d07/class_linux_window}
+\input{d6/d15/class_c78_e_1_1_log}
+\input{da/d03/class_c78_e_1_1_material}
+\input{dd/d34/struct_c78_e_1_1_material_component}
+\input{dc/d10/class_c78_e_1_1_material_loader}
+\input{d0/d18/struct_c78_e_1_1_material_1_1_material_properties}
+\input{d6/d9e/struct_c78_e_1_1_material_1_1_material_properties_p_b_rext}
+\input{d9/dde/struct_c78_e_1_1_material_1_1_material_textures}
+\input{d6/d8c/struct_c78_e_1_1_material_1_1_material_textures_p_b_rext}
+\input{d3/dbb/class_c78_e_1_1_mesh}
+\input{d9/d58/struct_c78_e_1_1_mesh_component}
+\input{d2/dc9/class_c78_e_1_1_mesh_loader}
+\input{d8/d26/class_c78_e_1_1_model}
+\input{d8/d07/struct_c78_e_1_1_model_component}
+\input{d2/da1/class_c78_e_1_1_model_loader}
+\input{d2/dd0/struct_c78_e_1_1_model_1_1_model_part}
+\input{dd/dd5/class_c78_e_1_1_mouse_button_event}
+\input{d5/d89/class_c78_e_1_1_mouse_button_pressed_event}
+\input{d6/dce/class_c78_e_1_1_mouse_button_released_event}
+\input{d0/da7/class_c78_e_1_1_mouse_moved_event}
+\input{d9/d50/class_c78_e_1_1_mouse_scrolled_event}
+\input{d7/d52/struct_c78_e_1_1_native_script_component}
+\input{d2/d20/class_c78_e_1_1_open_g_l_context}
+\input{d3/d3f/class_c78_e_1_1_open_g_l_cube_map}
+\input{d2/d21/class_c78_e_1_1_open_g_l_framebuffer}
+\input{d3/d4c/class_c78_e_1_1_open_g_l_index_buffer}
+\input{d5/d99/class_c78_e_1_1_open_g_l_renderer_a_p_i}
+\input{d2/d0c/class_c78_e_1_1_open_g_l_shader}
+\input{dd/deb/class_c78_e_1_1_open_g_l_texture2_d}
+\input{d2/d8e/class_c78_e_1_1_open_g_l_uniform_buffer}
+\input{d5/d79/class_c78_e_1_1_open_g_l_vertex_array}
+\input{dd/db4/class_c78_e_1_1_open_g_l_vertex_buffer}
+\input{d3/d75/class_c78_e_1_1_orthographic_camera}
+\input{df/dc5/class_c78_e_1_1_orthographic_camera_controller}
+\input{d5/d33/struct_c78_e_1_1_point_light}
+\input{d8/d61/class_c78_e_1_1_project}
+\input{d7/d8e/struct_c78_e_1_1_project_config}
+\input{d3/df7/class_c78_e_1_1_project_serializer}
+\input{da/dc6/class_c78_e_1_1_generic_shape_1_1_quad}
+\input{d7/d31/class_c78_e_1_1_render_command}
+\input{db/da8/class_c78_e_1_1_renderer}
+\input{de/deb/class_c78_e_1_1_renderer_a_p_i}
+\input{d5/de7/class_c78_e_1_1_runtime_asset_manager}
+\input{d8/dc2/class_c78_e_1_1_scene}
+\input{dd/d25/class_c78_e_1_1_scene_camera}
+\input{dc/db8/struct_c78_e_1_1_scene_light_uniform}
+\input{d8/d39/class_c78_e_1_1_scene_loader}
+\input{d8/d65/class_c78_e_1_1_scene_serializer}
+\input{d8/dde/struct_c78_e_1_1_scoped_buffer}
+\input{db/de4/class_c78_e_1_1_scriptable_entity}
+\input{d8/d4d/struct_c78_e_1_1_script_component}
+\input{d1/d1f/class_c78_e_1_1_shader}
+\input{df/dad/struct_c78_e_1_1_sky_box_component}
+\input{d8/d08/struct_c78_e_1_1_spot_light}
+\input{d4/da6/struct_c78_e_1_1_sprite_renderer_component}
+\input{d6/d15/struct_c78_e_1_1_state_component}
+\input{d1/d73/struct_c78_e_1_1_tag_component}
+\input{d8/d10/class_c78_e_1_1_texture}
+\input{d0/d7c/class_c78_e_1_1_texture2_d}
+\input{d7/dda/struct_c78_e_1_1_texture_component}
+\input{d2/ddf/class_c78_e_1_1_texture_loader}
+\input{d9/d23/struct_c78_e_1_1_texture_1_1_texture_option}
+\input{de/d72/struct_c78_e_1_1_cube_map_1_1_texture_specification}
+\input{d8/d0d/struct_c78_e_1_1_texture2_d_1_1_texture_specification}
+\input{d5/d15/class_c78_e_1_1_time}
+\input{d5/d93/class_c78_e_1_1_timer}
+\input{dc/dfe/class_c78_e_1_1_timestep}
+\input{da/d10/struct_c78_e_1_1_transform_component}
+\input{d0/d80/class_c78_e_1_1_generic_shape_1_1_triangle}
+\input{db/dbe/class_c78_e_1_1_uniform_buffer}
+\input{d9/daf/class_c78_e_1_1_u_u_i_d}
+\input{d1/df2/struct_c78_e_1_1_vertex}
+\input{db/d3b/class_c78_e_1_1_vertex_array}
+\input{dc/d5c/class_c78_e_1_1_vertex_buffer}
+\input{d1/d2c/class_c78_editor_1_1_viewport}
+\input{d4/d2f/class_c78_e_1_1_wavefront_loader}
+\input{d0/dc2/struct_c78_e_1_1_wavefront_loader_1_1_wavefront_material}
+\input{d5/dc8/struct_c78_e_1_1_wavefront_loader_1_1_wavefront_model}
+\input{de/d48/class_c78_e_1_1_window}
+\input{d8/da4/class_c78_e_1_1_window_close_event}
+\input{d9/dd3/struct_c78_e_1_1_window_props}
+\input{d3/dd3/class_c78_e_1_1_window_resize_event}
+\input{db/daa/class_c78_e_1_1_windows_window}
+\chapter{File Documentation}
+\input{dd/dd4/_c78_editor_8h_source}
+\input{d2/d55/_editor_layer_8h_source}
+\input{d7/d6b/_c78_editor_2src_2_scene_2_editor_camera_8h_source}
+\input{d4/d87/_c78_engine_2src_2_c78_e_2_renderer_2_editor_camera_8h_source}
+\input{d9/d2a/_entity_inspector_8h_source}
+\input{d3/df1/_file_manager_8h_source}
+\input{d7/d19/_viewport_8h_source}
+\input{dd/dae/_editor_main_menu_8h_source}
+\input{de/d2a/_editor_main_menu_bar_8h_source}
+\input{d7/dab/_c78_e_8h_source}
+\input{da/d81/_asset_8cpp}
+\input{de/dbe/_asset_8h}
+\input{de/dbe/_asset_8h_source}
+\input{d2/d93/_asset_loader_8h_source}
+\input{da/d65/_asset_manager_8h_source}
+\input{d3/d09/_material_8h_source}
+\input{d3/d3d/_material_loader_8h_source}
+\input{d2/da1/_mesh_8h_source}
+\input{d9/d8f/_mesh_loader_8h_source}
+\input{da/ded/_model_8h_source}
+\input{d9/dee/_model_loader_8h_source}
+\input{d4/d2d/_scene_loader_8h_source}
+\input{d8/d34/_shader_8h_source}
+\input{d9/de5/_image_8h_source}
+\input{de/dbf/_texture_8h_source}
+\input{d6/d11/_texture_loader_8h_source}
+\input{d9/da3/_application_8h_source}
+\input{d0/d64/_assert_8h_source}
+\input{d7/d87/_core_2_buffer_8h_source}
+\input{dc/da9/_renderer_2_buffer_8h_source}
+\input{d3/d6e/_console_8h_source}
+\input{d4/d09/_core_8h_source}
+\input{df/dce/_entry_point_8h_source}
+\input{d2/d58/_file_system_8h_source}
+\input{d2/d94/_input_8h_source}
+\input{d3/d68/_key_codes_8h_source}
+\input{d6/d5a/_layer_8h_source}
+\input{db/dd9/_layer_stack_8h_source}
+\input{da/df4/_log_8h_source}
+\input{d3/ddf/_mouse_codes_8h_source}
+\input{d4/df5/_platform_detection_8h_source}
+\input{d5/d29/_timer_8h_source}
+\input{dd/dae/_timestep_8h_source}
+\input{d0/db6/_types_8h_source}
+\input{df/ddd/_u_u_i_d_8h_source}
+\input{de/d42/_window_8h_source}
+\input{d3/d87/_application_event_8h_source}
+\input{de/d6d/_event_8h_source}
+\input{dd/d79/_key_event_8h_source}
+\input{d4/df8/_mouse_event_8h_source}
+\input{df/d68/_im_gui_layer_8h_source}
+\input{d9/d8d/_project_8h_source}
+\input{df/d56/_project_serializer_8h_source}
+\input{d5/d91/_camera_8h_source}
+\input{d2/dae/_framebuffer_8h_source}
+\input{dc/d03/_generic_shape_8h_source}
+\input{d8/d38/_graphics_context_8h_source}
+\input{d5/dea/_orthographic_camera_8h_source}
+\input{d8/db3/_orthographic_camera_controller_8h_source}
+\input{db/d8f/_render_command_8h_source}
+\input{d3/da0/_renderer_8h_source}
+\input{d6/d22/_renderer_a_p_i_8h_source}
+\input{d3/de1/_uniform_buffer_8h_source}
+\input{d0/df4/_vertex_array_8h_source}
+\input{da/d0a/_components_8h_source}
+\input{db/d3a/_entity_8h_source}
+\input{de/d56/_scene_8h_source}
+\input{d2/d50/_scene_camera_8h_source}
+\input{d1/d43/_scene_serializer_8h_source}
+\input{d3/d78/_scriptable_entity_8h_source}
+\input{db/ded/_platform_utils_8h_source}
+\input{d2/d5f/_std_utils_8h_source}
+\input{da/d72/_wavefront_loader_8h_source}
+\input{db/dd6/_yaml_utils_8h_source}
+\input{d0/d47/_c78_elibs_8h_source}
+\input{d8/da1/_c78e_p_c_h_8h_source}
+\input{d3/d6e/_linux_window_8h_source}
+\input{d6/da4/_open_g_l_2_im_gui_2imgui__impl__glfw_8cpp_source}
+\input{d2/df0/_open_g_l_2_im_gui_2imgui__impl__glfw_8h_source}
+\input{d1/dbc/_vulkan_2_im_gui_2imgui__impl__glfw_8h_source}
+\input{d9/db9/imgui__impl__opengl3_8cpp_source}
+\input{d1/dea/imgui__impl__opengl3_8h_source}
+\input{df/d5f/imgui__impl__opengl3__loader_8h_source}
+\input{d0/d9c/_open_g_l_buffer_8h_source}
+\input{da/d2c/_open_g_l_context_8h_source}
+\input{d6/d57/_open_g_l_framebuffer_8h_source}
+\input{dd/da6/_open_g_l_renderer_a_p_i_8h_source}
+\input{da/de8/_open_g_l_shader_8h_source}
+\input{d1/d16/_open_g_l_texture_8h_source}
+\input{dc/d1c/_open_g_l_uniform_buffer_8h_source}
+\input{d8/d4a/_open_g_l_vertex_array_8h_source}
+\input{d9/db6/imgui__impl__vulkan_8h_source}
+\input{de/dd7/_windows_window_8h_source}
+\input{d0/daf/_app_layer_8h_source}
+\input{d5/dfb/_c78_app_8h_source}
+%--- End generated contents ---
+% Index
+  \backmatter
+  \newpage
+  \phantomsection
+  \clearemptydoublepage
+  \addcontentsline{toc}{chapter}{\indexname}
+  \printindex
+% Required for some languages (in combination with latexdocumentpre from the header)
+\end{document}

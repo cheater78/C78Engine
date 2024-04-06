@@ -1,0 +1,90 @@
+\doxysection{Entity\+Inspector.\+h}
+\hypertarget{_entity_inspector_8h_source}{}\label{_entity_inspector_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Editor/src/Tools/EntityInspector.h@{C:/dev/c-\/cpp/C78Engine/C78Editor/src/Tools/EntityInspector.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <C78E.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <C78Elibs.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{namespace\ }C78Editor\ \{}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ \ *\ }}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ *\ <COMPACT>}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ *\ Attribute(AssetHandle)\ =\ AssetMeta.name\ [\ view\ |\ change\ ]}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ *\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ *\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ *\ <VIEW>}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ *\ Attribute(AssetHandle)\ =\ AssetMeta.name\ [\ view\ |\ change\ ]}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ *\ \ \ Name\ =\ AssetMeta.name}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ *\ \ \ Source\ =\ AssetMeta.fileSource}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ *\ \ \ **attr**\ =\ **value**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ *\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ *\ <CHANGE>}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ *\ Attribute(AssetHandle)\ =\ AssetMeta.name\ [\ view\ |\ change\ ]}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ *\ //TODO}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_editor_1_1_entity_inspector}{EntityInspector}}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ init();}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ onImGuiRender(C78E::Ref<C78E::Scene>\ scene);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sub\ Systems}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ showEntityList(std::string\ element,\ C78E::Ref<C78E::Scene>\ scene);}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ showInspectorList(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity);}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Generic\ ImGui\ 2\ Column\ Attribute\ :\ Value\ entries}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insData(std::string\ element,\ std::string\ title,\ \textcolor{keyword}{const}\ T\&\ data,\ uint32\_t\ indent\ =\ 0,\ ImGuiTableRowFlags\ rowFlags\ =\ 0);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insDataOptToggleElement(std::string\ element,\ std::string\ title,\ \textcolor{keyword}{const}\ T\&\ data,\ uint32\_t\ indent\ =\ 0,\ ImGuiTableRowFlags\ rowFlags\ =\ 0);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insDataOptToggleData(std::string\ element,\ std::string\ title,\ T\&\ data,\ \textcolor{keyword}{const}\ T\&\ state0,\ \textcolor{keyword}{const}\ T\&\ state1,\ uint32\_t\ indent\ =\ 0,\ ImGuiTableRowFlags\ rowFlags\ =\ 0);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Components}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insIDComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insTagComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insStateComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insTransformComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insCameraComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insAmbinentLightComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);\ \textcolor{comment}{//\ maybe\ Deprecated}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insDirectLightComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);\ \textcolor{comment}{//\ maybe\ Deprecated}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insPointLightComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);\ \textcolor{comment}{//\ maybe\ Deprecated}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insSpotLightComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);\ \textcolor{comment}{//\ maybe\ Deprecated}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insModelComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insMeshComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);\ \ \textcolor{comment}{//\ maybe\ Deprecated}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insMaterialComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);\ \textcolor{comment}{//\ maybe\ Deprecated}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insTextureComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insSkyBoxComponent(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\&\ entity,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Assets}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insAsset(std::string\ element,\ std::string\ title,\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::AssetHandle}}\ assetHandle,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insModel(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::AssetHandle}}\ modelHandle,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insMesh(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::AssetHandle}}\ meshHandle,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insMaterial(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::AssetHandle}}\ materialHandle,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insShader(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::AssetHandle}}\ shaderHandle,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ insTexture(std::string\ element,\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::AssetHandle}}\ textureHandle,\ uint32\_t\ indent\ =\ 0);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Helpers}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::string\ indentStr(std::string\ str,\ uint32\_t\ ind\ =\ 0);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Element\ System}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\&\ shouldShow(std::string\ element);}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ toggleShow(std::string\ element);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ uint32\_t\ s\_ID;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ bool>\ s\_ShowElement;}
+\DoxyCodeLine{00082\ \ \ \ \ \};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \}}
+
+\end{DoxyCode}

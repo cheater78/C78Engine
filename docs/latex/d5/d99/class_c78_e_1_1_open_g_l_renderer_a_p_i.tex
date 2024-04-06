@@ -1,0 +1,200 @@
+\doxysection{C78E\+::Open\+GLRenderer\+API Class Reference}
+\hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i}{}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i}\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+
+
+Inheritance diagram for C78E\+::Open\+GLRenderer\+API\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Open\+GLRenderer\+API\+:
+% FIG 1
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a_p_i_a02339485f65751068142e0a1b6763e8f}\label{class_c78_e_1_1_renderer_a_p_i_a02339485f65751068142e0a1b6763e8f} 
+enum class {\bfseries API} \{ \newline
+{\bfseries None} = 0
+, {\bfseries Open\+GL} = 1
+, {\bfseries Vulkan} = 2
+, {\bfseries DIRECTX} = 3
+, \newline
+{\bfseries METAL} = 4
+ \}
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a_p_i_a17a549d9c4ea608ed4362ca0a209177e}\label{class_c78_e_1_1_renderer_a_p_i_a17a549d9c4ea608ed4362ca0a209177e} 
+enum {\bfseries Depth\+Func} \+: uint32\+\_\+t \{ \newline
+{\bfseries NEVER} = 0
+, {\bfseries LESS} = 1
+, {\bfseries EQUAL} = 2
+, {\bfseries LEQUAL} = 3
+, \newline
+{\bfseries GREATER} = 4
+, {\bfseries NOTEQUAL} = 5
+, {\bfseries GEQUAL} = 6
+, {\bfseries ALWAYS} = 7
+ \}
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a_p_i_ab4f72aab52fa27f30bfdbe684fea8924}\label{class_c78_e_1_1_renderer_a_p_i_ab4f72aab52fa27f30bfdbe684fea8924} 
+enum {\bfseries Shader\+Stage} \+: uint32\+\_\+t \{ \newline
+{\bfseries VERTEX} = 0
+, {\bfseries TESSELATION} = 1
+, {\bfseries TESSEVALUATION} = 2
+, {\bfseries GEOMETRY} = 3
+, \newline
+{\bfseries FRAGMENT} = 4
+, {\bfseries COMPUTE} = 5
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a478dcbcee6ef813cdc69cd061e87efaa}{init}} () override
+\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a9a3368097abe6de2284ae414e5461a88}{get\+Max\+Texture\+Slots}} (Shader\+Stage stage) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_aac8c690c0f5b2fbc0026d270d754ed04}{set\+Viewport}} (uint32\+\_\+t x, uint32\+\_\+t y, uint32\+\_\+t width, uint32\+\_\+t height) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_af4ff3d880c05ee2df9d22b45cbbc9a33}{set\+Clear\+Color}} (const glm\+::vec4 \&color) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a445209552d11cede09ee6821a3aae91a}{clear}} () override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a0e78ee6aa98c2e67224887567e77aded}{enable\+Depth\+Test}} (bool enable) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a399242341450e9f2ae5926188d352f17}{set\+Depth\+Func}} (Depth\+Func func) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_ab0b1f25a143d4b02f0999b0f701450df}{set\+Depth\+Write}} (bool enable) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a737fb6b7e7119de4f3bc6ba717e7d532}{draw\+Indexed}} (const Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_vertex_array}{Vertex\+Array}} $>$ \&vertex\+Array, uint32\+\_\+t index\+Count=0) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a3d99832722630ebe932119b002bccef8}{draw\+Lines}} (const Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_vertex_array}{Vertex\+Array}} $>$ \&vertex\+Array, uint32\+\_\+t vertex\+Count) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_renderer_a_p_i_a6be8d872022af92cb1c498586f9f9de6}{set\+Line\+Width}} (float width) override
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a_p_i_acd54d63ddf79eb21e5d4223229c1bae2}\label{class_c78_e_1_1_renderer_a_p_i_acd54d63ddf79eb21e5d4223229c1bae2} 
+static API {\bfseries get\+API} ()
+\item 
+\Hypertarget{class_c78_e_1_1_renderer_a_p_i_abff88b00b0a4c7632cbe1017620c3850}\label{class_c78_e_1_1_renderer_a_p_i_abff88b00b0a4c7632cbe1017620c3850} 
+static Scope$<$ \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{Renderer\+API}} $>$ {\bfseries create} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a445209552d11cede09ee6821a3aae91a}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a445209552d11cede09ee6821a3aae91a} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!clear@{clear}}
+\index{clear@{clear}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a737fb6b7e7119de4f3bc6ba717e7d532}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a737fb6b7e7119de4f3bc6ba717e7d532} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!drawIndexed@{drawIndexed}}
+\index{drawIndexed@{drawIndexed}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{drawIndexed()}{drawIndexed()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::draw\+Indexed (\begin{DoxyParamCaption}\item[{const Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_vertex_array}{Vertex\+Array}} $>$ \&}]{vertex\+Array,  }\item[{uint32\+\_\+t}]{index\+Count = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a3d99832722630ebe932119b002bccef8}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a3d99832722630ebe932119b002bccef8} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!drawLines@{drawLines}}
+\index{drawLines@{drawLines}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{drawLines()}{drawLines()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::draw\+Lines (\begin{DoxyParamCaption}\item[{const Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_vertex_array}{Vertex\+Array}} $>$ \&}]{vertex\+Array,  }\item[{uint32\+\_\+t}]{vertex\+Count }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a0e78ee6aa98c2e67224887567e77aded}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a0e78ee6aa98c2e67224887567e77aded} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!enableDepthTest@{enableDepthTest}}
+\index{enableDepthTest@{enableDepthTest}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{enableDepthTest()}{enableDepthTest()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::enable\+Depth\+Test (\begin{DoxyParamCaption}\item[{bool}]{enable }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a9a3368097abe6de2284ae414e5461a88}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a9a3368097abe6de2284ae414e5461a88} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!getMaxTextureSlots@{getMaxTextureSlots}}
+\index{getMaxTextureSlots@{getMaxTextureSlots}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{getMaxTextureSlots()}{getMaxTextureSlots()}}
+{\footnotesize\ttfamily uint32\+\_\+t C78\+E\+::\+Open\+GLRenderer\+API\+::get\+Max\+Texture\+Slots (\begin{DoxyParamCaption}\item[{Shader\+Stage}]{stage }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a478dcbcee6ef813cdc69cd061e87efaa}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a478dcbcee6ef813cdc69cd061e87efaa} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!init@{init}}
+\index{init@{init}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_af4ff3d880c05ee2df9d22b45cbbc9a33}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_af4ff3d880c05ee2df9d22b45cbbc9a33} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!setClearColor@{setClearColor}}
+\index{setClearColor@{setClearColor}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{setClearColor()}{setClearColor()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::set\+Clear\+Color (\begin{DoxyParamCaption}\item[{const glm\+::vec4 \&}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a399242341450e9f2ae5926188d352f17}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a399242341450e9f2ae5926188d352f17} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!setDepthFunc@{setDepthFunc}}
+\index{setDepthFunc@{setDepthFunc}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{setDepthFunc()}{setDepthFunc()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::set\+Depth\+Func (\begin{DoxyParamCaption}\item[{Depth\+Func}]{func }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_ab0b1f25a143d4b02f0999b0f701450df}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_ab0b1f25a143d4b02f0999b0f701450df} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!setDepthWrite@{setDepthWrite}}
+\index{setDepthWrite@{setDepthWrite}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{setDepthWrite()}{setDepthWrite()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::set\+Depth\+Write (\begin{DoxyParamCaption}\item[{bool}]{enable }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_a6be8d872022af92cb1c498586f9f9de6}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_a6be8d872022af92cb1c498586f9f9de6} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!setLineWidth@{setLineWidth}}
+\index{setLineWidth@{setLineWidth}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{setLineWidth()}{setLineWidth()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::set\+Line\+Width (\begin{DoxyParamCaption}\item[{float}]{width }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_renderer_a_p_i_aac8c690c0f5b2fbc0026d270d754ed04}\label{class_c78_e_1_1_open_g_l_renderer_a_p_i_aac8c690c0f5b2fbc0026d270d754ed04} 
+\index{C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}!setViewport@{setViewport}}
+\index{setViewport@{setViewport}!C78E::OpenGLRendererAPI@{C78E::OpenGLRendererAPI}}
+\doxysubsubsection{\texorpdfstring{setViewport()}{setViewport()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLRenderer\+API\+::set\+Viewport (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{x,  }\item[{uint32\+\_\+t}]{y,  }\item[{uint32\+\_\+t}]{width,  }\item[{uint32\+\_\+t}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_renderer_a_p_i}{C78\+E\+::\+Renderer\+API}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLRenderer\+API.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLRenderer\+API.\+cpp\end{DoxyCompactItemize}

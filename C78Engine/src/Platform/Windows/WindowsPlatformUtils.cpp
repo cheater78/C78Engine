@@ -9,14 +9,11 @@
 
 namespace C78E {
 
-	float Time::getTime()
-	{
+	float Time::getTime() {
 		return	static_cast<float>(glfwGetTime());
 	}
 
-
-	std::string FileDialogs::openFile(const char* filter)
-	{
+	std::string FileDialogs::openFile(const char* filter) {
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
 		CHAR currentDir[256] = { 0 };
@@ -38,8 +35,7 @@ namespace C78E {
 
 	}
 
-	std::string FileDialogs::saveFile(const char* filter)
-	{
+	std::string FileDialogs::saveFile(const char* filter) {
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
 		CHAR currentDir[256] = { 0 };
@@ -61,6 +57,20 @@ namespace C78E {
 			return ofn.lpstrFile;
 		
 		return std::string();
+	}
+
+	System::Monitor System::getPrimaryMonitor() {
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		C78_CORE_ASSERT(monitor, "glfw Monitor is nullptr!");
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+		return {
+			static_cast<uint32_t>(mode->width), 
+			static_cast<uint32_t>(mode->height), 
+			static_cast<uint32_t>(mode->refreshRate), 
+			static_cast<uint32_t>(mode->redBits), 
+			static_cast<uint32_t>(mode->greenBits), 
+			static_cast<uint32_t>(mode->blueBits)
+		};
 	}
 
 }

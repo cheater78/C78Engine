@@ -1,0 +1,80 @@
+\doxysection{Scene.\+h}
+\hypertarget{_scene_8h_source}{}\label{_scene_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Scene/Scene.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Scene/Scene.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/UUID.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Timestep.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}C78E/Renderer/EditorCamera.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_asset_8h}{C78E/Assets/Asset/Asset.h}}>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{class\ }Entity;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_scene}{Scene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_asset}{Asset}}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Scene>\ copy(Ref<Scene>\ other);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_scene}{Scene}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_scene}{\string~Scene}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ createEntity(\textcolor{keyword}{const}\ std::string\&\ name\ =\ std::string());}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ createEntityWithUUID(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{UUID}}\ uuid,\ \textcolor{keyword}{const}\ std::string\&\ name\ =\ std::string());}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ destroyEntity(\mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ entity);}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onRuntimeStart();}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onRuntimeStop();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onUpdateRuntime(\mbox{\hyperlink{class_c78_e_1_1_timestep}{Timestep}}\ ts);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onViewportResize(uint32\_t\ width,\ uint32\_t\ height);}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ duplicateEntity(\mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ entity);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ findEntityByName(std::string\_view\ name);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ getEntityByUUID(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{UUID}}\ uuid);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setPrimaryCamera(\mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ camera);}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ hasPrimaryCamera();}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ getPrimaryCamera();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isRunning()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_IsRunning;\ \}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isPaused()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_IsPaused;\ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setPaused(\textcolor{keywordtype}{bool}\ paused)\ \{\ m\_IsPaused\ =\ paused;\ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ step(\textcolor{keywordtype}{int}\ frames\ =\ 1);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Components>}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ getAllEntitiesWith()\ \{\ \textcolor{keywordflow}{return}\ m\_Registry.view<Components...>();\ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ AssetType\ getType()\ \{\ \textcolor{keywordflow}{return}\ Asset::AssetType::Scene;\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onComponentAdded(\mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}}\ entity,\ T\&\ component);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ renderScene(\mbox{\hyperlink{class_c78_e_1_1_editor_camera}{EditorCamera}}\&\ camera);}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Entities}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ entt::registry\ m\_Registry;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{UUID}}\ m\_ActiveCam\{\ 0\ \};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ std::unordered\_map<UUID,\ entt::entity>\ m\_EntityMap;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Runtime}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ uint32\_t\ m\_ViewportWidth\ =\ 0,\ m\_ViewportHeight\ =\ 0;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_IsRunning\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_IsPaused\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m\_StepFrames\ =\ 0;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_entity}{Entity}};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_scene_serializer}{SceneSerializer}};}
+\DoxyCodeLine{00072\ \ \ \ \ \};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \}}
+
+\end{DoxyCode}

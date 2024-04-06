@@ -1,0 +1,14 @@
+digraph "C:/dev/c-cpp/C78Engine/C78Engine/src/C78E/Scene"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  compound=true
+  subgraph clusterdir_8ebace0e1f45e7ba10ddb999631a377f {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", label="C78E", fontname=Helvetica,fontsize=10 style="filled,dashed", URL="dir_8ebace0e1f45e7ba10ddb999631a377f.html",tooltip=""]
+  dir_6040b2ffaedfa60e1ddfa743591d8b51 [label="Assets", fillcolor="#a2b4d6", color="red", style="filled", URL="dir_6040b2ffaedfa60e1ddfa743591d8b51.html",tooltip=""];
+  dir_634f75e07c3126b1d7e7ab06603093ff [label="Scene", fillcolor="#edf0f7", color="grey25", style="filled,bold", URL="dir_634f75e07c3126b1d7e7ab06603093ff.html",tooltip=""];
+  }
+  dir_634f75e07c3126b1d7e7ab06603093ff->dir_6040b2ffaedfa60e1ddfa743591d8b51 [headlabel="1", labeldistance=1.5 headhref="dir_000021_000001.html" href="dir_000021_000001.html" color="steelblue1" fontcolor="steelblue1"];
+}

@@ -60,6 +60,3 @@ namespace C78E {
 }
 
 #include "C78E/Core/Log.h"
-
-#define C78_FILE_EXT_SCENE ".sce"
-#define C78_FILE_EXT_PROJECT ".pce"

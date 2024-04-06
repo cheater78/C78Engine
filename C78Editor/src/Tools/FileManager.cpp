@@ -4,24 +4,24 @@ namespace C78Editor {
 	//UI
 	uint32_t FileManager::s_ColumnElements = 11;
 
-	static const std::filesystem::path c_FolderTextureFile = std::filesystem::relative("assets/textures/FileManager/Folder.png");
-	static const std::filesystem::path c_FileTextureFile = std::filesystem::relative("assets/textures/FileManager/File.png");
-	static const std::filesystem::path c_FileUnknownTextureFile = std::filesystem::relative("assets/textures/FileManager/FileUnknown.png");
+	static const C78E::FilePath c_FolderTextureFile = std::filesystem::relative("assets/textures/FileManager/Folder.png");
+	static const C78E::FilePath c_FileTextureFile = std::filesystem::relative("assets/textures/FileManager/File.png");
+	static const C78E::FilePath c_FileUnknownTextureFile = std::filesystem::relative("assets/textures/FileManager/FileUnknown.png");
 
 	C78E::Ref<C78E::Texture2D> FileManager::s_FolderTexture;
 	C78E::Ref<C78E::Texture2D> FileManager::s_FileTexture;
 	C78E::Ref<C78E::Texture2D> FileManager::s_FileUnknownTexture;
 
 	//Logic
-	std::filesystem::path FileManager::s_CWD;
-	std::filesystem::path FileManager::s_CurrentProjectPath;
-	std::filesystem::path FileManager::s_LastCWD;
+	C78E::FilePath FileManager::s_CWD;
+	C78E::FilePath FileManager::s_CurrentProjectPath;
+	C78E::FilePath FileManager::s_LastCWD;
 
 	FileManager::DirectoryStructure FileManager::s_CWDStructure;
 
 	
 
-	void FileManager::init(std::filesystem::path currentProjectPath) {
+	void FileManager::init(C78E::FilePath currentProjectPath) {
 		s_CWD = currentProjectPath;
 		s_CurrentProjectPath = currentProjectPath;
 		s_LastCWD = currentProjectPath;
@@ -51,7 +51,7 @@ namespace C78Editor {
 		ImGui::End();
 	}
 
-	FileManager::EntryType FileManager::getEntryType(std::filesystem::path filepath) {
+	FileManager::EntryType FileManager::getEntryType(C78E::FilePath filepath) {
 		if (std::filesystem::is_directory(filepath))
 			return EntryType::DIRECTORY;
 		std::string ext = filepath.extension().string();
@@ -136,7 +136,7 @@ namespace C78Editor {
 		}
 	}
 
-	void C78Editor::FileManager::showSingleFileCard(std::filesystem::path filepath, EntryType type) {
+	void C78Editor::FileManager::showSingleFileCard(C78E::FilePath filepath, EntryType type) {
 		std::string fileName = filepath.filename().string();
 
 		switch (type) {
@@ -207,7 +207,7 @@ namespace C78Editor {
 
 	}
 
-	void FileManager::changeDirectory(std::filesystem::path newCWD) {
+	void FileManager::changeDirectory(C78E::FilePath newCWD) {
 		if (newCWD != s_CWD)
 			s_LastCWD = s_CWD;
 		s_CWD = newCWD;
@@ -225,7 +225,7 @@ namespace C78Editor {
 			s_CWDStructure.entries.emplace(entry, type);
 
 			if (type == EntryType::IMAGE) {
-				const std::filesystem::path path = entry.path();
+				const C78E::FilePath path = entry.path();
 				s_CWDStructure.icons.emplace(path, C78E::TextureLoader::loadTexture2D(path));
 				/*
 				threads.push_back(
@@ -261,7 +261,7 @@ namespace C78Editor {
 		return clicked;
 	}
 	
-	C78E::Ref<C78E::Texture2D> FileManager::getIcon(std::filesystem::path file) {
+	C78E::Ref<C78E::Texture2D> FileManager::getIcon(C78E::FilePath file) {
 		return (s_CWDStructure.icons.contains(file)) ? s_CWDStructure.icons.at(file) : nullptr;
 	}
 

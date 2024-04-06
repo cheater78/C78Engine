@@ -1,0 +1,118 @@
+\doxysection{C78E\+::Open\+GLFramebuffer Class Reference}
+\hypertarget{class_c78_e_1_1_open_g_l_framebuffer}{}\label{class_c78_e_1_1_open_g_l_framebuffer}\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+
+
+Inheritance diagram for C78E\+::Open\+GLFramebuffer\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Open\+GLFramebuffer\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_a1572eefaf176eacfcedb84f5e1e2061c}\label{class_c78_e_1_1_open_g_l_framebuffer_a1572eefaf176eacfcedb84f5e1e2061c} 
+{\bfseries Open\+GLFramebuffer} (const \mbox{\hyperlink{struct_c78_e_1_1_framebuffer_specification}{Framebuffer\+Specification}} \&spec)
+\item 
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_a1dd18e5e42617722638734c60c1517e9}\label{class_c78_e_1_1_open_g_l_framebuffer_a1dd18e5e42617722638734c60c1517e9} 
+void {\bfseries Invalidate} ()
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_framebuffer_afaec835e0afc9780430805868bb61cc0}{Bind}} () override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_framebuffer_a849ee643d269f3cc721fd62387cf3115}{Unbind}} () override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_framebuffer_ad0d0a51047430ed7d9d153e6f6dd355b}{Resize}} (uint32\+\_\+t width, uint32\+\_\+t height) override
+\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{class_c78_e_1_1_open_g_l_framebuffer_a29140b054d9c3f6bbfca640a897de1cb}{Read\+Pixel}} (uint32\+\_\+t attachment\+Index, int x, int y) override
+\item 
+virtual void \mbox{\hyperlink{class_c78_e_1_1_open_g_l_framebuffer_aede1d17814536362bcb23f4a03698e62}{Clear\+Attachment}} (uint32\+\_\+t attachment\+Index, int value) override
+\item 
+Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_texture2_d}{Texture2D}} $>$ \mbox{\hyperlink{class_c78_e_1_1_open_g_l_framebuffer_a151965087b6f0088a3662264711f2fbd}{get\+Color\+Attachment}} (uint32\+\_\+t id) override
+\item 
+virtual const \mbox{\hyperlink{struct_c78_e_1_1_framebuffer_specification}{Framebuffer\+Specification}} \& \mbox{\hyperlink{class_c78_e_1_1_open_g_l_framebuffer_ad0cf190f95932508c7d8bd671cd38c6e}{Get\+Specification}} () const override
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_framebuffer_a149a630f3fc83935bc6da00e78f581bb}\label{class_c78_e_1_1_framebuffer_a149a630f3fc83935bc6da00e78f581bb} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{Framebuffer}} $>$ {\bfseries Create} (const \mbox{\hyperlink{struct_c78_e_1_1_framebuffer_specification}{Framebuffer\+Specification}} \&spec)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_afaec835e0afc9780430805868bb61cc0}\label{class_c78_e_1_1_open_g_l_framebuffer_afaec835e0afc9780430805868bb61cc0} 
+\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}!Bind@{Bind}}
+\index{Bind@{Bind}!C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+\doxysubsubsection{\texorpdfstring{Bind()}{Bind()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLFramebuffer\+::\+Bind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{C78\+E\+::\+Framebuffer}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_aede1d17814536362bcb23f4a03698e62}\label{class_c78_e_1_1_open_g_l_framebuffer_aede1d17814536362bcb23f4a03698e62} 
+\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}!ClearAttachment@{ClearAttachment}}
+\index{ClearAttachment@{ClearAttachment}!C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+\doxysubsubsection{\texorpdfstring{ClearAttachment()}{ClearAttachment()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLFramebuffer\+::\+Clear\+Attachment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{attachment\+Index,  }\item[{int}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{C78\+E\+::\+Framebuffer}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_a151965087b6f0088a3662264711f2fbd}\label{class_c78_e_1_1_open_g_l_framebuffer_a151965087b6f0088a3662264711f2fbd} 
+\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}!getColorAttachment@{getColorAttachment}}
+\index{getColorAttachment@{getColorAttachment}!C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+\doxysubsubsection{\texorpdfstring{getColorAttachment()}{getColorAttachment()}}
+{\footnotesize\ttfamily Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_texture2_d}{Texture2D}} $>$ C78\+E\+::\+Open\+GLFramebuffer\+::get\+Color\+Attachment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{C78\+E\+::\+Framebuffer}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_ad0cf190f95932508c7d8bd671cd38c6e}\label{class_c78_e_1_1_open_g_l_framebuffer_ad0cf190f95932508c7d8bd671cd38c6e} 
+\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}!GetSpecification@{GetSpecification}}
+\index{GetSpecification@{GetSpecification}!C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+\doxysubsubsection{\texorpdfstring{GetSpecification()}{GetSpecification()}}
+{\footnotesize\ttfamily virtual const \mbox{\hyperlink{struct_c78_e_1_1_framebuffer_specification}{Framebuffer\+Specification}} \& C78\+E\+::\+Open\+GLFramebuffer\+::\+Get\+Specification (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{C78\+E\+::\+Framebuffer}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_a29140b054d9c3f6bbfca640a897de1cb}\label{class_c78_e_1_1_open_g_l_framebuffer_a29140b054d9c3f6bbfca640a897de1cb} 
+\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}!ReadPixel@{ReadPixel}}
+\index{ReadPixel@{ReadPixel}!C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+\doxysubsubsection{\texorpdfstring{ReadPixel()}{ReadPixel()}}
+{\footnotesize\ttfamily uint32\+\_\+t C78\+E\+::\+Open\+GLFramebuffer\+::\+Read\+Pixel (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{attachment\+Index,  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{C78\+E\+::\+Framebuffer}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_ad0d0a51047430ed7d9d153e6f6dd355b}\label{class_c78_e_1_1_open_g_l_framebuffer_ad0d0a51047430ed7d9d153e6f6dd355b} 
+\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}!Resize@{Resize}}
+\index{Resize@{Resize}!C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+\doxysubsubsection{\texorpdfstring{Resize()}{Resize()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLFramebuffer\+::\+Resize (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{width,  }\item[{uint32\+\_\+t}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{C78\+E\+::\+Framebuffer}}.
+
+\Hypertarget{class_c78_e_1_1_open_g_l_framebuffer_a849ee643d269f3cc721fd62387cf3115}\label{class_c78_e_1_1_open_g_l_framebuffer_a849ee643d269f3cc721fd62387cf3115} 
+\index{C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}!Unbind@{Unbind}}
+\index{Unbind@{Unbind}!C78E::OpenGLFramebuffer@{C78E::OpenGLFramebuffer}}
+\doxysubsubsection{\texorpdfstring{Unbind()}{Unbind()}}
+{\footnotesize\ttfamily void C78\+E\+::\+Open\+GLFramebuffer\+::\+Unbind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c78_e_1_1_framebuffer}{C78\+E\+::\+Framebuffer}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLFramebuffer.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+Platform/\+Open\+GL/Open\+GLFramebuffer.\+cpp\end{DoxyCompactItemize}

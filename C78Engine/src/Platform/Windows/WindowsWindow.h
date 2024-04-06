@@ -14,11 +14,11 @@ namespace C78E {
 
 		void onUpdate() override;
 
-		unsigned int getWidth() const override { return m_Data.Width; }
-		unsigned int getHeight() const override { return m_Data.Height; }
+		uint32_t getWidth() const override { return m_Data.width; }
+		uint32_t getHeight() const override { return m_Data.height; }
 
 		// Window attributes
-		void setEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+		void setEventCallback(const EventCallbackFn& callback) override { m_Data.eventCallback = callback; }
 		void setVSync(bool enabled) override;
 		bool isVSync() const override;
 
@@ -27,7 +27,7 @@ namespace C78E {
 
 		virtual void* getNativeWindow() const { return m_Window; }
 
-		virtual WindowProps getWindowProperties() const { return {m_Data.Title, m_Data.Width, m_Data.Height }; }
+		virtual WindowProps getWindowProperties() const { return {m_Data.title, m_Data.width, m_Data.height }; }
 
 	private:
 		virtual void init(const WindowProps& props);
@@ -36,14 +36,13 @@ namespace C78E {
 		GLFWwindow* m_Window;
 		Scope<GraphicsContext> m_Context;
 
-		struct WindowData
-		{
-			std::string Title = "<error>";
-			unsigned int Width = 100;
-			unsigned int Height = 100;
-			bool VSync = true;
+		struct WindowData {
+			std::string title = "<error>";
+			uint32_t width = 100;
+			uint32_t height = 100;
+			bool vSync = true;
 
-			EventCallbackFn EventCallback;
+			EventCallbackFn eventCallback;
 		};
 
 		WindowData m_Data;

@@ -6,8 +6,7 @@
 
 extern C78E::Application* C78E::createApplication();
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
 	C78E::Log::init();
 	C78_CORE_INFO("Logger started...");
 	C78_INFO("Logger started...");
@@ -22,8 +21,7 @@ int main(int argc, char** argv)
 
 extern C78E::Application* C78E::createApplication();
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
 	C78E::Log::init();
 	C78_CORE_INFO("Logger started...");
 	C78_INFO("Logger started...");

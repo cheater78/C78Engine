@@ -1,0 +1,37 @@
+\doxysection{Model.\+h}
+\hypertarget{_model_8h_source}{}\label{_model_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Model/Model.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Model/Model.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <C78E/Core/Types.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_asset_8h}{C78E/Assets/Asset/Asset.h}}>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ *\ Model}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ *\ consisting\ of\ parts,\ with\ each\ part\ containing\ a\ Mesh\ and\ its\ corresponding\ material}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ *\ only\ stores\ AssetHandles\ which\ must\ be\ registered\ at\ the\ current\ AssetManager\ instance}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_model}{Model}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_asset}{Asset}}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_model_1_1_model_part}{ModelPart}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ m\_Mesh\ =\ 0;}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ m\_Material\ =\ 0;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_model}{Model}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_model}{Model}}(\textcolor{keyword}{const}\ std::vector<ModelPart>\&\ parts)}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ :\ m\_Parts(parts)\ \{\ \}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_model}{Model}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_model}{Model}}\&\ other)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_model}{\string~Model}}()\ \{\ \}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ AssetType\ getType()\ \{\ \textcolor{keywordflow}{return}\ Asset::AssetType::Model;\ \};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ std::vector<ModelPart>\ m\_Parts;\ \textcolor{comment}{//\ list\ of\ pairs\ with\ Mesh\ and\ Material}}
+\DoxyCodeLine{00029\ \ \ \ \ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \}}
+
+\end{DoxyCode}

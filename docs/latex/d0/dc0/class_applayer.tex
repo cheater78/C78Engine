@@ -1,0 +1,99 @@
+\doxysection{Applayer Class Reference}
+\hypertarget{class_applayer}{}\label{class_applayer}\index{Applayer@{Applayer}}
+
+
+Inheritance diagram for Applayer\+:
+% FIG 0
+
+
+Collaboration diagram for Applayer\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_applayer_a4ea9c1b0fc82dbab4b7425fabfc00ab1}\label{class_applayer_a4ea9c1b0fc82dbab4b7425fabfc00ab1} 
+{\bfseries Applayer} (\mbox{\hyperlink{class_c78_e_1_1_window}{C78\+E\+::\+Window}} \&window)
+\item 
+void \mbox{\hyperlink{class_applayer_aff3bbf6a419d21d5aa707cd4bf3e208d}{on\+Attach}} ()
+\item 
+void \mbox{\hyperlink{class_applayer_a236f00d3ed9fe633af70508dd90cce76}{on\+Detach}} ()
+\item 
+void \mbox{\hyperlink{class_applayer_add6f1c78a6a2c45140e426e35e45bb15}{on\+Update}} (\mbox{\hyperlink{class_c78_e_1_1_timestep}{C78\+E\+::\+Timestep}} delta) override
+\item 
+void \mbox{\hyperlink{class_applayer_a0d45bfa8afaf630f948921a8dde06923}{on\+Event}} (\mbox{\hyperlink{class_c78_e_1_1_event}{C78\+E\+::\+Event}} \&e) override
+\item 
+\Hypertarget{class_applayer_af44fb3e334bdb9bc08d42d755bf9ec1b}\label{class_applayer_af44fb3e334bdb9bc08d42d755bf9ec1b} 
+bool {\bfseries on\+Key\+Pressed} (\mbox{\hyperlink{class_c78_e_1_1_key_pressed_event}{C78\+E\+::\+Key\+Pressed\+Event}} e)
+\item 
+\Hypertarget{class_applayer_a320e269971f057f5d92dbda44458908d}\label{class_applayer_a320e269971f057f5d92dbda44458908d} 
+bool {\bfseries on\+Window\+Resize} (\mbox{\hyperlink{class_c78_e_1_1_window_resize_event}{C78\+E\+::\+Window\+Resize\+Event}} e)
+\item 
+void \mbox{\hyperlink{class_applayer_a7cae3fe9349d66ec8b43dfccc9b5201c}{on\+Im\+Gui\+Render}} () override
+\item 
+\Hypertarget{class_c78_e_1_1_layer_a18364200c060c5146225a8c66b10ceb5}\label{class_c78_e_1_1_layer_a18364200c060c5146225a8c66b10ceb5} 
+const std\+::string \& {\bfseries get\+Name} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_layer_ab725efbad7c30d4c3016afc24976c1b3}\label{class_c78_e_1_1_layer_ab725efbad7c30d4c3016afc24976c1b3} 
+std\+::string {\bfseries m\+\_\+\+Debug\+Name}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_applayer_aff3bbf6a419d21d5aa707cd4bf3e208d}\label{class_applayer_aff3bbf6a419d21d5aa707cd4bf3e208d} 
+\index{Applayer@{Applayer}!onAttach@{onAttach}}
+\index{onAttach@{onAttach}!Applayer@{Applayer}}
+\doxysubsubsection{\texorpdfstring{onAttach()}{onAttach()}}
+{\footnotesize\ttfamily void Applayer\+::on\+Attach (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_applayer_a236f00d3ed9fe633af70508dd90cce76}\label{class_applayer_a236f00d3ed9fe633af70508dd90cce76} 
+\index{Applayer@{Applayer}!onDetach@{onDetach}}
+\index{onDetach@{onDetach}!Applayer@{Applayer}}
+\doxysubsubsection{\texorpdfstring{onDetach()}{onDetach()}}
+{\footnotesize\ttfamily void Applayer\+::on\+Detach (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_applayer_a0d45bfa8afaf630f948921a8dde06923}\label{class_applayer_a0d45bfa8afaf630f948921a8dde06923} 
+\index{Applayer@{Applayer}!onEvent@{onEvent}}
+\index{onEvent@{onEvent}!Applayer@{Applayer}}
+\doxysubsubsection{\texorpdfstring{onEvent()}{onEvent()}}
+{\footnotesize\ttfamily void Applayer\+::on\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c78_e_1_1_event}{C78\+E\+::\+Event}} \&}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_applayer_a7cae3fe9349d66ec8b43dfccc9b5201c}\label{class_applayer_a7cae3fe9349d66ec8b43dfccc9b5201c} 
+\index{Applayer@{Applayer}!onImGuiRender@{onImGuiRender}}
+\index{onImGuiRender@{onImGuiRender}!Applayer@{Applayer}}
+\doxysubsubsection{\texorpdfstring{onImGuiRender()}{onImGuiRender()}}
+{\footnotesize\ttfamily void Applayer\+::on\+Im\+Gui\+Render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+\Hypertarget{class_applayer_add6f1c78a6a2c45140e426e35e45bb15}\label{class_applayer_add6f1c78a6a2c45140e426e35e45bb15} 
+\index{Applayer@{Applayer}!onUpdate@{onUpdate}}
+\index{onUpdate@{onUpdate}!Applayer@{Applayer}}
+\doxysubsubsection{\texorpdfstring{onUpdate()}{onUpdate()}}
+{\footnotesize\ttfamily void Applayer\+::on\+Update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c78_e_1_1_timestep}{C78\+E\+::\+Timestep}}}]{delta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_layer}{C78\+E\+::\+Layer}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Project/src/App\+Layer.\+h\end{DoxyCompactItemize}

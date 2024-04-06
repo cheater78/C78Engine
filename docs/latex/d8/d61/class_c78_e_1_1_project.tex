@@ -1,0 +1,193 @@
+\doxysection{C78E\+::Project Class Reference}
+\hypertarget{class_c78_e_1_1_project}{}\label{class_c78_e_1_1_project}\index{C78E::Project@{C78E::Project}}
+
+
+Inheritance diagram for C78E\+::Project\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Project\+:
+% FIG 1
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e}\label{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e} 
+enum {\bfseries Asset\+Type} \+: uint8\+\_\+t \{ \newline
+{\bfseries None} = 0
+, {\bfseries Project} = 1
+, {\bfseries Scene} = 2
+, {\bfseries Texture2D}
+, \newline
+{\bfseries Shader}
+, {\bfseries Model}
+, {\bfseries Mesh}
+, {\bfseries Material}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_project_adadca7620763dd2c7169f5caafefe037}\label{class_c78_e_1_1_project_adadca7620763dd2c7169f5caafefe037} 
+const File\+Path \& {\bfseries get\+Project\+Directory} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_a8f0141f16fa1d174525e8d282dc62d02}\label{class_c78_e_1_1_project_a8f0141f16fa1d174525e8d282dc62d02} 
+File\+Path {\bfseries get\+Asset\+Directory} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_a856e2a79a50e5d6a00594736fa51681a}\label{class_c78_e_1_1_project_a856e2a79a50e5d6a00594736fa51681a} 
+File\+Path {\bfseries get\+Asset\+Registry\+Path} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_a375d5dd8729b7c4234a7b9e2290c0269}\label{class_c78_e_1_1_project_a375d5dd8729b7c4234a7b9e2290c0269} 
+File\+Path {\bfseries get\+Asset\+File\+System\+Path} (const File\+Path \&path)
+\item 
+\Hypertarget{class_c78_e_1_1_project_a1396a0448560b18040bebf738c3fbef7}\label{class_c78_e_1_1_project_a1396a0448560b18040bebf738c3fbef7} 
+File\+Path {\bfseries get\+Asset\+Absolute\+Path} (const File\+Path \&path)
+\item 
+\Hypertarget{class_c78_e_1_1_project_aaa1361c3a436e7ab93f166af66cab776}\label{class_c78_e_1_1_project_aaa1361c3a436e7ab93f166af66cab776} 
+\mbox{\hyperlink{struct_c78_e_1_1_project_config}{Project\+Config}} \& {\bfseries get\+Config} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_af379a287493ab364828b52638dc34473}\label{class_c78_e_1_1_project_af379a287493ab364828b52638dc34473} 
+Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_asset_manager_base}{Asset\+Manager\+Base}} $>$ {\bfseries get\+Asset\+Manager} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_aae100c2b92a80795c4191b1a942bc114}\label{class_c78_e_1_1_project_aae100c2b92a80795c4191b1a942bc114} 
+Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_runtime_asset_manager}{Runtime\+Asset\+Manager}} $>$ {\bfseries get\+Runtime\+Asset\+Manager} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_a0c3e22e0ac8d21d276b7920182093ebf}\label{class_c78_e_1_1_project_a0c3e22e0ac8d21d276b7920182093ebf} 
+Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_editor_asset_manager}{Editor\+Asset\+Manager}} $>$ {\bfseries get\+Editor\+Asset\+Manager} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_afad6601488613220e1f85663d3b943e7}\label{class_c78_e_1_1_project_afad6601488613220e1f85663d3b943e7} 
+virtual Asset\+Type {\bfseries get\+Type} ()
+\item 
+\Hypertarget{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38}\label{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38} 
+virtual Asset\+Type {\bfseries get\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_project_ad2817d6ccdbced226e0858cbacb007b5}\label{class_c78_e_1_1_project_ad2817d6ccdbced226e0858cbacb007b5} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_project}{Project}} $>$ {\bfseries create} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_a52c7e40d349b2c4ee4eaf153d04918f9}\label{class_c78_e_1_1_project_a52c7e40d349b2c4ee4eaf153d04918f9} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_project}{Project}} $>$ {\bfseries load} (const File\+Path \&path)
+\item 
+\Hypertarget{class_c78_e_1_1_project_a38dcc1cc6335e1ab5c82083dfe6d1c6d}\label{class_c78_e_1_1_project_a38dcc1cc6335e1ab5c82083dfe6d1c6d} 
+static bool {\bfseries save\+Active} (const File\+Path \&path)
+\item 
+\Hypertarget{class_c78_e_1_1_project_ae2a1634309333876da3c1351165df514}\label{class_c78_e_1_1_project_ae2a1634309333876da3c1351165df514} 
+static Ref$<$ \mbox{\hyperlink{class_c78_e_1_1_project}{Project}} $>$ {\bfseries get\+Active} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_a4192ac55b101f764b822de989b5a465f}\label{class_c78_e_1_1_project_a4192ac55b101f764b822de989b5a465f} 
+static const File\+Path \& {\bfseries get\+Active\+Project\+Directory} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_a74ce9ecfc8f7946f8aef1f5d376ec252}\label{class_c78_e_1_1_project_a74ce9ecfc8f7946f8aef1f5d376ec252} 
+static File\+Path {\bfseries get\+Active\+Asset\+Directory} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_aa779054765ca609e7db3937ff84592e9}\label{class_c78_e_1_1_project_aa779054765ca609e7db3937ff84592e9} 
+static File\+Path {\bfseries get\+Active\+Asset\+Registry\+Path} ()
+\item 
+\Hypertarget{class_c78_e_1_1_project_ae333dd567de2cf1f791659b47166f5c9}\label{class_c78_e_1_1_project_ae333dd567de2cf1f791659b47166f5c9} 
+static File\+Path {\bfseries get\+Active\+Asset\+File\+System\+Path} (const File\+Path \&path)
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}{file\+To\+Asset\+Type}} (const File\+Path \&file\+Path)
+\item 
+static std\+::string \mbox{\hyperlink{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}{asset\+Type\+To\+String}} (Asset\+Type type)
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}{asset\+Type\+From\+String}} (std\+::string str)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4}\label{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4} 
+\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{Asset\+Handle}} {\bfseries m\+\_\+\+Asset\+Handle}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::map$<$ File\+Path, Asset\+Type $>$ \mbox{\hyperlink{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}{c\+\_\+\+Asset\+Extension\+Map}}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1}\label{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1} 
+static const \mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset\+Meta}} {\bfseries c\+\_\+\+Null\+Asset\+Meta} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}\label{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687} 
+\index{C78E::Project@{C78E::Project}!assetTypeFromString@{assetTypeFromString}}
+\index{assetTypeFromString@{assetTypeFromString}!C78E::Project@{C78E::Project}}
+\doxysubsubsection{\texorpdfstring{assetTypeFromString()}{assetTypeFromString()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::asset\+Type\+From\+String (\begin{DoxyParamCaption}\item[{std\+::string}]{str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Deserializes a std\+::string to Asset\+::\+Asset\+Type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & the string containing the serialized Asset\+::\+Asset\+Type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the deserialized Asset\+::\+Asset\+Type 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}\label{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1} 
+\index{C78E::Project@{C78E::Project}!assetTypeToString@{assetTypeToString}}
+\index{assetTypeToString@{assetTypeToString}!C78E::Project@{C78E::Project}}
+\doxysubsubsection{\texorpdfstring{assetTypeToString()}{assetTypeToString()}}
+{\footnotesize\ttfamily std\+::string C78\+E\+::\+Asset\+::asset\+Type\+To\+String (\begin{DoxyParamCaption}\item[{Asset\+::\+Asset\+Type}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Serializes a Asset\+::\+Asset\+Type to a std\+::string.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the Asset\+::\+Asset\+Type to serialize \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the serialized Asset\+::\+Asset\+Type as std\+::string 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}\label{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693} 
+\index{C78E::Project@{C78E::Project}!fileToAssetType@{fileToAssetType}}
+\index{fileToAssetType@{fileToAssetType}!C78E::Project@{C78E::Project}}
+\doxysubsubsection{\texorpdfstring{fileToAssetType()}{fileToAssetType()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::file\+To\+Asset\+Type (\begin{DoxyParamCaption}\item[{const File\+Path \&}]{file\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Determines the Asset\+::\+Asset\+Type of an arbituary file based on its extension, using the Asset\+::c\+\_\+\+Asset\+Extension\+Map.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Path} & the C78\+E\+::\+File\+Path of the file in question \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the Asset\+::\+Asset\+Type of the file 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}\label{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346} 
+\index{C78E::Project@{C78E::Project}!c\_AssetExtensionMap@{c\_AssetExtensionMap}}
+\index{c\_AssetExtensionMap@{c\_AssetExtensionMap}!C78E::Project@{C78E::Project}}
+\doxysubsubsection{\texorpdfstring{c\_AssetExtensionMap}{c\_AssetExtensionMap}}
+{\footnotesize\ttfamily const std\+::map$<$ File\+Path, Asset\+::\+Asset\+Type $>$ C78\+E\+::\+Asset\+::c\+\_\+\+Asset\+Extension\+Map\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.pce"{}},\ Asset::AssetType::Project\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.sce"{}},\ Asset::AssetType::Scene\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.png"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpeg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.stl"{}},\ Asset::AssetType::Model\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.mtl"{}},\ Asset::AssetType::Material\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.glsl"{}},\ Asset::AssetType::Shader\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.hlsl"{}},\ Asset::AssetType::Shader\ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Project/Project.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Project/Project.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,55 @@
+\doxysection{C78e\+PCH.\+h}
+\hypertarget{_c78e_p_c_h_8h_source}{}\label{_c78e_p_c_h_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78ePCH.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78ePCH.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ std\ lib}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <semaphore>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ Platform\ dependent}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#ifdef\ C78\_PLATFORM\_WINDOWS}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#include\ <Windows.h>}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ libs}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ GLM\_ENABLE\_EXPERIMENTAL}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <glm/gtx/quaternion.hpp>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <glm/gtc/matrix\_inverse.hpp>}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <glm/gtc/matrix\_transform.hpp>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ <entt/entt.hpp>}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{//C78E\ core}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ <C78E/Core/Core.h>}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <C78E/Core/Assert.h>}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ <C78E/Core/Log.h>}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ <C78E/Core/UUID.h>}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ <C78E/Core/FileSystem.h>}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{comment}{//C78E\ utils}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#include\ <C78E/Utils/StdUtils.h>}}
+
+\end{DoxyCode}

@@ -35,6 +35,7 @@ namespace C78E {
 	class OpenGLTexture2D : public Texture2D {
 	public:
 		OpenGLTexture2D(const Texture2D::TextureSpecification& specification);
+		OpenGLTexture2D(const Texture2D::TextureSpecification& specification, const Buffer& data);
 		OpenGLTexture2D(Image& image);
 		OpenGLTexture2D(const OpenGLTexture2D&) = default; // Maybe needed!
 		virtual ~OpenGLTexture2D();
