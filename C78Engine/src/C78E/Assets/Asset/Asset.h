@@ -7,7 +7,6 @@ namespace C78E {
 	
 	class Asset {
 	public:
-		//prob add: Animation, Skeleton
 		enum AssetType : uint8_t {
 			None = 0,
 
@@ -26,7 +25,7 @@ namespace C78E {
 
 		struct AssetMeta {
 			AssetType type = AssetType::None;
-			FilePath fileSource;
+			FilePath fileSource = "/";
 			std::string name = "untitled asset";
 
 			operator bool() const { return type != AssetType::None; }

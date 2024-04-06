@@ -57,9 +57,6 @@ namespace C78E {
 	constexpr Ref<T> createRef(Args&& ... args) {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
-	
-	using FilePath = std::filesystem::path;
-
 }
 
 #include "C78E/Core/Log.h"

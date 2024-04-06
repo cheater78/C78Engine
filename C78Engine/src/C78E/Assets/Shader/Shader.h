@@ -1,13 +1,12 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
+#include <C78E/Assets/Asset/Asset.h>
 
 #include <glm/glm.hpp>
 
 namespace C78E {
 
-	class Shader {
+	class Shader : public Asset {
 	public:
 		virtual ~Shader() = default;
 
@@ -28,5 +27,8 @@ namespace C78E {
 		static Ref<Shader> create(const std::string& filepath);
 		static Ref<Shader> create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		static Ref<Shader> create(const std::string& name, const std::string& computeSrc);
+
+
+		Asset::AssetType getType() { return Asset::AssetType::Shader; }
 	};
 }

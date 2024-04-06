@@ -4,8 +4,9 @@
 
 namespace C78E {
 
-	class FileSystem
-	{
+	using FilePath = std::filesystem::path;
+
+	class FileSystem {
 	public:
 		// TODO: move to FileSystem class
 		static Buffer ReadFileBinary(const std::filesystem::path& filepath);

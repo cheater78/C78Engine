@@ -3,6 +3,8 @@
 
 namespace C78E {
 
+	const Asset::AssetMeta Asset::c_NullAssetMeta{};
+
 	const std::map<FilePath, Asset::AssetType> Asset::c_AssetExtensionMap = {
 		{ ".pce", Asset::AssetType::Project },
 		{ ".sce", Asset::AssetType::Scene },

@@ -1,8 +1,5 @@
 #include "C78EPCH.h"
 #include "Renderer.h"
-#include <C78E/Renderer/Systems/Renderer2D.h>
-#include <C78E/Renderer/Systems/Renderer3D.h>
-#include <C78E/Renderer/Systems/Raytracer3D.h>
 
 namespace C78E {
 
@@ -13,17 +10,12 @@ namespace C78E {
 	Renderer::DisplayAssets Renderer::s_DisplayAssets;
 
 	void Renderer::init(uint32_t width, uint32_t height) {
-		RenderCommand::init();
-		Renderer3D::init(width, height);
-		RayTracer3D::init(width, height);
 
 		initDisplayAssets();
 	}
 
 	void Renderer::shutdown()
 	{
-		Renderer3D::shutdown();
-		RayTracer3D::shutdown();
 	}
 
 	void Renderer::setDisplayShader(std::string name) {
@@ -33,8 +25,6 @@ namespace C78E {
 	}
 
 	void Renderer::onWindowResize(uint32_t width, uint32_t height) {
-		Renderer3D::onWindowResize(width, height);
-		RayTracer3D::onWindowResize(width, height);
 	}
 
 	void Renderer::beginScene(SceneCamera& camera) {
@@ -55,25 +45,6 @@ namespace C78E {
 
 	void Renderer::render() {
 		if (!s_Scene) return;
-
-		switch (s_RenderMode) {
-		case C78E::Renderer::NONE:
-			/* No Rendering */
-			break;
-		case C78E::Renderer::RASTERIZE_2D:
-			//Renderer2D::Flush(); render
-			break;
-		case C78E::Renderer::RASTERIZE_3D:
-			Renderer3D::render(s_Scene);
-			s_Result = Renderer3D::getResult();
-			break;
-		case C78E::Renderer::RAYTRACE_3D:
-			RayTracer3D::render(s_Scene);
-			s_Result = RayTracer3D::getResult();
-			break;
-		default:
-			break;
-		}
 	}
 
 	void Renderer::display() {

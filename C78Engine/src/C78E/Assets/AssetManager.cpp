@@ -12,11 +12,7 @@ namespace C78E {
 	* AssetManager
 	*/
 
-	template<typename T>
-	Ref<T> AssetManager::getAsset(AssetHandle handle) {
-		Ref<Asset> asset = Project::getActive()->getAssetManager()->GetAsset(handle);
-		return std::static_pointer_cast<T>(asset);
-	}
+	
 
 	bool AssetManager::isValid(AssetHandle handle) {
 		return Project::getActive()->getAssetManager()->isValid(handle);
@@ -28,6 +24,10 @@ namespace C78E {
 
 	Asset::AssetType AssetManager::getType(AssetHandle handle) {
 		return Project::getActive()->getAssetManager()->getType(handle);
+	}
+
+	Ref<AssetManagerBase> AssetManager::getCurrentProjectsAssetManager() {
+		return Project::getActive()->getAssetManager();
 	}
 
 

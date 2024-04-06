@@ -166,4 +166,5 @@ namespace std {
 	_EXPORT_STD _NODISCARD inline string to_string(glm::vec4 _Val, const uint32_t& _Dec = -1) {
 		return "(" + to_string(_Val[0], _Dec) + "," + to_string(_Val[1], _Dec) + "," + to_string(_Val[2], _Dec) + "," + to_string(_Val[3], _Dec) + ")";
 	}
+
 }

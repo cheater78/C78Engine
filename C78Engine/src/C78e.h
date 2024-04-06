@@ -25,9 +25,6 @@
 #include "C78E/Renderer/RendererAPI.h"
 #include "C78E/Renderer/RenderCommand.h"
 #include "C78E/Renderer/Renderer.h"
-#include "C78E/Renderer/Systems/Renderer2D.h"
-#include "C78E/Renderer/Systems/Renderer3D.h"
-#include "C78E/Renderer/Systems/Raytracer3D.h"
 
 #include "C78E/Renderer/Buffer.h"
 #include "C78E/Renderer/VertexArray.h"
@@ -41,6 +38,7 @@
 // Assets
 #include "C78E/Assets/AssetManager.h"
 #include "C78E/Assets/Texture/Image.h"
+#include "C78E/Assets/Texture/TextureLoader.h"
 
 #include "C78E/Scene/Components.h"
 #include "C78E/Scene/Entity.h"

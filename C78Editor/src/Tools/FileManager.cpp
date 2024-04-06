@@ -29,9 +29,9 @@ namespace C78Editor {
 		s_CWDStructure.sortFilter = { DIRECTORY, PROJECT, SCENE, IMAGE, SHADER, MODEL, MATERIAL, FONT, MISC };
 		updateCurrentDirectoryStructure();
 
-		s_FolderTexture = C78E::Texture2D::create(c_FolderTextureFile.string());
-		s_FileTexture = C78E::Texture2D::create(c_FileTextureFile.string());
-		s_FileUnknownTexture = C78E::Texture2D::create(c_FileUnknownTextureFile.string());
+		s_FolderTexture = C78E::TextureLoader::loadTexture2D(c_FolderTextureFile);
+		s_FileTexture = C78E::TextureLoader::loadTexture2D(c_FileTextureFile);
+		s_FileUnknownTexture = C78E::TextureLoader::loadTexture2D(c_FileUnknownTextureFile);
 
 	}
 
@@ -226,8 +226,7 @@ namespace C78Editor {
 
 			if (type == EntryType::IMAGE) {
 				const std::filesystem::path path = entry.path();
-				C78E::RawImage img(path.string().c_str());
-				s_CWDStructure.icons.emplace(path, C78E::Texture2D::create(img));
+				s_CWDStructure.icons.emplace(path, C78E::TextureLoader::loadTexture2D(path));
 				/*
 				threads.push_back(
 					std::thread([path]() {

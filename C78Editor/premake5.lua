@@ -28,7 +28,8 @@ project "C78Editor"
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.VulkanSDK}",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.tinobj}"
+		"%{IncludeDir.tinobj}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links
