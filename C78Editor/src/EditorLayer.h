@@ -70,9 +70,6 @@ namespace C78Editor {
         }
 
         bool onKeyPressed(C78E::KeyPressedEvent e) {
-
-            if(ProjectManager::onKeyPressedEvent(e)) return true;
-
             return false;
         }
 

@@ -24,11 +24,11 @@ namespace C78E {
 			return result;
 		}
 
-		void allocate(uint64_t size) {
+		void allocate(uint64_t _size) {
 			release();
 
-			data = new uint8_t[size];
-			size = size;
+			data = new uint8_t[_size];
+			size = _size;
 		}
 
 		void release() {

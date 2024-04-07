@@ -109,8 +109,7 @@ namespace C78E {
 			out << YAML::Key << "AssetRegistry" << YAML::Value;
 
 			out << YAML::BeginSeq;
-			for (const auto& [handle, metadata] : m_AssetRegistry)
-			{
+			for (const auto& [handle, metadata] : m_AssetRegistry) {
 				out << YAML::BeginMap;
 				out << YAML::Key << "Handle" << YAML::Value << handle;
 				std::string filepathStr = metadata.fileSource.generic_string();

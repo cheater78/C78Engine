@@ -6,9 +6,30 @@ namespace C78E {
 
 	class FileDialogs {
 	public:
-		// These return empty strings if cancelled
-		static std::string openFile(const char* filter);
-		static std::string saveFile(const char* filter);
+		typedef uint32_t Flags;
+		enum Flag : uint32_t { // don't change -> compatible with win::GetOpenFileNameA
+			None = 0,
+
+			ReadOnly = 1<<0,
+			HideReadOnly = 1<<2,
+			NoReadOnlyReturn = 1<<15,
+
+			NoChangeDirectory = 1<<3,
+
+			AllowMultiSelect = 1<<9,
+
+			ExtensionDifferent = 1<<10,
+
+			PathMustExist = 1<<11,
+			FileMustExist = 1<<12
+		};
+	public:
+		// on fail, return empty
+		static C78E::FilePath openFile(std::string filter = "", C78E::FilePath baseDir = "", Flags flags = FileMustExist | PathMustExist);
+		static C78E::FilePath openFolder(C78E::FilePath baseDir = "", Flags flags = PathMustExist);
+		static C78E::FilePath saveFile(std::string filter = "");
+		static std::string constructFilter(std::vector<std::string> extensions, std::vector<std::string> labels = {});
+
 	};
 
 	class Time {

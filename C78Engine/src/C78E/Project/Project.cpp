@@ -8,8 +8,15 @@ namespace C78E {
 		return getAssetDirectory() / path;
 	}
 
-	Ref<Project> Project::create() {
+	Ref<Project> Project::create(ProjectConfig config) {
 		s_ActiveProject = createRef<Project>();
+		s_ActiveProject->m_Config = config;
+
+		s_ActiveProject->m_AssetManager = createRef<EditorAssetManager>();
+
+		if (std::filesystem::exists(config.assetDirectory) && std::filesystem::exists(config.assetDirectory / config.assetRegistryPath))
+			s_ActiveProject->getEditorAssetManager()->deserializeAssetRegistry();
+
 		return s_ActiveProject;
 	}
 
@@ -32,6 +39,15 @@ namespace C78E {
 		ProjectSerializer serializer(s_ActiveProject);
 		if (serializer.serializeProject(path)) {
 			s_ActiveProject->m_ProjectDirectory = path.parent_path();
+
+			if (!std::filesystem::exists(s_ActiveProject->m_Config.assetDirectory) || !std::filesystem::is_directory(s_ActiveProject->m_Config.assetDirectory))
+				std::filesystem::create_directories(s_ActiveProject->m_Config.assetDirectory);
+
+			if (!std::filesystem::exists(getActiveAssetRegistryPath().parent_path()) || !std::filesystem::is_directory(getActiveAssetRegistryPath().parent_path()))
+				std::filesystem::create_directories(getActiveAssetRegistryPath().parent_path());
+
+			s_ActiveProject->getEditorAssetManager()->serializeAssetRegistry();
+
 			return true;
 		}
 		return false;

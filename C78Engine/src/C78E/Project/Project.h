@@ -12,7 +12,7 @@ namespace C78E {
 	struct ProjectConfig {
 		std::string name = "Untitled Project";
 
-		AssetHandle startScene;
+		AssetHandle startScene = 0;
 
 		FilePath assetDirectory;
 		FilePath assetRegistryPath; // Relative to AssetDirectory
@@ -21,7 +21,7 @@ namespace C78E {
 
 	class Project : public Asset {
 	public:
-		static Ref<Project> create();
+		static Ref<Project> create(ProjectConfig config = ProjectConfig());
 		static Ref<Project> load(const FilePath& path);
 		static bool saveActive(const FilePath& path);
 

@@ -1,6 +1,4 @@
 #pragma once
-
-
 // Core
 #include "C78E/Core/Core.h"
 #include "C78E/Core/Log.h"

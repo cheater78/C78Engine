@@ -4,6 +4,7 @@
 
 #define C78_FILE_EXT_SCENE ".sce"
 #define C78_FILE_EXT_PROJECT ".pce"
+#define C78_FILE_EXT_ASSETREGISTRY ".ace"
 
 namespace C78E {
 

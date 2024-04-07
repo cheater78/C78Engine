@@ -1,6 +1,6 @@
 Project:
-  Name: C78Project
+  Name: Untitled Project
   StartScene: 0
-  AssetDirectory: ./C78Project/assets
-  AssetRegistryPath: ./C78Project/assets/AssetRegistry.yml
-  ScriptModulePath: ./C78Project/assets/scripts
+  AssetDirectory: C:\dev\c-cpp\C78Engine\C78Project\C78Project.pce
+  AssetRegistryPath: ""
+  ScriptModulePath: ""

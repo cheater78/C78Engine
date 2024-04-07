@@ -37,6 +37,10 @@ project "C78Editor"
 		"C78Engine"
 	}
 	
+	defines{
+		"YAML_CPP_STATIC_DEFINE"
+	}
+	
 	filter "system:windows"
 		systemversion "latest"
 

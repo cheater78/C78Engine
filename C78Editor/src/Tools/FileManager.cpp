@@ -42,13 +42,18 @@ namespace C78Editor {
 
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		uint32_t x = static_cast<uint32_t>(size.x);
-		s_CWDStructure.elementSize = (x / s_ColumnElements)*0.90f;
+		s_CWDStructure.elementSize = static_cast<uint32_t>((x / s_ColumnElements)*0.90f);
 
 		showCWDNavigator();
 		
 		showFileNavigator();
 		
 		ImGui::End();
+	}
+
+	void FileManager::setCurrentProjectPath(C78E::FilePath currentProjectPath, bool cd) {
+		s_CurrentProjectPath = currentProjectPath;
+		if (cd) changeDirectory(currentProjectPath);
 	}
 
 	FileManager::EntryType FileManager::getEntryType(C78E::FilePath filepath) {
