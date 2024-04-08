@@ -1,4 +1,7 @@
 #include "C78EPCH.h"
+
+#ifdef C78_PLATFORM_WINDOWS
+
 #include "C78E/Utils/PlatformUtils.h"
 #include "C78E/Core/Application.h"
 
@@ -44,6 +47,7 @@ namespace C78E {
 	}
 
 	C78E::FilePath FileDialogs::openFolder(C78E::FilePath baseDir, Flags flags) {
+		C78_CORE_ASSERT(false, "win api is dooogshit");
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
 		CHAR currentDir[260] = { 0 };
@@ -61,7 +65,7 @@ namespace C78E {
 		}
 		ofn.lpstrInitialDir = currentDir;
 
-		ofn.lpstrFilter = "Folder"; //TODO Folder
+		ofn.lpstrFilter = ""; //TODO Folder
 		ofn.nFilterIndex = 1;
 		ofn.Flags = flags; // natively compatible!
 
@@ -122,3 +126,5 @@ namespace C78E {
 	}
 
 }
+
+#endif
