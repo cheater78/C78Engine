@@ -6,6 +6,7 @@
 #include "C78E/Core/Application.h"
 
 #include <commdlg.h>
+#include <shlobj.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
@@ -46,34 +47,41 @@ namespace C78E {
 
 	}
 
-	C78E::FilePath FileDialogs::openFolder(C78E::FilePath baseDir, Flags flags) {
-		C78_CORE_ASSERT(false, "win api is dooogshit");
-		OPENFILENAMEA ofn;
-		CHAR szFile[260] = { 0 };
-		CHAR currentDir[260] = { 0 };
-		ZeroMemory(&ofn, sizeof(OPENFILENAME));
-		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
-		ofn.lpstrFile = szFile;
-		ofn.nMaxFile = sizeof(szFile);
-
-		if(baseDir.empty()) {
-			if (GetCurrentDirectoryA(256, currentDir)) { }
-			else C78_CORE_ERROR("FileDialogs::openFolder: could not retrieve current directory!");
-		} else {
-			memcpy_s(currentDir, baseDir.string().size()+1, baseDir.string().c_str(), baseDir.string().size()+1);
+	static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) {
+		if (uMsg == BFFM_INITIALIZED) {
+			std::string tmp = (const char*)lpData;
+			C78_CORE_TRACE("WindoesPlatformUtils::BrowseCallbackProc: Path: {}", tmp);
+			SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
 		}
-		ofn.lpstrInitialDir = currentDir;
+		return 0;
+	}
 
-		ofn.lpstrFilter = ""; //TODO Folder
-		ofn.nFilterIndex = 1;
-		ofn.Flags = flags; // natively compatible!
+	FilePath FileDialogs::openFolder(C78E::FilePath baseDir, Flags flags) {
+		const char* path_param = baseDir.string().c_str();
 
-		if (GetOpenFileNameA(&ofn) == TRUE)
-			return ofn.lpstrFile;
+		TCHAR path[MAX_PATH];
+		BROWSEINFO bi = { 0 };
+		bi.lpszTitle = (const wchar_t*)"Browse for folder...";
+		bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE; //Flags impl!
+		bi.lpfn = BrowseCallbackProc;
+		bi.lParam = (LPARAM)path_param;
 
-		return C78E::FilePath();
+		LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+		if (pidl != 0) {
+			//get the name of the folder and put it in path
+			SHGetPathFromIDList(pidl, path);
 
+			//free memory used
+			IMalloc* imalloc = 0;
+			if (SUCCEEDED(SHGetMalloc(&imalloc))) {
+				imalloc->Free(pidl);
+				imalloc->Release();
+			}
+
+			return path;
+		}
+
+		return "";
 	}
 
 	C78E::FilePath FileDialogs::saveFile(std::string filter) {

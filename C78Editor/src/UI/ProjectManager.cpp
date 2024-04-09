@@ -86,6 +86,9 @@ namespace C78Editor {
 
 	void ProjectManager::showProjectCreate() {
 
+		C78E::FilePath path = C78E::FileDialogs::openFolder(getDefaultProjectPath(), 0);
+		C78_EDITOR_TRACE("Selected Path: {}", path.string());
+
 		static C78E::Gui::TextInput projectNameTI("ProjectName", "Untitled Project");
 
 
@@ -109,7 +112,7 @@ namespace C78Editor {
 		static C78E::Gui::TextInput assetRegistryTI("AssetRegistry", getDefaultProjectPath().string());
 		static C78E::Gui::TextButton assetRegistryTB("...",
 			[](void) -> void {
-				assetRegistryTI.setContent(C78E::FileDialogs::saveFile().string());
+				assetRegistryTI.setContent(C78E::FileDialogs::saveFile(".ace ").string());
 			}
 		);
 

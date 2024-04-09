@@ -25,9 +25,9 @@ namespace C78E {
 		};
 	public:
 		// on fail, return empty
-		static C78E::FilePath openFile(std::string filter = "", C78E::FilePath baseDir = "", Flags flags = FileMustExist | PathMustExist);
-		static C78E::FilePath openFolder(C78E::FilePath baseDir = "", Flags flags = PathMustExist);
-		static C78E::FilePath saveFile(std::string filter = "");
+		static FilePath openFile(std::string filter = "", C78E::FilePath baseDir = "", Flags flags = FileMustExist | PathMustExist);
+		static FilePath openFolder(C78E::FilePath baseDir = "", Flags flags = PathMustExist);
+		static FilePath saveFile(std::string filter = "");
 		static std::string constructFilter(std::vector<std::string> extensions, std::vector<std::string> labels = {});
 
 	};
