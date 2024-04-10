@@ -3,11 +3,14 @@
 namespace C78Editor {
 
 	C78E::FilePath ProjectManager::s_CurrentProjectFile = "";
+	C78E::Ref<C78E::FileManager> ProjectManager::s_FileManager = nullptr;
+
 	ProjectManager::UIElement ProjectManager::s_UIElement = ProjectManager::START;
 
 
 	void ProjectManager::init() {
 		s_CurrentProjectFile = "";
+		s_FileManager = C78E::createRef<C78E::FileManager>(C78E::FileDialogs::openFile().parent_path());
 	}
 
 	void ProjectManager::onUpdate() {
@@ -29,7 +32,7 @@ namespace C78Editor {
 		ImGui::SetNextWindowSize({ windowSize.x, windowSize.y }); // Maximized
 		if (!ImGui::Begin("Project", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) return false;
 
-
+		/*
 		switch (s_UIElement) {
 		case C78Editor::ProjectManager::START: {
 			if (ImGui::Button("Create")) {
@@ -49,8 +52,11 @@ namespace C78Editor {
 			break;
 		default: break;
 		}
-
+		*/
 		ImGui::End();
+
+		s_FileManager->onImGuiRender();
+
 		return true;
 	}
 

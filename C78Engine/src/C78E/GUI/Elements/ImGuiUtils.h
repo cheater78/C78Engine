@@ -1,5 +1,5 @@
 #pragma once
-
+#include <C78E/ImGui/TextureHandle.h>
 #include <imgui.h>
 #include <random>
 
@@ -10,6 +10,8 @@ namespace C78E {
 		* Primitives
 		*/
 		static void SameLine() { ImGui::SameLine(); }
+		static const glm::vec2 autoSize() { return {0.f, 0.f}; }
+		static const glm::vec4 autoColor() { return {0.f, 0.f, 0.f, 0.f }; }
 
 		/*
 		* BaseClass Element
@@ -42,6 +44,7 @@ namespace C78E {
 			~TextButton();
 
 			virtual void show() override;
+			virtual void show(glm::vec2 size);
 
 		private:
 			std::string m_Label = "";
@@ -57,11 +60,29 @@ namespace C78E {
 			~CyclingTextButton();
 
 			virtual void show() override;
+			virtual void show(glm::vec2 size);
 
 		private:
 			uint32_t m_State = 0;
 			std::vector<std::string> m_Label = {};
 			std::vector<std::function<void()>> m_OnClicks = {};
+		};
+
+		/*
+		*/
+		class ImageButton : public Element {
+		public:
+			ImageButton(std::string label, TextureHandle texture, std::function<void(void)> onClick);
+			ImageButton(const ImageButton& other) = delete;
+			~ImageButton();
+
+			virtual void show() override;
+			virtual void show(glm::vec2 size);
+			virtual void show(glm::vec2 size, glm::vec4 backGroundColor, glm::vec4 tintColor);
+		private:
+			std::string m_Tooltip = "";
+			std::function<void(void)> m_OnClick = nullptr;
+			TextureHandle m_Texture;
 		};
 
 		/*

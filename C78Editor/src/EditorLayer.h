@@ -2,11 +2,6 @@
 #include <C78E.h>
 #include <C78Elibs.h>
 
-
-
-
-
-#include "Tools/FileManager.h"
 #include "Tools/EntityInspector.h"
 #include "Tools/Viewport.h"
 
@@ -40,7 +35,6 @@ namespace C78Editor {
             
             EntityInspector::init();
             //Viewport::init();
-            FileManager::init();
 
         }
 
@@ -60,7 +54,6 @@ namespace C78Editor {
             }
             else m_Window.setMouseMode(C78E::MouseMode::NORMAL);
 
-            
         }
 
         void onEvent(C78E::Event& e) override {
@@ -95,7 +88,6 @@ namespace C78Editor {
 
             EntityInspector::onImGuiRender(m_EditorScene);
             //Viewport::onImGuiRender(m_MouseCapture);
-            FileManager::onImGuiRender();
         }
 
 

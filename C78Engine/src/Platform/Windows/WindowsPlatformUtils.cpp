@@ -57,30 +57,6 @@ namespace C78E {
 	}
 
 	FilePath FileDialogs::openFolder(C78E::FilePath baseDir, Flags flags) {
-		const char* path_param = baseDir.string().c_str();
-
-		TCHAR path[MAX_PATH];
-		BROWSEINFO bi = { 0 };
-		bi.lpszTitle = (const wchar_t*)"Browse for folder...";
-		bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE; //Flags impl!
-		bi.lpfn = BrowseCallbackProc;
-		bi.lParam = (LPARAM)path_param;
-
-		LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
-		if (pidl != 0) {
-			//get the name of the folder and put it in path
-			SHGetPathFromIDList(pidl, path);
-
-			//free memory used
-			IMalloc* imalloc = 0;
-			if (SUCCEEDED(SHGetMalloc(&imalloc))) {
-				imalloc->Free(pidl);
-				imalloc->Release();
-			}
-
-			return path;
-		}
-
 		return "";
 	}
 

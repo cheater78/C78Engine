@@ -27,6 +27,7 @@
 * ImGui
 */
 #include <imgui.h>
+#include <C78E/ImGui/TextureHandle.h>
 
 /*
 * GLM

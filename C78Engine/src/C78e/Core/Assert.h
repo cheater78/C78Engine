@@ -20,7 +20,7 @@
 	#define C78_CORE_ASSERT(...)	C78_EXPAND_MACRO( C78_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_CORE_, __VA_ARGS__) )
 	#define C78_EDITOR_ASSERT(...)	C78_EXPAND_MACRO( C78_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_EDITOR_, __VA_ARGS__) )
 #else
-	#define C78_ASSERT(...)
-	#define C78_CORE_ASSERT(...)
-	#define C78_EDITOR_ASSERT(...)
+	#define C78_ASSERT(x, ...)
+	#define C78_CORE_ASSERT(x, ...)
+	#define C78_EDITOR_ASSERT(x, ...)
 #endif

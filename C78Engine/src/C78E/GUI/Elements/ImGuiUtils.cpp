@@ -35,7 +35,9 @@ namespace C78E {
 
 	Gui::TextButton::~TextButton() { }
 
-	void Gui::TextButton::show() {
+	void Gui::TextButton::show() { show(autoSize()); }
+
+	void Gui::TextButton::show(glm::vec2 size) {
 		begin();
 		if (ImGui::Button(m_Label.c_str()))
 			m_OnClick();
@@ -54,7 +56,9 @@ namespace C78E {
 
 	Gui::CyclingTextButton::~CyclingTextButton() { }
 
-	void Gui::CyclingTextButton::show() {
+	void Gui::CyclingTextButton::show() { show(autoSize()); }
+
+	void Gui::CyclingTextButton::show(glm::vec2 size) {
 		begin();
 		if (ImGui::Button(m_Label.at(m_State).c_str())) {
 			m_OnClicks.at(m_State)();
@@ -64,6 +68,38 @@ namespace C78E {
 		end();
 	}
 
+	/*
+	* ImageButton
+	*/
+	Gui::ImageButton::ImageButton(std::string label, TextureHandle texture, std::function<void(void)> onClick) 
+		: m_Tooltip(label), m_Texture(texture), m_OnClick(onClick) { }
+
+	Gui::ImageButton::~ImageButton() { }
+
+	void Gui::ImageButton::show() { show(autoSize()); }
+
+	void Gui::ImageButton::show(glm::vec2 size) {
+		show(size, autoColor(), autoColor());
+	}
+
+	void Gui::ImageButton::show(glm::vec2 size, glm::vec4 backGroundColor, glm::vec4 tintColor) {
+		begin();
+		if (
+			ImGui::ImageButton(
+				m_Texture,
+				ImVec2{ size.x, size.y },
+				{ 0,0 },
+				{1,1},
+				-1,
+				{ backGroundColor.r, backGroundColor.g, backGroundColor.b, backGroundColor.a },
+				{ tintColor.r, tintColor.g, tintColor.b, tintColor.a }
+			)
+		)
+			m_OnClick();
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+			ImGui::SetTooltip(m_Tooltip.c_str());
+		end();
+	}
 
 	/*
 	* TextInput
@@ -107,4 +143,3 @@ namespace C78E {
 	}
 
 }
-

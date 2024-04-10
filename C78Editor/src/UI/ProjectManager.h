@@ -21,11 +21,11 @@ namespace C78Editor {
 
 	private:
 		static bool isProjectOpen() { return (bool)C78E::Project::getActive(); }
-		static C78E::FilePath getDefaultProjectPath() { return "C:\\dev\\c-cpp\\C78Engine\\C78Project"; }
+		static C78E::FilePath getDefaultProjectPath() { return "../C78Project"; }
 
 	private:
 		static C78E::FilePath s_CurrentProjectFile;
-
+		static C78E::Ref<C78E::FileManager> s_FileManager;
 	private:
 		static void showProjectCreate();
 
