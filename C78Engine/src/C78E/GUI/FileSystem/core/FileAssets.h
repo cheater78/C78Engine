@@ -13,6 +13,7 @@ namespace C78E {
 		BACKWARD,
 		HOME,
 		PARENT,
+		SEARCH
 	};
 
 	class FileAssets {

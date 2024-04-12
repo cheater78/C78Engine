@@ -11,6 +11,7 @@ namespace C78E {
 		m_History("C:\\dev\\c-cpp\\C78Engine\\C78Project"),
 		m_Assets("C:\\dev\\c-cpp\\C78Engine\\C78Editor\\assets\\textures\\FileManager"),
 		m_NavBar(m_History, m_Assets),
+		m_SearchBar(m_History, m_Assets),
 		m_FileView(createRef<FileViewGrid>(m_History, m_Assets)),
 		m_UIView(C78E::FileManager::ShowFiles) {
 		
@@ -35,6 +36,10 @@ namespace C78E {
 	
 	void FileManager::showFileView() {
 		m_NavBar.show();
+
+		Gui::SameLine();
+		m_SearchBar.show();
+
 		m_FileView->show();
 	}
 

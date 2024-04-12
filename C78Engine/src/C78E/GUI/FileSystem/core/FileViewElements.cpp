@@ -23,6 +23,29 @@ namespace C78E {
 			FileSystem::EntryType::MISC
 	};
 
+	FileSearchBar::FileSearchBar(FileHistory& history, FileAssets& assets) 
+		: m_History(history), m_Assets(assets),
+		m_SearchInput("Search"),
+		m_SearchButton("", Gui::ImageButton::LabelPostition::NONE, "Search", m_Assets.getUIconHandle(FileManagerIcon::SEARCH),
+			[this](void) -> void {
+				if (m_History.canCDBackward())
+					m_History.cdBackward();
+			}
+		) {
+
+	}
+
+	FileSearchBar::~FileSearchBar() { }
+
+	void FileSearchBar::show() {
+		glm::vec2 region = Gui::getContentRegionAvail();
+		uint32_t shorterSide = static_cast<uint32_t>(std::min(m_UISettings.screenWidth, m_UISettings.screenHeight));
+		glm::vec2 iconSize = m_UISettings.scale * glm::vec2{ shorterSide, shorterSide } *0.02f; // make FileCards 1.5% of ScreenHeight
+
+		m_SearchInput.show();
+		Gui::SameLine();
+		m_SearchButton.show(iconSize);
+	}
 
 	FileNavBar::FileNavBar(FileHistory& history, FileAssets& assets) 
 		: m_History(history), m_Assets(assets),
@@ -67,6 +90,10 @@ namespace C78E {
 		Gui::SameLine();
 		m_ParentButton.show(iconSize);
 		Gui::SameLine();
+
+		if (m_History.getCWD().string() != m_PathInput.getContent())
+			m_PathInput.setContent(m_History.getCWD().string());
+
 		m_PathInput.show();
 	}
 
@@ -96,7 +123,7 @@ namespace C78E {
 
 	void FileViewGrid::show() {
 		glm::vec2 region = Gui::getContentRegionAvail();
-		glm::vec2 fileCardSize = m_UISettings.scale * glm::vec2{ m_UISettings.screenWidth, m_UISettings.screenWidth } * 0.06f; // make FileCards 8% of ScreenWidth
+		glm::vec2 fileCardSize = m_UISettings.scale * glm::vec2{ m_UISettings.screenWidth, m_UISettings.screenWidth } * 0.03f; // make FileCards 6% of ScreenWidth
 		uint32_t horizontalElementCount = static_cast<uint32_t>(region.x / (fileCardSize.x + 0 /*padding*/));
 
 		if (ImGui::BeginTable("FileGrid", horizontalElementCount, ImGuiTableFlags_None)) {
@@ -174,5 +201,4 @@ namespace C78E {
 			ImGui::EndTable();
 		}
 	}
-
 }

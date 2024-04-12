@@ -43,6 +43,7 @@ namespace C78E {
 		FileAssets m_Assets;
 
 		FileNavBar m_NavBar;
+		FileSearchBar m_SearchBar;
 		Ref<FileView> m_FileView;
 
 

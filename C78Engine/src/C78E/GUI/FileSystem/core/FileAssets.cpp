@@ -10,6 +10,7 @@ namespace C78E {
 		m_UIcons.emplace(FileManagerIcon::BACKWARD, C78E::TextureLoader::loadTexture2D(defaultIconPath / "Backward.png"));
 		m_UIcons.emplace(FileManagerIcon::HOME, C78E::TextureLoader::loadTexture2D(defaultIconPath / "Home.png"));
 		m_UIcons.emplace(FileManagerIcon::PARENT, C78E::TextureLoader::loadTexture2D(defaultIconPath / "Parent.png"));
+		m_UIcons.emplace(FileManagerIcon::SEARCH, C78E::TextureLoader::loadTexture2D(defaultIconPath / "Search.png"));
 
 
 		m_DefaultIcons.emplace(FileSystem::EntryType::DIRECTORY, C78E::TextureLoader::loadTexture2D(defaultIconPath / "Folder.png"));

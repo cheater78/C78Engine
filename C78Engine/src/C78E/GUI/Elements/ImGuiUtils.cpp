@@ -145,10 +145,16 @@ namespace C78E {
 	}
 
 	void Gui::TextInput::show() {
+		show(0);
+	}
+
+	void Gui::TextInput::show(uint32_t width) {
 		begin();
 		ImGui::Text(m_Label.c_str());
 		ImGui::SameLine();
+		if(width) ImGui::PushItemWidth(width);
 		ImGui::InputText("", (char*)m_Buffer->data, m_Buffer->size);
+		if(width) ImGui::PopItemWidth();
 		end();
 	}
 

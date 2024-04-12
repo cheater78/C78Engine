@@ -115,6 +115,7 @@ namespace C78E {
 			std::string getContent(); // ascii chars and symbols only!, 0x20(' ') <= char <= 0x7E('~')
 
 			virtual void show() override;
+			virtual void show(uint32_t width);
 
 		protected:
 			std::string m_Label = "";

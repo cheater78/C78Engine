@@ -16,7 +16,17 @@ namespace C78E {
 
 	class FileSearchBar {
 	public:
+		FileSearchBar(FileHistory& history, FileAssets& assets);
+		FileSearchBar(const FileSearchBar& other) = delete;
+		~FileSearchBar();
+
+		void show();
 	private:
+		FileHistory& m_History;
+		FileAssets& m_Assets;
+		UISettings m_UISettings;
+		Gui::TextInput m_SearchInput;
+		Gui::ImageButton m_SearchButton;
 	};
 
 	class FileNavBar {
