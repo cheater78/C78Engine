@@ -17,8 +17,17 @@ namespace C78E {
 
 	};
 
-	class FileViewBase { //abstract
+	class FileView { //abstract
+	public:
+		FileView(FilePath cwd);
+		FileView(const FileView& other) = delete;
+		~FileView();
 
+		virtual void onUpdate(FilePath cwd) = 0;
+		virtual void show() = 0;
+
+	private:
+		FilePath m_CWD;
 	};
 
 	class FileViewGrid {
