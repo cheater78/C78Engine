@@ -1,4 +1,5 @@
 #pragma once
+#include "FileAssets.h"
 
 namespace C78E {
 
@@ -19,7 +20,13 @@ namespace C78E {
 
 	class FileView { //abstract
 	public:
-		FileView(FilePath cwd);
+		struct UISettings {
+			uint32_t screenWidth;
+			uint32_t screenHeight;
+			float scale = 1.0f;
+		};
+	public:
+		FileView(FilePath cwd, FileAssets& assets);
 		FileView(const FileView& other) = delete;
 		~FileView();
 
@@ -28,6 +35,7 @@ namespace C78E {
 
 	private:
 		FilePath m_CWD;
+		FileAssets& m_Assets;
 	};
 
 	class FileViewGrid {

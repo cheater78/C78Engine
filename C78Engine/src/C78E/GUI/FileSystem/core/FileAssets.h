@@ -31,7 +31,7 @@ namespace C78E {
 	private:
 		std::unordered_map<FileManagerIcon, Ref<Texture2D>> m_UIcons;
 		std::map<FileSystem::EntryType, Ref<Texture2D>> m_DefaultIcons;
-		std::unordered_map<FilePathHash, Ref<Texture2D>> m_CustomIcons;
+		std::unordered_map<FilePathHash, Ref<Texture2D>> m_CustomIcons; // to AssetManager when there is one
 		
 
 	};

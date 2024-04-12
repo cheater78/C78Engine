@@ -2,6 +2,7 @@
 
 #include "core/FileHistory.h"
 #include "core/FileAssets.h"
+#include "core/FileViewElements.h"
 
 namespace C78E {
 
@@ -25,6 +26,7 @@ namespace C78E {
 		void setView(View view) { m_UIView = view; }
 		void setTitle(std::string title) { m_Title = title; }
 
+		void onUpdate();
 		void onImGuiRender();
 
 	private:
@@ -43,11 +45,11 @@ namespace C78E {
 
 
 	private:
-		FileHistory m_History;
-		FileAssets m_Assets;
-
 		std::string m_Title = "File Manager";
 
+		FileHistory m_History;
+		FileAssets m_Assets;
+		Ref<FileView> m_FileView;
 		SortFilter m_SortFilter;
 
 
