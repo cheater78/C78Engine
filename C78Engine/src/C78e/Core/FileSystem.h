@@ -28,6 +28,7 @@ namespace C78E {
 			MISC
 		};
 		static EntryType getEntryType(C78E::FilePath filepath);
+		static std::string stringFromEntryType(EntryType type);
 	private:
 		static const std::map<std::string, EntryType> c_EntryTypeExtensionMap;
 

@@ -8,10 +8,8 @@ namespace C78E {
 
 	class FileManager {
 	public:
-		using SortFilter = std::vector<FileSystem::EntryType>;
-	public:
 		enum View {
-			FileView,
+			ShowFiles,
 			OpenElement,
 			SaveElement
 		};
@@ -33,32 +31,22 @@ namespace C78E {
 		void showFileView();
 		void showOpenElement();
 		void showSaveElement();
-
-		void showTopBar();
-		void showFileGrid();
-
-		bool showSingleFileEntry(std::string label, C78E::Ref<C78E::Texture2D> icon, uint32_t size);
-
-		glm::vec2 getContentRegionAvail();
 		//~GUI
 
 
 
 	private:
 		std::string m_Title = "File Manager";
+		UISettings m_UISettings;
 
 		FileHistory m_History;
 		FileAssets m_Assets;
+
+		FileNavBar m_NavBar;
 		Ref<FileView> m_FileView;
-		SortFilter m_SortFilter;
 
 
 	private:
-		struct UISettings {
-			uint32_t topBarElementHeight = 20;
-			uint32_t elementCount = 11;
-			std::string assetDirectory = "../C78Editor/asset/texture/FileManager"; //TODO: no hardcode duh
-		} m_UISettings;
 		View m_UIView;
 	};
 

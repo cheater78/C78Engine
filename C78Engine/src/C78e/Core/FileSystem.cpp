@@ -30,6 +30,23 @@ namespace C78E {
 		else return EntryType::MISC;
 	}
 
+	std::string FileSystem::stringFromEntryType(EntryType type) {
+		switch (type) {
+		case C78E::FileSystem::DIRECTORY: return "Directory";
+		case C78E::FileSystem::PROJECT: return "Project";
+		case C78E::FileSystem::SCENE: return "Scene";
+		case C78E::FileSystem::ASSETREGISTRY: return "AssetRegistry";
+		case C78E::FileSystem::IMAGE: return "Image";
+		case C78E::FileSystem::SHADER: return "Shader";
+		case C78E::FileSystem::MODEL: return "Model";
+		case C78E::FileSystem::MESH: return "Mesh";
+		case C78E::FileSystem::MATERIAL: return "Material";
+		case C78E::FileSystem::FONT: return "Font";
+		case C78E::FileSystem::MISC: return "File";
+		default:  return "Illegal FileType";
+		}
+	}
+
 
 
 

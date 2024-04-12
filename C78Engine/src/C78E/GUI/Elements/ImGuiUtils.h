@@ -11,8 +11,11 @@ namespace C78E {
 		*/
 		static void SameLine() { ImGui::SameLine(); }
 		static const glm::vec2 autoSize() { return {0.f, 0.f}; }
-		static const glm::vec4 autoColor() { return {0.f, 0.f, 0.f, 0.f }; }
-		static const glm::vec4 noTintColor() { return {1.f, 1.f, 1.f, 1.f }; }
+		static const glm::vec4 autoColor() { return { 0.f, 0.f, 0.f, 0.f }; }
+		static const glm::vec4 markedColor() { return { .1f, .2f, .3f, 1.f }; }
+		static const glm::vec4 noTintColor() { return { 1.f, 1.f, 1.f, 1.f }; }
+
+		static glm::vec2 getContentRegionAvail() { ImVec2 size = ImGui::GetContentRegionAvail(); return glm::vec2(size.x, size.y); }
 
 		/*
 		* BaseClass Element
@@ -32,11 +35,12 @@ namespace C78E {
 			void end();
 		public:
 			virtual void show() = 0;
-		private:
+		protected:
 			int m_Handle;
 		};
 
 		/*
+		* TextButton
 		*/
 		class TextButton : public Element {
 		public:
@@ -47,12 +51,13 @@ namespace C78E {
 			virtual void show() override;
 			virtual void show(glm::vec2 size);
 
-		private:
+		protected:
 			std::string m_Label = "";
 			std::function<void(void)> m_OnClick = nullptr;
 		};
 
 		/*
+		* CyclingTextButton
 		*/
 		class CyclingTextButton : public Element {
 		public:
@@ -63,30 +68,42 @@ namespace C78E {
 			virtual void show() override;
 			virtual void show(glm::vec2 size);
 
-		private:
+		protected:
 			uint32_t m_State = 0;
 			std::vector<std::string> m_Label = {};
 			std::vector<std::function<void()>> m_OnClicks = {};
 		};
 
 		/*
+		* ImageButton
 		*/
 		class ImageButton : public Element {
 		public:
-			ImageButton(std::string label, TextureHandle texture, std::function<void(void)> onClick);
+			enum LabelPostition : uint8_t {
+				NONE = 0,
+				RIGHT = 1,
+				LEFT = 2,
+				BELOW = 3,
+				ABOVE = 4
+			};
+		public:
+			ImageButton(std::string label, LabelPostition labelPos, std::string toolTip, TextureHandle texture, std::function<void(void)> onClick);
 			ImageButton(const ImageButton& other) = delete;
 			~ImageButton();
 
 			virtual void show() override;
 			virtual void show(glm::vec2 size);
 			virtual void show(glm::vec2 size, glm::vec4 backGroundColor, glm::vec4 tintColor);
-		private:
+		protected:
+			std::string m_Label = "";
+			LabelPostition m_LabelPostition = LabelPostition::RIGHT;
 			std::string m_Tooltip = "";
 			std::function<void(void)> m_OnClick = nullptr;
 			TextureHandle m_Texture;
 		};
 
 		/*
+		* TextInput
 		*/
 		class TextInput : public Element {
 		public:
@@ -99,7 +116,7 @@ namespace C78E {
 
 			virtual void show() override;
 
-		private:
+		protected:
 			std::string m_Label = "";
 			Ref<Buffer> m_Buffer = nullptr;
 		};

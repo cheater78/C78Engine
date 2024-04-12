@@ -71,19 +71,22 @@ namespace C78E {
 	/*
 	* ImageButton
 	*/
-	Gui::ImageButton::ImageButton(std::string label, TextureHandle texture, std::function<void(void)> onClick) 
-		: m_Tooltip(label), m_Texture(texture), m_OnClick(onClick) { }
+	Gui::ImageButton::ImageButton(std::string label, LabelPostition labelPos, std::string toolTip, TextureHandle texture, std::function<void(void)> onClick)
+		: m_Label(label), m_LabelPostition(labelPos), m_Tooltip(toolTip), m_Texture(texture), m_OnClick(onClick) { }
 
 	Gui::ImageButton::~ImageButton() { }
 
 	void Gui::ImageButton::show() { show(autoSize()); }
 
-	void Gui::ImageButton::show(glm::vec2 size) {
-		show(size, autoColor(), noTintColor());
-	}
+	void Gui::ImageButton::show(glm::vec2 size) { show(size, autoColor(), noTintColor()); }
 
 	void Gui::ImageButton::show(glm::vec2 size, glm::vec4 backGroundColor, glm::vec4 tintColor) {
 		begin();
+
+		if (m_LabelPostition == ABOVE || m_LabelPostition == LEFT)
+			ImGui::Text(m_Label.c_str());
+		if (m_LabelPostition == LEFT)
+			ImGui::SameLine();
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 		if (
 			ImGui::ImageButton(
@@ -98,8 +101,13 @@ namespace C78E {
 		)
 			m_OnClick();
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-			ImGui::SetTooltip(m_Tooltip.c_str());
+			if(!m_Tooltip.empty())
+				ImGui::SetTooltip(m_Tooltip.c_str());
 		ImGui::PopStyleVar();
+		if (m_LabelPostition == RIGHT)
+			ImGui::SameLine();
+		if (m_LabelPostition == BELOW || m_LabelPostition == RIGHT)
+			ImGui::Text(m_Label.c_str());
 		end();
 	}
 
@@ -145,3 +153,5 @@ namespace C78E {
 	}
 
 }
+
+

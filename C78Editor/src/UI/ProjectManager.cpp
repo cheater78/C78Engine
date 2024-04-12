@@ -10,11 +10,11 @@ namespace C78Editor {
 
 	void ProjectManager::init() {
 		s_CurrentProjectFile = "";
-		s_FileManager = C78E::createRef<C78E::FileManager>(C78E::FileDialogs::openFile().parent_path());
+		s_FileManager = C78E::createRef<C78E::FileManager>("");
 	}
 
 	void ProjectManager::onUpdate() {
-
+		s_FileManager->onUpdate();
 	}
 
 	void ProjectManager::onImGuiMainMenuBar() {

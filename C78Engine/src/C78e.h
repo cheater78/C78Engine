@@ -57,7 +57,6 @@
 #include <C78E/Utils/PlatformUtils.h>
 #include <C78E/Utils/yaml-cpp/YamlUtils.h>
 #include <C78E/GUI/Elements/ImGuiUtils.h>
-#include <C78E/GUI/Elements/ImGuiFileDialogUtils.h>
 
 
 #ifdef C78E_ENTRYPOINT
