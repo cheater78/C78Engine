@@ -79,11 +79,12 @@ namespace C78E {
 	void Gui::ImageButton::show() { show(autoSize()); }
 
 	void Gui::ImageButton::show(glm::vec2 size) {
-		show(size, autoColor(), autoColor());
+		show(size, autoColor(), noTintColor());
 	}
 
 	void Gui::ImageButton::show(glm::vec2 size, glm::vec4 backGroundColor, glm::vec4 tintColor) {
 		begin();
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 		if (
 			ImGui::ImageButton(
 				m_Texture,
@@ -98,13 +99,14 @@ namespace C78E {
 			m_OnClick();
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
 			ImGui::SetTooltip(m_Tooltip.c_str());
+		ImGui::PopStyleVar();
 		end();
 	}
 
 	/*
 	* TextInput
 	*/
-	Gui::TextInput::TextInput(std::string label, std::string defaultValue, size_t maxLength, Ref<Buffer> buffer)
+	Gui::TextInput::TextInput(const std::string& label, const std::string& defaultValue, size_t maxLength, Ref<Buffer> buffer)
 		: m_Label(label) {
 		if (!buffer) {
 			m_Buffer = createRef<Buffer>(maxLength);

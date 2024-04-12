@@ -12,7 +12,7 @@
 
 
 #include "UI/ProjectManager.h"
-
+#include <C78E/GUI/FileSystem/core/FileSearcher.h>
 
 namespace C78Editor {
 

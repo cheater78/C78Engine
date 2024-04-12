@@ -35,6 +35,8 @@ namespace C78E {
 		void showTopBar();
 		void showFileGrid();
 
+		bool showSingleFileEntry(std::string label, C78E::Ref<C78E::Texture2D> icon, uint32_t size);
+
 		glm::vec2 getContentRegionAvail();
 		//~GUI
 
@@ -51,7 +53,7 @@ namespace C78E {
 
 	private:
 		struct UISettings {
-			uint32_t topBarElementHeight = 30;
+			uint32_t topBarElementHeight = 20;
 			uint32_t elementCount = 11;
 			std::string assetDirectory = "../C78Editor/asset/texture/FileManager"; //TODO: no hardcode duh
 		} m_UISettings;

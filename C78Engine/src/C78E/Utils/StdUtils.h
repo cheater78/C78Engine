@@ -47,12 +47,8 @@ namespace std {
 
 		std::string::size_type prev_pos = 0, pos = 0;
 
-		while ((pos = s.find(seperator, pos)) != std::string::npos)
-		{
-			std::string substring(s.substr(prev_pos, pos - prev_pos));
-
-			output.push_back(substring);
-
+		while ((pos = s.find(seperator, pos)) != std::string::npos) {
+			output.push_back(s.substr(prev_pos, pos - prev_pos));
 			prev_pos = ++pos;
 		}
 
@@ -78,6 +74,32 @@ namespace std {
 
 		return output;
 	}
+	
+
+	// string compare with caseSensitivity
+	template<typename charT>
+	struct nonCaseSensitiveEqual {
+		nonCaseSensitiveEqual(const std::locale& loc) : locale(loc) {}
+		bool operator()(charT ch1, charT ch2) {
+			return std::toupper(ch1, locale) == std::toupper(ch2, locale);
+		}
+	private:
+		const std::locale& locale;
+	};
+
+	template<typename T>
+	size_t findInString(const T& base, const T& pattern, bool caseSensitive = true, const std::locale& loc = std::locale()) {
+		if (caseSensitive)
+			return base.find(pattern);
+		else {
+			typename T::const_iterator it = std::search(base.begin(), base.end(),
+				pattern.begin(), pattern.end(), nonCaseSensitiveEqual<typename T::value_type>(loc));
+			if (it != base.end()) return it - base.begin();
+			else return std::string::npos;
+		}
+	}
+
+	
 
 	// Filesystem
 	namespace filesystem {

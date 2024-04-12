@@ -12,6 +12,7 @@ namespace C78E {
 		static void SameLine() { ImGui::SameLine(); }
 		static const glm::vec2 autoSize() { return {0.f, 0.f}; }
 		static const glm::vec4 autoColor() { return {0.f, 0.f, 0.f, 0.f }; }
+		static const glm::vec4 noTintColor() { return {1.f, 1.f, 1.f, 1.f }; }
 
 		/*
 		* BaseClass Element
@@ -89,7 +90,7 @@ namespace C78E {
 		*/
 		class TextInput : public Element {
 		public:
-			TextInput(std::string label = "", std::string defaultValue = "", size_t maxLength = 1024, Ref<Buffer> buffer = nullptr);
+			TextInput(const std::string& label = "", const std::string& defaultValue = "", size_t maxLength = 1024, Ref<Buffer> buffer = nullptr);
 			TextInput(const TextInput& other) = delete;
 			~TextInput();
 

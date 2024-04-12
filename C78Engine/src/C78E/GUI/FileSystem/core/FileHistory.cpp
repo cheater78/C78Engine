@@ -35,6 +35,7 @@ namespace C78E {
 			m_History.erase(std::next(m_History.begin(), m_CurrentIndex + 1), m_History.end());
 		//...so just add the new point to ur path
 		m_History.push_back(filePath);
+		m_CurrentIndex = m_History.size() - 1; // set the current Index to the laste Element of m_History
 	}
 
 	void FileHistory::cdParent() {
@@ -50,6 +51,10 @@ namespace C78E {
 	void FileHistory::cdBackward() {
 		C78_CORE_ASSERT(canCDBackward(), "FileHistory::cdBackward: no History to move backward to!");
 		m_CurrentIndex--;
+	}
+
+	bool FileHistory::canCD(FilePath filePath) const {
+		return std::filesystem::is_directory(filePath); //TODO: permission check
 	}
 
 	bool FileHistory::canCDParent() const {

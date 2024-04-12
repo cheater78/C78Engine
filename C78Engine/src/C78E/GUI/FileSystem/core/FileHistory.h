@@ -17,6 +17,7 @@ namespace C78E {
 		void cdForward();
 		void cdBackward();
 
+		bool canCD(FilePath filePath) const;
 		bool canCDParent() const;
 		bool canCDForward() const;
 		bool canCDBackward() const;
