@@ -39,12 +39,14 @@ namespace C78E {
 		std::string m_Title = "File Manager";
 		UISettings m_UISettings;
 
+		// ORDER MATTERS !!!
 		FileHistory m_History;
 		FileAssets m_Assets;
 
-		FileNavBar m_NavBar;
-		FileSearchBar m_SearchBar;
 		Ref<FileView> m_FileView;
+		FileSearchBar m_SearchBar;
+		FileNavBar m_NavBar;
+		
 
 
 	private:

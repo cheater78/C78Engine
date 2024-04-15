@@ -3,10 +3,13 @@
 
 #include "FileHistory.h"
 #include "FileAssets.h"
+#include "FileSearcher.h"
 #include "FileViewElements.h"
 
 
 namespace C78E {
+
+	class FileView;
 
 	struct UISettings {
 		uint32_t screenWidth = 2560; //TODO: like just dont
@@ -16,29 +19,36 @@ namespace C78E {
 
 	class FileSearchBar {
 	public:
-		FileSearchBar(FileHistory& history, FileAssets& assets);
+		FileSearchBar(FileHistory& history, FileAssets& assets, Ref<FileView>& fileView);
 		FileSearchBar(const FileSearchBar& other) = delete;
 		~FileSearchBar();
 
-		void show();
+		void show(float relWidth = 0.f);
+
+		void closeFileSearch();
 	private:
 		FileHistory& m_History;
 		FileAssets& m_Assets;
+		Ref<FileView> m_FileView; // for displaying the search result
+		Ref<FileView> m_RestoreFileView = nullptr; // for displaying the search result
 		UISettings m_UISettings;
 		Gui::TextInput m_SearchInput;
 		Gui::ImageButton m_SearchButton;
+		Gui::ImageButton m_CancelSearchButton;
 	};
 
 	class FileNavBar {
 	public:
-		FileNavBar(FileHistory& history, FileAssets& assets);
+		FileNavBar(FileHistory& history, FileAssets& assets, Ref<FileView>& fileView, FileSearchBar& searchBar);
 		FileNavBar(const FileNavBar& other) = delete;
 		~FileNavBar();
 
-		void show();
+		void show(float relWidth = 0.f);
 	private:
 		FileHistory& m_History;
 		FileAssets& m_Assets;
+		Ref<FileView> m_FileView;
+		FileSearchBar& m_SearchBar;
 		UISettings m_UISettings;
 		Gui::ImageButton m_BackButton;
 		Gui::ImageButton m_ForwardButton;
@@ -58,7 +68,8 @@ namespace C78E {
 
 		enum FileViewType {
 			Grid,
-			List
+			List,
+			Search
 		};
 	public:
 		FileView() = delete;
@@ -85,7 +96,7 @@ namespace C78E {
 		~FileViewGrid();
 
 		virtual void show() override;
-		virtual FileViewType getType() { return Grid; }
+		virtual FileViewType getType() override { return Grid; }
 	private:
 		std::unordered_map<FilePath, Gui::ImageButton> m_FileCards;
 	};
@@ -98,8 +109,22 @@ namespace C78E {
 		~FileViewList();
 
 		virtual void show() override;
-		virtual FileViewType getType() { return List; }
+		virtual FileViewType getType() override { return List; }
 	private:
+		std::unordered_map<FilePath, Gui::ImageButton> m_FileCards; //TODO: rename
+	};
+
+	class SearchFileView : public FileView {
+	public:
+		SearchFileView() = delete;
+		SearchFileView(FileHistory& history, FileAssets& assets, FileSearcher::Result& result);
+		SearchFileView(const SearchFileView& other) = delete;
+		~SearchFileView();
+
+		virtual void show() override;
+		virtual FileViewType getType() override { return Search; }
+	private:
+		FileSearcher::Result m_Result;
 		std::unordered_map<FilePath, Gui::ImageButton> m_FileCards; //TODO: rename
 	};
 

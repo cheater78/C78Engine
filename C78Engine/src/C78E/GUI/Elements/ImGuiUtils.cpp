@@ -94,7 +94,7 @@ namespace C78E {
 				ImVec2{ size.x, size.y },
 				{ 0,0 },
 				{1,1},
-				-1,
+				0,
 				{ backGroundColor.r, backGroundColor.g, backGroundColor.b, backGroundColor.a },
 				{ tintColor.r, tintColor.g, tintColor.b, tintColor.a }
 			)
@@ -152,7 +152,7 @@ namespace C78E {
 		begin();
 		ImGui::Text(m_Label.c_str());
 		ImGui::SameLine();
-		if(width) ImGui::PushItemWidth(width);
+		if (width) ImGui::PushItemWidth(width - ImGui::CalcTextSize(m_Label.c_str()).x);
 		ImGui::InputText("", (char*)m_Buffer->data, m_Buffer->size);
 		if(width) ImGui::PopItemWidth();
 		end();

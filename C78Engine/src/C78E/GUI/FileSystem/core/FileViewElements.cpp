@@ -23,13 +23,19 @@ namespace C78E {
 			FileSystem::EntryType::MISC
 	};
 
-	FileSearchBar::FileSearchBar(FileHistory& history, FileAssets& assets) 
-		: m_History(history), m_Assets(assets),
+	FileSearchBar::FileSearchBar(FileHistory& history, FileAssets& assets, Ref<FileView>& fileView)
+		: m_History(history), m_Assets(assets), m_FileView(fileView),
 		m_SearchInput("Search"),
 		m_SearchButton("", Gui::ImageButton::LabelPostition::NONE, "Search", m_Assets.getUIconHandle(FileManagerIcon::SEARCH),
 			[this](void) -> void {
-				if (m_History.canCDBackward())
-					m_History.cdBackward();
+				FileSearcher::Result result = FileSearcher::search(m_History.getCWD(), m_SearchInput.getContent());
+				m_RestoreFileView = createRef<SearchFileView>(m_History, m_Assets, result);
+				m_FileView.swap(m_RestoreFileView);
+			}
+		),
+		m_CancelSearchButton("", Gui::ImageButton::LabelPostition::NONE, "Cancel", m_Assets.getUIconHandle(FileManagerIcon::HOME),
+			[this](void) -> void {
+				closeFileSearch();
 			}
 		) {
 
@@ -37,22 +43,47 @@ namespace C78E {
 
 	FileSearchBar::~FileSearchBar() { }
 
-	void FileSearchBar::show() {
+	void FileSearchBar::show(float relWidth) {
 		glm::vec2 region = Gui::getContentRegionAvail();
 		uint32_t shorterSide = static_cast<uint32_t>(std::min(m_UISettings.screenWidth, m_UISettings.screenHeight));
-		glm::vec2 iconSize = m_UISettings.scale * glm::vec2{ shorterSide, shorterSide } *0.02f; // make FileCards 1.5% of ScreenHeight
+		glm::vec2 iconSize = m_UISettings.scale * glm::vec2{ shorterSide, shorterSide } *0.017f; // make Icons 1.7% of ScreenHeight
 
-		m_SearchInput.show();
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+		if (relWidth > 0.f) {
+			ImGui::PushItemWidth(region.x * relWidth - 1 * iconSize.x);
+			m_SearchInput.show(static_cast<uint32_t>(region.x * relWidth - 1.f * iconSize.x));
+			ImGui::PopItemWidth();
+		}
+		else {
+			m_SearchInput.show();
+		}
 		Gui::SameLine();
-		m_SearchButton.show(iconSize);
+
+		if (m_FileView->getType() == FileView::FileViewType::Search)
+			m_CancelSearchButton.show(iconSize);
+		else m_SearchButton.show(iconSize);
+
+		ImGui::PopStyleVar();
 	}
 
-	FileNavBar::FileNavBar(FileHistory& history, FileAssets& assets) 
-		: m_History(history), m_Assets(assets),
+	void FileSearchBar::closeFileSearch() {
+		if (m_RestoreFileView) {
+			m_FileView.swap(m_RestoreFileView);
+			m_RestoreFileView.reset();
+		}
+		else if (!m_FileView) m_FileView = createRef<FileViewGrid>(m_History, m_Assets); // Emergency
+	}
+
+	FileNavBar::FileNavBar(FileHistory& history, FileAssets& assets, Ref<FileView>& fileView, FileSearchBar& searchBar)
+		: m_History(history), m_Assets(assets), m_FileView(fileView), m_SearchBar(searchBar),
 		m_BackButton("", Gui::ImageButton::LabelPostition::NONE, "Back", m_Assets.getUIconHandle(FileManagerIcon::BACKWARD),
 			[this](void) -> void {
-				if (m_History.canCDBackward())
-					m_History.cdBackward();
+				if (m_FileView->getType() != FileView::FileViewType::Search) {
+					if(m_History.canCDBackward())
+						m_History.cdBackward();
+				}
+				else m_SearchBar.closeFileSearch();
 			}
 		),
 		m_ForwardButton("", Gui::ImageButton::LabelPostition::NONE, "Forward", m_Assets.getUIconHandle(FileManagerIcon::FORWARD),
@@ -77,10 +108,12 @@ namespace C78E {
 
 	FileNavBar::~FileNavBar() { }
 
-	void FileNavBar::show() {
+	void FileNavBar::show(float relWidth) {
 		glm::vec2 region = Gui::getContentRegionAvail();
 		uint32_t shorterSide = static_cast<uint32_t>(std::min(m_UISettings.screenWidth, m_UISettings.screenHeight));
-		glm::vec2 iconSize = m_UISettings.scale * glm::vec2{ shorterSide, shorterSide } * 0.02f; // make FileCards 1.5% of ScreenHeight
+		glm::vec2 iconSize = m_UISettings.scale * glm::vec2{ shorterSide, shorterSide } * 0.017f; // make Icons 1.7% of ScreenHeight
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{0, 0});
 
 		m_BackButton.show(iconSize);
 		Gui::SameLine();
@@ -94,7 +127,13 @@ namespace C78E {
 		if (m_History.getCWD().string() != m_PathInput.getContent())
 			m_PathInput.setContent(m_History.getCWD().string());
 
+		if (relWidth > 0.f) ImGui::PushItemWidth(region.x * relWidth - 4 * iconSize.x);
+
 		m_PathInput.show();
+
+		if (relWidth > 0.f) ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
 	}
 
 
@@ -201,4 +240,55 @@ namespace C78E {
 			ImGui::EndTable();
 		}
 	}
+
+	
+
+	SearchFileView::SearchFileView(FileHistory& history, FileAssets& assets, FileSearcher::Result& result)
+		: FileView(history, assets), m_Result(result) {
+	}
+
+	SearchFileView::~SearchFileView() { }
+
+	void SearchFileView::show() {
+		glm::vec2 region = Gui::getContentRegionAvail();
+		glm::vec2 fileIconSize = m_UISettings.scale * glm::vec2{ m_UISettings.screenHeight, m_UISettings.screenHeight } *0.015f; // make FileCards 1.5% of ScreenHeight
+
+		if (ImGui::BeginTable("FileTable", 5, ImGuiTableFlags_None)) {
+			for (C78E::FileSystem::EntryType type : m_Filter)
+				for (FilePath file : m_Result) {
+					if (C78E::FileSystem::getEntryType(file) != type) continue;
+
+					// Asset will get loaded here on first Call -> TODO: async bc slow
+					if (!m_FileCards.contains(file)) {
+						m_FileCards.emplace(std::piecewise_construct, std::forward_as_tuple(file),
+							std::forward_as_tuple(
+								file.filename().string(), Gui::ImageButton::LabelPostition::RIGHT,
+								"", m_Assets.getIconHandle(file),
+								[this, file](void) -> void {
+									if (std::filesystem::is_directory(file))
+										m_History.cd(file);
+									else FileView::onFileClick(file);
+								}
+							)
+						);
+					}
+
+					ImGui::TableNextColumn(); // File Icon and Name
+					m_FileCards.at(file).show(fileIconSize, Gui::autoColor(), Gui::noTintColor());
+					ImGui::TableNextColumn(); // File ParentdDirectory
+					ImGui::Text(file.parent_path().string().c_str());
+					ImGui::TableNextColumn(); // File Size
+					std::string displayedFileSize = "";
+					if (!std::filesystem::is_directory(file))
+						displayedFileSize = std::to_string(std::filesystem::file_size(file));
+					ImGui::Text(displayedFileSize.c_str());
+					ImGui::TableNextColumn();  // File Type
+					ImGui::Text(FileSystem::stringFromEntryType(FileSystem::getEntryType(file)).c_str());
+					ImGui::TableNextColumn();  // File Change Date
+					ImGui::Text(std::format("{:%d.%m.%Y %H:%M}", std::filesystem::last_write_time(file)).c_str());
+				}
+			ImGui::EndTable();
+		}
+	}
+
 }
