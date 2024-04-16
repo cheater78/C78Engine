@@ -3,6 +3,7 @@
 #include "core/FileHistory.h"
 #include "core/FileAssets.h"
 #include "core/FileViewElements.h"
+#include "core/FileSearcher.h"
 
 namespace C78E {
 
@@ -18,7 +19,9 @@ namespace C78E {
 		FileManager(const FileManager& other) = delete;
 		~FileManager() = default;
 
-	
+		void createSearch(const std::string& searchDirective);
+		void destroySearch();
+		bool hasSearch();
 		
 	public: //GUI
 		void setView(View view) { m_UIView = view; }
@@ -43,11 +46,12 @@ namespace C78E {
 		FileHistory m_History;
 		FileAssets m_Assets;
 
-		Ref<FileView> m_FileView;
-		FileSearchBar m_SearchBar;
 		FileNavBar m_NavBar;
+		FileSearchBar m_SearchBar;
+		FilePoIPanel m_PoIPanel;
+		Scope<FileView> m_FileView;
+		Scope<FileView> m_RestoreFileView = nullptr;
 		
-
 
 	private:
 		View m_UIView;

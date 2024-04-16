@@ -10,11 +10,26 @@ namespace C78E {
 		m_UISettings(),
 		m_History("C:\\dev\\c-cpp\\C78Engine\\C78Project"),
 		m_Assets("C:\\dev\\c-cpp\\C78Engine\\C78Editor\\assets\\textures\\FileManager"),
-		m_FileView(createRef<FileViewGrid>(m_History, m_Assets)),
-		m_SearchBar(m_History, m_Assets, m_FileView),
-		m_NavBar(m_History, m_Assets, m_FileView, m_SearchBar),
+		m_FileView(createScope<FileViewGrid>(m_History, m_Assets)),
+		m_SearchBar(this, m_History, m_Assets),
+		m_NavBar(this, m_History, m_Assets),
+		m_PoIPanel(this, m_History, m_Assets),
 		m_UIView(C78E::FileManager::ShowFiles) {
-		
+
+	}
+
+	void FileManager::createSearch(const std::string& searchDirective) {
+		m_RestoreFileView = createScope<SearchFileView>(this, m_History, m_Assets, FileSearcher::search(m_History.getCWD(), searchDirective));
+		m_FileView.swap(m_RestoreFileView);
+	}
+
+	void FileManager::destroySearch() {
+		m_FileView.swap(m_RestoreFileView);
+		m_RestoreFileView.reset();
+	}
+
+	bool FileManager::hasSearch() {
+		return m_RestoreFileView.get();
 	}
 
 	void FileManager::onUpdate() {
@@ -39,7 +54,17 @@ namespace C78E {
 		Gui::SameLine();
 		m_SearchBar.show(1.f);
 
-		m_FileView->show();
+		if (ImGui::BeginTable("FileManagerSplitView", 2, ImGuiTableFlags_Resizable)) {
+			ImGui::TableNextColumn();
+
+			m_PoIPanel.show();
+
+			ImGui::TableNextColumn();
+
+			m_FileView->show();
+
+			ImGui::EndTable();
+		}
 	}
 
 	void FileManager::showOpenElement() {

@@ -84,7 +84,7 @@ namespace C78E {
 		begin();
 
 		if (m_LabelPostition == ABOVE || m_LabelPostition == LEFT)
-			ImGui::Text(m_Label.c_str());
+			ImGui::TextWrapped(m_Label.c_str());
 		if (m_LabelPostition == LEFT)
 			ImGui::SameLine();
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
@@ -107,7 +107,7 @@ namespace C78E {
 		if (m_LabelPostition == RIGHT)
 			ImGui::SameLine();
 		if (m_LabelPostition == BELOW || m_LabelPostition == RIGHT)
-			ImGui::Text(m_Label.c_str());
+			ImGui::TextWrapped(m_Label.c_str());
 		end();
 	}
 

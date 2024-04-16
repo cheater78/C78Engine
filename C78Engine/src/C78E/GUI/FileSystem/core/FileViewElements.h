@@ -9,7 +9,7 @@
 
 namespace C78E {
 
-	class FileView;
+	class FileManager;
 
 	struct UISettings {
 		uint32_t screenWidth = 2560; //TODO: like just dont
@@ -17,20 +17,24 @@ namespace C78E {
 		float scale = 1.0f;
 	};
 
+	struct ViewFileMeta {
+		Scope<Gui::ImageButton> fileButton;
+		FileSystem::EntryType type;
+		uintmax_t fileSize;
+		std::filesystem::file_time_type lastWrite;
+	};
+
 	class FileSearchBar {
 	public:
-		FileSearchBar(FileHistory& history, FileAssets& assets, Ref<FileView>& fileView);
+		FileSearchBar(FileManager* fileManager, FileHistory& history, FileAssets& assets);
 		FileSearchBar(const FileSearchBar& other) = delete;
 		~FileSearchBar();
 
 		void show(float relWidth = 0.f);
-
-		void closeFileSearch();
 	private:
+		FileManager* m_FileManager;
 		FileHistory& m_History;
 		FileAssets& m_Assets;
-		Ref<FileView> m_FileView; // for displaying the search result
-		Ref<FileView> m_RestoreFileView = nullptr; // for displaying the search result
 		UISettings m_UISettings;
 		Gui::TextInput m_SearchInput;
 		Gui::ImageButton m_SearchButton;
@@ -39,26 +43,43 @@ namespace C78E {
 
 	class FileNavBar {
 	public:
-		FileNavBar(FileHistory& history, FileAssets& assets, Ref<FileView>& fileView, FileSearchBar& searchBar);
+		FileNavBar(FileManager* fileManager, FileHistory& history, FileAssets& assets);
 		FileNavBar(const FileNavBar& other) = delete;
 		~FileNavBar();
 
 		void show(float relWidth = 0.f);
 	private:
+		FileManager* m_FileManager;
 		FileHistory& m_History;
 		FileAssets& m_Assets;
-		Ref<FileView> m_FileView;
-		FileSearchBar& m_SearchBar;
 		UISettings m_UISettings;
 		Gui::ImageButton m_BackButton;
 		Gui::ImageButton m_ForwardButton;
 		Gui::ImageButton m_HomeButton;
 		Gui::ImageButton m_ParentButton;
 		Gui::TextInput m_PathInput;
+		Gui::ImageButton m_PathSubmitButton;
 	};
 
-	class FilePoIPanel {
+	class FilePoIPanel  {
+	public:
+		FilePoIPanel(FileManager* fileManager, FileHistory& history, FileAssets& assets);
+		FilePoIPanel(const FilePoIPanel& other) = delete;
+		~FilePoIPanel();
 
+		void show();
+	private:
+		bool showDir(FilePath directory, uint32_t depth = 0);
+		void showDirRecurse(FilePath directory, uint32_t depth = 0);
+	private:
+		FileManager* m_FileManager;
+		FileHistory& m_History;
+		FileAssets& m_Assets;
+		UISettings m_UISettings;
+		std::unordered_map<FilePath, Gui::ImageButton> m_Directories;
+		std::unordered_map<FilePath, Gui::CyclingTextButton> m_ShowChildrenButtons;
+		std::unordered_map<FilePath, bool> m_ShowChildren;
+		glm::vec2 m_FileIconSize{ 1.f, 1.f };
 	};
 
 	class FileView { //abstract
@@ -111,21 +132,22 @@ namespace C78E {
 		virtual void show() override;
 		virtual FileViewType getType() override { return List; }
 	private:
-		std::unordered_map<FilePath, Gui::ImageButton> m_FileCards; //TODO: rename
+		std::unordered_map<FilePath, ViewFileMeta> m_Files;
 	};
 
 	class SearchFileView : public FileView {
 	public:
 		SearchFileView() = delete;
-		SearchFileView(FileHistory& history, FileAssets& assets, FileSearcher::Result& result);
+		SearchFileView(FileManager* fileManager, FileHistory& history, FileAssets& assets, const FileSearcher::Result& result);
 		SearchFileView(const SearchFileView& other) = delete;
 		~SearchFileView();
 
 		virtual void show() override;
 		virtual FileViewType getType() override { return Search; }
 	private:
+		FileManager* m_FileManager;
 		FileSearcher::Result m_Result;
-		std::unordered_map<FilePath, Gui::ImageButton> m_FileCards; //TODO: rename
+		std::unordered_map<FilePath, ViewFileMeta> m_Files;
 	};
 
 }
