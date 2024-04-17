@@ -132,13 +132,21 @@ namespace C78E {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{0, 0});
 
-		m_BackButton.show(iconSize);
+		if(m_History.canCDBackward() || m_FileManager->hasSearch())
+			m_BackButton.show(iconSize);
+		else m_BackButton.show(iconSize, Gui::autoColor(), glm::vec4{1.f, 1.f, 1.f, 0.3f});
 		Gui::SameLine();
-		m_ForwardButton.show(iconSize);
+		if (m_History.canCDForward())
+			m_ForwardButton.show(iconSize);
+		else m_ForwardButton.show(iconSize, Gui::autoColor(), glm::vec4{ 1.f, 1.f, 1.f, 0.3f });
 		Gui::SameLine();
-		m_HomeButton.show(iconSize);
+		if (m_History.canCD(m_History.getBasePath()))
+			m_HomeButton.show(iconSize);
+		else m_HomeButton.show(iconSize, Gui::autoColor(), glm::vec4{ 1.f, 1.f, 1.f, 0.3f });
 		Gui::SameLine();
-		m_ParentButton.show(iconSize);
+		if (m_History.canCDParent())
+			m_ParentButton.show(iconSize);
+		else m_ParentButton.show(iconSize, Gui::autoColor(), glm::vec4{ 1.f, 1.f, 1.f, 0.3f });
 		Gui::SameLine();
 
 		{
@@ -151,7 +159,9 @@ namespace C78E {
 			if (relWidth > 0.f) ImGui::PopItemWidth();
 
 			Gui::SameLine();
-			m_PathSubmitButton.show(iconSize);
+			if (m_History.canCD(m_PathInput.getContent()))
+				m_PathSubmitButton.show(iconSize);
+			else m_PathSubmitButton.show(iconSize, Gui::autoColor(), glm::vec4{ 1.f, 1.f, 1.f, 0.3f });
 
 			if (!ImGui::IsItemFocused()) { // Only Update when PathInput and Submit aren't focused 
 				if (m_History.getCWD().string() != m_PathInput.getContent())
@@ -243,22 +253,22 @@ namespace C78E {
 	/*
 	* FileView
 	*/
-	FileView::FileView(FileHistory& history, FileAssets& assets) 
-		: m_History(history), m_Assets(assets), m_Filter(SortNoFilter), m_UISettings() {
+	FileView::FileView(FileHistory& history, FileAssets& assets, std::function<void(FilePath)> onFileClick)
+		: m_History(history), m_Assets(assets), m_Filter(SortNoFilter), m_UISettings(), m_OnFileClick(onFileClick) {
 	}
 
 	FileView::~FileView() { }
 
 	void FileView::onFileClick(FilePath file) {
-		C78_ERROR("Opening Files isn't supported yet!");
+		C78_ERROR("FileView::onFileClick: Default Opening Files isn't supported yet!");
 		C78_ERROR("  File: {}", file.string());
 	}
 
 	/*
 	* FileViewGrid
 	*/
-	FileViewGrid::FileViewGrid(FileHistory& history, FileAssets& assets)
-		: FileView(history, assets) {
+	FileViewGrid::FileViewGrid(FileHistory& history, FileAssets& assets, std::function<void(FilePath)> onFileClick)
+		: FileView(history, assets, onFileClick) {
 	}
 
 	FileViewGrid::~FileViewGrid() { }
@@ -282,6 +292,8 @@ namespace C78E {
 								[this, file](void) -> void {
 									if (std::filesystem::is_directory(file))
 										m_History.cd(file);
+									if (m_OnFileClick)
+										m_OnFileClick(file);
 									else FileView::onFileClick(file);
 								}
 							)
@@ -298,8 +310,8 @@ namespace C78E {
 	/*
 	* FileViewList
 	*/
-	FileViewList::FileViewList(FileHistory& history, FileAssets& assets)
-		: FileView(history, assets) {
+	FileViewList::FileViewList(FileHistory& history, FileAssets& assets, std::function<void(FilePath)> onFileClick)
+		: FileView(history, assets, onFileClick) {
 	}
 
 	FileViewList::~FileViewList() { }
@@ -326,6 +338,8 @@ namespace C78E {
 									[this, file](void) -> void {
 										if (std::filesystem::is_directory(file))
 											m_History.cd(file);
+										if (m_OnFileClick)
+											m_OnFileClick(file);
 										else FileView::onFileClick(file);
 									}
 								),
@@ -356,8 +370,8 @@ namespace C78E {
 
 	
 
-	SearchFileView::SearchFileView(FileManager* fileManager, FileHistory& history, FileAssets& assets, const FileSearcher::Result& result)
-		: FileView(history, assets), m_FileManager(fileManager), m_Result(result) {
+	SearchFileView::SearchFileView(FileManager* fileManager, FileHistory& history, FileAssets& assets, const FileSearcher::Result& result, std::function<void(FilePath)> onFileClick)
+		: FileView(history, assets, onFileClick), m_FileManager(fileManager), m_Result(result) {
 	}
 
 	SearchFileView::~SearchFileView() { }
@@ -387,6 +401,8 @@ namespace C78E {
 											if (m_FileManager->hasSearch())
 												m_FileManager->destroySearch();
 										}
+										if (m_OnFileClick)
+											m_OnFileClick(file);
 										else FileView::onFileClick(file);
 									}
 								),
@@ -417,6 +433,72 @@ namespace C78E {
 			ImGui::EndTable();
 		}
 
+	}
+
+
+	/*
+	* OpenFileBar
+	*/
+	OpenFileBar::OpenFileBar(FileSystem::EntryType type) 
+		: m_Type(type), 
+		m_FileInput("Open:"),
+		m_OpenButton("Open", [this](void) -> void { m_Ready = true; } ),
+		m_CancelButton("Cancel", [this](void) -> void { m_FileInput.setContent(""); m_Ready = true; }) {
+	}
+
+	OpenFileBar::~OpenFileBar() { }
+
+	void OpenFileBar::show() {
+		m_FileInput.show();
+
+		m_OpenButton.show();
+		Gui::SameLine();
+		m_CancelButton.show();
+	}
+
+	bool OpenFileBar::ready() const { return m_Ready; }
+
+	void OpenFileBar::setResult(FilePath file) {
+		if(FileSystem::getEntryType(file) == m_Type)
+			m_FileInput.setContent(file.string());
+	}
+
+	FilePath OpenFileBar::getResult() {
+		return FilePath(m_FileInput.getContent());
+	}
+
+
+
+
+	/*
+	* SaveFileBar
+	*/
+	SaveFileBar::SaveFileBar(const std::string& extension) 
+		: m_Extension(extension),
+		m_FileInput("Save:"),
+		m_SaveButton("Save", [this](void) -> void { m_Ready = true; }),
+		m_CancelButton("Cancel", [this](void) -> void { m_FileInput.setContent(""); m_Ready = true; }) {
+	}
+
+	SaveFileBar::~SaveFileBar() { }
+
+	void SaveFileBar::show() {
+		m_FileInput.show();
+
+		m_SaveButton.show();
+		Gui::SameLine();
+		m_CancelButton.show();
+	}
+
+	bool SaveFileBar::ready() const { return m_Ready; }
+
+	void SaveFileBar::setResult(FilePath file) {
+		if(file.has_extension() && file.extension() == m_Extension)
+			m_FileInput.setContent(file.string());
+	}
+
+	FilePath SaveFileBar::getResult() {
+		return FilePath(m_FileInput.getContent());
 	}
 
 }

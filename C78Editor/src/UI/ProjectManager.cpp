@@ -4,13 +4,14 @@ namespace C78Editor {
 
 	C78E::FilePath ProjectManager::s_CurrentProjectFile = "";
 	C78E::Ref<C78E::FileManager> ProjectManager::s_FileManager = nullptr;
+	std::string ProjectManager::s_FileManagerOwner = "";
+	C78E::FilePath ProjectManager::s_FileManagerResult = "";
 
 	ProjectManager::UIElement ProjectManager::s_UIElement = ProjectManager::START;
 
 
 	void ProjectManager::init() {
 		s_CurrentProjectFile = "";
-		s_FileManager = C78E::createRef<C78E::FileManager>("");
 	}
 
 	void ProjectManager::onUpdate() {
@@ -32,7 +33,7 @@ namespace C78Editor {
 		ImGui::SetNextWindowSize({ windowSize.x, windowSize.y }); // Maximized
 		if (!ImGui::Begin("Project", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) return false;
 
-		/*
+		
 		switch (s_UIElement) {
 		case C78Editor::ProjectManager::START: {
 			if (ImGui::Button("Create")) {
@@ -52,10 +53,11 @@ namespace C78Editor {
 			break;
 		default: break;
 		}
-		*/
+		
 		ImGui::End();
 
-		s_FileManager->onImGuiRender();
+		if(s_FileManager)
+			s_FileManager->onImGuiRender();
 
 		return true;
 	}
@@ -92,14 +94,32 @@ namespace C78Editor {
 
 	void ProjectManager::showProjectCreate() {
 
-		C78E::FilePath path = C78E::FileDialogs::openFolder(getDefaultProjectPath(), 0);
-		C78_EDITOR_TRACE("Selected Path: {}", path.string());
+		{
+			static C78E::Gui::TextInput projectNameTI("ProjectName", "Untitled Project");
 
-		static C78E::Gui::TextInput projectNameTI("ProjectName", "Untitled Project");
+			static C78E::Gui::TextInput projectDirectoryTI("ProjectDirectory", getDefaultProjectPath().string());
+			static C78E::Gui::TextButton projectDirectoryTB("...",
+				[](void) -> void {
+					s_FileManager = C78E::createRef<C78E::FileManager>("");
+					s_FileManager->setOpenDialog(C78E::FileSystem::EntryType::DIRECTORY);
+					s_FileManagerOwner = "ProjectDirectory";
+				}
+			);
+
+			if (s_FileManagerOwner == "ProjectDirectory" && s_FileManager->dialogReady()) {
+				projectDirectoryTI.setContent(s_FileManager->getDialogResult().string());
+				s_FileManager = nullptr;
+				s_FileManagerOwner = "";
+			}
+
+			projectNameTI.show();
+			projectDirectoryTI.show();
+			C78E::Gui::SameLine();
+			projectDirectoryTB.show();
+		}
+		return;
 
 
-
-		projectNameTI.show();
 
 
 		static C78E::Gui::TextInput assetDirectoryTI("AssetDirectory", getDefaultProjectPath().string());

@@ -19,6 +19,12 @@ namespace C78E {
 		FileManager(const FileManager& other) = delete;
 		~FileManager() = default;
 
+		void setOpenDialog(FileSystem::EntryType type);
+		void setSaveDialog(const std::string& extension);
+
+		bool dialogReady() const;
+		FilePath getDialogResult();
+
 		void createSearch(const std::string& searchDirective);
 		void destroySearch();
 		bool hasSearch();
@@ -51,6 +57,9 @@ namespace C78E {
 		FilePoIPanel m_PoIPanel;
 		Scope<FileView> m_FileView;
 		Scope<FileView> m_RestoreFileView = nullptr;
+		
+		Scope<OpenFileBar> m_OpenFileBar = nullptr;
+		Scope<SaveFileBar> m_SaveFileBar = nullptr;
 		
 
 	private:

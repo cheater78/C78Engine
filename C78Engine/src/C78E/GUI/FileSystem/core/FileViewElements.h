@@ -90,11 +90,19 @@ namespace C78E {
 		enum FileViewType {
 			Grid,
 			List,
+			Stacked, //TODO
 			Search
 		};
+
+		enum FileViewMode {
+			View,
+			Open,
+			Save
+		};
+
 	public:
 		FileView() = delete;
-		FileView(FileHistory& history, FileAssets& assets);
+		FileView(FileHistory& history, FileAssets& assets, std::function<void(FilePath)> onFileClick = nullptr);
 		FileView(const FileView& other) = delete;
 		~FileView();
 
@@ -107,12 +115,13 @@ namespace C78E {
 		FileAssets& m_Assets;
 		SortFilter m_Filter;
 		UISettings m_UISettings;
+		std::function<void(FilePath)> m_OnFileClick = nullptr;
 	};
 
 	class FileViewGrid : public FileView {
 	public:
 		FileViewGrid() = delete;
-		FileViewGrid(FileHistory& history, FileAssets& assets);
+		FileViewGrid(FileHistory& history, FileAssets& assets, std::function<void(FilePath)> onFileClick = nullptr);
 		FileViewGrid(const FileViewGrid& other) = delete;
 		~FileViewGrid();
 
@@ -125,7 +134,7 @@ namespace C78E {
 	class FileViewList : public FileView {
 	public:
 		FileViewList() = delete;
-		FileViewList(FileHistory& history, FileAssets& assets);
+		FileViewList(FileHistory& history, FileAssets& assets, std::function<void(FilePath)> onFileClick = nullptr);
 		FileViewList(const FileViewList& other) = delete;
 		~FileViewList();
 
@@ -138,7 +147,7 @@ namespace C78E {
 	class SearchFileView : public FileView {
 	public:
 		SearchFileView() = delete;
-		SearchFileView(FileManager* fileManager, FileHistory& history, FileAssets& assets, const FileSearcher::Result& result);
+		SearchFileView(FileManager* fileManager, FileHistory& history, FileAssets& assets, const FileSearcher::Result& result, std::function<void(FilePath)> onFileClick = nullptr);
 		SearchFileView(const SearchFileView& other) = delete;
 		~SearchFileView();
 
@@ -148,6 +157,47 @@ namespace C78E {
 		FileManager* m_FileManager;
 		FileSearcher::Result m_Result;
 		std::unordered_map<FilePath, ViewFileMeta> m_Files;
+	};
+
+	class OpenFileBar {
+	public:
+		OpenFileBar() = delete;
+		OpenFileBar(FileSystem::EntryType type);
+		OpenFileBar(const OpenFileBar& other) = delete;
+		~OpenFileBar();
+
+		void show();
+		bool ready() const;
+		void setResult(FilePath file);
+		FilePath getResult();
+	private:
+		FileSystem::EntryType m_Type; // filter?
+		bool m_Ready = false;
+
+		Gui::TextInput m_FileInput;
+		Gui::TextButton m_OpenButton;
+		Gui::TextButton m_CancelButton;
+	};
+
+	class SaveFileBar {
+	public:
+		SaveFileBar() = delete;
+		SaveFileBar(const std::string& extension);
+		SaveFileBar(const SaveFileBar& other) = delete;
+		~SaveFileBar();
+
+		void show();
+		bool ready() const;
+		void setResult(FilePath file);
+		FilePath getResult();
+	private:
+		std::string m_Extension; // filter?
+		bool m_Ready = false;
+		
+		Gui::TextInput m_FileInput;
+		Gui::TextInput m_DirectoryInput;
+		Gui::TextButton m_SaveButton;
+		Gui::TextButton m_CancelButton;
 	};
 
 }

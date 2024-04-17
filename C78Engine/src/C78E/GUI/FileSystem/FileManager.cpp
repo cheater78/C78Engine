@@ -6,8 +6,7 @@
 namespace C78E {
 
 	FileManager::FileManager(FilePath defaultDirectory)
-		:
-		m_UISettings(),
+		: m_UISettings(),
 		m_History("C:\\dev\\c-cpp\\C78Engine\\C78Project"),
 		m_Assets("C:\\dev\\c-cpp\\C78Engine\\C78Editor\\assets\\textures\\FileManager"),
 		m_FileView(createScope<FileViewGrid>(m_History, m_Assets)),
@@ -16,6 +15,42 @@ namespace C78E {
 		m_PoIPanel(this, m_History, m_Assets),
 		m_UIView(C78E::FileManager::ShowFiles) {
 
+	}
+
+	void FileManager::setOpenDialog(FileSystem::EntryType type) {
+		m_OpenFileBar = createScope<OpenFileBar>(type);
+		m_UIView = OpenElement;
+		if (hasSearch()) // should never happen, this function should be called right after creatiion of FileManager
+			destroySearch();
+		m_FileView = createScope<FileViewGrid>(m_History, m_Assets, [this](FilePath file) -> void { m_OpenFileBar->setResult(file); });
+		m_OpenFileBar->setResult(m_History.getCWD());
+	}
+
+	void FileManager::setSaveDialog(const std::string& extension) {
+		m_SaveFileBar = createScope<SaveFileBar>(extension);
+		m_UIView = SaveElement;
+		if (hasSearch()) // should never happen, this function should be called right after creatiion of FileManager
+			destroySearch();
+		m_FileView = createScope<FileViewGrid>(m_History, m_Assets, [this](FilePath file) -> void { m_SaveFileBar->setResult(file); });
+		m_SaveFileBar->setResult(m_History.getCWD());
+	}
+
+	bool FileManager::dialogReady() const {
+		switch (m_UIView) {
+		case C78E::FileManager::ShowFiles: return false;
+		case C78E::FileManager::OpenElement: return m_OpenFileBar->ready();
+		case C78E::FileManager::SaveElement: return m_SaveFileBar->ready();
+		default: return false;
+		}
+	}
+
+	FilePath FileManager::getDialogResult() {
+		switch (m_UIView) {
+		case C78E::FileManager::ShowFiles: return FilePath();
+		case C78E::FileManager::OpenElement: return m_OpenFileBar->getResult();
+		case C78E::FileManager::SaveElement: return m_SaveFileBar->getResult();
+		default: return FilePath();
+		}
 	}
 
 	void FileManager::createSearch(const std::string& searchDirective) {
@@ -68,9 +103,15 @@ namespace C78E {
 	}
 
 	void FileManager::showOpenElement() {
+		showFileView();
+		C78_CORE_ASSERT(m_OpenFileBar, "FileManager::showOpenElement: missing OpenFileBar!");
+		m_OpenFileBar->show();
 	}
 
 	void FileManager::showSaveElement() {
+		showFileView();
+		C78_CORE_ASSERT(m_SaveFileBar, "FileManager::showOpenElement: missing SaveFileBar!");
+		m_SaveFileBar->show();
 	}
 
 }

@@ -26,6 +26,8 @@ namespace C78Editor {
 	private:
 		static C78E::FilePath s_CurrentProjectFile;
 		static C78E::Ref<C78E::FileManager> s_FileManager;
+		static std::string s_FileManagerOwner;
+		static C78E::FilePath s_FileManagerResult; // unused
 	private:
 		static void showProjectCreate();
 
