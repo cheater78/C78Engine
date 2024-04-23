@@ -52,8 +52,7 @@ namespace C78E {
 		void serializeAssetRegistry();
 		bool deserializeAssetRegistry();
 	protected:
-		// TODO: memory-only assets
-		AssetHandle addAsset(Asset::AssetMeta meta, Ref<Asset> asset);
+		AssetHandle addAsset(Asset::AssetMeta meta, Ref<Asset> asset); // TODO: memory-only assets -> kinda done
 	private:
 		AssetRegistry m_AssetRegistry;
 		AssetMap m_LoadedAssets;

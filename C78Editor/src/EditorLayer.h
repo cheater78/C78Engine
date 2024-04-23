@@ -16,8 +16,6 @@
 
 namespace C78Editor {
 
-    static const C78E::FilePath projectPath = "C:\\dev\\c-cpp\\C78Engine\\C78Project\\assets\\C78Project.pce";
-
     class EditorLayer : public C78E::Layer {
     public:
 
@@ -34,7 +32,7 @@ namespace C78Editor {
 
             
             EntityInspector::init();
-            //Viewport::init();
+            Viewport::init();
 
         }
 
@@ -57,7 +55,7 @@ namespace C78Editor {
 
 
 
-
+            Viewport::onUpdate(nullptr);
         }
 
         void onEvent(C78E::Event& e) override {
@@ -86,12 +84,13 @@ namespace C78Editor {
                 ImGui::Begin("FrameInfo");
                 ImGui::Text(("FPS: " + std::to_string((uint32_t)(1 / m_LastFrameTime))).c_str());
                 ImGui::Text("FrameTime: %.1f ms", m_LastFrameTime * 1000);
+                ImGui::Text("FrameTime: %.0f us", m_LastFrameTime * 1000000);
 
                 ImGui::End();
             }
 
             EntityInspector::onImGuiRender(m_EditorScene);
-            //Viewport::onImGuiRender(m_MouseCapture);
+            Viewport::onImGuiRender(m_MouseCapture);
         }
 
 

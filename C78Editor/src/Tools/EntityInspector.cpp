@@ -33,6 +33,13 @@ namespace C78Editor {
     void EntityInspector::showEntityList(std::string element, C78E::Ref<C78E::Scene> scene) {
         element += "/EnttityList";
         if(!ImGui::Begin("EnttityList")) return;
+
+
+        if (ImGui::Button("Add Entity")) {
+            scene->createEntity("unnamed Entity");
+        }
+
+
         auto entts = scene->getAllEntitiesWith<C78E::TagComponent, C78E::TransformComponent>();
         
         if (!ImGui::BeginTable("Entities", 2, s_EnttityListTableColumnFlags)) { ImGui::End(); return; };
