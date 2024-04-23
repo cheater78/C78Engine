@@ -26,13 +26,13 @@ namespace C78E {
 		m_OpenFileBar->setResult(m_History.getCWD());
 	}
 
-	void FileManager::setSaveDialog(const std::string& extension) {
+	void FileManager::setSaveDialog(const std::string& extension, const std::string& defaultName) {
 		m_SaveFileBar = createScope<SaveFileBar>(extension);
 		m_UIView = SaveElement;
 		if (hasSearch()) // should never happen, this function should be called right after creatiion of FileManager
-			destroySearch();
-		m_FileView = createScope<FileViewGrid>(m_History, m_Assets, [this](FilePath file) -> void { m_SaveFileBar->setResult(file); });
-		m_SaveFileBar->setResult(m_History.getCWD());
+			destroySearch(); 
+		m_FileView = createScope<FileViewGrid>(m_History, m_Assets, [this, extension, defaultName](FilePath file) -> void { if (std::filesystem::is_directory(file)) { m_SaveFileBar->setResult(file / (FilePath)(defaultName + extension) ); } else { m_SaveFileBar->setResult(file); } });
+		m_SaveFileBar->setResult(m_History.getCWD() / (FilePath)(defaultName + extension));
 	}
 
 	bool FileManager::dialogReady() const {

@@ -20,7 +20,7 @@ namespace C78E {
 		~FileManager() = default;
 
 		void setOpenDialog(FileSystem::EntryType type);
-		void setSaveDialog(const std::string& extension);
+		void setSaveDialog(const std::string& extension, const std::string& defaultName = "Untitled");
 
 		bool dialogReady() const;
 		FilePath getDialogResult();

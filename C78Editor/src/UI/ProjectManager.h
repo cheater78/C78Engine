@@ -13,8 +13,7 @@ namespace C78Editor {
 
 		static void onImGuiMainMenuBar();
 		static bool onImGuiRender();
-
-		static void onProjectCreate(C78E::ProjectConfig config = C78E::ProjectConfig());
+		
 		static void onProjectOpen();
 		static void onProjectSave();
 		static void onProjectClose();

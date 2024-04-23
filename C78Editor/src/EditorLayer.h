@@ -38,21 +38,25 @@ namespace C78Editor {
 
         }
 
-        void onDetach() { }
+        void onDetach() {
+            ProjectManager::onProjectSave();
+            ProjectManager::onProjectClose();
+        }
 
         void onUpdate(C78E::Timestep delta) override {
             m_LastFrameTime = delta;
 
             ProjectManager::onUpdate();
-
-
-
+            
             m_EditorScene->onViewportResize(m_Window.getWidth(), m_Window.getHeight());
             if (m_MouseCapture) {
                 m_Window.setMouseMode(C78E::MouseMode::DISABLED);
                 EditorCamera::update(m_EditorCameraEntity, delta);
             }
             else m_Window.setMouseMode(C78E::MouseMode::NORMAL);
+
+
+
 
         }
 
