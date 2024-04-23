@@ -5,8 +5,7 @@ namespace C78E {
 
 	Application* Application::s_App = nullptr;
 
-	Application::Application()
-	{
+	Application::Application(const WindowProps& windowProperties) {
 		C78_CORE_ASSERT(!s_App, "There can only be one Application!");
 		s_App = this;
 
@@ -14,9 +13,8 @@ namespace C78E {
 
 		m_Console = createRef<Console>("C78E Console");
 		m_Console->addCmd("exit", BIND_CALLBACK_FN(Application::onCMDClose));
-		m_Console->show(true);
 
-		m_Window = Window::create();
+		m_Window = Window::create(windowProperties);
 		m_Window->setEventCallback(BIND_CALLBACK_FN(Application::onEvent));
 
 		m_ImGuiLayer = createRef<ImGuiLayer>();
@@ -25,8 +23,7 @@ namespace C78E {
 		pushOverlay(m_Console);
 	}
 
-	Application::~Application() {	
-	}
+	Application::~Application() { }
 
 	void Application::run() {
 		while (m_Running) {

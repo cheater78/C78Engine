@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   Asset.h
+ * \brief  Definition of class Asset, which represents any arbituary Asset in the Engine
+ * 
+ * \author c78
+ * \date   April 2024
+ *********************************************************************/
 #pragma once
 #include <C78E/Core/UUID.h>
 
@@ -7,7 +14,6 @@ namespace C78E {
 	
 	class Asset {
 	public:
-		//prob add: Animation, Skeleton
 		enum AssetType : uint8_t {
 			None = 0,
 
@@ -26,7 +32,7 @@ namespace C78E {
 
 		struct AssetMeta {
 			AssetType type = AssetType::None;
-			FilePath fileSource;
+			FilePath fileSource = "/";
 			std::string name = "untitled asset";
 
 			operator bool() const { return type != AssetType::None; }
@@ -34,8 +40,8 @@ namespace C78E {
 
 	public:
 		static AssetType fileToAssetType(const FilePath& filePath);
-		static AssetType assetTypeFromString(std::string str);
 		static std::string assetTypeToString(AssetType type);
+		static AssetType assetTypeFromString(std::string str);
 		
 	public:
 		static const std::map<FilePath, AssetType> c_AssetExtensionMap;
@@ -43,8 +49,6 @@ namespace C78E {
 
 	public:
 		virtual AssetType getType() const { return AssetType::None; };
-		// TODO: revisit, found unnecessary -> Serializers for all of them
-		//virtual std::string toString() const = 0; // Editor serialize
 	public:
 		AssetHandle m_AssetHandle;
 	};

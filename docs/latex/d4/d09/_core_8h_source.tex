@@ -1,0 +1,71 @@
+\doxysection{Core.\+h}
+\hypertarget{_core_8h_source}{}\label{_core_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/Core.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/Core.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#ifdef\ C78\_PLATFORM\_WINDOWS}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ C78\_DYN\_LINK}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#ifdef\ C78\_BUILD\_DLL}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#define\ C78\_API\ \_\_declspec(dllexport)}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#define\ C78\_API\ \_\_declspec(dllimport)}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif\ }\textcolor{comment}{//\ C78\_BUILD\_DLL}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ C78\_API}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\ \ \ \ \#define\ C78\_DEBUGBREAK()\ \_\_debugbreak()}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#elif\ C78\_PLATFORM\_LINUX}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ C78\_DYN\_LINK}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#ifdef\ C78\_BUILD\_DLL}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#define\ C78\_API\ \_\_attribute\_\_((visibility("{}default"{})))}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#define\ C78\_API\ \_\_declspec(dllimport)}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif\ }\textcolor{comment}{//\ C78\_BUILD\_DLL}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ C78\_API}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00026\ \ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ <stdio.h>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ <signal.h>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \#define\ C78\_DEBUGBREAK()\ raise(SIGTRAP)}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \#error\ NotSupportedPlatform!}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ C78\_PLATFORM\_WINDOWS}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{//\ Bit\ Map}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ BIT(x)\ (1<<x)}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ BIND\_CALLBACK\_FN(fn)\ std::bind(\&fn,\ this,\ std::placeholders::\_1)}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ C78\_EXPAND\_MACRO(x)\ x}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ C78\_STRINGIFY\_MACRO(x)\ \#x}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00045\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{using\ }Scope\ =\ std::unique\_ptr<T>;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ ...\ Args>}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{constexpr}\ Scope<T>\ createScope(Args\&\&\ ...\ args)\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_unique<T>(std::forward<Args>(args)...);}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{using\ }Ref\ =\ std::shared\_ptr<T>;}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ ...\ Args>}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{constexpr}\ Ref<T>\ createRef(Args\&\&\ ...\ args)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_shared<T>(std::forward<Args>(args)...);}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Log.h"{}}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ C78\_FILE\_EXT\_SCENE\ "{}.sce"{}}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ C78\_FILE\_EXT\_PROJECT\ "{}.pce"{}}}
+
+\end{DoxyCode}

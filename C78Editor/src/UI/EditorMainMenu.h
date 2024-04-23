@@ -24,7 +24,5 @@ namespace C78Editor {
 
 	private:
 		static bool s_Active;
-
-		//<project link>
 	};
 }

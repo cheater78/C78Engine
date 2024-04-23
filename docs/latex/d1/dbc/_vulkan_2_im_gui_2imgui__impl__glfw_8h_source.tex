@@ -1,0 +1,64 @@
+\doxysection{imgui\+\_\+impl\+\_\+glfw.\+h}
+\hypertarget{_vulkan_2_im_gui_2imgui__impl__glfw_8h_source}{}\label{_vulkan_2_im_gui_2imgui__impl__glfw_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/Platform/Vulkan/ImGui/imgui\_impl\_glfw.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/Platform/Vulkan/ImGui/imgui\_impl\_glfw.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ dear\ imgui:\ Platform\ Backend\ for\ GLFW}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ This\ needs\ to\ be\ used\ along\ with\ a\ Renderer\ (e.g.\ OpenGL3,\ Vulkan,\ WebGPU..)}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ (Info:\ GLFW\ is\ a\ cross-\/platform\ general\ purpose\ library\ for\ handling\ windows,\ inputs,\ OpenGL/Vulkan\ graphics\ context\ creation,\ etc.)}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ (Requires:\ GLFW\ 3.1+.\ Prefer\ GLFW\ 3.3+\ for\ full\ feature\ support.)}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ Implemented\ features:}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ [X]\ Platform:\ Clipboard\ support.}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ [X]\ Platform:\ Mouse\ support.\ Can\ discriminate\ Mouse/TouchScreen/Pen\ (Windows\ only).}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ \ [X]\ Platform:\ Keyboard\ support.\ Since\ 1.87\ we\ are\ using\ the\ io.AddKeyEvent()\ function.\ Pass\ ImGuiKey\ values\ to\ all\ key\ functions\ e.g.\ ImGui::IsKeyPressed(ImGuiKey\_Space).\ [Legacy\ GLFW\_KEY\_*\ values\ will\ also\ be\ supported\ unless\ IMGUI\_DISABLE\_OBSOLETE\_KEYIO\ is\ set]}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ [X]\ Platform:\ Gamepad\ support.\ Enable\ with\ 'io.ConfigFlags\ |=\ ImGuiConfigFlags\_NavEnableGamepad'.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \ [x]\ Platform:\ Mouse\ cursor\ shape\ and\ visibility.\ Disable\ with\ 'io.ConfigFlags\ |=\ ImGuiConfigFlags\_NoMouseCursorChange'\ (note:\ the\ resizing\ cursors\ requires\ GLFW\ 3.4+).}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ \ [X]\ Platform:\ Multi-\/viewport\ support\ (multiple\ windows).\ Enable\ with\ 'io.ConfigFlags\ |=\ ImGuiConfigFlags\_ViewportsEnable'.}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ Issues:}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ [\ ]\ Platform:\ Multi-\/viewport\ support:\ ParentViewportID\ not\ honored,\ and\ so\ io.ConfigViewportsNoDefaultParent\ has\ no\ effect\ (minor).}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ You\ can\ use\ unmodified\ imgui\_impl\_*\ files\ in\ your\ project.\ See\ examples/\ folder\ for\ examples\ of\ using\ this.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ Prefer\ including\ the\ entire\ imgui/\ repository\ into\ your\ project\ (either\ as\ a\ copy\ or\ as\ a\ submodule),\ and\ only\ build\ the\ backends\ you\ need.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ Learn\ about\ Dear\ ImGui:}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ -\/\ FAQ\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ https://dearimgui.com/faq}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ -\/\ Getting\ Started\ \ \ \ \ \ https://dearimgui.com/getting-\/started}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ -\/\ Documentation\ \ \ \ \ \ \ \ https://dearimgui.com/docs\ (same\ as\ your\ local\ docs/\ folder).}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ -\/\ Introduction,\ links\ and\ more\ at\ the\ top\ of\ imgui.cpp}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ "{}imgui.h"{}}\ \ \ \ \ \ \textcolor{comment}{//\ IMGUI\_IMPL\_API}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#ifndef\ IMGUI\_DISABLE}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{struct\ }GLFWwindow;}
+\DoxyCodeLine{00030\ \textcolor{keyword}{struct\ }GLFWmonitor;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{bool}\ \ \ \ \ ImGui\_ImplGlfw\_InitForOpenGL(GLFWwindow*\ window,\ \textcolor{keywordtype}{bool}\ install\_callbacks);}
+\DoxyCodeLine{00033\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{bool}\ \ \ \ \ ImGui\_ImplGlfw\_InitForVulkan(GLFWwindow*\ window,\ \textcolor{keywordtype}{bool}\ install\_callbacks);}
+\DoxyCodeLine{00034\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{bool}\ \ \ \ \ ImGui\_ImplGlfw\_InitForOther(GLFWwindow*\ window,\ \textcolor{keywordtype}{bool}\ install\_callbacks);}
+\DoxyCodeLine{00035\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_Shutdown();}
+\DoxyCodeLine{00036\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_NewFrame();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{comment}{//\ GLFW\ callbacks\ install}}
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ -\/\ When\ calling\ Init\ with\ 'install\_callbacks=true':\ ImGui\_ImplGlfw\_InstallCallbacks()\ is\ called.\ GLFW\ callbacks\ will\ be\ installed\ for\ you.\ They\ will\ chain-\/call\ user's\ previously\ installed\ callbacks,\ if\ any.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ -\/\ When\ calling\ Init\ with\ 'install\_callbacks=false':\ GLFW\ callbacks\ won't\ be\ installed.\ You\ will\ need\ to\ call\ individual\ function\ yourself\ from\ your\ own\ GLFW\ callbacks.}}
+\DoxyCodeLine{00041\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_InstallCallbacks(GLFWwindow*\ window);}
+\DoxyCodeLine{00042\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_RestoreCallbacks(GLFWwindow*\ window);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{//\ GFLW\ callbacks\ options:}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ -\/\ Set\ 'chain\_for\_all\_windows=true'\ to\ enable\ chaining\ callbacks\ for\ all\ windows\ (including\ secondary\ viewports\ created\ by\ backends\ or\ by\ user)}}
+\DoxyCodeLine{00046\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_SetCallbacksChainForAllWindows(\textcolor{keywordtype}{bool}\ chain\_for\_all\_windows);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{comment}{//\ GLFW\ callbacks\ (individual\ callbacks\ to\ call\ yourself\ if\ you\ didn't\ install\ callbacks)}}
+\DoxyCodeLine{00049\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_WindowFocusCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{int}\ focused);\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ 1.84}}
+\DoxyCodeLine{00050\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_CursorEnterCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{int}\ entered);\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ 1.84}}
+\DoxyCodeLine{00051\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_CursorPosCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y);\ \ \ \textcolor{comment}{//\ Since\ 1.87}}
+\DoxyCodeLine{00052\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_MouseButtonCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00053\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_ScrollCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{double}\ xoffset,\ \textcolor{keywordtype}{double}\ yoffset);}
+\DoxyCodeLine{00054\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_KeyCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00055\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_CharCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ c);}
+\DoxyCodeLine{00056\ IMGUI\_IMPL\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ ImGui\_ImplGlfw\_MonitorCallback(GLFWmonitor*\ monitor,\ \textcolor{keywordtype}{int}\ event);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \#ifndef\ IMGUI\_DISABLE}}
+
+\end{DoxyCode}

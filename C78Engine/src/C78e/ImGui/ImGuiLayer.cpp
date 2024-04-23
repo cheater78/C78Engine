@@ -14,12 +14,9 @@ namespace C78E {
 
 	ImGuiLayer::ImGuiLayer()
 		: Layer("ImGuiLayer")
-	{
-	}
+	{ }
 
-	void ImGuiLayer::onAttach()
-	{
-
+	void ImGuiLayer::onAttach() {
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -49,7 +46,7 @@ namespace C78E {
 		}
 		
 
-		SetDarkThemeColors();
+		setDarkThemeColors();
 
 		Application& app = Application::get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
@@ -84,7 +81,7 @@ namespace C78E {
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::get();
 		io.DisplaySize = ImVec2((float)app.getWindow().getWidth(), (float)app.getWindow().getHeight());
-
+		
 		// Rendering
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -99,12 +96,9 @@ namespace C78E {
 		
 	}
 
-	void ImGuiLayer::onImGuiRender() {
-		//ImGui::ShowDemoWindow();
-	}
+	void ImGuiLayer::onImGuiRender() { }
 
-	void ImGuiLayer::SetDarkThemeColors()
-	{
+	void ImGuiLayer::setDarkThemeColors() {
 		auto& colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
 

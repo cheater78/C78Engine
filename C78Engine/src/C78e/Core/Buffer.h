@@ -24,11 +24,11 @@ namespace C78E {
 			return result;
 		}
 
-		void allocate(uint64_t size) {
+		void allocate(uint64_t _size) {
 			release();
 
-			data = new uint8_t[size];
-			size = size;
+			data = new uint8_t[_size];
+			size = _size;
 		}
 
 		void release() {
@@ -40,6 +40,14 @@ namespace C78E {
 		template<typename T>
 		T* as() {
 			return (T*)data;
+		}
+
+		// unsafe, make damn shure that size is a multiple of sizeof(T) or it wont clear all memory
+		template<typename T>
+		void clear(const T& value) {
+			for (uint8_t* off = 0; (uint64_t)off < (size / sizeof(T)); off += sizeof(T)) {
+				*((T*)((uint64_t)data + (uint64_t)off)) = value;
+			}
 		}
 
 		operator bool() const {

@@ -1,0 +1,73 @@
+\doxysection{C78E\+::Editor\+Camera Class Reference}
+\hypertarget{class_c78_e_1_1_editor_camera}{}\label{class_c78_e_1_1_editor_camera}\index{C78E::EditorCamera@{C78E::EditorCamera}}
+
+
+Inheritance diagram for C78E\+::Editor\+Camera\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Editor\+Camera\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a0d46bd18682aebbb61cc4706214b41b2}\label{class_c78_e_1_1_editor_camera_a0d46bd18682aebbb61cc4706214b41b2} 
+{\bfseries Editor\+Camera} (float fov, float aspect\+Ratio, float near\+Clip, float far\+Clip)
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_afc5ab1c21d4170a3684a9e75335174ae}\label{class_c78_e_1_1_editor_camera_afc5ab1c21d4170a3684a9e75335174ae} 
+void {\bfseries On\+Update} (\mbox{\hyperlink{class_c78_e_1_1_timestep}{Timestep}} ts)
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a40a989b6448941a80197b0b5bfc1c618}\label{class_c78_e_1_1_editor_camera_a40a989b6448941a80197b0b5bfc1c618} 
+void {\bfseries On\+Event} (\mbox{\hyperlink{class_c78_e_1_1_event}{Event}} \&e)
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_ad56c7799229ee7088aa305db8b39011e}\label{class_c78_e_1_1_editor_camera_ad56c7799229ee7088aa305db8b39011e} 
+float {\bfseries Get\+Distance} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_ae1d64f1c6f0abb7d74c01bdfae07b7ed}\label{class_c78_e_1_1_editor_camera_ae1d64f1c6f0abb7d74c01bdfae07b7ed} 
+void {\bfseries Set\+Distance} (float distance)
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_af98f87012145524a1666db30a537503e}\label{class_c78_e_1_1_editor_camera_af98f87012145524a1666db30a537503e} 
+void {\bfseries Set\+Viewport\+Size} (float width, float height)
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_aa1a2c81f617ee081a2a154f3e82a51ef}\label{class_c78_e_1_1_editor_camera_aa1a2c81f617ee081a2a154f3e82a51ef} 
+const glm\+::mat4 \& {\bfseries Get\+View\+Matrix} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a40185a78ca19083581188a8c199962d5}\label{class_c78_e_1_1_editor_camera_a40185a78ca19083581188a8c199962d5} 
+glm\+::mat4 {\bfseries Get\+View\+Projection} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_aa27b927e2fafa47b5f483c0ec9ac4979}\label{class_c78_e_1_1_editor_camera_aa27b927e2fafa47b5f483c0ec9ac4979} 
+glm\+::vec3 {\bfseries Get\+Up\+Direction} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a305ee546f521f478889935b2961c3698}\label{class_c78_e_1_1_editor_camera_a305ee546f521f478889935b2961c3698} 
+glm\+::vec3 {\bfseries Get\+Right\+Direction} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a2b04b5726f2a2acec73924c5c670c88b}\label{class_c78_e_1_1_editor_camera_a2b04b5726f2a2acec73924c5c670c88b} 
+glm\+::vec3 {\bfseries Get\+Forward\+Direction} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_af2905b73454a60118a3cdecb3628a82b}\label{class_c78_e_1_1_editor_camera_af2905b73454a60118a3cdecb3628a82b} 
+const glm\+::vec3 \& {\bfseries Get\+Position} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a26c5ede83a11ee168ac159882db309f3}\label{class_c78_e_1_1_editor_camera_a26c5ede83a11ee168ac159882db309f3} 
+glm\+::quat {\bfseries Get\+Orientation} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a3ccfac1606c5437938550afd4ea6a4a1}\label{class_c78_e_1_1_editor_camera_a3ccfac1606c5437938550afd4ea6a4a1} 
+float {\bfseries Get\+Pitch} () const
+\item 
+\Hypertarget{class_c78_e_1_1_editor_camera_a5ef29f6a2acc29cafa23b9330cdbb3de}\label{class_c78_e_1_1_editor_camera_a5ef29f6a2acc29cafa23b9330cdbb3de} 
+float {\bfseries Get\+Yaw} () const
+\item 
+\Hypertarget{class_c78_e_1_1_camera_a857ff9b0f542fdced16d6968e9c5b6e6}\label{class_c78_e_1_1_camera_a857ff9b0f542fdced16d6968e9c5b6e6} 
+const glm\+::mat4 \& {\bfseries Get\+Projection} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_camera_aa814ded36a74bb5154f9c8734f16edb8}\label{class_c78_e_1_1_camera_aa814ded36a74bb5154f9c8734f16edb8} 
+glm\+::mat4 {\bfseries m\+\_\+\+Projection} = glm\+::mat4(1.\+0f)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Renderer/Editor\+Camera.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Renderer/Editor\+Camera.\+cpp\end{DoxyCompactItemize}

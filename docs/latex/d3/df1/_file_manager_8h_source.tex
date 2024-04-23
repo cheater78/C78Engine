@@ -1,0 +1,68 @@
+\doxysection{File\+Manager.\+h}
+\hypertarget{_file_manager_8h_source}{}\label{_file_manager_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Editor/src/Tools/FileManager.h@{C:/dev/c-\/cpp/C78Engine/C78Editor/src/Tools/FileManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <C78E.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <C78Elibs.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{namespace\ }C78Editor\ \{}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_editor_1_1_file_manager}{FileManager}}\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ init(std::filesystem::path\ currentProjectPath\ =\ std::filesystem::current\_path());}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ onUpdate();}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ onImGuiRender();}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ EntryType\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ DIRECTORY,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ IMAGE,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ SHADER,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ MODEL,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ MATERIAL,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ FONT,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ PROJECT,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ SCENE,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ MISC}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }DirectoryStructure\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ std::filesystem::path\ path;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::filesystem::path,\ EntryType>\ entries;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<EntryType>\ sortFilter;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ std::counting\_semaphore<1>\ writeIcons\ =\ std::counting\_semaphore<1>(1);}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ std::unordered\_map<std::filesystem::path,\ C78E::Ref<C78E::Texture2D>>\ icons;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ elementSize\ =\ 128;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ showCWDNavigator();}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ showFileNavigator();}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ showSingleFileCard(std::filesystem::path\ filepath,\ EntryType\ type);}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ showSingleFileEntry(std::string\ label,\ C78E::Ref<C78E::Texture2D>\ icon,\ uint32\_t\ size\ =\ s\_CWDStructure.elementSize);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ FileManager::EntryType\ getEntryType(std::filesystem::path\ filepath);}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ updateCurrentDirectoryStructure();}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ C78E::Ref<C78E::Texture2D>\ getIcon(std::filesystem::path\ file);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ changeDirectory(std::filesystem::path\ newCWD);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::filesystem::path\ s\_CWD;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::filesystem::path\ s\_CurrentProjectPath;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::filesystem::path\ s\_LastCWD;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ uint32\_t\ s\_ColumnElements;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ DirectoryStructure\ s\_CWDStructure;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ C78E::Ref<C78E::Texture2D>\ s\_FolderTexture;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ C78E::Ref<C78E::Texture2D>\ s\_FileTexture;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ C78E::Ref<C78E::Texture2D>\ s\_FileUnknownTexture;}
+\DoxyCodeLine{00060\ \ \ \ \ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \}}
+
+\end{DoxyCode}

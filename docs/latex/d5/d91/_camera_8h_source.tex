@@ -1,0 +1,27 @@
+\doxysection{Camera.\+h}
+\hypertarget{_camera_8h_source}{}\label{_camera_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/Camera.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Renderer/Camera.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_camera}{Camera}}}
+\DoxyCodeLine{00008\ \ \ \ \ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_camera}{Camera}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_camera}{Camera}}(\textcolor{keyword}{const}\ glm::mat4\&\ projection)}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ :\ m\_Projection(projection)\ \{\}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_c78_e_1_1_camera}{\string~Camera}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ glm::mat4\&\ GetProjection()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Projection;\ \}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ glm::mat4\ m\_Projection\ =\ glm::mat4(1.0f);}
+\DoxyCodeLine{00019\ \ \ \ \ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \}}
+
+\end{DoxyCode}

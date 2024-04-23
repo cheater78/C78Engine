@@ -1,0 +1,203 @@
+\doxysection{Components.\+h}
+\hypertarget{_components_8h_source}{}\label{_components_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Scene/Components.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Scene/Components.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}C78EPCH.h"{}}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}SceneCamera.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Types.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/UUID.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}C78E/Assets/AssetManager.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{class\ }ScriptableEntity;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ *\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ *\ Components\ for\ Scene\ Entities}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ *\ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ *\ ID\ Component,\ uniquely\ identifying\ an\ Entity}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ *\ mandatory\ for\ every\ Entity}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ *\ gets\ auto\ created\ on\ Entity\ creation}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_i_d_component}{IDComponent}}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_i_d_component}{IDComponent}}(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{UUID}}\ \_id)\ :\ id(\_id)\ \{\}\ \textcolor{comment}{//maybe\ needed}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{UUID}}\ id;}
+\DoxyCodeLine{00026\ \ \ \ \ \};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ *\ Tag\ Component,\ closer\ description\ of\ the\ Entity(e.g.\ name)}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ *\ mandatory\ for\ every\ Entity}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_tag_component}{TagComponent}}\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::string\ tag;}
+\DoxyCodeLine{00034\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ *\ State\ Component,\ whether\ an\ Entity\ is\ active\ or\ should\ be\ skipped\ in\ any\ handling}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ *\ mandatory\ for\ every\ Entity}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ *\ Entities\ are\ enabled\ by\ default}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_state_component}{StateComponent}}\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ enable\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00043\ \ \ \ \ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ *\ Transform\ Component,\ placement\ information\ of\ the\ Entity\ in\ virtual\ space}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ *\ mandatory\ for\ every\ Entity}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_transform_component}{TransformComponent}}\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ glm::vec3\ Translation\ =\ \{\ 0.0f,\ 0.0f,\ 0.0f\ \};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ glm::vec3\ Rotation\ =\ \{\ 0.0f,\ 0.0f,\ 0.0f\ \};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ glm::vec3\ Scale\ =\ \{\ 1.0f,\ 1.0f,\ 1.0f\ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_transform_component}{TransformComponent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_transform_component}{TransformComponent}}(\textcolor{keyword}{const}\ glm::vec3\&\ translation)}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Translation(translation)\ \{\}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ glm::mat4\ getTransform()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ glm::translate(glm::mat4(1.0f),\ Translation)}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ glm::toMat4(glm::quat(Rotation))}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ glm::scale(glm::mat4(1.0f),\ Scale);}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ glm::mat4\ normalMat()\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ glm::mat4(glm::inverseTranspose(getTransform()));}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00067\ \ \ \ \ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ *\ Camera\ Component,\ containing\ data\ for\ the\ Entity\ to\ be\ used\ as\ a\ Camera}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ *\ (optional)}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_camera_component}{CameraComponent}}\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_scene_camera}{SceneCamera}}\ \mbox{\hyperlink{class_c78_e_1_1_camera}{Camera}};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ FixedAspectRatio\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00076\ \ \ \ \ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ *\ Model\ Component,\ AssetHandles\ for\ registered\ Models\ to\ be\ rendered\ as\ visual\ representation\ of\ the\ Entity}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ *\ (optional)}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_model_component}{ModelComponent}}\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ model;}
+\DoxyCodeLine{00084\ \ \ \ \ \};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ *\ SkyBox\ Component,\ AssetHandles\ for\ registered\ Textures\ (TODO\ Cubemaps\ only?!)\ to\ be\ used\ as\ SkyBox\ for\ the\ Scene\ (TODO\ blending\ for\ multiple?!)}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ *\ (optional)}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_sky_box_component}{SkyBoxComponent}}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ std::vector<AssetHandle>\ skyboxes;}
+\DoxyCodeLine{00092\ \ \ \ \ \};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{//\ LEGACY\ -\/>\ TODO:\ rework\ in\ Material/Shader\ system}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ TODO\ -\/>\ Material}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{struct_c78_e_1_1_ambient_light}{AmbientLight}}\ \mbox{\hyperlink{struct_c78_e_1_1_ambient_light}{AmbientLightComponent}};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{struct_c78_e_1_1_direct_light}{DirectLight}}\ \mbox{\hyperlink{struct_c78_e_1_1_direct_light}{DirectLightComponent}};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{struct_c78_e_1_1_point_light}{PointLight}}\ \mbox{\hyperlink{struct_c78_e_1_1_point_light}{PointLightComponent}};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{struct_c78_e_1_1_spot_light}{SpotLight}}\ \mbox{\hyperlink{struct_c78_e_1_1_spot_light}{SpotLightComponent}};}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_mesh_component}{MeshComponent}}\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ mesh;}
+\DoxyCodeLine{00113\ \ \ \ \ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_material_component}{MaterialComponent}}\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ material;}
+\DoxyCodeLine{00117\ \ \ \ \ \};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_texture_component}{TextureComponent}}\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ std::vector<AssetHandle>\ textures;}
+\DoxyCodeLine{00121\ \ \ \ \ \};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_sprite_renderer_component}{SpriteRendererComponent}}\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ glm::vec4\ color\{\ 1.0f,\ 1.0f,\ 1.0f,\ 1.0f\ \};}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ texture;}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ tilingFactor\ =\ 1.0f;}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_sprite_renderer_component}{SpriteRendererComponent}}(\textcolor{keyword}{const}\ glm::vec4\&\ color)}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ :\ color(color)\ \{\}}
+\DoxyCodeLine{00133\ \ \ \ \ \};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_circle_renderer_component}{CircleRendererComponent}}\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ glm::vec4\ color\{\ 1.0f,\ 1.0f,\ 1.0f,\ 1.0f\ \};}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ thickness\ =\ 1.0f;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ fade\ =\ 0.005f;}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_circle_renderer_component}{CircleRendererComponent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_circle_renderer_component}{CircleRendererComponent}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_circle_renderer_component}{CircleRendererComponent}}\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00142\ \ \ \ \ \};}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_script_component}{ScriptComponent}}\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ std::string\ className;}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_script_component}{ScriptComponent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_script_component}{ScriptComponent}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_script_component}{ScriptComponent}}\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00150\ \ \ \ \ \};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_native_script_component}{NativeScriptComponent}}\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_scriptable_entity}{ScriptableEntity}}*\ instance\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_scriptable_entity}{ScriptableEntity}}*(*instantiateScript)();}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ void\ (*destroyScript)(\mbox{\hyperlink{struct_c78_e_1_1_native_script_component}{NativeScriptComponent}}*);}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Bind()\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ instantiateScript\ =\ []()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{class_c78_e_1_1_scriptable_entity}{ScriptableEntity}}*\textcolor{keyword}{>}(\textcolor{keyword}{new}\ T());\ \};}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ destroyScript\ =\ [](\mbox{\hyperlink{struct_c78_e_1_1_native_script_component}{NativeScriptComponent}}*\ nsc)\ \{\ \textcolor{keyword}{delete}\ nsc-\/>instance;\ nsc-\/>instance\ =\ \textcolor{keyword}{nullptr};\ \};}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00163\ \ \ \ \ \};}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Component>}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_component_group}{ComponentGroup}}}
+\DoxyCodeLine{00168\ \ \ \ \ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \};}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{struct_c78_e_1_1_component_group}{AllComponents}}\ =\ \mbox{\hyperlink{struct_c78_e_1_1_component_group}{ComponentGroup}}\ <}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_i_d_component}{IDComponent}},}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_tag_component}{TagComponent}},}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_state_component}{StateComponent}},}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_transform_component}{TransformComponent}},}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_camera_component}{CameraComponent}},}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_ambient_light}{AmbientLightComponent}},}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_direct_light}{DirectLightComponent}},}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_point_light}{PointLightComponent}},}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_spot_light}{SpotLightComponent}},}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_model_component}{ModelComponent}},}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_mesh_component}{MeshComponent}},}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_material_component}{MaterialComponent}},}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_texture_component}{TextureComponent}},}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_sky_box_component}{SkyBoxComponent}},}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_sprite_renderer_component}{SpriteRendererComponent}},}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_circle_renderer_component}{CircleRendererComponent}},}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_camera_component}{CameraComponent}},}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_script_component}{ScriptComponent}},}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_native_script_component}{NativeScriptComponent}}}
+\DoxyCodeLine{00195\ \ \ \ \ >;}
+\DoxyCodeLine{00196\ \ \ \ \ }
+\DoxyCodeLine{00197\ \}}
+
+\end{DoxyCode}

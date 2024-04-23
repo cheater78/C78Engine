@@ -1,0 +1,105 @@
+\doxysection{Editor\+Layer.\+h}
+\hypertarget{_editor_layer_8h_source}{}\label{_editor_layer_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Editor/src/EditorLayer.h@{C:/dev/c-\/cpp/C78Engine/C78Editor/src/EditorLayer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <C78E.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <C78Elibs.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Tools/FileManager.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Tools/EntityInspector.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Tools/Viewport.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Scene/EditorCamera.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <C78E/Project/Project.h>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }C78Editor\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ C78E::FilePath\ projectPath\ =\ \textcolor{stringliteral}{"{}C:\(\backslash\)\(\backslash\)dev\(\backslash\)\(\backslash\)c-\/cpp\(\backslash\)\(\backslash\)C78Engine\(\backslash\)\(\backslash\)C78Project\(\backslash\)\(\backslash\)assets\(\backslash\)\(\backslash\)C78Project.pce"{}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_editor_1_1_editor_layer}{EditorLayer}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_layer}{C78E::Layer}}\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_editor_1_1_editor_layer}{EditorLayer}}(\mbox{\hyperlink{class_c78_e_1_1_window}{C78E::Window}}\&\ window)\ :\ Layer(\textcolor{stringliteral}{"{}EditorLayer"{}}),\ m\_Window(window)}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onAttach()\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Create\ Scene\ and\ Camera\ for\ the\ Editor}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ m\_EditorScene\ =\ C78E::createRef<C78E::Scene>();}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ m\_EditorCameraEntity\ =\ m\_EditorScene-\/>createEntity(\textcolor{stringliteral}{"{}EditorCamera;"{}});}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ EntityInspector::init();}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Viewport::init();}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ FileManager::init();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onDetach()\ \{\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onUpdate(\mbox{\hyperlink{class_c78_e_1_1_timestep}{C78E::Timestep}}\ delta)\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ m\_LastFrameTime\ =\ delta;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ m\_EditorScene-\/>onViewportResize(m\_Window.getWidth(),\ m\_Window.getHeight());}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_MouseCapture)\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_Window.setMouseMode(C78E::MouseMode::DISABLED);}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EditorCamera::update(m\_EditorCameraEntity,\ delta);}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ m\_Window.setMouseMode(C78E::MouseMode::NORMAL);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onEvent(\mbox{\hyperlink{class_c78_e_1_1_event}{C78E::Event}}\&\ e)\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_event_dispatcher}{C78E::EventDispatcher}}\ dispatcher(e);}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ dispatcher.dispatch<\mbox{\hyperlink{class_c78_e_1_1_key_pressed_event}{C78E::KeyPressedEvent}}>(BIND\_CALLBACK\_FN(EditorLayer::onKeyPressed));}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ dispatcher.dispatch<\mbox{\hyperlink{class_c78_e_1_1_window_resize_event}{C78E::WindowResizeEvent}}>(BIND\_CALLBACK\_FN(EditorLayer::onWindowResize));}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ onKeyPressed(\mbox{\hyperlink{class_c78_e_1_1_key_pressed_event}{C78E::KeyPressedEvent}}\ e)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ onWindowResize(\mbox{\hyperlink{class_c78_e_1_1_window_resize_event}{C78E::WindowResizeEvent}}\ e)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ C78E::RenderCommand::setViewport(0,\ 0,\ e.getWidth(),\ e.getHeight());}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onImGuiRender()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!m\_active)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ ImGui::DockSpaceOverViewport();\ \textcolor{comment}{//\ For\ Editor\ -\/>\ one\ big\ root\ DockingSpace}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ImGui::Begin(\textcolor{stringliteral}{"{}FrameInfo"{}});}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ImGui::Text((\textcolor{stringliteral}{"{}FPS:\ "{}}\ +\ std::to\_string((uint32\_t)(1\ /\ m\_LastFrameTime))).c\_str());}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ImGui::Text(\textcolor{stringliteral}{"{}FrameTime:\ \%.1f\ ms"{}},\ m\_LastFrameTime\ *\ 1000);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ImGui::End();}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ EntityInspector::onImGuiRender(m\_EditorScene);}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Viewport::onImGuiRender(m\_MouseCapture);}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ FileManager::onImGuiRender();}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_window}{C78E::Window}}\&\ m\_Window;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_active\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_timestep}{C78E::Timestep}}\ m\_LastFrameTime\ =\ 0;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_MouseCapture\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ C78E::Ref<C78E::Scene>\ m\_EditorScene;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_entity}{C78E::Entity}}\ m\_EditorCameraEntity;}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ C78E::Ref<C78E::Project>\ m\_Project\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00097\ \ \ \ \ \};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,63 @@
+\doxysection{Image.\+h}
+\hypertarget{_image_8h_source}{}\label{_image_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Texture/Image.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Texture/Image.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}C78ePCH.h"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <C78E/Core/Buffer.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_image}{Image}}\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ ImageFormat\ :\ uint32\_t\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \ \ \ \ None\ =\ 0,}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \ \ \ \ R8\ =\ 1,}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ RG8\ =\ 2,}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ RGB8\ =\ 3,}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ RGBA8\ =\ 4,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ RGBA32F\ =\ 5,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ R32\ =\ 6,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ D24S8\ =\ 7}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ imageFormatSize(ImageFormat\ format)\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((uint32\_t)format\ <=\ 4)\ \textcolor{keywordflow}{return}\ (uint32\_t)format;}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (format\ ==\ ImageFormat::RGBA32F)\ \textcolor{keywordflow}{return}\ 16;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (format\ ==\ ImageFormat::R32)\ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (format\ ==\ ImageFormat::D24S8)\ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_image}{Image}}(uint32\_t\ width,\ uint32\_t\ height,\ ImageFormat\ format,\ \textcolor{keywordtype}{void}*\ data);}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_image}{Image}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_image}{Image}}\&\ copy);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_image}{\string~Image}}();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isValid()\ \{\ \textcolor{keywordflow}{return}\ m\_Data;\ \}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ getData()\ \{\ \textcolor{keywordflow}{return}\ m\_Data.data;\ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ uint32\_t\ getWidth()\ \{\ \textcolor{keywordflow}{return}\ m\_Width;\ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ uint32\_t\ getHeight()\ \{\ \textcolor{keywordflow}{return}\ m\_Height;\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ ImageFormat\&\ getFormat()\ \{\ \textcolor{keywordflow}{return}\ m\_Format;\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ getByteSize();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ \ \ \ void\ expandLeft(Image\&\ image);}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ \ \ \ void\ expandRight(Image\&\ image);}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ \ \ \ void\ expandTop(Image\&\ image);}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ \ \ \ void\ expandBot(Image\&\ image);}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ Ref<Image>\ croppedCopy(\textcolor{keywordtype}{float}\ ox,\ \textcolor{keywordtype}{float}\ oy,\ \textcolor{keywordtype}{float}\ dx,\ \textcolor{keywordtype}{float}\ dy);}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ Ref<Image>\ croppedCopy(uint32\_t\ ox,\ uint32\_t\ oy,\ uint32\_t\ dx,\ uint32\_t\ dy);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ uint32\_t\ m\_Width\ =\ 1;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ uint32\_t\ m\_Height\ =\ 1;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ ImageFormat\ m\_Format\ =\ ImageFormat::R8;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_buffer}{Buffer}}\ m\_Data;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \};}
+\DoxyCodeLine{00057\ \}}
+
+\end{DoxyCode}

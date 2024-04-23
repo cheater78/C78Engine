@@ -14,8 +14,7 @@ namespace C78E {
 		C78_CORE_ASSERT(windowHandle, "Window handle is null!")
 	}
 
-	void OpenGLContext::init()
-	{
+	void OpenGLContext::init() {
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		C78_CORE_ASSERT(status, "Failed to initialize Glad!");
@@ -29,8 +28,7 @@ namespace C78E {
 		
 	}
 
-	void OpenGLContext::swapBuffers()
-	{
+	void OpenGLContext::swapBuffers() {
 		glfwSwapBuffers(m_WindowHandle);
 	}
 

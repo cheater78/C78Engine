@@ -28,12 +28,17 @@ project "C78Editor"
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.VulkanSDK}",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.tinobj}"
+		"%{IncludeDir.tinobj}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links
 	{
 		"C78Engine"
+	}
+	
+	defines{
+		"YAML_CPP_STATIC_DEFINE"
 	}
 	
 	filter "system:windows"

@@ -43,6 +43,7 @@
 #include <C78E/Core/Assert.h>
 #include <C78E/Core/Log.h>
 #include <C78E/Core/UUID.h>
+#include <C78E/Core/FileSystem.h>
 
 //C78E utils
 #include <C78E/Utils/StdUtils.h>

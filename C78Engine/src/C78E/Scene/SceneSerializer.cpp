@@ -20,7 +20,7 @@ namespace C78E {
 			out << YAML::Key << "TagComponent";
 			out << YAML::BeginMap; // TagComponent
 
-			auto& tag = entity.getComponent<TagComponent>();
+			auto& tag = entity.getComponent<TagComponent>().tag;
 			out << YAML::Key << "Tag" << YAML::Value << tag;
 
 			out << YAML::EndMap; // TagComponent
@@ -61,36 +61,6 @@ namespace C78E {
 			out << YAML::EndMap; // CameraComponent
 		}
 
-		//
-
-		if (entity.hasComponent<SpriteRendererComponent>())
-		{
-			out << YAML::Key << "SpriteRendererComponent";
-			out << YAML::BeginMap; // SpriteRendererComponent
-
-			auto& spriteRendererComponent = entity.getComponent<SpriteRendererComponent>();
-			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.color;
-			out << YAML::Key << "TextureHandle" << YAML::Value << spriteRendererComponent.texture;
-
-			out << YAML::Key << "TilingFactor" << YAML::Value << spriteRendererComponent.tilingFactor;
-
-			out << YAML::EndMap; // SpriteRendererComponent
-		}
-
-		if (entity.hasComponent<CircleRendererComponent>())
-		{
-			out << YAML::Key << "CircleRendererComponent";
-			out << YAML::BeginMap; // CircleRendererComponent
-
-			auto& circleRendererComponent = entity.getComponent<CircleRendererComponent>();
-			out << YAML::Key << "Color" << YAML::Value << circleRendererComponent.color;
-			out << YAML::Key << "Thickness" << YAML::Value << circleRendererComponent.thickness;
-			out << YAML::Key << "Fade" << YAML::Value << circleRendererComponent.fade;
-
-			out << YAML::EndMap; // CircleRendererComponent
-		}
-
-		//
 
 		out << YAML::EndMap; // Entity
 	}
@@ -175,37 +145,6 @@ namespace C78E {
 					cc.Camera.SetOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
 
 					cc.FixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();
-				}
-
-				//
-
-				auto spriteRendererComponent = entity["SpriteRendererComponent"];
-				if (spriteRendererComponent)
-				{
-					auto& src = deserializedEntity.addComponent<SpriteRendererComponent>();
-					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
-					if (spriteRendererComponent["TexturePath"])
-					{
-						// NOTE(Yan): legacy, could try and find something in the asset registry that matches?
-						// std::string texturePath = spriteRendererComponent["TexturePath"].as<std::string>();
-						// auto path = Project::GetAssetFileSystemPath(texturePath);
-						// src.Texture = Texture2D::Create(path.string());
-					}
-
-					if (spriteRendererComponent["TextureHandle"])
-						src.texture = spriteRendererComponent["TextureHandle"].as<AssetHandle>();
-
-					if (spriteRendererComponent["TilingFactor"])
-						src.tilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
-				}
-
-				auto circleRendererComponent = entity["CircleRendererComponent"];
-				if (circleRendererComponent)
-				{
-					auto& crc = deserializedEntity.addComponent<CircleRendererComponent>();
-					crc.color = circleRendererComponent["Color"].as<glm::vec4>();
-					crc.thickness = circleRendererComponent["Thickness"].as<float>();
-					crc.fade = circleRendererComponent["Fade"].as<float>();
 				}
 
 				

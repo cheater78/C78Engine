@@ -1,0 +1,123 @@
+\doxysection{Yaml\+Utils.\+h}
+\hypertarget{_yaml_utils_8h_source}{}\label{_yaml_utils_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Utils/yaml-\/cpp/YamlUtils.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Utils/yaml-\/cpp/YamlUtils.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <C78E/Core/UUID.h>}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <yaml-\/cpp/yaml.h>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }YAML\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{comment}{//\ String}}
+\DoxyCodeLine{00010\ \ \ \ \ Emitter\&\ operator<<(Emitter\&\ out,\ \textcolor{keyword}{const}\ std::string\_view\&\ v);}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\ UUID}}
+\DoxyCodeLine{00014\ \ \ \ \ Emitter\&\ operator<<(Emitter\&\ out,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::UUID}}\&\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{struct\ }convert<C78E::UUID>\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Node\ encode(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::UUID}}\&\ \textcolor{keywordtype}{id})\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ Node\ node;}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back((uint64\_t)\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ decode(\textcolor{keyword}{const}\ Node\&\ node,\ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{C78E::UUID}}\&\ \textcolor{keywordtype}{id})\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ node.as<uint64\_t>();}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ GLM::vec2}}
+\DoxyCodeLine{00032\ \ \ \ \ Emitter\&\ operator<<(Emitter\&\ out,\ \textcolor{keyword}{const}\ glm::vec2\&\ v);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{struct\ }convert<glm::vec2>\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Node\ encode(\textcolor{keyword}{const}\ glm::vec2\&\ v)\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ Node\ node;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.x);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.y);}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ decode(\textcolor{keyword}{const}\ Node\&\ node,\ glm::vec2\&\ v)\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!node.IsSequence()\ ||\ node.size()\ !=\ 2)}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ v.x\ =\ node[0].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ v.y\ =\ node[1].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ GLM::vec3}}
+\DoxyCodeLine{00055\ \ \ \ \ Emitter\&\ operator<<(Emitter\&\ out,\ \textcolor{keyword}{const}\ glm::vec3\&\ v);}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{struct\ }convert<glm::vec3>\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Node\ encode(\textcolor{keyword}{const}\ glm::vec3\&\ v)\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ Node\ node;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.x);}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.y);}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.z);}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ decode(\textcolor{keyword}{const}\ Node\&\ node,\ glm::vec3\&\ v)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!node.IsSequence()\ ||\ node.size()\ !=\ 3)}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ v.x\ =\ node[0].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ v.y\ =\ node[1].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ v.z\ =\ node[2].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ GLM::vec4}}
+\DoxyCodeLine{00080\ \ \ \ \ Emitter\&\ operator<<(Emitter\&\ out,\ \textcolor{keyword}{const}\ glm::vec4\&\ v);}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{struct\ }convert<glm::vec4>\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Node\ encode(\textcolor{keyword}{const}\ glm::vec4\&\ v)\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ Node\ node;}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.x);}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.y);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.z);}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ node.push\_back(v.w);}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ decode(\textcolor{keyword}{const}\ Node\&\ node,\ glm::vec4\&\ v)\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!node.IsSequence()\ ||\ node.size()\ !=\ 4)}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ v.x\ =\ node[0].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ v.y\ =\ node[1].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ v.z\ =\ node[2].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ v.w\ =\ node[3].as<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#define\ WRITE\_SCRIPT\_FIELD(FieldType,\ Type)\ case\ ScriptFieldType::FieldType:\ out\ <<\ scriptField.GetValue<Type>();\ break}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#define\ READ\_SCRIPT\_FIELD(FieldType,\ Type)\ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\ \ \ \ case\ ScriptFieldType::FieldType:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ Type\ data\ =\ scriptField["{}Data"{}].as<Type>();\ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ fieldInstance.SetValue(data);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ break;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\ \ \ \ \}}}
+
+\end{DoxyCode}

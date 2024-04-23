@@ -4,15 +4,16 @@
 #include <C78E.h>
 #include <C78Elibs.h>
 
+#include "Config/WindowConfig.h"
 #include "EditorLayer.h"
+
 
 namespace C78Editor {
 
 	class C78Editor : public C78E::Application {
-
 	public:
 
-		C78Editor() :m_EditorLayer(C78E::createRef<EditorLayer>(this->getWindow())) {
+		C78Editor() : Application({"C78Editor", 1920, 1080 }), m_EditorLayer(C78E::createRef<EditorLayer>(this->getWindow())) {
 			pushLayer(m_EditorLayer);
 		}
 
@@ -26,4 +27,7 @@ namespace C78Editor {
 }
 
 // Register App in Engine
-C78E::Application* C78E::createApplication() { return new C78Editor::C78Editor(); }
+C78E::Application* C78E::createApplication() {
+	C78Editor::WindowConfig::load();
+	return new C78Editor::C78Editor();
+}

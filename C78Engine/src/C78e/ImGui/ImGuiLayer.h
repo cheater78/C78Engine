@@ -8,8 +8,7 @@
 
 namespace C78E {
 
-	class C78_API ImGuiLayer : public Layer
-	{
+	class C78_API ImGuiLayer : public Layer {
 	public:
 		ImGuiLayer();
 		~ImGuiLayer() = default;
@@ -22,9 +21,9 @@ namespace C78E {
 		void begin();
 		void end();
 
-		void BlockEvents(bool block) { m_BlockEvents = block; }
+		void blockEvents(bool block) { m_BlockEvents = block; }
 		
-		void SetDarkThemeColors();
+		void setDarkThemeColors();
 
 		uint32_t getActiveWidgetID() const;
 	private:

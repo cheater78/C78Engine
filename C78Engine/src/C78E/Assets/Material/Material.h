@@ -52,15 +52,15 @@ namespace C78E {
 		Material() = default;
 		Material(
 			AssetHandle shader,
-			MaterialProperties materialProperties,
 			uint32_t illuminationModel,
+			MaterialProperties materialProperties,
 			MaterialTextures materialTextures,
 			MaterialPropertiesPBRext materialPropertiesPBRext = {},
 			MaterialTexturesPBRext materialTexturesPBRext = {}
 		)
 			: m_Shader(shader),
-			m_MaterialProperties(materialProperties),
 			m_IlluminationModel(illuminationModel),
+			m_MaterialProperties(materialProperties),
 			m_MaterialTextures(materialTextures),
 			m_MaterialPropertiesPBRext(materialPropertiesPBRext),
 			m_MaterialTexturesPBRext(materialTexturesPBRext)

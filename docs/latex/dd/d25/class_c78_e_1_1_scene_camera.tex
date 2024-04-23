@@ -1,0 +1,96 @@
+\doxysection{C78E\+::Scene\+Camera Class Reference}
+\hypertarget{class_c78_e_1_1_scene_camera}{}\label{class_c78_e_1_1_scene_camera}\index{C78E::SceneCamera@{C78E::SceneCamera}}
+
+
+Inheritance diagram for C78E\+::Scene\+Camera\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Scene\+Camera\+:
+% FIG 1
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_ac2ed0418e075be6ae610e28b8a0bbd18}\label{class_c78_e_1_1_scene_camera_ac2ed0418e075be6ae610e28b8a0bbd18} 
+enum class {\bfseries Projection\+Type} \{ {\bfseries Perspective} = 0
+, {\bfseries Orthographic} = 1
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a88bf27f31561237f8bf200f4e62d42ab}\label{class_c78_e_1_1_scene_camera_a88bf27f31561237f8bf200f4e62d42ab} 
+Projection\+Type \& {\bfseries Get\+Projection\+Type} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a9e1fe6001bef09eedfada7658779efa5}\label{class_c78_e_1_1_scene_camera_a9e1fe6001bef09eedfada7658779efa5} 
+void {\bfseries Set\+Projection\+Type} (Projection\+Type type)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a1cff1dec26f98262d1e85013d30e6734}\label{class_c78_e_1_1_scene_camera_a1cff1dec26f98262d1e85013d30e6734} 
+void {\bfseries Set\+Perspective} (float vertical\+FOV, float near\+Clip, float far\+Clip)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a40a8bcf6badffdf028555e134c09f29e}\label{class_c78_e_1_1_scene_camera_a40a8bcf6badffdf028555e134c09f29e} 
+float \& {\bfseries Get\+Perspective\+Vertical\+FOV} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_aca44e8c46df2d6c68b64c64e49d1379b}\label{class_c78_e_1_1_scene_camera_aca44e8c46df2d6c68b64c64e49d1379b} 
+void {\bfseries Set\+Perspective\+Vertical\+FOV} (float vertical\+Fov)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a187d6f8754f656b260215f93bd2e89fc}\label{class_c78_e_1_1_scene_camera_a187d6f8754f656b260215f93bd2e89fc} 
+float \& {\bfseries Get\+Perspective\+Near\+Clip} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a4b0ea7c4eb4d5b7363f9532b902e74de}\label{class_c78_e_1_1_scene_camera_a4b0ea7c4eb4d5b7363f9532b902e74de} 
+void {\bfseries Set\+Perspective\+Near\+Clip} (float near\+Clip)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a20b92eec129c74b638a4f86c81f495a7}\label{class_c78_e_1_1_scene_camera_a20b92eec129c74b638a4f86c81f495a7} 
+float \& {\bfseries Get\+Perspective\+Far\+Clip} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a46cebc5d5ed860c8c2edf29fa94b270e}\label{class_c78_e_1_1_scene_camera_a46cebc5d5ed860c8c2edf29fa94b270e} 
+void {\bfseries Set\+Perspective\+Far\+Clip} (float far\+Clip)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a7c03e4cd29ce5ac3318de38c18a0d660}\label{class_c78_e_1_1_scene_camera_a7c03e4cd29ce5ac3318de38c18a0d660} 
+void {\bfseries Set\+Orthographic} (float size, float near\+Clip, float far\+Clip)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a8aeb0346b164344c191bd98191357000}\label{class_c78_e_1_1_scene_camera_a8aeb0346b164344c191bd98191357000} 
+float \& {\bfseries Get\+Orthographic\+Size} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a8e701f74ea0cdaf681652d0eae6eafb2}\label{class_c78_e_1_1_scene_camera_a8e701f74ea0cdaf681652d0eae6eafb2} 
+void {\bfseries Set\+Orthographic\+Size} (float size)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a860b7897fa71d04b7d2533215fed0bf1}\label{class_c78_e_1_1_scene_camera_a860b7897fa71d04b7d2533215fed0bf1} 
+float \& {\bfseries Get\+Orthographic\+Near\+Clip} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a292e8141577773c5b9b528c263ebd36c}\label{class_c78_e_1_1_scene_camera_a292e8141577773c5b9b528c263ebd36c} 
+void {\bfseries Set\+Orthographic\+Near\+Clip} (float near\+Clip)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a28e73f6e67382e844391c0a828ca2c7c}\label{class_c78_e_1_1_scene_camera_a28e73f6e67382e844391c0a828ca2c7c} 
+float \& {\bfseries Get\+Orthographic\+Far\+Clip} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_af634b830cb98622b451697ab9ad04593}\label{class_c78_e_1_1_scene_camera_af634b830cb98622b451697ab9ad04593} 
+void {\bfseries Set\+Orthographic\+Far\+Clip} (float far\+Clip)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_abee93831e5b7ebf353caabd8ac1fee0c}\label{class_c78_e_1_1_scene_camera_abee93831e5b7ebf353caabd8ac1fee0c} 
+void {\bfseries Set\+Viewport\+Size} (uint32\+\_\+t width, uint32\+\_\+t height)
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a77501b18af2d89874273a901fcfe5bd2}\label{class_c78_e_1_1_scene_camera_a77501b18af2d89874273a901fcfe5bd2} 
+uint32\+\_\+t {\bfseries get\+Width} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_a46321358a8eee8c641bbc0e9d49338c0}\label{class_c78_e_1_1_scene_camera_a46321358a8eee8c641bbc0e9d49338c0} 
+uint32\+\_\+t {\bfseries get\+Height} ()
+\item 
+\Hypertarget{class_c78_e_1_1_scene_camera_ac992fdf118c44612dee4ed307334a5e7}\label{class_c78_e_1_1_scene_camera_ac992fdf118c44612dee4ed307334a5e7} 
+const glm\+::mat4 \& {\bfseries Get\+Projection} ()
+\item 
+\Hypertarget{class_c78_e_1_1_camera_a857ff9b0f542fdced16d6968e9c5b6e6}\label{class_c78_e_1_1_camera_a857ff9b0f542fdced16d6968e9c5b6e6} 
+const glm\+::mat4 \& {\bfseries Get\+Projection} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_camera_aa814ded36a74bb5154f9c8734f16edb8}\label{class_c78_e_1_1_camera_aa814ded36a74bb5154f9c8734f16edb8} 
+glm\+::mat4 {\bfseries m\+\_\+\+Projection} = glm\+::mat4(1.\+0f)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Scene/Scene\+Camera.\+h\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Scene/Scene\+Camera.\+cpp\end{DoxyCompactItemize}

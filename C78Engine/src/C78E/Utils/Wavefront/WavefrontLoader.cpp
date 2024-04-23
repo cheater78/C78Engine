@@ -162,8 +162,9 @@ namespace C78E {
 
     Ref<Material> WavefrontLoader::toMaterial(const tinyobj::material_t& material) {
         return createRef<Material>(
-            toMaterialProperties(material),
+            0, //TODO Shader handle
             material.illum,
+            toMaterialProperties(material),
             toMaterialTextures(material),
             toMaterialPropertiesPBRext(material),
             toMaterialTexturesPBRext(material)
@@ -185,6 +186,10 @@ namespace C78E {
 
     Material::MaterialTextures WavefrontLoader::toMaterialTextures(const tinyobj::material_t& material) {
         return {
+            0,0,0,0,0,0,0,0
+        };
+        /*
+        return {
             material.ambient_texname,
             material.diffuse_texname,
             material.specular_texname,
@@ -202,6 +207,7 @@ namespace C78E {
             toMaterialTextureOption(material.alpha_texopt),
             toMaterialTextureOption(material.reflection_texopt)
         };
+        */
     }
 
     Material::MaterialPropertiesPBRext WavefrontLoader::toMaterialPropertiesPBRext(const tinyobj::material_t& material) {
@@ -217,6 +223,9 @@ namespace C78E {
     }
 
     Material::MaterialTexturesPBRext WavefrontLoader::toMaterialTexturesPBRext(const tinyobj::material_t& material) {
+        return {0,0,0,0,0};
+
+        /*
         return {
             material.ambient_texname,
             material.metallic_texname,
@@ -229,6 +238,7 @@ namespace C78E {
             toMaterialTextureOption(material.emissive_texopt),
             toMaterialTextureOption(material.normal_texopt)
         };
+        */
     }
 
     Texture::TextureOption WavefrontLoader::toMaterialTextureOption(const tinyobj::texture_option_t& texOpt) {

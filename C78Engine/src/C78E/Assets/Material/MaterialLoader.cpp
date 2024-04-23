@@ -8,7 +8,7 @@ namespace C78E {
 	Ref<Material> MaterialLoader::importMaterial(AssetHandle handle, const Asset::AssetMeta& meta) {
 		FilePath ext = meta.fileSource.extension();
 
-		if (ext == ".mtl") return loadWavefrontMaterial(handle, meta);
+		if (ext == ".mtl") return loadWavefrontMaterial(Project::getActiveAssetDirectory() / meta.fileSource, meta.name);
 
 		return loadMaterial(Project::getActiveAssetDirectory() / meta.fileSource);
 	}

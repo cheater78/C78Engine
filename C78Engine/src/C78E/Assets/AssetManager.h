@@ -6,8 +6,7 @@ namespace C78E {
 	using AssetMap = std::map<AssetHandle, Ref<Asset>>;
 	using AssetRegistry = std::map<AssetHandle, Asset::AssetMeta>;
 
-
-	class AssetManagerBase {
+	class AssetManagerBase { // abstract Base AssetManager
 	public:
 		virtual Ref<Asset> getAsset(AssetHandle handle) = 0;
 
@@ -16,14 +15,24 @@ namespace C78E {
 		virtual Asset::AssetType getType(AssetHandle handle) const = 0;
 	};
 
-	class AssetManager {
+
+
+	class AssetManager { // static AssetManager "Access Point"
 	public:
 		template<typename T>
-		static Ref<T> getAsset(AssetHandle handle);
+		static Ref<T> getAsset(AssetHandle handle) {
+			Ref<Asset> asset = getCurrentProjectsAssetManager()->getAsset(handle);
+			return std::static_pointer_cast<T>(asset);
+		}
 		static bool isValid(AssetHandle handle);
 		static bool isLoaded(AssetHandle handle);
 		static Asset::AssetType getType(AssetHandle handle);
+	private:
+		static Ref<AssetManagerBase> getCurrentProjectsAssetManager();
 	};
+
+
+	// concrete AssetManagers
 
 	class EditorAssetManager : public AssetManagerBase {
 	public:

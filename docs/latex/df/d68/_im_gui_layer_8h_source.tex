@@ -1,0 +1,41 @@
+\doxysection{Im\+Gui\+Layer.\+h}
+\hypertarget{_im_gui_layer_8h_source}{}\label{_im_gui_layer_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/ImGui/ImGuiLayer.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/ImGui/ImGuiLayer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Layer.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}C78E/Events/ApplicationEvent.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}C78E/Events/KeyEvent.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}C78E/Events/MouseEvent.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{class\ }C78\_API\ \mbox{\hyperlink{class_c78_e_1_1_im_gui_layer}{ImGuiLayer}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_layer}{Layer}}}
+\DoxyCodeLine{00012\ \ \ \ \ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_im_gui_layer}{ImGuiLayer}}();}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_im_gui_layer}{\string~ImGuiLayer}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onAttach()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onDetach()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onImGuiRender()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onEvent(\mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\&\ e)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ begin();}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ end();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ BlockEvents(\textcolor{keywordtype}{bool}\ block)\ \{\ m\_BlockEvents\ =\ block;\ \}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetDarkThemeColors();}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ uint32\_t\ getActiveWidgetID()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_BlockEvents\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \}}
+
+\end{DoxyCode}

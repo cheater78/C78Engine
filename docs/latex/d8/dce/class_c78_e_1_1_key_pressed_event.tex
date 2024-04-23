@@ -1,0 +1,66 @@
+\doxysection{C78E\+::Key\+Pressed\+Event Class Reference}
+\hypertarget{class_c78_e_1_1_key_pressed_event}{}\label{class_c78_e_1_1_key_pressed_event}\index{C78E::KeyPressedEvent@{C78E::KeyPressedEvent}}
+
+
+Inheritance diagram for C78E\+::Key\+Pressed\+Event\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Key\+Pressed\+Event\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_key_pressed_event_ae8dab5c0aadf0d30a9dd53c4a4e81fd4}\label{class_c78_e_1_1_key_pressed_event_ae8dab5c0aadf0d30a9dd53c4a4e81fd4} 
+{\bfseries Key\+Pressed\+Event} (const Key\+Code keycode, bool is\+Repeat=false)
+\item 
+\Hypertarget{class_c78_e_1_1_key_pressed_event_a9c1e66c09454f13cee90a7d6ca0f613c}\label{class_c78_e_1_1_key_pressed_event_a9c1e66c09454f13cee90a7d6ca0f613c} 
+bool {\bfseries Is\+Repeat} () const
+\item 
+std\+::string \mbox{\hyperlink{class_c78_e_1_1_key_pressed_event_aeca0f599977b44e05fe5e4bac8e6a48f}{to\+String}} () const override
+\item 
+\Hypertarget{class_c78_e_1_1_key_event_acd066b9c2c3edce2f695a9b05a55d1cf}\label{class_c78_e_1_1_key_event_acd066b9c2c3edce2f695a9b05a55d1cf} 
+Key\+Code {\bfseries Get\+Key\+Code} () const
+\item 
+\Hypertarget{class_c78_e_1_1_event_a1dfa689428643c3de13a496ffda00fa7}\label{class_c78_e_1_1_event_a1dfa689428643c3de13a496ffda00fa7} 
+virtual Event\+Type {\bfseries get\+Event\+Type} () const =0
+\item 
+\Hypertarget{class_c78_e_1_1_event_a7473a68cf830d466a276c2bd96e1e864}\label{class_c78_e_1_1_event_a7473a68cf830d466a276c2bd96e1e864} 
+virtual const char \texorpdfstring{$\ast$}{*} {\bfseries get\+Name} () const =0
+\item 
+\Hypertarget{class_c78_e_1_1_event_a361731fd0036f3dc064a873befb51f76}\label{class_c78_e_1_1_event_a361731fd0036f3dc064a873befb51f76} 
+virtual int {\bfseries get\+Category\+Flags} () const =0
+\item 
+\Hypertarget{class_c78_e_1_1_event_ac776b44ca78b5639cd32894421c8d626}\label{class_c78_e_1_1_event_ac776b44ca78b5639cd32894421c8d626} 
+bool {\bfseries Is\+In\+Category} (Event\+Category category)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_event_acfcc319ace72aefdcea64189fd29097c}\label{class_c78_e_1_1_event_acfcc319ace72aefdcea64189fd29097c} 
+bool {\bfseries Handled} = false
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_key_event_a73fcf0853b0510a8bdbf34c5e2c0c628}\label{class_c78_e_1_1_key_event_a73fcf0853b0510a8bdbf34c5e2c0c628} 
+Key\+Code {\bfseries m\+\_\+\+Key\+Code}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_e_1_1_key_pressed_event_aeca0f599977b44e05fe5e4bac8e6a48f}\label{class_c78_e_1_1_key_pressed_event_aeca0f599977b44e05fe5e4bac8e6a48f} 
+\index{C78E::KeyPressedEvent@{C78E::KeyPressedEvent}!toString@{toString}}
+\index{toString@{toString}!C78E::KeyPressedEvent@{C78E::KeyPressedEvent}}
+\doxysubsubsection{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string C78\+E\+::\+Key\+Pressed\+Event\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_c78_e_1_1_event}{C78\+E\+::\+Event}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Events/Key\+Event.\+h\end{DoxyCompactItemize}

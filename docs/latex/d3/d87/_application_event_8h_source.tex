@@ -1,0 +1,64 @@
+\doxysection{Application\+Event.\+h}
+\hypertarget{_application_event_8h_source}{}\label{_application_event_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Events/ApplicationEvent.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Events/ApplicationEvent.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Events/Event.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_window_resize_event}{WindowResizeEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_window_resize_event}{WindowResizeEvent}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ height)\ :\ m\_Width(width),\ m\_Height(height)\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ getWidth()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Width;\ \}}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ getHeight()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_Height;\ \}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ std::string\ toString()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ std::stringstream\ ss;}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ ss\ <<\ \textcolor{stringliteral}{"{}WindowResizeEvent:\ "{}}\ <<\ m\_Width\ <<\ \textcolor{stringliteral}{"{},\ "{}}\ <<\ m\_Height;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ss.str();}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_TYPE(WindowResize)}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_CATEGORY(EventCategoryApplication)}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ m\_Width,\ m\_Height;}
+\DoxyCodeLine{00025\ \ \ \ \ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_window_close_event}{WindowCloseEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_window_close_event}{WindowCloseEvent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_TYPE(WindowClose)}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_CATEGORY(EventCategoryApplication)}
+\DoxyCodeLine{00033\ \ \ \ \ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_app_tick_event}{AppTickEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_app_tick_event}{AppTickEvent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_TYPE(AppTick)}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_CATEGORY(EventCategoryApplication)}
+\DoxyCodeLine{00041\ \ \ \ \ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_app_update_event}{AppUpdateEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_app_update_event}{AppUpdateEvent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_TYPE(AppUpdate)}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_CATEGORY(EventCategoryApplication)}
+\DoxyCodeLine{00049\ \ \ \ \ \};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_app_render_event}{AppRenderEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_app_render_event}{AppRenderEvent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_TYPE(AppRender)}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ EVENT\_CLASS\_CATEGORY(EventCategoryApplication)}
+\DoxyCodeLine{00057\ \ \ \ \ \};}
+\DoxyCodeLine{00058\ \}}
+
+\end{DoxyCode}

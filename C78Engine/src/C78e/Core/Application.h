@@ -12,10 +12,9 @@
 
 namespace C78E {
 
-	class C78_API Application
-	{
+	class C78_API Application {
 	public:
-		Application();
+		Application(const WindowProps& windowProperties = WindowProps());
 		virtual ~Application();
 
 		void run();

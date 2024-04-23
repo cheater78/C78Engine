@@ -1,0 +1,176 @@
+\doxysection{Std\+Utils.\+h}
+\hypertarget{_std_utils_8h_source}{}\label{_std_utils_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Utils/StdUtils.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Utils/StdUtils.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <C78E/Core/Types.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{comment}{//std\ lib}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ external\ Libs}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ std\ extension}}
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }std\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//String}}
+\DoxyCodeLine{00017\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_Val)\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ std::string\ ret\ =\ \_Val;}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(\textcolor{keywordtype}{string}\ \_Val)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_Val;}
+\DoxyCodeLine{00023\ \ \ \ \ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(\textcolor{keywordtype}{double}\ \_Val,\ \textcolor{keyword}{const}\ uint32\_t\&\ \_Dec)\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \_out\ =\ to\_string(\_Val);}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\_Dec\ ||\ (\_Dec\ ==\ -\/1\ \&\&\ \_Val\ ==\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\textcolor{keyword}{>}(\_Val)))\ )}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_string((\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long})\_Val);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\_Dec\ ==\ -\/1)\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \_out.erase(\_out.find\_last\_not\_of(\textcolor{charliteral}{'0'})\ +\ 1,\ std::string::npos);}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \_out.erase(\_out.find\_last\_not\_of(\textcolor{charliteral}{'.'})\ +\ 1,\ std::string::npos);}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_out;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ \_TargetSize\ =\ \_out.find(\textcolor{charliteral}{'.'})\ +\ \_Dec\ +\ 2;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\_TargetSize\ >=\ \_out.size())\ ?\ \_out\ :\ \_out.substr(0,\ \_TargetSize\ -\/\ 1);}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(\textcolor{keywordtype}{float}\ \_Val,\ \textcolor{keyword}{const}\ uint32\_t\&\ \_Dec)\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_string(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(\_Val),\ \_Dec);}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ std::vector<std::string>\ split(\textcolor{keyword}{const}\ std::string\&\ s,\ \textcolor{keywordtype}{char}\ seperator)}
+\DoxyCodeLine{00045\ \ \ \ \ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ std::vector<std::string>\ output;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::string::size\_type\ prev\_pos\ =\ 0,\ pos\ =\ 0;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ ((pos\ =\ s.find(seperator,\ pos))\ !=\ std::string::npos)}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ substring(s.substr(prev\_pos,\ pos\ -\/\ prev\_pos));}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ output.push\_back(substring);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ prev\_pos\ =\ ++pos;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ output.push\_back(s.substr(prev\_pos,\ pos\ -\/\ prev\_pos));\ \textcolor{comment}{//\ Last\ word}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ output;}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ std::string\ join(\textcolor{keyword}{const}\ std::vector<std::string>\&\ strs,\ std::string\ del\ =\ \textcolor{stringliteral}{"{}"{}},\ uint32\_t\ start\ =\ 0,\ uint32\_t\ count\ =\ -\/1)}
+\DoxyCodeLine{00065\ \ \ \ \ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ std::string\ output\ =\ del;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ uint32\_t\ wordInd\ =\ 0;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::string\ part\ :\ strs)\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wordInd\ <\ start)\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wordInd\ +\ 1\ >\ count)\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wordInd\ +\ 1\ ==\ strs.size()\ ||\ wordInd\ +\ 2\ >\ count)}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ output\ +=\ part;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ output\ +=\ part\ +\ del;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ wordInd++;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ output;}
+\DoxyCodeLine{00080\ \ \ \ \ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ Filesystem}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{namespace\ }filesystem\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ getName(\textcolor{keywordtype}{string}\ filepath)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Extract\ name\ from\ filepath}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ lastSlash\ =\ filepath.find\_last\_of(\textcolor{stringliteral}{"{}/\(\backslash\)\(\backslash\)"{}});}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ lastSlash\ =\ lastSlash\ ==\ std::string::npos\ ?\ 0\ :\ lastSlash\ +\ 1;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ lastDot\ =\ filepath.rfind(\textcolor{charliteral}{'.'});}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ count\ =\ lastDot\ ==\ std::string::npos\ ?\ filepath.size()\ -\/\ lastSlash\ :\ lastDot\ -\/\ lastSlash;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ filepath.substr(lastSlash,\ count);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ getExtension(\textcolor{keywordtype}{string}\ filepath)\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ lastDot\ =\ filepath.rfind(\textcolor{charliteral}{'.'})\ +\ 1;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ filepath.substr(lastDot,\ filepath.size());}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{//\ Hash\ for\ Vertex}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ from:\ https://stackoverflow.com/a/57595105}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Rest>}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ hashCombine(std::size\_t\&\ seed,\ \textcolor{keyword}{const}\ T\&\ v,\ \textcolor{keyword}{const}\ Rest\&...\ rest)\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ seed\ \string^=\ \mbox{\hyperlink{structstd_1_1hash}{std::hash<T>}}\{\}(v)+0x9e3779b9\ +\ (seed\ <<\ 6)\ +\ (seed\ >>\ 2);}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ (hashCombine(seed,\ rest),\ ...);}
+\DoxyCodeLine{00106\ \ \ \ \ \};}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\string~}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structstd_1_1hash}{hash}}<glm::vec1>\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ operator()(glm::vec1\ \textcolor{keyword}{const}\&\ vec)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ seed\ =\ 0;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ hashCombine(seed,\ vec);}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seed;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structstd_1_1hash}{hash}}<glm::vec2>\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ operator()(glm::vec1\ \textcolor{keyword}{const}\&\ vec)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ seed\ =\ 0;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ hashCombine(seed,\ vec[0],\ vec[1]);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seed;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structstd_1_1hash}{hash}}<glm::vec3>\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ operator()(glm::vec1\ \textcolor{keyword}{const}\&\ vec)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ seed\ =\ 0;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ hashCombine(seed,\ vec[0],\ vec[1],\ vec[2]);}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seed;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structstd_1_1hash}{hash}}<glm::vec4>\ \{}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ operator()(glm::vec1\ \textcolor{keyword}{const}\&\ vec)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ seed\ =\ 0;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ hashCombine(seed,\ vec[0],\ vec[1],\ vec[2],\ vec[3]);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seed;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00143\ \ \ \ \ \};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structstd_1_1hash}{hash}}<C78E::Vertex>\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ operator()(\mbox{\hyperlink{struct_c78_e_1_1_vertex}{C78E::Vertex}}\ \textcolor{keyword}{const}\&\ vertex)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ seed\ =\ 0;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ hashCombine(seed,\ vertex.Position,\ vertex.Color,\ vertex.Normal,\ vertex.TexCoord,\ vertex.TexIndex);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seed;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \};}
+\DoxyCodeLine{00153\ \ \ \ \ }
+\DoxyCodeLine{00154\ \ \ \ \ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{//\ GLM}}
+\DoxyCodeLine{00157\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(glm::vec1\ \_Val,\ \textcolor{keyword}{const}\ uint32\_t\&\ \_Dec\ =\ -\/1)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}("{}}\ +\ to\_string(\_Val[0],\ \_Dec)\ +\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00159\ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(glm::vec2\ \_Val,\ \textcolor{keyword}{const}\ uint32\_t\&\ \_Dec\ =\ -\/1)\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}("{}}\ +\ to\_string(\_Val[0],\ \_Dec)\ +\ \textcolor{stringliteral}{"{},"{}}\ +\ to\_string(\_Val[1],\ \_Dec)\ +\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00162\ \ \ \ \ \}}
+\DoxyCodeLine{00163\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(glm::vec3\ \_Val,\ \textcolor{keyword}{const}\ uint32\_t\&\ \_Dec\ =\ -\/1)\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}("{}}\ +\ to\_string(\_Val[0],\ \_Dec)\ +\ \textcolor{stringliteral}{"{},"{}}\ +\ to\_string(\_Val[1],\ \_Dec)\ +\ \textcolor{stringliteral}{"{},"{}}\ +\ to\_string(\_Val[2],\ \_Dec)\ +\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
+\DoxyCodeLine{00166\ \ \ \ \ \_EXPORT\_STD\ \_NODISCARD\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{string}\ to\_string(glm::vec4\ \_Val,\ \textcolor{keyword}{const}\ uint32\_t\&\ \_Dec\ =\ -\/1)\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}("{}}\ +\ to\_string(\_Val[0],\ \_Dec)\ +\ \textcolor{stringliteral}{"{},"{}}\ +\ to\_string(\_Val[1],\ \_Dec)\ +\ \textcolor{stringliteral}{"{},"{}}\ +\ to\_string(\_Val[2],\ \_Dec)\ +\ \textcolor{stringliteral}{"{},"{}}\ +\ to\_string(\_Val[3],\ \_Dec)\ +\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00168\ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \}}
+
+\end{DoxyCode}

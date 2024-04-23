@@ -17,7 +17,7 @@ namespace C78E {
 			auto view = src.view<Component>();
 			for (auto srcEntity : view)
 			{
-				entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity));
+				entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).id);
 
 				auto& srcComponent = src.get<Component>(srcEntity);
 				dst.emplace_or_replace<Component>(dstEntity, srcComponent);
@@ -181,6 +181,10 @@ namespace C78E {
 
 	template<>
 	void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& component) {
+	}
+
+	template<>
+	void Scene::onComponentAdded<StateComponent>(Entity entity, StateComponent& component) {
 	}
 
 	template<>

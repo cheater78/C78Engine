@@ -33,13 +33,13 @@ namespace C78Editor {
 
 		// Generic ImGui 2 Column Attribute : Value entries
 		template <typename T>
-		static void insData(std::string element, std::string title, const T& data, uint32_t indent = 0, ImGuiTableRowFlags rowFlags = 0, ImGuiTableColumnFlags colFlagsLabel = 0, ImGuiTableColumnFlags colFlagsData = 0);
+		static void insData(std::string element, std::string title, const T& data, uint32_t indent = 0, ImGuiTableRowFlags rowFlags = 0);
 
 		template <typename T>
-		static void insDataOptToggleElement(std::string element, std::string title, const T& data, uint32_t indent = 0, ImGuiTableRowFlags rowFlags = 0, ImGuiTableColumnFlags colFlagsLabel = 0, ImGuiTableColumnFlags colFlagsData = 0);
+		static void insDataOptToggleElement(std::string element, std::string title, const T& data, uint32_t indent = 0, ImGuiTableRowFlags rowFlags = 0);
 
 		template <typename T>
-		static void insDataOptToggleData(std::string element, std::string title, const T& data, const T& state0, const T& state1, uint32_t indent = 0, ImGuiTableRowFlags rowFlags = 0, ImGuiTableColumnFlags colFlagsLabel = 0, ImGuiTableColumnFlags colFlagsData = 0);
+		static void insDataOptToggleData(std::string element, std::string title, T& data, const T& state0, const T& state1, uint32_t indent = 0, ImGuiTableRowFlags rowFlags = 0);
 
 		// Components
 		static void insIDComponent(std::string element, C78E::Entity& entity, uint32_t indent = 0);

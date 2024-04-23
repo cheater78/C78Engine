@@ -1,0 +1,72 @@
+\doxysection{Console.\+h}
+\hypertarget{_console_8h_source}{}\label{_console_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/Console.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Core/Console.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Core.h"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Layer.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/KeyCodes.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{struct\ }ImGuiInputTextCallbackData;}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{class\ }KeyPressedEvent;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_console}{Console}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_layer}{Layer}}\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }CmdCallbackFn\ =\ std::function<void(std::string)>;}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_console}{Console}}(std::string\ consoleName);}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_console}{\string~Console}}();}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setPosSize(uint32\_t\ posX,\ uint32\_t\ posY,\ uint32\_t\ sizeX,\ uint32\_t\ sizeY);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ addLog(std::string\ logEntry);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ addCmd(std::string\ cmd,\ CmdCallbackFn\ callback);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onAttach();}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onDetach();}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onUpdate(\mbox{\hyperlink{class_c78_e_1_1_timestep}{Timestep}}\ ts);}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onImGuiRender();}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ onEvent(\mbox{\hyperlink{class_c78_e_1_1_event}{Event}}\&\ event);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ show(\textcolor{keywordtype}{bool}\ show)\ \{\ m\_Visible\ =\ show;\ \}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ onToggleConsole(\mbox{\hyperlink{class_c78_e_1_1_key_pressed_event}{KeyPressedEvent}}\ event);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ std::string\ m\_Title\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_Visible\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO:\ make\ variable}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ KeyCode\ m\_ToggleVisibleKey\ =\ Key::RightControl;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ std::unordered\_map<std::string,\ const\ CmdCallbackFn>\ m\_Commands\{\};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ std::vector<std::string>\ m\_History\{\};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ m\_InputBuffer[1024]\{\ 0\ \};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_AutoScroll\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_ScrollToBottom\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_UseImGui\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_BlockEvents\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }WinSizePos\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ posX;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ posY;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ sizeX;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ sizeY;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \}\ m\_ImGuiWinSizePos;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onEnter();}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onExecute(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cmd);}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ clearLog()\ \{\ Log::getCoreLogger()-\/>flush();\ Log::getClientLogger()-\/>flush();\ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ commandTypeCallback(ImGuiInputTextCallbackData*\ data);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onCMDClear(std::string\ cmd)\ \{\ this-\/>clearLog();\ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ onCMDClose(std::string\ cmd)\ \{\ this-\/>m\_Visible\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00064\ \ \ \ \ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \}}
+
+\end{DoxyCode}

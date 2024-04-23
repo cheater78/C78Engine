@@ -1,0 +1,35 @@
+\doxysection{Mesh.\+h}
+\hypertarget{_mesh_8h_source}{}\label{_mesh_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Mesh/Mesh.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Mesh/Mesh.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <C78E/Core/Types.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_asset_8h}{C78E/Assets/Asset/Asset.h}}>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_mesh}{Mesh}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_asset}{Asset}}\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_mesh}{Mesh}}()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_mesh}{Mesh}}(\textcolor{keyword}{const}\ std::vector<Vertex>\&vertecies)}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ :\ m\_Vertecies(vertecies),\ m\_Indicies(),\ m\_HasIndicies(\textcolor{keyword}{false})}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_mesh}{Mesh}}(\textcolor{keyword}{const}\ std::vector<Vertex>\&\ vertecies,\ \textcolor{keyword}{const}\ std::vector<uint32\_t>\&\ indicies)}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ :\ m\_Vertecies(vertecies),\ m\_Indicies(indicies),\ m\_HasIndicies(\textcolor{keyword}{true})}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_mesh}{Mesh}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_mesh}{Mesh}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_mesh}{\string~Mesh}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ AssetType\ getType()\ \{\ \textcolor{keywordflow}{return}\ Asset::AssetType::Mesh;\ \};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ std::vector<Vertex>\ m\_Vertecies;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ std::vector<uint32\_t>\ m\_Indicies;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_HasIndicies\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{//\ TODO:\ unused...}}
+\DoxyCodeLine{00028\ \ \ \ \ \};}
+\DoxyCodeLine{00029\ \}}
+
+\end{DoxyCode}

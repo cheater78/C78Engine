@@ -3,6 +3,7 @@
 
 namespace C78E {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
+	std::shared_ptr<spdlog::logger> Log::s_EditorLogger;
 	std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
 
 	std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt> Log::s_RingbufferSink;

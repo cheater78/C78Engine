@@ -58,3 +58,13 @@ namespace C78E {
 	};
 
 }
+
+namespace std {
+	_EXPORT_STD _NODISCARD inline string to_string(C78E::SceneCamera::ProjectionType type) {
+		switch (type) {
+		case C78E::SceneCamera::ProjectionType::Perspective: return "Perspective";
+		case C78E::SceneCamera::ProjectionType::Orthographic: return "Orthographic";
+		default: return "Illegal ProjectionType";
+		}
+	}
+};

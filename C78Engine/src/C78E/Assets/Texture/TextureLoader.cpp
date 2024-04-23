@@ -15,7 +15,7 @@ namespace C78E {
 
 	Ref<Texture2D> TextureLoader::loadTexture2D(const FilePath& path) {
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(1);
+		stbi_set_flip_vertically_on_load(0);
 		Buffer data;
 
 		{

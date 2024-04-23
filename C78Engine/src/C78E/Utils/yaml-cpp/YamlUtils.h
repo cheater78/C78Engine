@@ -7,17 +7,11 @@
 namespace YAML {
 
 	// String
-	Emitter& operator<<(Emitter& out, const std::string_view& v) {
-		out << std::string(v.data(), v.size());
-		return out;
-	}
+	Emitter& operator<<(Emitter& out, const std::string_view& v);
 
 
 	// UUID
-	Emitter& operator<<(Emitter& out, const C78E::UUID& id) {
-		out << (uint64_t)id;
-		return out;
-	}
+	Emitter& operator<<(Emitter& out, const C78E::UUID& id);
 	template <>
 	struct convert<C78E::UUID> {
 		static Node encode(const C78E::UUID& id) {
@@ -35,11 +29,7 @@ namespace YAML {
 
 
 	// GLM::vec2
-	Emitter& operator<<(Emitter& out, const glm::vec2& v) {
-		out << YAML::Flow;
-		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
-		return out;
-	}
+	Emitter& operator<<(Emitter& out, const glm::vec2& v);
 	template <>
 	struct convert<glm::vec2> {
 		static Node encode(const glm::vec2& v) {
@@ -62,11 +52,7 @@ namespace YAML {
 
 
 	// GLM::vec3
-	Emitter& operator<<(Emitter& out, const glm::vec3& v) {
-		out << YAML::Flow;
-		out << YAML::BeginSeq << v.x << v.y << v.z << YAML::EndSeq;
-		return out;
-	}
+	Emitter& operator<<(Emitter& out, const glm::vec3& v);
 	template <>
 	struct convert<glm::vec3> {
 		static Node encode(const glm::vec3& v) {
@@ -91,11 +77,7 @@ namespace YAML {
 
 
 	// GLM::vec4
-	Emitter& operator<<(Emitter& out, const glm::vec4& v) {
-		out << YAML::Flow;
-		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
-		return out;
-	}
+	Emitter& operator<<(Emitter& out, const glm::vec4& v);
 	template <>
 	struct convert<glm::vec4> {
 		static Node encode(const glm::vec4& v) {

@@ -1,0 +1,80 @@
+\doxysection{Asset\+Manager.\+h}
+\hypertarget{_asset_manager_8h_source}{}\label{_asset_manager_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/AssetManager.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/AssetManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_asset_8h}{C78E/Assets/Asset/Asset.h}}>}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keyword}{using\ }AssetMap\ =\ std::map<AssetHandle,\ Ref<Asset>>;}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{using\ }AssetRegistry\ =\ std::map<AssetHandle,\ Asset::AssetMeta>;}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_asset_manager_base}{AssetManagerBase}}\ \{\ \textcolor{comment}{//\ abstract\ Base\ AssetManager}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ Ref<Asset>\ getAsset(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ =\ 0;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ isValid(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ isLoaded(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ Asset::AssetType\ getType(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00016\ \ \ \ \ \};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_asset_manager}{AssetManager}}\ \{\ \textcolor{comment}{//\ static\ AssetManager\ "{}Access\ Point"{}}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<T>\ getAsset(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ Ref<Asset>\ asset\ =\ getCurrentProjectsAssetManager()-\/>getAsset(handle);}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::static\_pointer\_cast<T>(asset);}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_c78_e_1_1_asset_manager_afcd4925206b70ba6c1ce7554149a4f16}{isValid}}(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle);}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isLoaded(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Asset::AssetType\ getType(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle);}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<AssetManagerBase>\ getCurrentProjectsAssetManager();}
+\DoxyCodeLine{00032\ \ \ \ \ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ concrete\ AssetManagers}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_editor_asset_manager}{EditorAssetManager}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_asset_manager_base}{AssetManagerBase}}\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ Ref<Asset>\ getAsset(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_c78_e_1_1_editor_asset_manager_a218842a100b86197263d360b2b539a69}{isValid}}(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ isLoaded(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ Asset::AssetType\ getType(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ loadAsset(\textcolor{keyword}{const}\ FilePath\&\ filepath);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset::AssetMeta}}\&\ getMeta(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ FilePath\&\ getFile(\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ handle)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ AssetRegistry\&\ getAssetRegistry()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_AssetRegistry;\ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ serializeAssetRegistry();}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ deserializeAssetRegistry();}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ memory-\/only\ assets}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ addAsset(\mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset::AssetMeta}}\ meta,\ Ref<Asset>\ asset);}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ AssetRegistry\ m\_AssetRegistry;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ AssetMap\ m\_LoadedAssets;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_model_loader}{ModelLoader}};}
+\DoxyCodeLine{00062\ \ \ \ \ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_runtime_asset_manager}{RuntimeAssetManager}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_asset_manager_base}{AssetManagerBase}}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{comment}{//loadAssets\ -\/>\ Assetpack.file(keep\ full\ Header\ in\ mem)\ -\/>\ Project\ -\/>\ current\ Scene\ -\/>\ all}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ AssetMap\ m\_LoadedAssets;}
+\DoxyCodeLine{00072\ \ \ \ \ \};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \}}
+
+\end{DoxyCode}

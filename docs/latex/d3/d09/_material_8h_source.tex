@@ -1,0 +1,87 @@
+\doxysection{Material.\+h}
+\hypertarget{_material_8h_source}{}\label{_material_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Material/Material.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Material/Material.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <C78e/Core/Types.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_asset_8h}{C78E/Assets/Asset/Asset.h}}>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <C78E/Assets/Texture/Texture.h>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_material}{Material}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_asset}{Asset}}\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_material_1_1_material_properties}{MaterialProperties}}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ ambient\ =\ \{\ 1.f,\ 1.f,\ 1.f\ \};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ka:\ Ambient\ Color\ Reaction\ [0,1]³}}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{alignas}(16)\ glm::vec3\ diffuse\ =\ \{\ 1.f,\ 1.f,\ 1.f\ \};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Kd:\ Diffuse\ Color\ Reaction\ [0,1]³}}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{alignas}(16)\ glm::vec3\ specular\ =\ \{\ 1.f,\ 1.f,\ 1.f\ \};\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ks:\ Specular\ Color\ Reaction\ [0,1]³}}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{alignas}(16)\ glm::vec3\ transmittance\ =\ \{\ 1.f,\ 1.f,\ 1.f\ \};\ \ \ \ \textcolor{comment}{//\ Tf:\ Transmission\ Filter\ [0,1]³}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{alignas}(16)\ glm::vec3\ emission\ =\ \{\ 0.f,\ 0.f,\ 0.f\ \};\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ke:\ Emissive\ Color\ [0,1]³}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{alignas}(16)\ \textcolor{keywordtype}{float}\ shininess\ =\ 100.0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ns:\ Specular\ Highlight\ [0,1000]}}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ ior\ =\ 1.f;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ni:\ Optical\ Density\ -\/>\ Index\ Of\ Refraction\ [0.001,10]\ (e.g.\ glass\ 1.5)}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dissolve\ =\ 1.0f;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ d:\ \ Dissolve\ Factor\ -\/>\ Opacity\ [0,1]}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_material_1_1_material_textures}{MaterialTextures}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ ambient\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_Ka.\ For\ ambient\ or\ ambient\ occlusion.}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ diffuse\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_Kd}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ specular\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_Ks}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ specularHighlight\ =\ 0;\ \ \ \ \textcolor{comment}{//\ map\_Ns}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ bump\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_bump,\ map\_Bump,\ bump}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ displacement\ =\ 0;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ disp}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ alpha\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_d}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ reflection\ =\ 0;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ refl}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_material_1_1_material_properties_p_b_rext}{MaterialPropertiesPBRext}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ roughness\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [0,\ 1]\ default\ 0}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ metallic\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [0,\ 1]\ default\ 0}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ sheen\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [0,\ 1]\ default\ 0}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ clearcoat\_thickness\ =\ 0;\ \ \textcolor{comment}{//\ [0,\ 1]\ default\ 0}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ clearcoat\_roughness\ =\ 0;\ \ \textcolor{comment}{//\ [0,\ 1]\ default\ 0}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ anisotropy\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [0,\ 1]\ default\ 0}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ anisotropy\_rotation\ =\ 0;\ \ \textcolor{comment}{//\ [0,\ 1]\ default\ 0}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_material_1_1_material_textures_p_b_rext}{MaterialTexturesPBRext}}\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ roughness\ =\ 0;\ \ \ \ \ \ \ \textcolor{comment}{//\ map\_Pr}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ metallic\ =\ 0;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_Pm}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ sheen\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_Ps}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ emissive\ =\ 0;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\_Ke}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ normal\ =\ 0;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ norm.\ For\ normal\ mapping.}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_material}{Material}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_material}{Material}}(}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{AssetHandle}}\ shader,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ illuminationModel,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_material_1_1_material_properties}{MaterialProperties}}\ materialProperties,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_material_1_1_material_textures}{MaterialTextures}}\ materialTextures,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_c78_e_1_1_material_1_1_material_properties_p_b_rext}{MaterialPropertiesPBRext}}\ materialPropertiesPBRext\ =\ \{\},}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ MaterialTexturesPBRext\ materialTexturesPBRext\ =\ \{\}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ :\ m\_Shader(shader),}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ m\_IlluminationModel(illuminationModel),}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ m\_MaterialProperties(materialProperties),}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ m\_MaterialTextures(materialTextures),}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ m\_MaterialPropertiesPBRext(materialPropertiesPBRext),}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ m\_MaterialTexturesPBRext(materialTexturesPBRext)}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \{\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ Material(\textcolor{keyword}{const}\ Material\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \string~Material()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ AssetType\ getType()\ \{\ \textcolor{keywordflow}{return}\ Asset::AssetType::Material;\ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ AssetHandle\ m\_Shader;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ uint32\_t\ m\_IlluminationModel;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ MaterialProperties\ m\_MaterialProperties;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ MaterialTextures\ m\_MaterialTextures;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ MaterialPropertiesPBRext\ m\_MaterialPropertiesPBRext;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ MaterialTexturesPBRext\ m\_MaterialTexturesPBRext;}
+\DoxyCodeLine{00080\ \ \ \ \ \};}
+\DoxyCodeLine{00081\ \}}
+
+\end{DoxyCode}

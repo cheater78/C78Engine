@@ -16,6 +16,28 @@ namespace C78E {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
+	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification, const Buffer& data)
+		: m_Specification(specification) {
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, toGLInternalFormat(m_Specification.format), m_Specification.width, m_Specification.height);
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		GLenum type;
+		if (m_Specification.format == Image::ImageFormat::RGBA32F)
+			type = GL_FLOAT;
+		else
+			type = GL_UNSIGNED_BYTE;
+
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), type, data.data);
+
+		m_IsLoaded = true;
+	}
+
 	OpenGLTexture2D::OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID)
 		: m_RendererID(rendererID), m_Specification(specification), m_IsLoaded(false)
 	{ }
@@ -42,10 +64,7 @@ namespace C78E {
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), type, image.getData());
 
-		if (m_Specification.format == Image::ImageFormat::RGBA32F)
-
-
-			m_IsLoaded = true;
+		m_IsLoaded = true;
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D() {

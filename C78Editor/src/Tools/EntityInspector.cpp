@@ -2,6 +2,7 @@
 #include <C78E/Assets/Model/Model.h>
 #include <C78E/Project/Project.h>
 #include <C78E/Assets/Material/Material.h>
+#include <C78E/Assets/Shader/Shader.h>
 
 namespace C78Editor {
 
@@ -15,7 +16,7 @@ namespace C78Editor {
     static constexpr ImGuiTableColumnFlags s_EntityInspectorTableColFlags = 0;
     static constexpr ImGuiTableColumnFlags s_EntityInspectorTableHighlightRowFlags = ImGuiTableRowFlags_Headers;
 
-    static constexpr uint64_t indentStep = 2;
+    static constexpr uint32_t indentStep = 2;
     static constexpr char indentChar = ' ';
 
     void EntityInspector::init() {
@@ -52,7 +53,7 @@ namespace C78Editor {
             {
                 ImGui::TableNextColumn();
                 // Loaded
-                if (ImGui::Checkbox(std::to_string((uint32_t)entt).c_str(), &entity.getComponent<C78E::StateComponent>().enable));
+                ImGui::Checkbox(std::to_string((uint32_t)entt).c_str(), &entity.getComponent<C78E::StateComponent>().enable);
                 //--------------------------------------------
                 ImGui::TableNextColumn();
                 // Name
@@ -130,14 +131,14 @@ namespace C78Editor {
     * std::to_string(const T& data) must be defined!
     */
     template<typename T>
-    inline void EntityInspector::insData(std::string element, std::string title, const T& data, uint32_t indent, ImGuiTableRowFlags rowFlags, ImGuiTableColumnFlags colFlagsLabel, ImGuiTableColumnFlags colFlagsData) {
+    inline void EntityInspector::insData(std::string element, std::string title, const T& data, uint32_t indent, ImGuiTableRowFlags rowFlags) {
         ImGui::TableNextRow(rowFlags);
         {
-            ImGui::TableNextColumn(colFlagsLabel);
+            ImGui::TableNextColumn();
             // Identifier
             ImGui::Text(indentStr(title, indent).c_str());
             //--------------------------------------------
-            ImGui::TableNextColumn(colFlagsData);
+            ImGui::TableNextColumn();
             // Value
             ImGui::Text(std::to_string(data).c_str());
             //--------------------------------------------
@@ -150,14 +151,14 @@ namespace C78Editor {
     * std::to_string(const T& data) must be defined!
     */
     template<typename T>
-    inline void EntityInspector::insDataOptToggleElement(std::string element, std::string title, const T& data, uint32_t indent, ImGuiTableRowFlags rowFlags, ImGuiTableColumnFlags colFlagsLabel, ImGuiTableColumnFlags colFlagsData) {
+    inline void EntityInspector::insDataOptToggleElement(std::string element, std::string title, const T& data, uint32_t indent, ImGuiTableRowFlags rowFlags) {
         ImGui::TableNextRow(rowFlags);
         {
-            ImGui::TableNextColumn(colFlagsLabel);
+            ImGui::TableNextColumn();
             // Identifier
             ImGui::Text(indentStr(title, indent).c_str());
             //--------------------------------------------
-            ImGui::TableNextColumn(colFlagsData);
+            ImGui::TableNextColumn();
             // Value
             if (ImGui::Button(std::to_string(data).c_str()))
                 toggleShow(element);
@@ -172,15 +173,15 @@ namespace C78Editor {
     * std::to_string(const T& data) must be defined!
     */
     template<typename T>
-    void EntityInspector::insDataOptToggleData(std::string element, std::string title, const T& data, const T& state0, const T& state1, uint32_t indent, ImGuiTableRowFlags rowFlags, ImGuiTableColumnFlags colFlagsLabel, ImGuiTableColumnFlags colFlagsData) {
+    void EntityInspector::insDataOptToggleData(std::string element, std::string title, T& data, const T& state0, const T& state1, uint32_t indent, ImGuiTableRowFlags rowFlags) {
         C78_EDITOR_ASSERT(data == state0 || data == state1, "EntityInspector::insDataOptToggleData: data can only be one of the two specified states!");
         ImGui::TableNextRow(rowFlags);
         {
-            ImGui::TableNextColumn(colFlagsLabel);
+            ImGui::TableNextColumn();
             // Identifier
             ImGui::Text(indentStr(title, indent).c_str());
             //--------------------------------------------
-            ImGui::TableNextColumn(colFlagsData);
+            ImGui::TableNextColumn();
             // Value
             if (ImGui::Button(std::to_string(data).c_str()))
                 if (data == state0)
@@ -601,7 +602,7 @@ namespace C78Editor {
         if (shouldShow(element)) {
             insData<C78E::AssetHandle>(element, "UUID", assetHandle, indent + indentStep); // TODO: DropDownMenu for Asset hotSwap of the same type
             insData<std::string>(element, "Name", assetMeta.name, indent + indentStep); // TODO: DropDownMenu for Asset hotSwap of the same type
-            insData<std::string>(element, "Source", assetMeta.fileSource, indent + indentStep);
+            insData<std::string>(element, "Source", assetMeta.fileSource.string(), indent + indentStep);
 
             switch (assetMeta.type) {
             case C78E::Asset::AssetType::None: C78_EDITOR_ERROR("EntityInspector::insAsset: Can't show AssetType::None!"); break;

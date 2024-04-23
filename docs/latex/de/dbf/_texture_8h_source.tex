@@ -1,0 +1,104 @@
+\doxysection{Texture.\+h}
+\hypertarget{_texture_8h_source}{}\label{_texture_8h_source}\index{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Texture/Texture.h@{C:/dev/c-\/cpp/C78Engine/C78Engine/src/C78E/Assets/Texture/Texture.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}C78E/Core/Core.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_asset_8h}{C78E/Assets/Asset/Asset.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}C78E/Assets/Texture/Image.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }C78E\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_asset}{Asset}}\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ TextureType\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \ \ \ \ FLAT,}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ SPHERE,}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ CUBE\_TOP,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ CUBE\_BOTTOM,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ CUBE\_FRONT,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ CUBE\_BACK,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ CUBE\_LEFT,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ CUBE\_RIGHT}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_texture_1_1_texture_option}{TextureOption}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ TextureType\ type\ =\ TextureType::FLAT;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ sharpness\ =\ 1.f;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ brightness\ =\ 0.f;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ contrast\ =\ 1.f;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ originOffset\ =\ \{\ 0.f,\ 0.f,\ 0.f\ \};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ scale\ =\ \{\ 1.f,\ 1.f,\ 1.f\ \};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ turbulence\ =\ \{\ 0.f,\ 0.f,\ 0.f\ \};}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ textureResolution\ =\ UINT32\_MAX;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ clamp\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ imfchan\ =\ \textcolor{charliteral}{'l'};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ blenU\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ blenV\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ bumpMultiplier\ =\ 1.f;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ext}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ colorspace\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_c78_e_1_1_texture}{\string~Texture}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getRendererID()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setData(\textcolor{keywordtype}{void}*\ data,\ uint32\_t\ size)\ =\ 0;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ bind(uint32\_t\ slot\ =\ 0)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ isLoaded()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}}\&\ other)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ revisit,\ Texture\ loading/handling,\ 2D\ and\ Cubemap\ don't\ differ\ as\ file\ rn}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ AssetType\ getType()\ \{\ \textcolor{keywordflow}{return}\ Asset::AssetType::Texture2D;\ \};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ virtual}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ TextureOption\ m\_Option;\ \textcolor{comment}{//TODO:\ all\ u\ need\ to\ know\ abt\ this\ texture\ -\/>\ process\ on\ creation}}
+\DoxyCodeLine{00059\ \ \ \ \ \};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_texture2_d}{Texture2D}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}}\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{TextureSpecification}}\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ width\ =\ 1;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ height\ =\ 1;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ Image::ImageFormat\ format\ =\ Image::ImageFormat::RGBA8;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ generateMips\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Texture2D>\ create(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{TextureSpecification}}\&\ specification);}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Texture2D>\ create(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{TextureSpecification}}\&\ specification,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_buffer}{Buffer}}\&\ data);}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Texture2D>\ create(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{TextureSpecification}}\&\ specification,\ uint32\_t\ rendererID);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<Texture2D>\ create(\mbox{\hyperlink{class_c78_e_1_1_image}{Image}}\&\ image);}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ bindImage(uint32\_t\ binding\ =\ 0)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getWidth()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getHeight()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_texture2_d_1_1_texture_specification}{TextureSpecification}}\&\ getSpecification()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c78_e_1_1_cube_map}{CubeMap}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}}\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{TextureSpecification}}\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ size\ =\ 1;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ Image::ImageFormat\ format\ =\ Image::ImageFormat::RGBA8;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<CubeMap>\ create(std::vector<Image>\&\ images);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Ref<CubeMap>\ create(Ref<Image>\ crossCubeMap);}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ getSize()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_c78_e_1_1_cube_map_1_1_texture_specification}{CubeMap::TextureSpecification}}\&\ getSpecification()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \}}
+
+\end{DoxyCode}

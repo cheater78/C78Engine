@@ -7,9 +7,7 @@ namespace C78Editor {
 
 	uint32_t Viewport::s_Width = 1, Viewport::s_Height = 1;
 
-	void Viewport::init()
-	{
-	}
+	void Viewport::init() { }
 
 	void Viewport::onUpdate(C78E::Ref<C78E::Texture2D> texture) {
 		if (texture == nullptr) return;

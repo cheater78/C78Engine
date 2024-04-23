@@ -1,0 +1,174 @@
+\doxysection{C78E\+::Texture Class Reference}
+\hypertarget{class_c78_e_1_1_texture}{}\label{class_c78_e_1_1_texture}\index{C78E::Texture@{C78E::Texture}}
+
+
+Inheritance diagram for C78E\+::Texture\+:
+% FIG 0
+
+
+Collaboration diagram for C78E\+::Texture\+:
+% FIG 1
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_c78_e_1_1_texture_1_1_texture_option}{Texture\+Option}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_texture_aaa8068bce35e01740cfe8f623ba2be32}\label{class_c78_e_1_1_texture_aaa8068bce35e01740cfe8f623ba2be32} 
+enum {\bfseries Texture\+Type} \{ \newline
+{\bfseries FLAT}
+, {\bfseries SPHERE}
+, {\bfseries CUBE\+\_\+\+TOP}
+, {\bfseries CUBE\+\_\+\+BOTTOM}
+, \newline
+{\bfseries CUBE\+\_\+\+FRONT}
+, {\bfseries CUBE\+\_\+\+BACK}
+, {\bfseries CUBE\+\_\+\+LEFT}
+, {\bfseries CUBE\+\_\+\+RIGHT}
+ \}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e}\label{class_c78_e_1_1_asset_aed183211974f0ffb89a313737c81fa5e} 
+enum {\bfseries Asset\+Type} \+: uint8\+\_\+t \{ \newline
+{\bfseries None} = 0
+, {\bfseries Project} = 1
+, {\bfseries Scene} = 2
+, {\bfseries Texture2D}
+, \newline
+{\bfseries Shader}
+, {\bfseries Model}
+, {\bfseries Mesh}
+, {\bfseries Material}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_texture_a275c1d9f4883ae35d1b8c62285f8a8a1}\label{class_c78_e_1_1_texture_a275c1d9f4883ae35d1b8c62285f8a8a1} 
+virtual uint32\+\_\+t {\bfseries get\+Renderer\+ID} () const =0
+\item 
+\Hypertarget{class_c78_e_1_1_texture_a4f05043ee71406d522e736cf5df2160c}\label{class_c78_e_1_1_texture_a4f05043ee71406d522e736cf5df2160c} 
+virtual void {\bfseries set\+Data} (void \texorpdfstring{$\ast$}{*}data, uint32\+\_\+t size)=0
+\item 
+\Hypertarget{class_c78_e_1_1_texture_af312874d9420f4bf26956762a7192fa6}\label{class_c78_e_1_1_texture_af312874d9420f4bf26956762a7192fa6} 
+virtual void {\bfseries bind} (uint32\+\_\+t slot=0) const =0
+\item 
+\Hypertarget{class_c78_e_1_1_texture_ac9c7bda2be5423387e04d80e4493900b}\label{class_c78_e_1_1_texture_ac9c7bda2be5423387e04d80e4493900b} 
+virtual bool {\bfseries is\+Loaded} () const =0
+\item 
+\Hypertarget{class_c78_e_1_1_texture_a16e30f8d95cdb8f132dc9a45c6755147}\label{class_c78_e_1_1_texture_a16e30f8d95cdb8f132dc9a45c6755147} 
+virtual bool {\bfseries operator==} (const \mbox{\hyperlink{class_c78_e_1_1_texture}{Texture}} \&other) const =0
+\item 
+\Hypertarget{class_c78_e_1_1_texture_acf83be49b95c60bbe6f1b3b918adf9fa}\label{class_c78_e_1_1_texture_acf83be49b95c60bbe6f1b3b918adf9fa} 
+virtual Asset\+Type {\bfseries get\+Type} ()
+\item 
+\Hypertarget{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38}\label{class_c78_e_1_1_asset_a4dcb1226ed597010cd7a75f3874ade38} 
+virtual Asset\+Type {\bfseries get\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}{file\+To\+Asset\+Type}} (const File\+Path \&file\+Path)
+\item 
+static std\+::string \mbox{\hyperlink{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}{asset\+Type\+To\+String}} (Asset\+Type type)
+\item 
+static Asset\+Type \mbox{\hyperlink{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}{asset\+Type\+From\+String}} (std\+::string str)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4}\label{class_c78_e_1_1_asset_af883508621d35ed86ef4317b06eaede4} 
+\mbox{\hyperlink{class_c78_e_1_1_u_u_i_d}{Asset\+Handle}} {\bfseries m\+\_\+\+Asset\+Handle}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::map$<$ File\+Path, Asset\+Type $>$ \mbox{\hyperlink{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}{c\+\_\+\+Asset\+Extension\+Map}}
+\item 
+\Hypertarget{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1}\label{class_c78_e_1_1_asset_ac0cb5136c8ec07eaccf39eb3db7839b1} 
+static const \mbox{\hyperlink{struct_c78_e_1_1_asset_1_1_asset_meta}{Asset\+Meta}} {\bfseries c\+\_\+\+Null\+Asset\+Meta} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687}\label{class_c78_e_1_1_asset_a6e8c54d96e1c4184de75395151b3f687} 
+\index{C78E::Texture@{C78E::Texture}!assetTypeFromString@{assetTypeFromString}}
+\index{assetTypeFromString@{assetTypeFromString}!C78E::Texture@{C78E::Texture}}
+\doxysubsubsection{\texorpdfstring{assetTypeFromString()}{assetTypeFromString()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::asset\+Type\+From\+String (\begin{DoxyParamCaption}\item[{std\+::string}]{str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Deserializes a std\+::string to Asset\+::\+Asset\+Type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & the string containing the serialized Asset\+::\+Asset\+Type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the deserialized Asset\+::\+Asset\+Type 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1}\label{class_c78_e_1_1_asset_a548dbf2f13e3af968ff8e142d4156cf1} 
+\index{C78E::Texture@{C78E::Texture}!assetTypeToString@{assetTypeToString}}
+\index{assetTypeToString@{assetTypeToString}!C78E::Texture@{C78E::Texture}}
+\doxysubsubsection{\texorpdfstring{assetTypeToString()}{assetTypeToString()}}
+{\footnotesize\ttfamily std\+::string C78\+E\+::\+Asset\+::asset\+Type\+To\+String (\begin{DoxyParamCaption}\item[{Asset\+::\+Asset\+Type}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Serializes a Asset\+::\+Asset\+Type to a std\+::string.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the Asset\+::\+Asset\+Type to serialize \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the serialized Asset\+::\+Asset\+Type as std\+::string 
+\end{DoxyReturn}
+\Hypertarget{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693}\label{class_c78_e_1_1_asset_a34b23c9873b1909bbe34eac03602b693} 
+\index{C78E::Texture@{C78E::Texture}!fileToAssetType@{fileToAssetType}}
+\index{fileToAssetType@{fileToAssetType}!C78E::Texture@{C78E::Texture}}
+\doxysubsubsection{\texorpdfstring{fileToAssetType()}{fileToAssetType()}}
+{\footnotesize\ttfamily Asset\+::\+Asset\+Type C78\+E\+::\+Asset\+::file\+To\+Asset\+Type (\begin{DoxyParamCaption}\item[{const File\+Path \&}]{file\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+Determines the Asset\+::\+Asset\+Type of an arbituary file based on its extension, using the Asset\+::c\+\_\+\+Asset\+Extension\+Map.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Path} & the C78\+E\+::\+File\+Path of the file in question \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the Asset\+::\+Asset\+Type of the file 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346}\label{class_c78_e_1_1_asset_abb2f73f544107e0b286033732c714346} 
+\index{C78E::Texture@{C78E::Texture}!c\_AssetExtensionMap@{c\_AssetExtensionMap}}
+\index{c\_AssetExtensionMap@{c\_AssetExtensionMap}!C78E::Texture@{C78E::Texture}}
+\doxysubsubsection{\texorpdfstring{c\_AssetExtensionMap}{c\_AssetExtensionMap}}
+{\footnotesize\ttfamily const std\+::map$<$ File\+Path, Asset\+::\+Asset\+Type $>$ C78\+E\+::\+Asset\+::c\+\_\+\+Asset\+Extension\+Map\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.pce"{}},\ Asset::AssetType::Project\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.sce"{}},\ Asset::AssetType::Scene\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.png"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.jpeg"{}},\ Asset::AssetType::Texture2D\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.stl"{}},\ Asset::AssetType::Model\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.mtl"{}},\ Asset::AssetType::Material\ \},}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.glsl"{}},\ Asset::AssetType::Shader\ \},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\ \textcolor{stringliteral}{"{}.hlsl"{}},\ Asset::AssetType::Shader\ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/c-\/cpp/\+C78\+Engine/\+C78\+Engine/src/\+C78\+E/\+Assets/\+Texture/Texture.\+h\end{DoxyCompactItemize}

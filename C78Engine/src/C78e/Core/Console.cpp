@@ -160,7 +160,7 @@ namespace C78E {
 	}
 
 	bool Console::onToggleConsole(KeyPressedEvent event) {
-		if (event.GetKeyCode() == m_ToggleVisibleKey) {
+		if (event.getKeyCode() == m_ToggleVisibleKey) {
 			m_Visible = !m_Visible;
 			return true;
 		}
