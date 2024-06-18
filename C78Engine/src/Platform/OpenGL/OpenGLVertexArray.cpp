@@ -28,45 +28,45 @@ namespace C78E {
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
-		//C78_PROFILE_FUNCTION();
+		
 
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
-		//C78_PROFILE_FUNCTION();
+		
 
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
-	void OpenGLVertexArray::Bind() const
+	void OpenGLVertexArray::bind() const
 	{
-		//C78_PROFILE_FUNCTION();
+		
 
 		glBindVertexArray(m_RendererID);
 	}
 
-	void OpenGLVertexArray::Unbind() const
+	void OpenGLVertexArray::unbind() const
 	{
-		//C78_PROFILE_FUNCTION();
+		
 
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
-		//C78_PROFILE_FUNCTION();
+		
 
-		C78_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
+		C78_CORE_ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout!");
 
 		glBindVertexArray(m_RendererID);
-		vertexBuffer->Bind();
+		vertexBuffer->bind();
 
-		const auto& layout = vertexBuffer->GetLayout();
+		const auto& layout = vertexBuffer->getLayout();
 		for (const auto& element : layout)
 		{
-			switch (element.Type)
+			switch (element.type)
 			{
 				case ShaderDataType::Float:
 				case ShaderDataType::Float2:
@@ -75,11 +75,11 @@ namespace C78E {
 				{
 					glEnableVertexAttribArray(m_VertexBufferIndex);
 					glVertexAttribPointer(m_VertexBufferIndex,
-						element.GetComponentCount(),
-						ShaderDataTypeToOpenGLBaseType(element.Type),
-						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(),
-						(const void*)element.Offset);
+						element.getComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.type),
+						element.normalized ? GL_TRUE : GL_FALSE,
+						layout.getStride(),
+						(const void*)element.offset);
 					m_VertexBufferIndex++;
 					break;
 				}
@@ -91,26 +91,26 @@ namespace C78E {
 				{
 					glEnableVertexAttribArray(m_VertexBufferIndex);
 					glVertexAttribIPointer(m_VertexBufferIndex,
-						element.GetComponentCount(),
-						ShaderDataTypeToOpenGLBaseType(element.Type),
-						layout.GetStride(),
-						(const void*)element.Offset);
+						element.getComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.type),
+						layout.getStride(),
+						(const void*)element.offset);
 					m_VertexBufferIndex++;
 					break;
 				}
 				case ShaderDataType::Mat3:
 				case ShaderDataType::Mat4:
 				{
-					uint8_t count = element.GetComponentCount();
+					uint8_t count = element.getComponentCount();
 					for (uint8_t i = 0; i < count; i++)
 					{
 						glEnableVertexAttribArray(m_VertexBufferIndex);
 						glVertexAttribPointer(m_VertexBufferIndex,
 							count,
-							ShaderDataTypeToOpenGLBaseType(element.Type),
-							element.Normalized ? GL_TRUE : GL_FALSE,
-							layout.GetStride(),
-							(const void*)(element.Offset + sizeof(float) * count * i));
+							ShaderDataTypeToOpenGLBaseType(element.type),
+							element.normalized ? GL_TRUE : GL_FALSE,
+							layout.getStride(),
+							(const void*)(element.offset + sizeof(float) * count * i));
 						glVertexAttribDivisor(m_VertexBufferIndex, 1);
 						m_VertexBufferIndex++;
 					}
@@ -124,12 +124,12 @@ namespace C78E {
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
-		//C78_PROFILE_FUNCTION();
+		
 
 		glBindVertexArray(m_RendererID);
-		indexBuffer->Bind();
+		indexBuffer->bind();
 
 		m_IndexBuffer = indexBuffer;
 	}

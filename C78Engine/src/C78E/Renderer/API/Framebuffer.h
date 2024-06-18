@@ -23,10 +23,10 @@ namespace C78E {
 	struct FramebufferAttachmentSpecification {
 		FramebufferAttachmentSpecification() = default;
 		FramebufferAttachmentSpecification(std::initializer_list<FramebufferTextureSpecification> attachments)
-			: Attachments(attachments) 
+			: attachments(attachments) 
 		{ }
 
-		std::vector<FramebufferTextureSpecification> Attachments;
+		std::vector<FramebufferTextureSpecification> attachments;
 	};
 
 	struct FramebufferSpecification {

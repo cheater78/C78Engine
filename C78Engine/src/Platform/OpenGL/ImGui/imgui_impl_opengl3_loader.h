@@ -1,3 +1,6 @@
+#pragma once
+#ifndef C78_PLATFORM_GLFW
+
 //-----------------------------------------------------------------------------
 // About imgui_impl_opengl3_loader.h:
 //
@@ -807,3 +810,6 @@ static void load_procs(GL3WGetProcAddressProc proc)
 }
 #endif
 #endif
+
+
+#endif // !C78_PLATFORM_GLFW

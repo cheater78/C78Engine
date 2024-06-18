@@ -156,7 +156,7 @@ namespace C78E {
 		void (*destroyScript)(NativeScriptComponent*);
 
 		template<typename T>
-		void Bind() {
+		void bind() {
 			instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
 			destroyScript = [](NativeScriptComponent* nsc) { delete nsc->instance; nsc->instance = nullptr; };
 		}

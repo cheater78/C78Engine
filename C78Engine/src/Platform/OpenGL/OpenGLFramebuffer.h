@@ -1,29 +1,26 @@
 #pragma once
-
-#include "C78E/Renderer/Framebuffer.h"
-#include "C78E/Assets/Texture/Texture.h"
+#include <C78E/Renderer/API/Framebuffer.h>
 
 namespace C78E {
 
-	class OpenGLFramebuffer : public Framebuffer
-	{
+	class OpenGLFramebuffer : public Framebuffer {
 	public:
 		OpenGLFramebuffer(const FramebufferSpecification& spec);
 		virtual ~OpenGLFramebuffer();
 
-		void Invalidate();
+		void invalidate();
 
-		virtual void Bind() override;
-		virtual void Unbind() override;
+		virtual void bind() override;
+		virtual void unbind() override;
 
-		virtual void Resize(uint32_t width, uint32_t height) override;
-		virtual uint32_t ReadPixel(uint32_t attachmentIndex, int x, int y) override;
+		virtual void resize(uint32_t width, uint32_t height) override;
+		virtual uint32_t readPixel(uint32_t attachmentIndex, int x, int y) override;
 
-		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
+		virtual void clearAttachment(uint32_t attachmentIndex, int value) override;
 
 		Ref<Texture2D> getColorAttachment(uint32_t id) override;
 
-		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
+		virtual const FramebufferSpecification& getSpecification() const override { return m_Specification; }
 	private:
 		uint32_t m_RendererID = 0;
 		FramebufferSpecification m_Specification;

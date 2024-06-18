@@ -133,7 +133,7 @@ namespace C78Editor {
                     if (ImGui::Button("Save")) m_SceneManager->saveScene();
                 }
 
-                static C78E::GUI::TextInput createSceneTI("Create Scene", "UnnamedScene");
+                static C78E::GUI::TextInput createSceneTI("create Scene", "UnnamedScene");
                 static C78E::GUI::TextButton createSceneTB("New Scene:",
                     [this]() {
                         m_SceneManager->createScene(createSceneTI.getContent());

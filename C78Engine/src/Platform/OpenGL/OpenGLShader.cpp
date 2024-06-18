@@ -379,7 +379,7 @@ namespace C78E {
 		}
 	}
 
-	void OpenGLShader::Bind() const
+	void OpenGLShader::bind() const
 	{
 		glUseProgram(m_RendererID);
 	}
@@ -392,7 +392,7 @@ namespace C78E {
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 	}
 
-	void OpenGLShader::Unbind() const
+	void OpenGLShader::unbind() const
 	{
 		glUseProgram(0);
 	}

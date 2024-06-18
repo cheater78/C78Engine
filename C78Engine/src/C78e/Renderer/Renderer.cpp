@@ -84,14 +84,14 @@ namespace C78E {
 		};
 		uint32_t indecies[6] = { 0,1,2,2,3,0 };
 
-		s_DisplayAssets.vertexBuffer = VertexBuffer::Create(vertecies, 4*20);
-		s_DisplayAssets.vertexBuffer->SetLayout({ { ShaderDataType::Float3, "a_Position" }, { ShaderDataType::Float2, "a_TexCoord" } });
+		s_DisplayAssets.vertexBuffer = VertexBuffer::create(vertecies, 4*20);
+		s_DisplayAssets.vertexBuffer->setLayout({ { ShaderDataType::Float3, "a_Position" }, { ShaderDataType::Float2, "a_TexCoord" } });
 
-		s_DisplayAssets.indexBuffer = IndexBuffer::Create(indecies, 6);
+		s_DisplayAssets.indexBuffer = IndexBuffer::create(indecies, 6);
 
-		s_DisplayAssets.vertexArray = VertexArray::Create();
-		s_DisplayAssets.vertexArray->AddVertexBuffer(s_DisplayAssets.vertexBuffer);
-		s_DisplayAssets.vertexArray->SetIndexBuffer(s_DisplayAssets.indexBuffer);
+		s_DisplayAssets.vertexArray = VertexArray::create();
+		s_DisplayAssets.vertexArray->addVertexBuffer(s_DisplayAssets.vertexBuffer);
+		s_DisplayAssets.vertexArray->setIndexBuffer(s_DisplayAssets.indexBuffer);
 	}
 
 }

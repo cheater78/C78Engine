@@ -1,33 +1,20 @@
 #include "C78EPCH.h"
-#include "OpenGLUniformBuffer.h"
-
-#include <glad.h>
+#include "VulkanUniformBuffer.h"
 
 namespace C78E {
 
-
-	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size) {
-		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW); 
+	VulkanUniformBuffer::VulkanUniformBuffer(uint32_t size) {
 	}
 
-	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size, uint32_t binding) {
-		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW); // TODO: investigate usage hint
-		glBindBufferBase(GL_UNIFORM_BUFFER, binding, m_RendererID);
+	VulkanUniformBuffer::VulkanUniformBuffer(uint32_t size, uint32_t binding) {
 	}
 
-	OpenGLUniformBuffer::~OpenGLUniformBuffer() {
-		glDeleteBuffers(1, &m_RendererID);
+	VulkanUniformBuffer::~VulkanUniformBuffer() {
 	}
 
-
-	void OpenGLUniformBuffer::setData(const void* data, uint32_t size, uint32_t offset) {
-		glNamedBufferSubData(m_RendererID, offset, size, data);
+	void VulkanUniformBuffer::setData(const void* data, uint32_t size, uint32_t offset) {
 	}
 
-
-	void OpenGLUniformBuffer::bind(uint32_t binding) {
-		glBindBufferBase(GL_UNIFORM_BUFFER, binding, m_RendererID);
+	void VulkanUniformBuffer::bind(uint32_t binding) {
 	}
 }

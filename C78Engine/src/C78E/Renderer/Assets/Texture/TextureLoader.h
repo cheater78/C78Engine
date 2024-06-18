@@ -1,7 +1,4 @@
 #pragma once
-#include "C78E/Assets/Asset/Asset.h"
-
-#include "Texture.h"
 
 namespace C78E {
 

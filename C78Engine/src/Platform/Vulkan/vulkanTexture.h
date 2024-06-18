@@ -1,46 +1,15 @@
 #pragma once
-
-#include "C78E/Assets/Texture/Texture.h"
-
-#include <glad.h>
+#include <C78E/Renderer/API/Texture.h>
 
 namespace C78E {
 
-	static GLenum toGLDataFormat(Image::ImageFormat format) {
-		switch (format) {
-		case Image::ImageFormat::R8:		return GL_RED;
-		case Image::ImageFormat::R32:		return GL_RED_INTEGER;
-		case Image::ImageFormat::RG8:		return GL_RG;
-		case Image::ImageFormat::RGB8:		return GL_RGB;
-		case Image::ImageFormat::RGBA8:		return GL_RGBA;
-		case Image::ImageFormat::RGBA32F:	return GL_RGBA;
-		case Image::ImageFormat::D24S8:		return GL_DEPTH_STENCIL_ATTACHMENT;
-		default: C78_CORE_ASSERT(false);	return 0;
-		}
-	}
-
-	static GLenum toGLInternalFormat(Image::ImageFormat format) {
-		switch (format) {
-		case Image::ImageFormat::R8:		return GL_R8;
-		case Image::ImageFormat::R32:		return GL_R32I;
-		case Image::ImageFormat::RG8:		return GL_RG8;
-		case Image::ImageFormat::RGB8:		return GL_RGB8;
-		case Image::ImageFormat::RGBA8:		return GL_RGBA8;
-		case Image::ImageFormat::RGBA32F:	return GL_RGBA32F;
-		case Image::ImageFormat::D24S8:		return GL_DEPTH24_STENCIL8;
-		default: C78_CORE_ASSERT(false);	return 0;
-		}
-	}
-
-	class OpenGLTexture2D : public Texture2D {
+	class VulkanTexture2D : public Texture2D {
 	public:
-		OpenGLTexture2D(const Texture2D::TextureSpecification& specification);
-		OpenGLTexture2D(const Texture2D::TextureSpecification& specification, const Buffer& data);
-		OpenGLTexture2D(Image& image);
-		OpenGLTexture2D(const OpenGLTexture2D&) = default; // Maybe needed!
-		virtual ~OpenGLTexture2D();
-
-		OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID); // Do Not Use
+		VulkanTexture2D(const Texture2D::TextureSpecification& specification);
+		VulkanTexture2D(const Texture2D::TextureSpecification& specification, const Buffer& data);
+		VulkanTexture2D(Image& image);
+		VulkanTexture2D(const VulkanTexture2D&) = default; //TODO: Maybe needed!
+		virtual ~VulkanTexture2D();
 
 		virtual uint32_t getWidth() const override { return m_Specification.width;  }
 		virtual uint32_t getHeight() const override { return m_Specification.height; }
@@ -55,8 +24,6 @@ namespace C78E {
 
 		virtual bool operator==(const Texture& other) const override { return m_RendererID == other.getRendererID(); }
 	private:
-		
-	private:
 		uint32_t m_RendererID;
 		Texture2D::TextureSpecification m_Specification;
 
@@ -64,13 +31,12 @@ namespace C78E {
 
 	};
 
-
-	class OpenGLCubeMap : public CubeMap {
+	class VulkanCubeMap : public CubeMap {
 	public:
-		OpenGLCubeMap(CubeMap::TextureSpecification& specification);
-		OpenGLCubeMap(std::vector<Image>& images);
-		OpenGLCubeMap(Ref<Image> crossCubeMap);
-		~OpenGLCubeMap();
+		VulkanCubeMap(CubeMap::TextureSpecification& specification);
+		VulkanCubeMap(std::vector<Image>& images);
+		VulkanCubeMap(Ref<Image> crossCubeMap);
+		~VulkanCubeMap();
 
 		uint32_t getSize() const override { return m_Specification.size; };
 		virtual uint32_t getRendererID() const override { return m_RendererID; };

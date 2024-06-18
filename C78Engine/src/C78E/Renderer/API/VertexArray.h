@@ -1,26 +1,22 @@
 #pragma once
-
-#include "C78E/Renderer/Buffer.h"
-
-#include <memory>
+#include <C78E/Renderer/API/Buffer.h>
 
 namespace C78E {
 
-	class VertexArray
-	{
+	class VertexArray {
 	public:
 		virtual ~VertexArray() = default;
 
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
+		virtual void bind() const = 0;
+		virtual void unbind() const = 0;
 
-		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) = 0;
-		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) = 0;
+		virtual void addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) = 0;
+		virtual void setIndexBuffer(const Ref<IndexBuffer>& indexBuffer) = 0;
 
-		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const = 0;
-		virtual const Ref<IndexBuffer>& GetIndexBuffer() const = 0;
+		virtual const std::vector<Ref<VertexBuffer>>& getVertexBuffers() const = 0;
+		virtual const Ref<IndexBuffer>& getIndexBuffer() const = 0;
 
-		static Ref<VertexArray> Create();
+		static Ref<VertexArray> create();
 	};
 
 }

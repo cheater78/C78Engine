@@ -14,7 +14,6 @@ namespace C78E {
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLFramebuffer>(spec);
 			case RendererAPI::API::Vulkan:  return createRef<VulkanFramebuffer>(spec);
 		}
-
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}

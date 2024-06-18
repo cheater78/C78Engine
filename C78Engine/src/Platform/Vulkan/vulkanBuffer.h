@@ -1,5 +1,5 @@
 #pragma once
-#include <C78E/Renderer/Buffer.h>
+#include <C78E/Renderer/API/Buffer.h>
 
 namespace C78E {
 
@@ -9,28 +9,27 @@ namespace C78E {
 		VulkanVertexBuffer(float* vertices, uint32_t size);
 		virtual ~VulkanVertexBuffer();
 
-		virtual void Bind() const override;
-		virtual void Unbind() const override;
+		virtual void bind() const override;
+		virtual void unbind() const override;
 		
-		virtual void SetData(const void* data, uint32_t size) override;
+		virtual void setData(const void* data, uint32_t size) override;
 
-		virtual const BufferLayout& GetLayout() const override { return m_Layout; }
-		virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
+		virtual const BufferLayout& getLayout() const override { return m_Layout; }
+		virtual void setLayout(const BufferLayout& layout) override { m_Layout = layout; }
 	private:
 		uint32_t m_RendererID;
 		BufferLayout m_Layout;
 	};
 
-	class OpenGLIndexBuffer : public IndexBuffer
-	{
+	class VulkanIndexBuffer : public IndexBuffer {
 	public:
-		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
-		virtual ~OpenGLIndexBuffer();
+		VulkanIndexBuffer(uint32_t* indices, uint32_t count);
+		virtual ~VulkanIndexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
+		virtual void bind() const;
+		virtual void unbind() const;
 
-		virtual uint32_t GetCount() const { return m_Count; }
+		virtual uint32_t getCount() const { return m_Count; }
 	private:
 		uint32_t m_RendererID;
 		uint32_t m_Count;

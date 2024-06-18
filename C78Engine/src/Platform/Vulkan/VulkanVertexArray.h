@@ -1,23 +1,21 @@
 #pragma once
-
-#include "C78E/Renderer/VertexArray.h"
+#include <C78E/Renderer/API/VertexArray.h>
 
 namespace C78E {
 
-	class OpenGLVertexArray : public VertexArray
-	{
+	class VulkanVertexArray : public VertexArray {
 	public:
-		OpenGLVertexArray();
-		virtual ~OpenGLVertexArray();
+		VulkanVertexArray();
+		virtual ~VulkanVertexArray();
 
-		virtual void Bind() const override;
-		virtual void Unbind() const override;
+		virtual void bind() const override;
+		virtual void unbind() const override;
 
-		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
-		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
+		virtual void addVertexBuffer(const Ref<VertexBuffer> vertexBuffer) override;
+		virtual void setIndexBuffer(const Ref<IndexBuffer> indexBuffer) override;
 
-		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; }
-		virtual const Ref<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; }
+		virtual const std::vector<Ref<VertexBuffer>>& getVertexBuffers() const { return m_VertexBuffers; }
+		virtual const Ref<IndexBuffer>& getIndexBuffer() const { return m_IndexBuffer; }
 	private:
 		uint32_t m_RendererID;
 		uint32_t m_VertexBufferIndex = 0;

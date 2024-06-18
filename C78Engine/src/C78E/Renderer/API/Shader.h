@@ -1,8 +1,5 @@
 #pragma once
-
 #include <C78E/Assets/Asset/Asset.h>
-
-#include <glm/glm.hpp>
 
 namespace C78E {
 
@@ -10,9 +7,9 @@ namespace C78E {
 	public:
 		virtual ~Shader() = default;
 
-		virtual void Bind() const = 0;
+		virtual void bind() const = 0;
 		virtual void BindCompute(uint32_t x = 1, uint32_t y = 1, uint32_t z = 1) const = 0;
-		virtual void Unbind() const = 0;
+		virtual void unbind() const = 0;
 
 		virtual void SetInt(const std::string& name, int value) = 0;
 		virtual void SetIntArray(const std::string& name, int* values, uint32_t count) = 0;

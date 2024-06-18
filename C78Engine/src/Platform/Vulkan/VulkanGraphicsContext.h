@@ -1,14 +1,13 @@
 #pragma once
-
-#include "C78E/Renderer/GraphicsContext.h"
+#include <C78E/Renderer/API/GraphicsContext.h>
 
 struct GLFWwindow;
 
 namespace C78E {
 
-	class OpenGLContext : public GraphicsContext {
+	class VulkanGraphicsContext : public GraphicsContext {
 	public:
-		OpenGLContext(GLFWwindow* windowHandle);
+		VulkanGraphicsContext(GLFWwindow* windowHandle);
 
 		virtual void init() override;
 		virtual void swapBuffers() override;

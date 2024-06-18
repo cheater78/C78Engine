@@ -1,7 +1,5 @@
 #include "C78EPCH.h"
-#include "Platform/OpenGL/OpenGLRendererAPI.h"
-
-#include <glad.h>
+#include "OpenGLRendererAPI.h"
 
 namespace C78E {
 	
@@ -12,16 +10,13 @@ namespace C78E {
 		unsigned severity,
 		int length,
 		const char* message,
-		const void* userParam)
-	{
-		switch (severity)
-		{
+		const void* userParam) {
+		switch (severity) {
 			case GL_DEBUG_SEVERITY_HIGH:         C78_CORE_FATAL(message); return;
 			case GL_DEBUG_SEVERITY_MEDIUM:       C78_CORE_ERROR(message); return;
 			case GL_DEBUG_SEVERITY_LOW:          C78_CORE_WARN(message); return;
 			case GL_DEBUG_SEVERITY_NOTIFICATION: C78_CORE_TRACE(message); return;
 		}
-		
 		C78_CORE_ASSERT(false, "Unknown severity level!");
 	}
 
@@ -33,7 +28,7 @@ namespace C78E {
 		
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 	#endif
-
+		//TODO: seems a bit too hardcoded -> manage Defaults
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -42,7 +37,7 @@ namespace C78E {
 		glEnable(GL_LINE_SMOOTH);
 	}
 
-	uint32_t OpenGLRendererAPI::getMaxTextureSlots(ShaderStage stage) {
+	uint32_t OpenGLRendererAPI::getMaxTextureSlots(ShaderType stage) {
 		GLint slots = 16;
 		switch (stage) {
 		case C78E::RendererAPI::VERTEX:			glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &slots); break;
@@ -83,14 +78,14 @@ namespace C78E {
 		glDepthMask(enable);
 	}
 
-	void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount) {
-		vertexArray->Bind();
-		uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
+	void OpenGLRendererAPI::drawIndexed(Ref<VertexArray> vertexArray, uint32_t indexCount) {
+		vertexArray->bind();
+		uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
-	void OpenGLRendererAPI::drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) {
-		vertexArray->Bind();
+	void OpenGLRendererAPI::drawLines(Ref<VertexArray> vertexArray, uint32_t vertexCount) {
+		vertexArray->bind();
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 

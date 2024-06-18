@@ -11,7 +11,7 @@ namespace C78E {
 			s_RendererAPI->init();
 		}
 
-		static uint32_t getMaxTextureSlots(RendererAPI::ShaderStage stage) {
+		static uint32_t getMaxTextureSlots(RendererAPI::ShaderType stage) {
 			return s_RendererAPI->getMaxTextureSlots(stage);
 		}
 

@@ -1,27 +1,18 @@
 #pragma once
-
-#include "C78E/Renderer/VertexArray.h"
-
-#include <glm/glm.hpp>
+#include <C78E/Renderer/API/VertexArray.h>
 
 namespace C78E {
 
 	class RendererAPI {
 	public:
-		enum class API {
-			None = 0, OpenGL = 1, Vulkan = 2, DIRECTX = 3, METAL = 4
-		};
-		enum DepthFunc : uint32_t {
-			NEVER = 0, LESS = 1, EQUAL = 2, LEQUAL = 3, GREATER = 4, NOTEQUAL = 5, GEQUAL = 6, ALWAYS = 7
-		};
-		enum ShaderStage : uint32_t {
-			VERTEX = 0, TESSELATION = 1, TESSEVALUATION = 2, GEOMETRY = 3, FRAGMENT = 4, COMPUTE = 5
-		};
+		enum class API { None = 0, OpenGL, Vulkan, DIRECTX, METAL };
+		enum DepthFunc : uint32_t { NEVER = 0, LESS, EQUAL, LEQUAL, GREATER, NOTEQUAL, GEQUAL, ALWAYS };
+		enum ShaderType : uint32_t { VERTEX, TESSELATION, TESSEVALUATION, GEOMETRY, FRAGMENT, COMPUTE };
 	public:
 		virtual ~RendererAPI() = default;
 
 		virtual void init() = 0;
-		virtual uint32_t getMaxTextureSlots(ShaderStage stage) = 0;
+		virtual uint32_t getMaxTextureSlots(ShaderType stage) = 0;
 		virtual void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 		virtual void setClearColor(const glm::vec4& color) = 0;
 
@@ -31,8 +22,8 @@ namespace C78E {
 
 		virtual void clear() = 0;
 
-		virtual void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
-		virtual void drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
+		virtual void drawIndexed(Ref<VertexArray> vertexArray, uint32_t indexCount = 0) = 0;
+		virtual void drawLines(Ref<VertexArray> vertexArray, uint32_t vertexCount) = 0;
 		
 		virtual void setLineWidth(float width) = 0;
 		

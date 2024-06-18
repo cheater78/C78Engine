@@ -1,14 +1,11 @@
 #include "C78EPCH.h"
 #ifdef C78_PLATFORM_WINDOWS
-
 #include <C78E/Utils/PlatformUtils.h>
+
 #include <C78E/Core/Application.h>
 
 #include <commdlg.h>
 #include <shlobj.h>
-#include <GLFW/glfw3.h>
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
 
 namespace C78E {
 

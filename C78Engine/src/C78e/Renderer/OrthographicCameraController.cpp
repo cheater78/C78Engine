@@ -13,7 +13,7 @@ namespace C78E {
 
 	void OrthographicCameraController::OnUpdate(Timestep dt)
 	{
-		//C78_PROFILE_FUNCTION();
+		
 
 		if (Input::isKeyPressed(Key::A))
 		{
@@ -58,7 +58,7 @@ namespace C78E {
 	}
 
 	void OrthographicCameraController::OnEvent(Event& e) {
-		//C78_PROFILE_FUNCTION();
+		
 
 		EventDispatcher dispatcher(e);
 		dispatcher.dispatch<MouseScrolledEvent>(BIND_CALLBACK_FN(OrthographicCameraController::OnMouseScrolled));
@@ -71,7 +71,7 @@ namespace C78E {
 	}
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e) {
-		//C78_PROFILE_FUNCTION();
+		
 
 		m_ZoomLevel -= e.getYOffset() * 0.25f;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
@@ -80,7 +80,7 @@ namespace C78E {
 	}
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e) {
-		//C78_PROFILE_FUNCTION();
+		
 
 		OnResize((float)e.getWidth(), (float)e.getHeight());
 		return false;

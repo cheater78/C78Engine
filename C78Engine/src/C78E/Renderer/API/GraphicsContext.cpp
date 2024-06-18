@@ -1,19 +1,19 @@
 #include "C78EPCH.h"
-#include "C78E/Renderer/GraphicsContext.h"
+#include "GraphicsContext.h"
 
-#include "C78E/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLContext.h"
+#include <C78E/Renderer/API/RendererAPI.h>
+
+#include <Platform/OpenGL/OpenGLGraphicsContext.h>
+#include <Platform/Vulkan/VulkanGraphicsContext.h>
 
 namespace C78E {
 
-	Scope<GraphicsContext> GraphicsContext::Create(void* window)
-	{
-		switch (Renderer::getAPI())
-		{
-		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return createScope<OpenGLContext>(static_cast<GLFWwindow*>(window));
+	Scope<GraphicsContext> GraphicsContext::create(void* window) {
+		switch (RendererAPI::getAPI()) {
+			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:  return createScope<OpenGLGraphicsContext>(static_cast<GLFWwindow*>(window));
+			case RendererAPI::API::Vulkan:  return createScope<VulkanGraphicsContext>(static_cast<GLFWwindow*>(window));
 		}
-
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}

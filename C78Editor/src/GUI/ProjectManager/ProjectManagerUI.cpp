@@ -38,7 +38,7 @@ namespace C78Editor::GUI {
 			}
 		);
 
-		m_CreateProjectTB = C78E::createRef<C78E::GUI::TextButton>("Create Project",
+		m_CreateProjectTB = C78E::createRef<C78E::GUI::TextButton>("create Project",
 			[this](void) -> void {
 				m_ProjectManager->getManager()->createProject({
 						m_ProjectFileManager->getDialogResult().filename().string(),
@@ -60,7 +60,7 @@ namespace C78Editor::GUI {
 
 	void CreateProjectUI::show() {
 		if (!m_Visible) return;
-		ImGui::Begin("Create Project");
+		ImGui::Begin("create Project");
 
 		m_ProjectFileManager->widget();
 
@@ -80,7 +80,7 @@ namespace C78Editor::GUI {
 	}
 
 	void CreateProjectUI::widget() {
-		if (ImGui::Button("Create Project") && !m_Visible) {
+		if (ImGui::Button("create Project") && !m_Visible) {
 			m_Visible = true;
 		}
 	}

@@ -1,6 +1,4 @@
 #pragma once
-
-#include "C78E/Core/Core.h"
 #include "C78E/Assets/Asset/Asset.h"
 #include "C78E/Assets/Texture/Image.h"
 

@@ -1,4 +1,9 @@
 #include <C78ePCH.h>
+
+#ifdef C78_PLATFORM_GLFW
+
+
+
 // dear imgui: Platform Backend for GLFW
 // This needs to be used along with a Renderer (e.g. OpenGL3, Vulkan, WebGPU..)
 // (Info: GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan graphics context creation, etc.)
@@ -1323,3 +1328,6 @@ static LRESULT CALLBACK ImGui_ImplGlfw_WndProc(HWND hWnd, UINT msg, WPARAM wPara
 #endif
 
 #endif // #ifndef IMGUI_DISABLE
+
+
+#endif // C78_PLATFORM_GLFW

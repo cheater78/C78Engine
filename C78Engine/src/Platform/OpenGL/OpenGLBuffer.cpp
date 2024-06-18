@@ -1,7 +1,5 @@
 #include "C78EPCH.h"
-#include "Platform/OpenGL/OpenGLBuffer.h"
-
-#include <glad.h>
+#include "OpenGLBuffer.h"
 
 namespace C78E {
 
@@ -9,47 +7,31 @@ namespace C78E {
 	// VertexBuffer /////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size) {
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 	}
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
-	{
-		//C78_PROFILE_FUNCTION();
-
+	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size) {
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 
-	OpenGLVertexBuffer::~OpenGLVertexBuffer()
-	{
-		//C78_PROFILE_FUNCTION();
-
+	OpenGLVertexBuffer::~OpenGLVertexBuffer() {
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-	void OpenGLVertexBuffer::Bind() const
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLVertexBuffer::bind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	}
 
-	void OpenGLVertexBuffer::Unbind() const
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLVertexBuffer::unbind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
-	{
+	void OpenGLVertexBuffer::setData(const void* data, uint32_t size) {
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
@@ -59,36 +41,23 @@ namespace C78E {
 	/////////////////////////////////////////////////////////////////////////////
 
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
-		: m_Count(count)
-	{
-		//C78_PROFILE_FUNCTION();
-
+		: m_Count(count) {
 		glCreateBuffers(1, &m_RendererID);
-		
 		// GL_ELEMENT_ARRAY_BUFFER is not valid without an actively bound VAO
 		// Binding with GL_ARRAY_BUFFER allows the data to be loaded regardless of VAO state. 
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 	}
 
-	OpenGLIndexBuffer::~OpenGLIndexBuffer()
-	{
-		//C78_PROFILE_FUNCTION();
-
+	OpenGLIndexBuffer::~OpenGLIndexBuffer() {
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-	void OpenGLIndexBuffer::Bind() const
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLIndexBuffer::bind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	}
 
-	void OpenGLIndexBuffer::Unbind() const
-	{
-		//C78_PROFILE_FUNCTION();
-
+	void OpenGLIndexBuffer::unbind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 

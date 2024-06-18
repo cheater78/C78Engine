@@ -1,10 +1,6 @@
 #pragma once
 #ifdef C78_PLATFORM_WINDOWS
-
-#include "C78E/Core/Window.h"
-
-#include <GLFW/glfw3.h>
-#include "Platform/OpenGL/OpenGLContext.h"
+#include <C78E/Renderer/API/GraphicsContext.h>
 
 namespace C78E {
 
@@ -38,9 +34,9 @@ namespace C78E {
 		Scope<GraphicsContext> m_Context;
 
 		struct WindowData { //TODO: merge with WinProps
-			std::string title = "<error>";
-			uint32_t width = 100;
-			uint32_t height = 100;
+			std::string title = "Untitled Windows Window";
+			uint32_t width = 1920;
+			uint32_t height = 1080;
 			bool vSync = true;
 
 			EventCallbackFn eventCallback;

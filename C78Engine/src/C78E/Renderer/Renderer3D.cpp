@@ -20,7 +20,7 @@ namespace C78E {
 	Ref<Framebuffer> Renderer3D::s_MainFramebuffer = nullptr;
 
 	void Renderer3D::init() {
-		s_MaxTextureSlots = std::min<uint32_t>(RenderCommand::getMaxTextureSlots(RendererAPI::ShaderStage::VERTEX), RenderCommand::getMaxTextureSlots(RendererAPI::ShaderStage::FRAGMENT));
+		s_MaxTextureSlots = std::min<uint32_t>(RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::VERTEX), RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::FRAGMENT));
 		
 		FramebufferSpecification spec{
 			1, 1,
@@ -28,8 +28,8 @@ namespace C78E {
 			1,
 			false
 		};
-		s_MainFramebuffer = Framebuffer::Create(spec);
-		s_MainFramebuffer->Unbind();
+		s_MainFramebuffer = Framebuffer::create(spec);
+		s_MainFramebuffer->unbind();
 
 		std::vector<float> vertecies = {
 			-1.f, -1.f, 0.f, 0.f, 0.f,
@@ -42,15 +42,15 @@ namespace C78E {
 			0,1,2,2,3,0
 		};
 		s_MainPass.shader = C78E::AssetManager::getShader("DisplayTex");
-		s_MainPass.vertexBuffer = VertexBuffer::Create(vertecies.data(), static_cast<uint32_t>(sizeof(float) * vertecies.size()));
-		s_MainPass.vertexBuffer->SetLayout({
+		s_MainPass.vertexBuffer = VertexBuffer::create(vertecies.data(), static_cast<uint32_t>(sizeof(float) * vertecies.size()));
+		s_MainPass.vertexBuffer->setLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float2, "a_TexCoord" }
 			});
-		s_MainPass.indexBuffer = IndexBuffer::Create(indecies.data(), static_cast<uint32_t>(indecies.size()));
-		s_MainPass.vertexArray = VertexArray::Create();
-		s_MainPass.vertexArray->AddVertexBuffer(s_MainPass.vertexBuffer);
-		s_MainPass.vertexArray->SetIndexBuffer(s_MainPass.indexBuffer);
+		s_MainPass.indexBuffer = IndexBuffer::create(indecies.data(), static_cast<uint32_t>(indecies.size()));
+		s_MainPass.vertexArray = VertexArray::create();
+		s_MainPass.vertexArray->addVertexBuffer(s_MainPass.vertexBuffer);
+		s_MainPass.vertexArray->setIndexBuffer(s_MainPass.indexBuffer);
 		
 	}
 
@@ -122,12 +122,12 @@ namespace C78E {
 
 			uint32_t passes = 1;
 			Ref<Shader> shader = skyBoxEntity.getComponent<MaterialComponent>().getShader();
-			Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertecies.data(), static_cast<uint32_t>(vertecies.size() * sizeof(float)));
-			vertexBuffer->SetLayout({ { ShaderDataType::Float3, "a_Position"} });
-			Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indicies.data(), static_cast<uint32_t>(indicies.size()));
-			Ref<VertexArray> vertexArray = VertexArray::Create();
-			vertexArray->AddVertexBuffer(vertexBuffer);
-			vertexArray->SetIndexBuffer(indexBuffer);
+			Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(vertecies.data(), static_cast<uint32_t>(vertecies.size() * sizeof(float)));
+			vertexBuffer->setLayout({ { ShaderDataType::Float3, "a_Position"} });
+			Ref<IndexBuffer> indexBuffer = IndexBuffer::create(indicies.data(), static_cast<uint32_t>(indicies.size()));
+			Ref<VertexArray> vertexArray = VertexArray::create();
+			vertexArray->addVertexBuffer(vertexBuffer);
+			vertexArray->setIndexBuffer(indexBuffer);
 
 			Renderer3DPassConfig config{
 				true,
@@ -162,18 +162,18 @@ namespace C78E {
 
 			uint32_t passes = 1;
 			Ref<Shader> shader = material.getShader();
-			Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create((float*)mesh.m_Vertecies.data(), static_cast<uint32_t>(mesh.m_Vertecies.size() * sizeof(Vertex)));
-			vertexBuffer->SetLayout({
+			Ref<VertexBuffer> vertexBuffer = VertexBuffer::create((float*)mesh.m_Vertecies.data(), static_cast<uint32_t>(mesh.m_Vertecies.size() * sizeof(Vertex)));
+			vertexBuffer->setLayout({
 				{ ShaderDataType::Float3, "a_Position"     },
 				{ ShaderDataType::Float4, "a_Color"        },
 				{ ShaderDataType::Float3, "a_Normal"       },
 				{ ShaderDataType::Float2, "a_TexCoord"     },
 				{ ShaderDataType::Float,  "a_TexIndex"     }
 				});
-			Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(mesh.m_Indicies.data(), static_cast<uint32_t>(mesh.m_Indicies.size()));
-			Ref<VertexArray> vertexArray = VertexArray::Create();
-			vertexArray->AddVertexBuffer(vertexBuffer);
-			vertexArray->SetIndexBuffer(indexBuffer);
+			Ref<IndexBuffer> indexBuffer = IndexBuffer::create(mesh.m_Indicies.data(), static_cast<uint32_t>(mesh.m_Indicies.size()));
+			Ref<VertexArray> vertexArray = VertexArray::create();
+			vertexArray->addVertexBuffer(vertexBuffer);
+			vertexArray->setIndexBuffer(indexBuffer);
 
 			std::vector<Ref<Texture>> textures;
 			for (Asset<Texture2D> asset : entity.getComponent<TextureComponent>().textures) {
@@ -228,18 +228,18 @@ namespace C78E {
 				Material::MaterialTextures materialTextures = model.get().m_Material.get().getTextures();
 				Asset<Mesh> mesh = model.get().m_Mesh;
 
-				Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create((float*)mesh.get().m_Vertecies.data(), static_cast<uint32_t>(mesh.get().m_Vertecies.size() * sizeof(Vertex)));
-				vertexBuffer->SetLayout({
+				Ref<VertexBuffer> vertexBuffer = VertexBuffer::create((float*)mesh.get().m_Vertecies.data(), static_cast<uint32_t>(mesh.get().m_Vertecies.size() * sizeof(Vertex)));
+				vertexBuffer->setLayout({
 					{ ShaderDataType::Float3, "a_Position"     },
 					{ ShaderDataType::Float4, "a_Color"        },
 					{ ShaderDataType::Float3, "a_Normal"       },
 					{ ShaderDataType::Float2, "a_TexCoord"     },
 					{ ShaderDataType::Float,  "a_TexIndex"     }
 					});
-				Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(mesh.get().m_Indicies.data(), static_cast<uint32_t>(mesh.get().m_Indicies.size()));
-				Ref<VertexArray> vertexArray = VertexArray::Create();
-				vertexArray->AddVertexBuffer(vertexBuffer);
-				vertexArray->SetIndexBuffer(indexBuffer);
+				Ref<IndexBuffer> indexBuffer = IndexBuffer::create(mesh.get().m_Indicies.data(), static_cast<uint32_t>(mesh.get().m_Indicies.size()));
+				Ref<VertexArray> vertexArray = VertexArray::create();
+				vertexArray->addVertexBuffer(vertexBuffer);
+				vertexArray->setIndexBuffer(indexBuffer);
 
 
 				//TODO ORDER!---------------------------------------------------------------------------------------------------
@@ -314,9 +314,9 @@ namespace C78E {
 		}
 		if (!indicies.size()) return;
 		
-		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indicies.data(), static_cast<uint32_t>(indicies.size()));
-		Ref<VertexArray> vertexArray = VertexArray::Create();
-		vertexArray->SetIndexBuffer(indexBuffer);
+		Ref<IndexBuffer> indexBuffer = IndexBuffer::create(indicies.data(), static_cast<uint32_t>(indicies.size()));
+		Ref<VertexArray> vertexArray = VertexArray::create();
+		vertexArray->setIndexBuffer(indexBuffer);
 		
 		Renderer3DPassConfig config{
 			true,
@@ -354,9 +354,9 @@ namespace C78E {
 		}
 		if (!indicies.size()) return;
 
-		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indicies.data(), static_cast<uint32_t>(indicies.size()));
-		Ref<VertexArray> vertexArray = VertexArray::Create();
-		vertexArray->SetIndexBuffer(indexBuffer);
+		Ref<IndexBuffer> indexBuffer = IndexBuffer::create(indicies.data(), static_cast<uint32_t>(indicies.size()));
+		Ref<VertexArray> vertexArray = VertexArray::create();
+		vertexArray->setIndexBuffer(indexBuffer);
 
 		Renderer3DPassConfig config{
 			true,
@@ -416,7 +416,7 @@ namespace C78E {
 		s_ActiveScene = scene;
 
 		s_MainFramebuffer->Resize(width, height);
-		s_MainFramebuffer->Bind();
+		s_MainFramebuffer->bind();
 		
 		//Render
 
@@ -424,8 +424,8 @@ namespace C78E {
 
 		for (auto& pass : curr(scene)->renderPasses) {
 			if (!pass.passes) continue;
-			pass.shader->Bind();
-			pass.vertexArray->Bind();
+			pass.shader->bind();
+			pass.vertexArray->bind();
 
 			C78_CORE_ASSERT(pass.textureSlots.size() <= s_MaxTextureSlots, "RenderPass cannot have this much Textures bound!");
 			uint32_t texID = 0;
@@ -447,7 +447,7 @@ namespace C78E {
 
 		//~Render
 		
-		s_MainFramebuffer->Unbind();
+		s_MainFramebuffer->unbind();
 
 		RenderCommand::clear();
 

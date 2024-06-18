@@ -16,9 +16,9 @@ namespace C78E {
 		OpenGLShader(const std::string& name, const std::string& computeSrc);
 		virtual ~OpenGLShader();
 
-		virtual void Bind() const override;
+		virtual void bind() const override;
 		virtual void BindCompute(uint32_t x = 1, uint32_t y = 1, uint32_t z = 1) const override;
-		virtual void Unbind() const override;
+		virtual void unbind() const override;
 
 		virtual void SetInt(const std::string& name, int value) override;
 		virtual void SetIntArray(const std::string& name, int* values, uint32_t count) override;
