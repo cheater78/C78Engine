@@ -1,12 +1,5 @@
-#include "vulkanSwapChain.h"
-
-#include <array>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <limits>
-#include <set>
-#include <stdexcept>
+#include "C78ePCH.h"
+#include "VulkanSwapChain.h"
 
 namespace C78e {
 

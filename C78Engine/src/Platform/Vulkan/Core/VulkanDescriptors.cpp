@@ -1,9 +1,7 @@
-#include "vulkanDescriptors.h"
+#include "C78ePCH.h"
+#include "VulkanDescriptors.h"
 
-#include <cassert>
-#include <stdexcept>
-
-namespace C78e {
+namespace C78E {
 
     // *************** Descriptor Set Layout Builder *********************
 

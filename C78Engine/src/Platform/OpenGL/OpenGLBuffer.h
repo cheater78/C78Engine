@@ -4,8 +4,7 @@
 
 namespace C78E {
 
-	class OpenGLVertexBuffer : public VertexBuffer
-	{
+	class OpenGLVertexBuffer : public VertexBuffer {
 	public:
 		OpenGLVertexBuffer(uint32_t size);
 		OpenGLVertexBuffer(float* vertices, uint32_t size);

@@ -2,15 +2,10 @@
 
 namespace C78E {
 
-	enum class ShaderDataType
-	{
-		None = 0, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
-	};
+	enum class ShaderDataType { None = 0, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool };
 
-	static uint32_t ShaderDataTypeSize(ShaderDataType type)
-	{
-		switch (type)
-		{
+	static uint32_t shaderDataTypeSize(ShaderDataType type) {
+		switch (type) {
 			case ShaderDataType::Float:    return 4;
 			case ShaderDataType::Float2:   return 4 * 2;
 			case ShaderDataType::Float3:   return 4 * 3;
@@ -28,25 +23,21 @@ namespace C78E {
 		return 0;
 	}
 
-	struct BufferElement
-	{
-		std::string Name;
-		ShaderDataType Type;
-		uint32_t Size;
-		size_t Offset;
-		bool Normalized;
+	struct BufferElement {
+		std::string name;
+		ShaderDataType type;
+		uint32_t size;
+		size_t offset;
+		bool normalized;
 
 		BufferElement() = default;
-
 		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
-			: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)
-		{
-		}
+			: name(name), type(type), size(shaderDataTypeSize(type)), offset(0), normalized(normalized)
+		{ }
+		~BufferElement() = default;
 
-		uint32_t GetComponentCount() const
-		{
-			switch (Type)
-			{
+		uint32_t getComponentCount() const {
+			switch (type) {
 				case ShaderDataType::Float:   return 1;
 				case ShaderDataType::Float2:  return 2;
 				case ShaderDataType::Float3:  return 3;
@@ -59,40 +50,33 @@ namespace C78E {
 				case ShaderDataType::Int4:    return 4;
 				case ShaderDataType::Bool:    return 1;
 			}
-
 			C78_CORE_ASSERT(false, "Unknown ShaderDataType!");
 			return 0;
 		}
 	};
 
-	class BufferLayout
-	{
+	class BufferLayout {
 	public:
-		BufferLayout() {}
-
+		BufferLayout() = default;
 		BufferLayout(std::initializer_list<BufferElement> elements)
 			: m_Elements(elements)
-		{
-			CalculateOffsetsAndStride();
-		}
+		{ calculateOffsetsAndStride(); }
 
-		uint32_t GetStride() const { return m_Stride; }
-		const std::vector<BufferElement>& GetElements() const { return m_Elements; }
+		uint32_t getStride() const { return m_Stride; }
+		const std::vector<BufferElement>& getElements() const { return m_Elements; }
 
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
 		std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
 		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
 	private:
-		void CalculateOffsetsAndStride()
-		{
+		void calculateOffsetsAndStride() {
 			size_t offset = 0;
 			m_Stride = 0;
-			for (auto& element : m_Elements)
-			{
-				element.Offset = offset;
-				offset += element.Size;
-				m_Stride += element.Size;
+			for (auto& element : m_Elements) {
+				element.offset = offset;
+				offset += element.size;
+				m_Stride += element.size;
 			}
 		}
 	private:
@@ -100,35 +84,32 @@ namespace C78E {
 		uint32_t m_Stride = 0;
 	};
 
-	class VertexBuffer
-	{
+	class VertexBuffer {
 	public:
 		virtual ~VertexBuffer() = default;
 
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
+		virtual void bind() const = 0;
+		virtual void unbind() const = 0;
 
-		virtual void SetData(const void* data, uint32_t size) = 0;
+		virtual void setData(const void* data, uint32_t size) = 0;
 
-		virtual const BufferLayout& GetLayout() const = 0;
-		virtual void SetLayout(const BufferLayout& layout) = 0;
+		virtual const BufferLayout& getLayout() const = 0;
+		virtual void setLayout(const BufferLayout& layout) = 0;
 
-		static Ref<VertexBuffer> Create(uint32_t size);
-		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> create(uint32_t size);
+		static Ref<VertexBuffer> create(float* vertices, uint32_t size);
 	};
 
-	// Currently C78E only supports 32-bit index buffers
-	class IndexBuffer
-	{
+	class IndexBuffer {
 	public:
 		virtual ~IndexBuffer() = default;
 
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
+		virtual void bind() const = 0;
+		virtual void unbind() const = 0;
 
-		virtual uint32_t GetCount() const = 0;
+		virtual uint32_t getCount() const = 0;
 
-		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> create(uint32_t* indices, uint32_t count);
 	};
 
 }

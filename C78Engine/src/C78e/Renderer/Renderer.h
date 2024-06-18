@@ -39,7 +39,6 @@ namespace C78E {
 		static void setRenderMode(RenderMode mode) { s_RenderMode = mode; }
 		static RenderMode getRenderMode() { return s_RenderMode; }
 
-		static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
 	private:
 		struct DisplayAssets {
 			bool init = false;

@@ -1,9 +1,5 @@
-#include "vulkanDevice.h"
-
-#include <cstring>
-#include <iostream>
-#include <set>
-#include <unordered_set>
+#include "C78ePCH.h"
+#include "VulkanDevice.h"
 
 namespace C78e {
 
