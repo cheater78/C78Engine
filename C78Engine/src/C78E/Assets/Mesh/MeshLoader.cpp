@@ -6,7 +6,8 @@
 namespace C78E {
 
 	Ref<Mesh> MeshLoader::importMesh(AssetHandle handle, const Asset::AssetMeta& meta) {
-		return loadMesh(Project::getActiveAssetDirectory() / meta.fileSource);
+		//return loadMesh(Project::getActiveAssetDirectory() / meta.fileSource);
+		return Ref<Mesh>();
 	}
 
 	Ref<Mesh> MeshLoader::loadMesh(const FilePath& path) {

@@ -4,27 +4,23 @@
 
 namespace C78E {
 
-	class Timer
-	{
+	class Timer {
 	public:
-		Timer()
-		{
+		Timer() {
 			reset();
 		}
+		~Timer() = default;
 
-		void reset()
-		{
+		void reset() {
 			m_Start = std::chrono::high_resolution_clock::now();
 		}
 
-		float elapsed()
-		{
+		float elapsedSeconds() {
 			return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f * 0.001f * 0.001f;
 		}
 
-		float elapsedMillis()
-		{
-			return elapsed() * 1000.0f;
+		float elapsedMillis() {
+			return elapsedSeconds() * 1000.0f;
 		}
 
 	private:

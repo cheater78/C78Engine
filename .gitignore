@@ -401,6 +401,7 @@ FodyWeavers.xsd
 # Directories
 bin/
 bin-int/
+C78E-cppcheck-build-dir/
 
 C78Editor/assets
 C78Project/assets

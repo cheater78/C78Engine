@@ -17,7 +17,7 @@ namespace C78E {
 		m_Window = Window::create(windowProperties);
 		m_Window->setEventCallback(BIND_CALLBACK_FN(Application::onEvent));
 
-		m_ImGuiLayer = createRef<ImGuiLayer>();
+		m_ImGuiLayer = createRef<GUI::ImGuiLayer>();
 
 		pushOverlay(m_ImGuiLayer);
 		pushOverlay(m_Console);
@@ -27,7 +27,7 @@ namespace C78E {
 
 	void Application::run() {
 		while (m_Running) {
-			Timestep delta = m_RunTime->elapsed();
+			Timestep delta = m_RunTime->elapsedSeconds();
 			m_RunTime->reset();
 
 			for (Ref<Layer> layer : m_LayerStack)

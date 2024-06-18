@@ -9,6 +9,7 @@ namespace C78E {
 		std::string title;
 		uint32_t width;
 		uint32_t height;
+		//TODO: vsync
 
 		WindowProps(const std::string& title = "C78Engine Window",
 			        uint32_t width = 1920,

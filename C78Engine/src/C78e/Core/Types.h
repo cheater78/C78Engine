@@ -1,27 +1,37 @@
 #pragma once
 #include "C78EPCH.h"
 
+#include "Primitives.h"
+
 namespace C78E {
 
 	struct Vertex {
 	public:
-		glm::vec3 Position;
-		glm::vec4 Color;
-		glm::vec3 Normal;
-		glm::vec2 TexCoord;
-		float TexIndex = 0.f;
+		glm::vec3 position;
+		glm::vec4 color;
+		glm::vec3 normal;
+		glm::vec2 texCoord;
+		float texIndex = 0.f;
 
 		Vertex() = default;
 		Vertex(glm::vec3 position, glm::vec4 color, glm::vec3 normal, glm::vec2 texCoord, float texIndex)
-			: Position(position), Color(color), Normal(normal), TexCoord(texCoord), TexIndex(texIndex)
+			: position(position), color(color), normal(normal), texCoord(texCoord), texIndex(texIndex)
 		{}
 		Vertex(const Vertex& other) = default;
 		~Vertex() {}
 
 		bool operator==(const Vertex& other) const {
-			return Position == other.Position && Color == other.Color && Normal == other.Normal && TexCoord == other.TexCoord && TexIndex == other.TexIndex;
+			return position == other.position && color == other.color && normal == other.normal && texCoord == other.texCoord && texIndex == other.texIndex;
+		}
+
+		inline operator Primitive::Vertex() {
+			return Primitive::Vertex{position, normal};
 		}
 	};
+
+	
+
+
 
 	struct AmbientLight {
 		glm::vec4 color{ 1.f, 1.f, 1.f, .0f };

@@ -28,6 +28,6 @@ namespace C78Editor {
 
 // Register App in Engine
 C78E::Application* C78E::createApplication() {
-	C78Editor::WindowConfig::load();
+	C78Editor::WindowConfig::load(); //TODO: load real Window settings
 	return new C78Editor::C78Editor();
 }

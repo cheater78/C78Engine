@@ -1,23 +1,23 @@
 #include "C78ePCH.h"
 #include "Project.h"
 #include "ProjectSerializer.h"
+#include <C78E/Assets/Scene/SceneSerializer.h>
+#include <C78E/Assets/Scene/Scene.h>
 
 namespace C78E {
 
-	FilePath Project::getAssetAbsolutePath(const FilePath& path) {
-		return getAssetDirectory() / path;
-	}
+	Ref<Project> Project::create(ProjectConfig config, Ref<AssetManager> assetManager) {
+		Ref<Project> project = createRef<Project>();
+		project->m_Config = config;
+		project->m_AssetManager = (assetManager) ? assetManager : createRef<EditorAssetManager>();
 
-	Ref<Project> Project::create(ProjectConfig config) {
-		s_ActiveProject = createRef<Project>();
-		s_ActiveProject->m_Config = config;
+		C78_CORE_ASSERT(!project->m_Config.assetDirectory.empty(), "Project::create: AssetDirectory is empty!");
+		//TODO: C78_CORE_ASSERT(!m_Config.scriptModulePath.empty(), "Project::create: ScriptModulePath is empty!");
+		FileSystem::createDirectoryIfNotPresent(project->m_Config.assetDirectory);
 
-		s_ActiveProject->m_AssetManager = createRef<EditorAssetManager>();
-
-		if (std::filesystem::exists(config.assetDirectory) && std::filesystem::exists(config.assetDirectory / config.assetRegistryPath))
-			s_ActiveProject->getEditorAssetManager()->deserializeAssetRegistry();
-
-		return s_ActiveProject;
+		if (FileSystem::exists(project->getAssetRegistryPath())) //AssetRegistry alr exists -> load it
+			project->getEditorAssetManager()->importAssetRegistry(project->getAssetRegistryPath());
+		return project;
 	}
 
 	Ref<Project> Project::load(const FilePath& path) {
@@ -26,27 +26,55 @@ namespace C78E {
 		ProjectSerializer serializer(project);
 		if (serializer.deserializeProject(path)) {
 			project->m_ProjectDirectory = path.parent_path();
-			s_ActiveProject = project;
 			Ref<EditorAssetManager> editorAssetManager = createRef<EditorAssetManager>();
-			s_ActiveProject->m_AssetManager = editorAssetManager;
-			editorAssetManager->deserializeAssetRegistry();
-			return s_ActiveProject;
+			project->m_AssetManager = editorAssetManager;
+			editorAssetManager->importAssetRegistry(path);
+
+			//Loading Assets
+			AssetRegistry assetRegistry = editorAssetManager->getAssetRegistry();
+
+			for (C78E::AssetRegistryEntry entry : assetRegistry) {
+				AssetHandle handle = entry.first;
+				Asset::AssetMeta meta = entry.second;
+
+				C78_CORE_INFO("Asset({}): '{}' from {}", Asset::assetTypeToString(meta.type), meta.name, meta.fileSource);
+				
+				if (editorAssetManager->isValid(handle) && !editorAssetManager->isLoaded(handle) && meta.type != None)
+					editorAssetManager->getAsset(handle);
+
+			}
+
+			return project;
 		}
 		return nullptr;
 	}
 
-	bool Project::saveActive(const FilePath& path) {
-		ProjectSerializer serializer(s_ActiveProject);
-		if (serializer.serializeProject(path)) {
-			s_ActiveProject->m_ProjectDirectory = path.parent_path();
+	bool Project::save(Ref<Project> project, const FilePath& projectFile) {
+		FileSystem::createDirectoryIfNotPresent(projectFile.parent_path());
+		ProjectSerializer serializer(project);
+		if (serializer.serializeProject(projectFile)) {
+			FileSystem::createDirectoryIfNotPresent(project->getAssetDirectory());
+			FileSystem::createDirectoryIfNotPresent(project->getAssetRegistryPath().parent_path());
 
-			if (!std::filesystem::exists(s_ActiveProject->m_Config.assetDirectory) || !std::filesystem::is_directory(s_ActiveProject->m_Config.assetDirectory))
-				std::filesystem::create_directories(s_ActiveProject->m_Config.assetDirectory);
+			project->m_ProjectDirectory = projectFile.parent_path();
+			project->getEditorAssetManager()->exportAssetRegistry(projectFile);
 
-			if (!std::filesystem::exists(getActiveAssetRegistryPath().parent_path()) || !std::filesystem::is_directory(getActiveAssetRegistryPath().parent_path()))
-				std::filesystem::create_directories(getActiveAssetRegistryPath().parent_path());
+			//Saving Assets
+			Ref<C78E::EditorAssetManager> assetManager = project->getEditorAssetManager();
+			AssetRegistry assetRegistry = assetManager->getAssetRegistry();
 
-			s_ActiveProject->getEditorAssetManager()->serializeAssetRegistry();
+			for (C78E::AssetRegistryEntry entry : assetRegistry) {
+				AssetHandle handle = entry.first;
+				Asset::AssetMeta meta = entry.second;
+
+				// Scenes
+				if (meta.type == C78E::Asset::AssetType::Scene) {
+					C78_CORE_INFO("Saving Scene: '{}' to {}", meta.name, meta.fileSource);
+					SceneSerializer serializer(std::static_pointer_cast<C78E::Scene>(assetManager->getAsset(handle)), meta);
+					serializer.serialize();
+				}
+
+			}
 
 			return true;
 		}

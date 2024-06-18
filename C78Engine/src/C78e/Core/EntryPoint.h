@@ -17,6 +17,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
+// C78_PLATFORM_WINDOWS
 #elif C78_PLATFORM_LINUX
 
 extern C78E::Application* C78E::createApplication();
@@ -31,5 +32,5 @@ int main(int argc, char** argv) {
 	delete app;
 	return 0;
 }
-
-#endif // C78_PLATFORM_WINDOWS
+// C78_PLATFORM_LINUX
+#endif

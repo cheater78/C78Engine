@@ -1,8 +1,10 @@
 #include "C78ePCH.h"
 #include "TextureLoader.h"
 
-#include "C78E/Core/Buffer.h"
+#include <C78E/Core/Buffer.h>
 #include <C78E/Project/Project.h>
+
+#include <C78E/Renderer/RendererAPI.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -10,18 +12,27 @@
 namespace C78E {
 
 	Ref<Texture2D> TextureLoader::importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta) {
-		return loadTexture2D(Project::getActiveAssetDirectory() / meta.fileSource);
+		return loadImageFile(meta.fileSource);
 	}
 
-	Ref<Texture2D> TextureLoader::loadTexture2D(const FilePath& path) {
+	Ref<Texture2D> TextureLoader::loadImageFile(const FilePath& path) {
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(0);
 		Buffer data;
 
+		if (C78E::RendererAPI::getAPI() == C78E::RendererAPI::API::OpenGL) {
+			stbi_set_flip_vertically_on_load(0);
+		} else if (C78E::RendererAPI::getAPI() == C78E::RendererAPI::API::Vulkan) {
+			C78_CORE_WARN("TextureLoader::loadImageFile: flipping Image for Vulkan, check me!");
+			stbi_set_flip_vertically_on_load(1);
+		}
+		
+
+		// TODO: rework Format handling -> 3/4 channels become 4ch -> 4Byte aligned
 		{
 			std::string pathStr = path.string();
 			data.data = stbi_load(pathStr.c_str(), &width, &height, &channels, 4);
-			channels = 4;
+			C78_CORE_WARN("TextureLoader::loadImageFile: not setting 4ch, but req is 4, check me!");
+			//channels = 4;
 		}
 
 		if (data.data == nullptr) {
@@ -29,7 +40,7 @@ namespace C78E {
 			return nullptr;
 		}
 
-		// TODO: rework Format handling
+		
 		data.size = width * height * channels;
 
 		C78E::Texture2D::TextureSpecification spec;

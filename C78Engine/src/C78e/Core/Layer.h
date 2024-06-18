@@ -6,8 +6,7 @@
 
 namespace C78E {
 
-	class C78_API Layer
-	{
+	class Layer {
 	public:
 		Layer(const std::string& debugName = "Layer");
 		virtual ~Layer() = default;

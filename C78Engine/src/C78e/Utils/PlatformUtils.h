@@ -4,7 +4,7 @@
 
 namespace C78E {
 
-	class FileDialogs {
+	class FileDialogs { //TODO: remove
 	public:
 		typedef uint32_t Flags;
 		enum Flag : uint32_t { // don't change -> compatible with win::GetOpenFileNameA

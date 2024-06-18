@@ -6,6 +6,8 @@ namespace C78E {
 	namespace GenericShape {
 		static const glm::vec4 WHITE = glm::vec4(1.f, 1.f, 1.f, 1.f);
 
+		/*
+
 		class Line {
 		public:
 			static std::vector<Vertex> getVertexData(glm::vec3 pos1, glm::vec3 pos2, glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f)) {
@@ -52,10 +54,8 @@ namespace C78E {
 		public:
 			static std::vector<Vertex> getVertexData(glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f), uint32_t texID = 0) {
 				return std::vector<Vertex>{
-					/*
-					LFR
-					TBb
-					*/
+					//LFR
+					//TBb
 
 					//Front
 					Vertex(glm::vec3{ -.5f, -.5f, -.5f }, color, glm::vec3{ 0.f, 0.f, -1.f }, glm::vec2{ 0.f, 0.f }, static_cast<float>(texID)),
@@ -103,7 +103,7 @@ namespace C78E {
 		private:
 		};
 
-
+		*/
 
 		class CubeMap {
 		public:

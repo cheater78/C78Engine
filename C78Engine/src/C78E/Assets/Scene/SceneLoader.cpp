@@ -2,24 +2,32 @@
 #include "SceneLoader.h"
 
 #include <C78E/Project/Project.h>
-#include <C78E/Scene/SceneSerializer.h>
+#include <C78E/Assets/Scene/SceneSerializer.h>
 
 namespace C78E {
 
 	Ref<Scene> SceneLoader::importScene(AssetHandle handle, const Asset::AssetMeta& meta) {
-		return loadScene(Project::getActiveAssetDirectory() / meta.fileSource);
+		Ref<Scene> scene = createRef<Scene>();
+		SceneSerializer serializer(scene, meta);
+		C78_CORE_ERROR("SceneLoader::importScene: DISABLED!");
+		//serializer.deserialize(Project::getActiveAssetDirectory() / meta.fileSource);
+		return scene;
 	}
 
 	Ref<Scene> SceneLoader::loadScene(const FilePath& path) {
+
+		// No such thing?!
+
 		Ref<Scene> scene = createRef<Scene>();
-		SceneSerializer serializer(scene);
+		Asset::AssetMeta meta;
+		SceneSerializer serializer(scene, meta);
 		serializer.deserialize(path);
 		return scene;
 	}
 
-	void SceneLoader::SaveScene(Ref<Scene> scene, const FilePath& path) {
-		SceneSerializer serializer(scene);
-		serializer.serialize(Project::getActiveAssetDirectory() / path);
+	void SceneLoader::saveScene(Ref<Scene> scene, const Asset::AssetMeta& meta) {
+		SceneSerializer serializer(scene, meta);
+		serializer.serialize();
 	}
 
 }

@@ -12,12 +12,10 @@ namespace C78E {
 
 	UUID::UUID()
 		: m_UUID(s_UniformDistribution(s_Engine))
-	{
-	}
+	{ }
 
 	UUID::UUID(uint64_t uuid)
 		: m_UUID(uuid)
-	{
-	}
+	{ }
 
 }

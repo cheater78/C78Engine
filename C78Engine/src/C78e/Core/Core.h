@@ -1,36 +1,16 @@
 #pragma once
 
 #ifdef C78_PLATFORM_WINDOWS
-	#ifdef C78_DYN_LINK
-		#ifdef C78_BUILD_DLL
-			#define C78_API __declspec(dllexport)
-		#else
-			#define C78_API __declspec(dllimport)
-		#endif // C78_BUILD_DLL
-	#else
-		#define C78_API
-	#endif
-
 	#define C78_DEBUGBREAK() __debugbreak()
-
+// C78_PLATFORM_WINDOWS
 #elif C78_PLATFORM_LINUX
-	#ifdef C78_DYN_LINK
-		#ifdef C78_BUILD_DLL
-			#define C78_API __attribute__((visibility("default")))
-		#else
-			#define C78_API __declspec(dllimport)
-		#endif // C78_BUILD_DLL
-	#else
-		#define C78_API
-	#endif
- 
 	#include <stdio.h>
 	#include <signal.h>
 	#define C78_DEBUGBREAK() raise(SIGTRAP)
-
+// C78_PLATFORM_LINUX
 #else
 	#error NotSupportedPlatform!
-#endif // C78_PLATFORM_WINDOWS
+#endif // C78_PLATFORM_*
 
 
 // Bit Map

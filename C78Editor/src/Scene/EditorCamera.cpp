@@ -26,7 +26,7 @@ namespace C78Editor {
         return sceneCameraEntity;
     }
 
-    void EditorCamera::update(C78E::Entity camera, C78E::Timestep delta) {
+    void EditorCamera::update(C78E::Entity camera, C78E::Timestep dt) {
         auto& cameraTransform = camera.getComponent<C78E::TransformComponent>();
         
         auto& pos = cameraTransform.Translation;
@@ -64,20 +64,20 @@ namespace C78Editor {
             }
 
             //TODO : C78E Input -> no hard code
-            rotChg =    glm::vec3(0.f, C78E::Input::getMouseX() * delta * hMouseSense, 0.f)
-                      + glm::vec3(C78E::Input::getMouseY() * delta * vMouseSense, 0.f, 0.f);
+            rotChg =    glm::vec3(0.f, C78E::Input::getMouseX() * dt.getSeconds() * hMouseSense, 0.f)
+                      + glm::vec3(C78E::Input::getMouseY() * dt.getSeconds() * vMouseSense, 0.f, 0.f);
             C78E::Input::setMousePosition(0, 0);
             
             // Limit to look straight up or down, no upside down view
             if ((rot + rotChg).x < -glm::half_pi<float>()) rotChg.x = -glm::half_pi<float>() - rot.x;
             if ((rot + rotChg).x > +glm::half_pi<float>()) rotChg.x = +glm::half_pi<float>() - rot.x;
 
-            if (C78E::Input::isKeyPressed(C78E::Key::W)) { posChg += dirForward * (float)delta * hMoveSpeed; }
-            if (C78E::Input::isKeyPressed(C78E::Key::S)) { posChg -= dirForward * (float)delta * hMoveSpeed; }
-            if (C78E::Input::isKeyPressed(C78E::Key::A)) { posChg += dirRight * (float)delta * hMoveSpeed; }
-            if (C78E::Input::isKeyPressed(C78E::Key::D)) { posChg -= dirRight * (float)delta * hMoveSpeed; }
-            if (C78E::Input::isKeyPressed(C78E::Key::Space)) { posChg += dirUp * (float)delta * vMoveSpeed; }
-            if (C78E::Input::isKeyPressed(C78E::Key::LeftControl)) { posChg -= dirUp * (float)delta * vMoveSpeed; }
+            if (C78E::Input::isKeyPressed(C78E::Key::W)) { posChg += dirForward * (float)dt.getSeconds() * hMoveSpeed; }
+            if (C78E::Input::isKeyPressed(C78E::Key::S)) { posChg -= dirForward * (float)dt.getSeconds() * hMoveSpeed; }
+            if (C78E::Input::isKeyPressed(C78E::Key::A)) { posChg += dirRight * (float)dt.getSeconds() * hMoveSpeed; }
+            if (C78E::Input::isKeyPressed(C78E::Key::D)) { posChg -= dirRight * (float)dt.getSeconds() * hMoveSpeed; }
+            if (C78E::Input::isKeyPressed(C78E::Key::Space)) { posChg += dirUp * (float)dt.getSeconds() * vMoveSpeed; }
+            if (C78E::Input::isKeyPressed(C78E::Key::LeftControl)) { posChg -= dirUp * (float)dt.getSeconds() * vMoveSpeed; }
 
         }
 

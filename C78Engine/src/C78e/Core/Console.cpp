@@ -10,11 +10,11 @@
 
 namespace C78E {
 
-	Console::Console(std::string consoleName) : Layer(consoleName), m_Title(consoleName) {
-	}
+	Console::Console(std::string consoleName) 
+		: Layer(consoleName), m_Title(consoleName), m_ToggleVisibleKeyCombo{ {Key::RightAlt, Key::F3} } 
+	{ }
 
-	Console::~Console() {
-	}
+	Console::~Console() { }
 
 	// Portable helpers
 	static int   Stricmp(const char* s1, const char* s2) { int d; while ((d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; } return d; }
@@ -160,7 +160,7 @@ namespace C78E {
 	}
 
 	bool Console::onToggleConsole(KeyPressedEvent event) {
-		if (event.getKeyCode() == m_ToggleVisibleKey) {
+		if (event == m_ToggleVisibleKeyCombo) {
 			m_Visible = !m_Visible;
 			return true;
 		}

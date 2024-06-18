@@ -1,16 +1,17 @@
 #include "C78EPCH.h"
-#include "Platform/Windows/WindowsWindow.h"
+#ifdef C78_PLATFORM_WINDOWS
+#include "WindowsWindow.h"
 
 #include <C78E/Renderer/Renderer.h>
 
-#include "C78E/Events/ApplicationEvent.h"
-#include "C78E/Events/MouseEvent.h"
-#include "C78E/Events/KeyEvent.h"
+#include <C78E/Events/ApplicationEvent.h>
+#include <C78E/Events/MouseEvent.h>
+#include <C78E/Events/KeyEvent.h>
 
 #include <C78E/Core/Log.h>
 
 namespace C78E {
-	
+
 	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description) {
@@ -40,9 +41,9 @@ namespace C78E {
 		}
 
 		{
-		#if defined(C78_DEBUG)
+			#if defined(C78_DEBUG)
 			if (Renderer::getAPI() == RendererAPI::API::OpenGL) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-		#endif
+			#endif
 			m_Window = glfwCreateWindow((int)props.width, (int)props.height, m_Data.title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
@@ -62,68 +63,68 @@ namespace C78E {
 
 			WindowResizeEvent event(width, height);
 			data.eventCallback(event);
-		});
+			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowCloseEvent event;
 			data.eventCallback(event);
-		});
+			});
 
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
+		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			switch (action) {
-				case GLFW_PRESS: {
-					KeyPressedEvent event(key, 0);
-					data.eventCallback(event);
-					break;
-				}
-				case GLFW_RELEASE: {
-					KeyReleasedEvent event(key);
-					data.eventCallback(event);
-					break;
-				}
-				case GLFW_REPEAT: {
-					KeyPressedEvent event(key, true);
-					data.eventCallback(event);
-					break;
-				}
+			case GLFW_PRESS: {
+				KeyPressedEvent event(key, 0);
+				data.eventCallback(event);
+				break;
 			}
-		});
+			case GLFW_RELEASE: {
+				KeyReleasedEvent event(key);
+				data.eventCallback(event);
+				break;
+			}
+			case GLFW_REPEAT: {
+				KeyPressedEvent event(key, true);
+				data.eventCallback(event);
+				break;
+			}
+			}
+			});
 
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode){
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			KeyTypedEvent event(keycode);
 			data.eventCallback(event);
-		});
+			});
 
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods){
+		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			switch (action) {
-				case GLFW_PRESS: {
-					MouseButtonPressedEvent event(button);
-					data.eventCallback(event);
-					break;
-				}
-				case GLFW_RELEASE: {
-					MouseButtonReleasedEvent event(button);
-					data.eventCallback(event);
-					break;
-				}
+			case GLFW_PRESS: {
+				MouseButtonPressedEvent event(button);
+				data.eventCallback(event);
+				break;
 			}
-		});
+			case GLFW_RELEASE: {
+				MouseButtonReleasedEvent event(button);
+				data.eventCallback(event);
+				break;
+			}
+			}
+			});
 
-		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset){
+		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data.eventCallback(event);
-		});
+			});
 
-		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos){
+		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.eventCallback(event);
-		});
+			});
 	}
 
 	void WindowsWindow::shutdown() {
@@ -150,7 +151,7 @@ namespace C78E {
 	bool WindowsWindow::isVSync() const { return m_Data.vSync; }
 
 	MouseMode WindowsWindow::getMouseMode() { return m_MouseMode; }
-	
+
 	void WindowsWindow::setMouseMode(MouseMode mouseMode) {
 		m_MouseMode = mouseMode;
 		int mode = GLFW_CURSOR_NORMAL;
@@ -164,3 +165,6 @@ namespace C78E {
 	}
 
 }
+
+
+#endif // C78_PLATFORM_WINDOWS

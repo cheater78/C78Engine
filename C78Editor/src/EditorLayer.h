@@ -11,51 +11,53 @@
 
 
 
-#include "UI/ProjectManager.h"
-#include <C78E/GUI/FileSystem/core/FileSearcher.h>
+#include "GUI/ProjectManager/ProjectManager.h"
+#include <C78E/Core/FileSystem/FileSearcher.h>
 
 namespace C78Editor {
+
+    /*
+    * UI System
+    * Asset Loader Importer..
+    * 
+    * EnttInspector
+    */
 
     class EditorLayer : public C78E::Layer {
     public:
 
-        EditorLayer(C78E::Window& window) : Layer("EditorLayer"), m_Window(window)
+        EditorLayer(C78E::Window& window) : Layer("EditorLayer"),
+            m_Window(window),
+            m_ProjectManager(C78E::createRef<::C78Editor::GUI::ProjectManager>()),
+            m_SceneManager(C78E::createRef<C78E::SceneManager>(m_ProjectManager->getManager()))
         { }
 
         void onAttach() {
-
-            ProjectManager::init();
-
-            //Create Scene and Camera for the Editor
-            m_EditorScene = C78E::createRef<C78E::Scene>();
-            m_EditorCameraEntity = m_EditorScene->createEntity("EditorCamera;");
-
-            
-            EntityInspector::init();
-            Viewport::init();
-
         }
 
         void onDetach() {
-            ProjectManager::onProjectSave();
-            ProjectManager::onProjectClose();
+            if (m_ProjectManager->getManager()->hasActiveProject()) {
+                C78_EDITOR_ASSERT(m_ProjectManager->getManager()->hasActiveProjectFile(), "EditorLayer::onDetach: no ActiveProjectFile in ProjectManager!");
+                m_ProjectManager->getManager()->saveProject(); //TODO: fails if no m_ActiveProjectFile in ProjectManager
+            }
         }
 
-        void onUpdate(C78E::Timestep delta) override {
-            m_LastFrameTime = delta;
+        void onUpdate(C78E::Timestep dt) override {
+            m_LastFrameTime = dt;
 
-            ProjectManager::onUpdate();
+            m_ProjectManager->onUpdate(dt);
             
+            /*
             m_EditorScene->onViewportResize(m_Window.getWidth(), m_Window.getHeight());
             if (m_MouseCapture) {
                 m_Window.setMouseMode(C78E::MouseMode::DISABLED);
-                EditorCamera::update(m_EditorCameraEntity, delta);
+                EditorCamera::update(, delta);
             }
             else m_Window.setMouseMode(C78E::MouseMode::NORMAL);
+            */
+            //Viewport::onUpdate(nullptr);
 
 
-
-            Viewport::onUpdate(nullptr);
         }
 
         void onEvent(C78E::Event& e) override {
@@ -65,6 +67,8 @@ namespace C78Editor {
         }
 
         bool onKeyPressed(C78E::KeyPressedEvent e) {
+            //TODO: HotkeyManager
+            //if (m_HotkeyManager->onKeyPressedEvent(e)) return true; //Hotkeys
             return false;
         }
 
@@ -77,20 +81,92 @@ namespace C78Editor {
             if (!m_active) return;
             ImGui::DockSpaceOverViewport(); // For Editor -> one big root DockingSpace
 
-            if (ProjectManager::onImGuiRender()) return;
+            { // Menu Bar
+                ImGui::BeginMainMenuBar();
 
+                m_ProjectManager->onImGuiMainMenuBar();
+
+                ImGui::EndMainMenuBar();
+            }
 
             {
-                ImGui::Begin("FrameInfo");
-                ImGui::Text(("FPS: " + std::to_string((uint32_t)(1 / m_LastFrameTime))).c_str());
-                ImGui::Text("FrameTime: %.1f ms", m_LastFrameTime * 1000);
-                ImGui::Text("FrameTime: %.0f us", m_LastFrameTime * 1000000);
+                m_ProjectManager->onImGuiRender();
+                /*
+                ImGui::Begin("ProjectManager");
+                if (m_ProjectManager->hasActiveProject()) {
+                    ImGui::Text(m_ProjectManager->getActiveProject()->getConfig().name.c_str());
 
+                    if (ImGui::Button("Reload Project")) m_ProjectManager->reloadProject();
+                    if (ImGui::Button("Save Project"))
+                        if(m_ProjectManager->hasActiveProjectFile()) {
+                            m_ProjectManager->saveProject();
+                        } else {
+                            //TODO:
+                            //m_ProjectManager->saveProject(projectFile);
+                        }
+                    if (ImGui::Button("Close Project"))
+                        if (m_ProjectManager->hasActiveProject())
+                            m_ProjectManager->closeProject();
+                }
+                else {
+                    if (ImGui::Button("Create Project")); // -> Create Dialog
+                    if (ImGui::Button("Open Project")); // -> Open Dialog
+
+                    // Editor Config += last Projects(by projectFiles)
+                }
+
+                ImGui::End();
+                */
+            }
+
+            if(m_ProjectManager->getManager()->hasActiveProject()) {
+                ImGui::Begin("SceneManager");
+
+                C78E::Ref<C78E::Project> project = m_ProjectManager->getManager()->getActiveProject();
+                C78E::Ref<C78E::EditorAssetManager> assetManager = project->getEditorAssetManager();
+                C78E::AssetRegistry assetRegistry = assetManager->getAssetRegistry();
+
+                if (m_SceneManager->hasActiveScene()) {
+                    C78E::SceneHandle sceneHandle = m_SceneManager->getActiveSceneHandle();
+
+                    ImGui::Text(("Current Scene: " + assetManager->getMeta(sceneHandle).name).c_str());
+                    if (ImGui::Button("Save")) m_SceneManager->saveScene();
+                }
+
+                static C78E::GUI::TextInput createSceneTI("Create Scene", "UnnamedScene");
+                static C78E::GUI::TextButton createSceneTB("New Scene:",
+                    [this]() {
+                        m_SceneManager->createScene(createSceneTI.getContent());
+                    }
+                );
+
+                createSceneTI.show();
+                C78E::GUI::SameLine();
+                createSceneTB.show();
+
+                for (C78E::AssetRegistryEntry entry : assetRegistry) {
+                    C78E::AssetHandle handle = entry.first;
+                    C78E::Asset::AssetMeta meta = entry.second;
+
+                    if (meta.type == C78E::Asset::AssetType::Scene) {
+                        std::string infoLine = meta.name + " (" + std::to_string(handle) + ")";
+                        if (ImGui::Button(infoLine.c_str())) {
+                            m_SceneManager->setActiveSceneHandle(handle);
+                        }
+                    }
+
+                }
                 ImGui::End();
             }
 
-            EntityInspector::onImGuiRender(m_EditorScene);
-            Viewport::onImGuiRender(m_MouseCapture);
+            {
+                ImGui::Begin("FrameInfo");
+                ImGui::Text(("FPS: " + std::to_string((uint32_t)(1 / m_LastFrameTime.getSeconds()))).c_str());
+                ImGui::Text("FrameTime: %.1f ms", m_LastFrameTime.getMilliSeconds());
+                ImGui::Text("FrameTime: %.0f us", m_LastFrameTime.getMilliSeconds() * 1000);
+
+                ImGui::End();
+            }
         }
 
 
@@ -101,9 +177,12 @@ namespace C78Editor {
         C78E::Timestep m_LastFrameTime = 0;
         bool m_MouseCapture = false;
 
+        C78E::Ref<C78E::AssetManager> m_EditorAssetManager; //TODO: for Editor GÙI assets -> Functional: EAM and loaf files -> Goal: RuntimeManager with AssetPack
 
-        C78E::Ref<C78E::Scene> m_EditorScene;
-        C78E::Entity m_EditorCameraEntity;
+        C78E::Ref<::C78Editor::GUI::ProjectManager> m_ProjectManager = nullptr;
+        C78E::Ref<C78E::SceneManager> m_SceneManager;
+
+        //C78E::Ref<C78E::GUI::HotkeyManager> m_HotkeyManager;
     };
 
 }

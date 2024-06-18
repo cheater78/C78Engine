@@ -7,12 +7,17 @@ namespace C78E {
 
 	class TextureLoader {
 	public:
-		// AssetMetadata filepath is relative to project asset directory
+		/*
+		* Imports the Texture specified in meta.fileSource
+		* returns a reference to the Texture
+		*/
 		static Ref<Texture2D> importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta);
 
-		// Reads file directly from filesystem
-		// (i.e. path has to be relative / absolute to working directory)
-		static Ref<Texture2D> loadTexture2D(const FilePath& path);
+		
+		//static AssetHandle loadTexture2D();
+
+	public:
+		static Ref<Texture2D> loadImageFile(const FilePath& path);
 	};
 
 

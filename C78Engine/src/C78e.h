@@ -6,11 +6,12 @@
 #include "C78E/Core/UUID.h"
 #include "C78E/Core/Types.h"
 #include "C78E/Core/Application.h"
+#include <C78E/Core/FileSystem/Extensions.h>
 
 
 // ImGui
 #include "C78E/Core/Layer.h"
-#include "C78E/ImGui/ImGuiLayer.h"
+#include "C78E/GUI/ImGui/ImGuiLayer.h"
 
 
 // User Input
@@ -32,31 +33,38 @@
 #include "C78E/Renderer/EditorCamera.h"
 #include "C78E/Renderer/OrthographicCamera.h"
 
+// Project
+#include <C78E/Project/Project.h>
+#include <C78E/Project/ProjectManager.h>
 
 // Assets
-#include <C78E/Project/Project.h>
-
 #include "C78E/Assets/AssetManager.h"
 
 
 #include "C78E/Assets/Texture/Image.h"
+#include "C78E/Assets/Texture/Texture.h"
 #include "C78E/Assets/Texture/TextureLoader.h"
 
-#include "C78E/Scene/Components.h"
-#include "C78E/Scene/Entity.h"
-#include "C78E/Scene/Scene.h"
-#include "C78E/Scene/ScriptableEntity.h"
-#include "C78E/Scene/SceneSerializer.h"
+#include "C78E/Assets/Scene/Components.h"
+#include "C78E/Assets/Scene/Entity.h"
+#include "C78E/Assets/Scene/Scene.h"
+#include "C78E/Assets/Scene/SceneManager.h"
+#include "C78E/Assets/Scene/SceneSerializer.h"
+#include "C78E/Assets/Scene/ScriptableEntity.h"
+
 #include "C78E/Renderer/GenericShape.h"
 
 //GUI
-#include <C78E/GUI/FileSystem/FileManager.h>
+#include <C78E/GUI/GUIUtils.h>
+#include <C78E/GUI/GUISystems.h>
+#include <C78E/GUI/GUIElements.h>
+#include <C78E/GUI/GUIExtensions.h>
+#include <C78E/GUI/FileManager/FileManager.h>
 
 
 // Utils
 #include <C78E/Utils/PlatformUtils.h>
 #include <C78E/Utils/yaml-cpp/YamlUtils.h>
-#include <C78E/GUI/Elements/ImGuiUtils.h>
 
 
 #ifdef C78E_ENTRYPOINT

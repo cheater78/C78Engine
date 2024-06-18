@@ -82,13 +82,13 @@ namespace C78E {
                     Vertex vertex;
                     uint32_t index = shapes[s].mesh.indices[index_offset + v].vertex_index;
 
-                    vertex.Position = {
+                    vertex.position = {
                         attrib.vertices[3 * size_t(index) + 0],
                         attrib.vertices[3 * size_t(index) + 1],
                         attrib.vertices[3 * size_t(index) + 2]
                     };
 
-                    vertex.Color = glm::vec4{
+                    vertex.color = glm::vec4{
                         attrib.colors[3 * size_t(idx.vertex_index) + 0],
                         attrib.colors[3 * size_t(idx.vertex_index) + 1],
                         attrib.colors[3 * size_t(idx.vertex_index) + 2],
@@ -96,19 +96,19 @@ namespace C78E {
                     };
 
                     // Check if `normal_index` is zero or positive. negative = no normal data
-                    vertex.Normal = (idx.normal_index >= 0) ? glm::vec3{
+                    vertex.normal = (idx.normal_index >= 0) ? glm::vec3{
                         attrib.normals[3 * size_t(idx.normal_index) + 0],
                         attrib.normals[3 * size_t(idx.normal_index) + 1],
                         attrib.normals[3 * size_t(idx.normal_index) + 2]
                     } : glm::vec3{ 0, 0, 0 };
 
                     // Check if `texcoord_index` is zero or positive. negative = no texcoord data
-                    vertex.TexCoord = (idx.texcoord_index >= 0) ? glm::vec2{
+                    vertex.texCoord = (idx.texcoord_index >= 0) ? glm::vec2{
                         attrib.texcoords[2 * size_t(idx.texcoord_index) + 0],
                         attrib.texcoords[2 * size_t(idx.texcoord_index) + 1]
                     } : glm::vec2{ 0, 0 };
 
-                    vertex.TexIndex = 0.f;
+                    vertex.texIndex = 0.f;
 
                     if (uniqueVertecies.count(vertex) <= 0) {
                         uniqueVertecies[vertex] = static_cast<uint32_t>(vertecies.size());

@@ -53,8 +53,8 @@ namespace C78E {
 				meshMeta.type = Asset::AssetType::Mesh;
 				meshMeta.fileSource = meta.fileSource;
 				meshMeta.name = wavefrontmodel->meshNames.at(meshID);
-
-				part.m_Mesh = Project::getActive()->getEditorAssetManager()->addAsset(meshMeta, mesh);
+				C78_CORE_ERROR("ModelLoader::loadWavefrontModel: DISABLED!");
+				//part.m_Mesh = Project::getActive()->getEditorAssetManager()->addAsset(meshMeta, mesh);
 			}
 
 			{
@@ -64,8 +64,8 @@ namespace C78E {
 				materialMeta.type = Asset::AssetType::Material;
 				materialMeta.fileSource = meta.fileSource;
 				materialMeta.name = wavefrontmodel->materialNames.at(materialID);
-
-				part.m_Material = Project::getActive()->getEditorAssetManager()->addAsset(materialMeta, material);
+				C78_CORE_ERROR("ModelLoader::loadWavefrontModel: DISABLED!");
+				//part.m_Material = Project::getActive()->getEditorAssetManager()->addAsset(materialMeta, material);
 			}
 
 			parts.push_back(part);

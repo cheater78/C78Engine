@@ -5,7 +5,6 @@ namespace C78E {
 
 	Layer::Layer(const std::string& debugName)
 		: m_DebugName(debugName)
-	{
-	}
+	{ }
 	
 }

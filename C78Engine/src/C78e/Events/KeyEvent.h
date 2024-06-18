@@ -3,6 +3,8 @@
 #include "C78E/Events/Event.h"
 #include "C78E/Core/KeyCodes.h"
 
+#include <C78E/Core/Input.h>
+
 namespace C78E {
 
 	class KeyEvent : public Event {
@@ -56,7 +58,7 @@ namespace C78E {
 	public:
 		KeyTypedEvent(const KeyCode keycode)
 			: KeyEvent(keycode)
-		{}
+		{ }
 
 		std::string toString() const override {
 			std::stringstream ss;
@@ -66,4 +68,5 @@ namespace C78E {
 
 		EVENT_CLASS_TYPE(KeyTyped)
 	};
+	
 }

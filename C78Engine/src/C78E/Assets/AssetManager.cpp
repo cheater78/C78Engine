@@ -1,38 +1,13 @@
 #include "C78ePCH.h"
 #include "AssetManager.h"
 
-#include "Asset/AssetLoader.h"
-#include <C78E/Project/Project.h>
+#include "Asset/AssetImporter.h"
 
 #include <C78E/Utils/yaml-cpp/YamlUtils.h>
 
 namespace C78E {
 
-	/**
-	* AssetManager
-	*/
-
-	
-
-	bool AssetManager::isValid(AssetHandle handle) {
-		return Project::getActive()->getAssetManager()->isValid(handle);
-	}
-
-	bool AssetManager::isLoaded(AssetHandle handle) {
-		return Project::getActive()->getAssetManager()->isLoaded(handle);
-	}
-
-	Asset::AssetType AssetManager::getType(AssetHandle handle) {
-		return Project::getActive()->getAssetManager()->getType(handle);
-	}
-
-	Ref<AssetManagerBase> AssetManager::getCurrentProjectsAssetManager() {
-		return Project::getActive()->getAssetManager();
-	}
-
-
-
-	/**
+	/*
 	* EditorAssetManager
 	*/
 
@@ -50,18 +25,24 @@ namespace C78E {
 		return m_AssetRegistry.at(handle).type;
 	}
 
-	void EditorAssetManager::loadAsset(const FilePath& filepath) {
-		AssetHandle handle; // generate new handle
-		Asset::AssetMeta metadata;
-		metadata.fileSource = filepath;
-		metadata.type = Asset::fileToAssetType(filepath);
-		C78_CORE_ASSERT(metadata.type != Asset::AssetType::None);
-		Ref<Asset> asset = AssetLoader::loadAsset(handle, metadata);
+	AssetHandle EditorAssetManager::importAsset(const FilePath& filepath) {
+		AssetHandle handle;
+		Asset::AssetMeta meta;
+		meta.name = "Unnamed Asset"; //TODO: centrl
+		meta.fileSource = filepath;
+		meta.type = Asset::fileToAssetType(filepath);
+
+		if (meta.type == Asset::AssetType::None) {
+			C78_CORE_ERROR("EditorAssetManager::importAsset: '{}' files are not supported yet!", filepath.extension().string());
+			return 0;
+		}
+
+		Ref<Asset> asset = AssetImporter::importAsset(handle, meta);
 		if (asset) {
 			asset->m_AssetHandle = handle;
 			m_LoadedAssets[handle] = asset;
-			m_AssetRegistry[handle] = metadata;
-			serializeAssetRegistry();
+			m_AssetRegistry[handle] = meta;
+			//TODO: if autosave... then here -> EditorAssetManager do
 		}
 	}
 
@@ -77,32 +58,26 @@ namespace C78E {
 	}
 
 	Ref<Asset> EditorAssetManager::getAsset(AssetHandle handle) {
-		// 1. check if handle is valid
 		if (!isValid(handle))
 			return nullptr;
-
-		// 2. check if asset needs load (and if so, load)
-		Ref<Asset> asset;
+		
 		if (isLoaded(handle)) {
-			asset = m_LoadedAssets.at(handle);
-		}
-		else {
-			// load asset
+			return m_LoadedAssets.at(handle);
+		} else {
+			Ref<Asset> asset;
 			const Asset::AssetMeta& metadata = getMeta(handle);
-			asset = AssetLoader::loadAsset(handle, metadata);
+			asset = AssetImporter::importAsset(handle, metadata);
 			if (!asset) {
 				// import failed
 				C78_CORE_ERROR("EditorAssetManager::getAsset - loading Asset failed!");
 			}
 			m_LoadedAssets[handle] = asset;
+			return asset;
 		}
-		// 3. return asset
-		return asset;
 	}
 
-	void EditorAssetManager::serializeAssetRegistry() {
-		auto path = Project::getActiveAssetRegistryPath();
-
+	void EditorAssetManager::exportAssetRegistry(const FilePath& assetRegistryPath) {
+		FileSystem::createDirectoryIfNotPresent(assetRegistryPath);
 		YAML::Emitter out;
 		{
 			out << YAML::BeginMap; // Root
@@ -113,6 +88,7 @@ namespace C78E {
 				out << YAML::BeginMap;
 				out << YAML::Key << "Handle" << YAML::Value << handle;
 				std::string filepathStr = metadata.fileSource.generic_string();
+				out << YAML::Key << "Name" << YAML::Value << metadata.name;
 				out << YAML::Key << "FilePath" << YAML::Value << filepathStr;
 				out << YAML::Key << "Type" << YAML::Value << Asset::assetTypeToString(metadata.type);
 				out << YAML::EndMap;
@@ -121,18 +97,18 @@ namespace C78E {
 			out << YAML::EndMap; // Root
 		}
 
-		std::ofstream fout(path);
+		std::ofstream fout(assetRegistryPath);
 		fout << out.c_str();
 	}
 
-	bool EditorAssetManager::deserializeAssetRegistry() {
-		auto path = Project::getActiveAssetRegistryPath();
+	bool EditorAssetManager::importAssetRegistry(const FilePath& assetRegistryPath) {
+		C78_CORE_ASSERT(FileSystem::exists(assetRegistryPath), "EditorAssetManager::deserializeAssetRegistry: AssetRegistryPath does not exist!");
 		YAML::Node data;
 		try {
-			data = YAML::LoadFile(path.string());
+			data = YAML::LoadFile(assetRegistryPath.string());
 		}
 		catch (YAML::ParserException e) {
-			C78_CORE_ERROR("Failed to load project file '{0}'\n     {1}", path, e.what());
+			C78_CORE_ERROR("Failed to load project file '{0}'\n     {1}", assetRegistryPath, e.what());
 			return false;
 		}
 
@@ -143,24 +119,37 @@ namespace C78E {
 		for (const auto& node : rootNode) {
 			AssetHandle handle = node["Handle"].as<uint64_t>();
 			auto& metadata = m_AssetRegistry[handle];
+			metadata.name = node["Name"].as<std::string>();
 			metadata.fileSource = node["FilePath"].as<std::string>();
 			metadata.type = Asset::assetTypeFromString(node["Type"].as<std::string>());
 		}
-
 		return true;
 	}
 
 	AssetHandle EditorAssetManager::addAsset(Asset::AssetMeta meta, Ref<Asset> asset) {
-		AssetHandle handle; // generate new handle
-		C78_CORE_ASSERT(meta.type != Asset::AssetType::None);
+		if (meta.type == Asset::AssetType::None) {
+			C78_CORE_ERROR("EditorAssetManager::addAsset: given AssetMeta.type cannot be None!");
+			return 0;
+		}
 		if (asset) {
+			AssetHandle handle; // generate new handle
 			asset->m_AssetHandle = handle;
 			m_LoadedAssets[handle] = asset;
 			m_AssetRegistry[handle] = meta;
-			serializeAssetRegistry();
+			//TODO: if autosave... then here -> EditorAssetManager do
 			return handle;
+		} else {
+			C78_CORE_ERROR("EditorAssetManager::addAsset: given asset is a nullptr!");
+			return 0;
 		}
-		return 0;
+		
 	}
+
+
+	/*
+	* RuntimeAssetManager
+	*/
+
+	//TODO
 
 }

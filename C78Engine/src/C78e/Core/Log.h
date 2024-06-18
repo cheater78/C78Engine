@@ -18,8 +18,7 @@
 
 namespace C78E {
 	using LogCallbackFn = std::function<void(std::vector<std::string>)>;
-	class C78_API Log
-	{
+	class Log {
 	public:
 		static void init();
 

@@ -3,14 +3,17 @@
 
 #include <C78E/Project/Project.h>
 
+#include <C78E/Utils/Wavefront/WavefrontLoader.h>
+
 namespace C78E {
 
 	Ref<Material> MaterialLoader::importMaterial(AssetHandle handle, const Asset::AssetMeta& meta) {
 		FilePath ext = meta.fileSource.extension();
 
-		if (ext == ".mtl") return loadWavefrontMaterial(Project::getActiveAssetDirectory() / meta.fileSource, meta.name);
+		//if (ext == ".mtl") return WavefrontLoader::loadMaterial(Project::getActiveAssetDirectory() / meta.fileSource, meta.name);
 
-		return loadMaterial(Project::getActiveAssetDirectory() / meta.fileSource);
+		//return loadMaterial(Project::getActiveAssetDirectory() / meta.fileSource);
+		return Ref<Material>();
 	}
 
 	Ref<Material> MaterialLoader::loadMaterial(const FilePath& path) {

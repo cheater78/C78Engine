@@ -13,7 +13,7 @@ namespace C78Editor {
 
 	public:
 		static C78E::Entity create(C78E::Ref<C78E::Scene> scene, std::string name);
-		static void update(C78E::Entity camera, C78E::Timestep delta);
+		static void update(C78E::Entity camera, C78E::Timestep dt);
 
 
 	private:

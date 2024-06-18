@@ -8,8 +8,7 @@
 
 namespace C78E {
 
-	class C78_API Input
-	{
+	class Input {
 	public:
 		static bool isKeyPressed(KeyCode key);
 

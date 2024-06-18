@@ -1,4 +1,7 @@
 #include "C78EPCH.h"
+
+#ifdef C78_PLATFORM_WINDOWS
+
 #include "C78E/Core/Input.h"
 
 #include "C78E/Core/Application.h"
@@ -31,7 +34,7 @@ namespace C78E {
 
 	void Input::setMousePosition(float x, float y) {
 		auto* window = static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow());
-		glfwSetCursorPos(window, static_cast<double>(x), static_cast<double>(y) );
+		glfwSetCursorPos(window, static_cast<double>(x), static_cast<double>(y));
 	}
 
 	float Input::getMouseX()
@@ -45,3 +48,5 @@ namespace C78E {
 	}
 
 }
+
+#endif // C78_PLATFORM_WINDOWS

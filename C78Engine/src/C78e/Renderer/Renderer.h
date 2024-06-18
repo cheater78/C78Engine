@@ -2,8 +2,8 @@
 
 #include <C78E/Renderer/RenderCommand.h>
 #include <C78E/Assets/AssetManager.h>
-#include <C78E/Scene/SceneCamera.h>
-#include <C78E/Scene/Scene.h>
+#include <C78E/Assets/Scene/SceneCamera.h>
+#include <C78E/Assets/Scene/Scene.h>
 
 #include <C78E/Assets/Texture/Texture.h>
 

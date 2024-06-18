@@ -4,7 +4,7 @@
 #include "C78E/Core/Timer.h"
 #include "C78E/Core/Window.h"
 #include "C78E/Core/LayerStack.h"
-#include <C78E/ImGui/ImGuiLayer.h>
+#include <C78E/GUI/ImGui/ImGuiLayer.h>
 #include "C78E/Core/Console.h"
 #include "C78E/Events/Event.h"
 #include "C78E/Events/ApplicationEvent.h"
@@ -12,7 +12,7 @@
 
 namespace C78E {
 
-	class C78_API Application {
+	class Application {
 	public:
 		Application(const WindowProps& windowProperties = WindowProps());
 		virtual ~Application();
@@ -36,7 +36,7 @@ namespace C78E {
 
 		Scope<Timer> m_RunTime;
 		LayerStack m_LayerStack;
-		Ref<ImGuiLayer> m_ImGuiLayer;
+		Ref<GUI::ImGuiLayer> m_ImGuiLayer;
 		Ref<Console> m_Console;
 
 

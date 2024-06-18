@@ -168,7 +168,7 @@ namespace std {
 	struct hash<C78E::Vertex> {
 		size_t operator()(C78E::Vertex const& vertex) const {
 			size_t seed = 0;
-			hashCombine(seed, vertex.Position, vertex.Color, vertex.Normal, vertex.TexCoord, vertex.TexIndex);
+			hashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.texCoord, vertex.texIndex);
 			return seed;
 		}
 	};

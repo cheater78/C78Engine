@@ -1,10 +1,3 @@
-/*****************************************************************//**
- * \file   Asset.h
- * \brief  Definition of class Asset, which represents any arbituary Asset in the Engine
- * 
- * \author c78
- * \date   April 2024
- *********************************************************************/
 #pragma once
 #include <C78E/Core/UUID.h>
 
@@ -33,7 +26,7 @@ namespace C78E {
 		struct AssetMeta {
 			AssetType type = AssetType::None;
 			FilePath fileSource = "/";
-			std::string name = "untitled asset";
+			std::string name = "Unnamed Asset"; //TODO: centrl
 
 			operator bool() const { return type != AssetType::None; }
 		};

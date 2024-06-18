@@ -2,6 +2,7 @@
 #include "C78E/Core/Core.h"
 #include "C78E/Core/Layer.h"
 #include "C78E/Core/KeyCodes.h"
+#include <C78E/GUI/HotkeyManager/KeyCombo.h>
 
 struct ImGuiInputTextCallbackData;
 
@@ -34,7 +35,7 @@ namespace C78E {
         std::string m_Title = "";
         bool m_Visible = false;
         //TODO: make variable
-        KeyCode m_ToggleVisibleKey = Key::RightControl;
+        GUI::KeyCombo m_ToggleVisibleKeyCombo;
 
         std::unordered_map<std::string, const CmdCallbackFn> m_Commands{};
         std::vector<std::string> m_History{};

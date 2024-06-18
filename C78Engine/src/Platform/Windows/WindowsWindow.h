@@ -1,4 +1,5 @@
 #pragma once
+#ifdef C78_PLATFORM_WINDOWS
 
 #include "C78E/Core/Window.h"
 
@@ -27,7 +28,7 @@ namespace C78E {
 
 		virtual void* getNativeWindow() const { return m_Window; }
 
-		virtual WindowProps getWindowProperties() const { return {m_Data.title, m_Data.width, m_Data.height }; }
+		virtual WindowProps getWindowProperties() const { return { m_Data.title, m_Data.width, m_Data.height }; }
 
 	private:
 		virtual void init(const WindowProps& props);
@@ -36,7 +37,7 @@ namespace C78E {
 		GLFWwindow* m_Window;
 		Scope<GraphicsContext> m_Context;
 
-		struct WindowData {
+		struct WindowData { //TODO: merge with WinProps
 			std::string title = "<error>";
 			uint32_t width = 100;
 			uint32_t height = 100;
@@ -51,3 +52,5 @@ namespace C78E {
 	};
 
 }
+
+#endif // C78_PLATFORM_WINDOWS
