@@ -1,9 +1,7 @@
+#include "C78EPCH.h"
 #include "VulkanBuffer.h"
 
-#include <cassert>
-#include <cstring>
-
-namespace C78e {
+namespace C78E {
 	/**
 	 * Returns the minimum instance size required to be compatible with devices minOffsetAlignment
 	 *

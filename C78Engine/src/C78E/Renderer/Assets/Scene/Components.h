@@ -1,10 +1,12 @@
 #pragma once
 #include "C78EPCH.h"
 
+
+#include "C78E/Core/Types.h" // TODO: resolve and remove
 #include "SceneCamera.h"
-#include "C78E/Core/Types.h"
+#include "Light.h"
 #include "C78E/Core/UUID.h"
-#include "C78E/Assets/AssetManager.h"
+#include "C78E/Renderer/Assets/AssetManager.h"
 
 namespace C78E {
 	class ScriptableEntity;
@@ -99,13 +101,13 @@ namespace C78E {
 	//
 
 	// TODO -> Material
-	typedef AmbientLight AmbientLightComponent;
+	typedef Light::AmbientLight AmbientLightComponent;
 
-	typedef DirectLight DirectLightComponent;
+	typedef Light::DirectLight DirectLightComponent;
 
-	typedef PointLight PointLightComponent;
+	typedef Light::PointLight PointLightComponent;
 
-	typedef SpotLight SpotLightComponent;
+	typedef Light::SpotLight SpotLightComponent;
 	// ----
 
 	struct MeshComponent {

@@ -1,7 +1,7 @@
 #include "C78ePCH.h"
 #include "VulkanSwapChain.h"
 
-namespace C78e {
+namespace C78E {
 
     VulkanSwapChain::VulkanSwapChain(VulkanDevice& deviceRef, VkExtent2D extent) : m_Device{deviceRef}, m_WindowExtent{extent} {
         init();

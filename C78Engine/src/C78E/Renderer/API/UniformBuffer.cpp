@@ -12,14 +12,14 @@ namespace C78E {
 		switch (RendererAPI::getAPI()) {
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLUniformBuffer>(size);
-			case RendererAPI::API::Vulkan:  return createRefVulkanUniformBuffer>(size);
+			case RendererAPI::API::Vulkan:  return createRef<VulkanUniformBuffer>(size);
 		}
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
 	Ref<UniformBuffer> UniformBuffer::create(uint32_t size, uint32_t binding) {
-		switch (Renderer::getAPI()) {
+		switch (RendererAPI::getAPI()) {
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLUniformBuffer>(size, binding);
 		case RendererAPI::API::Vulkan:  return createRef<VulkanUniformBuffer>(size, binding);

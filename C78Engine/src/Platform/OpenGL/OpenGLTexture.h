@@ -1,8 +1,6 @@
 #pragma once
 
-#include "C78E/Assets/Texture/Texture.h"
-
-#include <glad.h>
+#include "C78E/Renderer/API/Texture.h"
 
 namespace C78E {
 

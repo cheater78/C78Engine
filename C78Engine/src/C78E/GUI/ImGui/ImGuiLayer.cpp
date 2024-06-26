@@ -2,13 +2,13 @@
 #include "ImGuiLayer.h"
 
 #include "C78E/Core/Application.h"
-#include "C78E/Renderer/RendererAPI.h"
+#include "C78E/Renderer/API/RendererAPI.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <Platform/OpenGL/ImGui/imgui_impl_opengl3.h>
-#include <Platform/OpenGL/ImGui/imgui_impl_glfw.h>
+#include <Platform/GLFW/ImGui/imgui_impl_glfw.h>
 
 namespace C78E::GUI {
 

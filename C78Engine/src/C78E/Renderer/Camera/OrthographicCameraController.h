@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78E/Renderer/OrthographicCamera.h"
+#include "C78E/Renderer/Camera/OrthographicCamera.h"
 #include "C78E/Core/Timestep.h"
 
 #include "C78E/Events/ApplicationEvent.h"

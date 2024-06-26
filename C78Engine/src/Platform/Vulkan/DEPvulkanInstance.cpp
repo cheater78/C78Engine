@@ -8,7 +8,7 @@
 #include <sstream>
 #include <filesystem>
 
-namespace C78e {
+namespace C78E {
 
 	VulkanInstance::VulkanInstance(const uint32_t& width, const uint32_t& height, std::string title)
 		: m_Window(width, height, title), m_Device(m_Window), m_Renderer(m_Window, m_Device)

@@ -1,66 +1,14 @@
+#pragma once
 #include "C78EPCH.h"
-#include "Renderer3D.h"
 
-#include "C78E/Core/Types.h"
-#include <C78E/Scene/Entity.h>
-#include "C78E/Assets/AssetManager.h"
-
-#include "C78E/Renderer/vertexArray.h"
-#include "C78E/Renderer/UniformBuffer.h"
-#include "C78E/Renderer/RendererAPI.h"
-#include "C78E/Renderer/RenderCommand.h"
-#include "C78E/Renderer/GenericShape.h"
-#include "C78E/Renderer/Framebuffer.h"
+#include "3DRasterizer.h"
 
 namespace C78E {
-	std::string Renderer3D::s_ActiveScene;
-	std::unordered_map<std::string, Ref<C78E::Renderer3D::Renderer3DScene>> Renderer3D::s_Scenes;
-	uint32_t Renderer3D::s_MaxTextureSlots = 0;
-	C78E::Renderer3D::Renderer3DPass Renderer3D::s_MainPass{};
-	Ref<Framebuffer> Renderer3D::s_MainFramebuffer = nullptr;
-
-	void Renderer3D::init() {
-		s_MaxTextureSlots = std::min<uint32_t>(RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::VERTEX), RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::FRAGMENT));
-		
-		FramebufferSpecification spec{
-			1, 1,
-			{{{ FramebufferTextureFormat::DEPTH24STENCIL8 } ,{ FramebufferTextureFormat::RGBA8 }}},
-			1,
-			false
-		};
-		s_MainFramebuffer = Framebuffer::create(spec);
-		s_MainFramebuffer->unbind();
-
-		std::vector<float> vertecies = {
-			-1.f, -1.f, 0.f, 0.f, 0.f,
-			+1.f, -1.f, 0.f, 1.f, 0.f,
-			+1.f, +1.f, 0.f, 1.f, 1.f,
-			-1.f, +1.f, 0.f, 0.f, 1.f
-		};
-
-		std::vector<uint32_t> indecies = {
-			0,1,2,2,3,0
-		};
-		s_MainPass.shader = C78E::AssetManager::getShader("DisplayTex");
-		s_MainPass.vertexBuffer = VertexBuffer::create(vertecies.data(), static_cast<uint32_t>(sizeof(float) * vertecies.size()));
-		s_MainPass.vertexBuffer->setLayout({
-			{ ShaderDataType::Float3, "a_Position" },
-			{ ShaderDataType::Float2, "a_TexCoord" }
-			});
-		s_MainPass.indexBuffer = IndexBuffer::create(indecies.data(), static_cast<uint32_t>(indecies.size()));
-		s_MainPass.vertexArray = VertexArray::create();
-		s_MainPass.vertexArray->addVertexBuffer(s_MainPass.vertexBuffer);
-		s_MainPass.vertexArray->setIndexBuffer(s_MainPass.indexBuffer);
-		
-	}
-
-	void Renderer3D::shutdown() {
-	}
-
-	Ref<UniformBuffer> Renderer3D::currentCameraUniformBuffer(){
+	
+	Ref<UniformBuffer> camUBO(Ref<Scene> scene) {
 		Ref<CameraUniform> camUni = createRef<CameraUniform>();
-		camUni->projMat = curr()->scene->getPrimaryCamera().getComponent<CameraComponent>().Camera.GetProjection();
-		camUni->invViewMat = curr()->scene->getPrimaryCamera().getTransform().getTransform();
+		camUni->projMat = scene->getPrimaryCamera().getComponent<CameraComponent>().Camera.getProjection();
+		camUni->invViewMat = scene->getPrimaryCamera().getTransform().getTransform();
 		camUni->viewMat = glm::inverse(camUni->invViewMat);
 
 		Ref<UniformBuffer> camUniformBuffer = UniformBuffer::create(sizeof(CameraUniform));
@@ -69,32 +17,32 @@ namespace C78E {
 		return camUniformBuffer;
 	}
 
-	Ref<UniformBuffer> Renderer3D::currentLightsUniformBuffer() {
+	Ref<UniformBuffer> lightUBO(Ref<Scene> scene) {
 		SceneLightUniform sceneLightUniform{};
 
-		auto ambientLights = curr()->scene->getAllEntitiesWith<AmbientLightComponent>();
+		auto ambientLights = scene->getAllEntitiesWith<AmbientLightComponent>();
 		C78_ASSERT(ambientLights.size() == 1, "Every Scene needs exactly one AmbientLight!");
-		Entity ambientLightEntity(*ambientLights.begin(), curr()->scene.get());
+		Entity ambientLightEntity(*ambientLights.begin(), scene.get());
 		sceneLightUniform.ambientLight = ambientLightEntity.getComponent<AmbientLightComponent>();
 
 
-		for (auto& enttity : curr()->scene->getAllEntitiesWith<DirectLightComponent>()) {
-			Entity entity(enttity, curr()->scene.get());
+		for (auto& enttity : scene->getAllEntitiesWith<DirectLightComponent>()) {
+			Entity entity(enttity, scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
 			auto& dLight = entity.getComponent<DirectLightComponent>();
 			sceneLightUniform.directLights[sceneLightUniform.directLightCount++] = dLight;
 		}
 
-		for (auto& enttity : curr()->scene->getAllEntitiesWith<PointLightComponent>()) {
-			Entity entity(enttity, curr()->scene.get());
+		for (auto& enttity : scene->getAllEntitiesWith<PointLightComponent>()) {
+			Entity entity(enttity, scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
 			auto& pLight = entity.getComponent<PointLightComponent>();
 			pLight.position = entity.getComponent<TransformComponent>().Translation;
 			sceneLightUniform.pointLights[sceneLightUniform.pointLightCount++] = pLight;
 		}
 
-		for (auto& enttity : curr()->scene->getAllEntitiesWith<SpotLightComponent>()) {
-			Entity entity(enttity, curr()->scene.get());
+		for (auto& enttity : scene->getAllEntitiesWith<SpotLightComponent>()) {
+			Entity entity(enttity, scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
 			auto& sLight = entity.getComponent<SpotLightComponent>();
 			sLight.position = entity.getComponent<TransformComponent>().Translation;
@@ -107,13 +55,13 @@ namespace C78E {
 	}
 
 
-	void Renderer3D::submitSkyBox() {
-		auto skyBoxEntts = curr()->scene->getAllEntitiesWith<SkyBoxComponent>();
+	void skyBoxPass(Ref<Scene> scene) {
+		auto skyBoxEntts = scene->getAllEntitiesWith<SkyBoxComponent>();
 
 		if (!skyBoxEntts.size()) return;
 
 		for (auto& skyBoxEntt : skyBoxEntts) {
-			Entity skyBoxEntity(skyBoxEntts.front(), curr()->scene.get());
+			Entity skyBoxEntity(skyBoxEntts.front(), scene.get());
 			if (!skyBoxEntity.getComponent<StateComponent>().enable) continue;
 			auto& skyBoxTex = skyBoxEntity.getComponent<SkyBoxComponent>().skyboxes.at(0);
 
@@ -144,17 +92,17 @@ namespace C78E {
 				{ currentCameraUniformBuffer() },
 				config
 			};
-			curr()->renderPasses.push_back(skyBoxPass);
+			renderPasses.push_back(skyBoxPass);
 			break;
 		}
 	}
 
-	void Renderer3D::submitTexMeshes() {
-		auto meshEntts = curr()->scene->getAllEntitiesWith<MeshComponent, TextureComponent, MaterialComponent>();
+	void submitTexMeshes() {
+		auto meshEntts = scene->getAllEntitiesWith<MeshComponent, TextureComponent, MaterialComponent>();
 		if (!meshEntts) return;
 
 		for (auto& enttity : meshEntts) {
-			Entity entity(enttity, curr()->scene.get());
+			Entity entity(enttity, scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
 			Mesh& mesh = entity.getComponent<MeshComponent>().mesh.get();
 			Material& material = entity.getComponent<MaterialComponent>();
@@ -204,21 +152,21 @@ namespace C78E {
 				config
 			};
 
-			curr()->stats.vertecies += static_cast<uint32_t>(mesh.m_Vertecies.size());
-			curr()->stats.indicies += static_cast<uint32_t>(mesh.m_Indicies.size());
+			stats.vertecies += static_cast<uint32_t>(mesh.m_Vertecies.size());
+			stats.indicies += static_cast<uint32_t>(mesh.m_Indicies.size());
 
-			curr()->renderPasses.push_back(meshPass);
+			renderPasses.push_back(meshPass);
 		}
 	}
 
-	void Renderer3D::submitModels() {
-		auto modelEntts = curr()->scene->getAllEntitiesWith<C78E::ModelComponent>();
+	void submitModels() {
+		auto modelEntts = scene->getAllEntitiesWith<C78E::ModelComponent>();
 		if (!modelEntts.size()) return;
 
 		for (auto& enttity : modelEntts) {
-			Entity entity(enttity, curr()->scene.get());
+			Entity entity(enttity, scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
-			
+
 			std::vector<Asset<Model>> models = entity.getComponent<ModelComponent>().models;
 			for (Asset<Model> model : models) {
 				uint32_t passes = 1;
@@ -245,7 +193,7 @@ namespace C78E {
 				//TODO ORDER!---------------------------------------------------------------------------------------------------
 				// else dummy
 				std::vector<Ref<Texture>> textures;
-				if(materialTextures.ambient != "")
+				if (materialTextures.ambient != "")
 					textures.push_back(AssetManager::getTexture2D(materialTextures.ambient));
 				if (materialTextures.diffuse != "")
 					textures.push_back(AssetManager::getTexture2D(materialTextures.diffuse));
@@ -288,36 +236,36 @@ namespace C78E {
 					config
 				};
 
-				curr()->stats.vertecies += static_cast<uint32_t>(mesh.get().m_Vertecies.size());
-				curr()->stats.indicies += static_cast<uint32_t>(mesh.get().m_Indicies.size());
+				stats.vertecies += static_cast<uint32_t>(mesh.get().m_Vertecies.size());
+				stats.indicies += static_cast<uint32_t>(mesh.get().m_Indicies.size());
 
-				curr()->renderPasses.push_back(meshPass);
+				renderPasses.push_back(meshPass);
 			}
 
 		}
 	}
 
-	void Renderer3D::submitPointLights() {
-		auto pointLightEntts = curr()->scene->getAllEntitiesWith<PointLightComponent>();
+	void submitPointLights() {
+		auto pointLightEntts = scene->getAllEntitiesWith<PointLightComponent>();
 		if (!pointLightEntts.size()) return;
 
 		uint32_t passes = 1;
 		Ref<Shader> shader = C78E::AssetManager::getShader("PointLight");
-		
+
 		std::vector<uint32_t> indicies = {  };
 		for (auto& pointLightEntt : pointLightEntts) {
-			Entity pointLightEnt(pointLightEntt, curr()->scene.get());
+			Entity pointLightEnt(pointLightEntt, scene.get());
 			if (!pointLightEnt.getComponent<StateComponent>().enable) continue;
 			uint32_t offset = static_cast<uint32_t>(indicies.size());
 			for (uint32_t i = 0; i < 6; i++)
 				indicies.push_back(offset + i);
 		}
 		if (!indicies.size()) return;
-		
+
 		Ref<IndexBuffer> indexBuffer = IndexBuffer::create(indicies.data(), static_cast<uint32_t>(indicies.size()));
 		Ref<VertexArray> vertexArray = VertexArray::create();
 		vertexArray->setIndexBuffer(indexBuffer);
-		
+
 		Renderer3DPassConfig config{
 			true,
 			RendererAPI::LESS
@@ -333,12 +281,12 @@ namespace C78E {
 			{ currentCameraUniformBuffer(), currentLightsUniformBuffer() },
 			config
 		};
-		curr()->stats.indicies += static_cast<uint32_t>(indicies.size());
-		curr()->renderPasses.push_back(pointLightPass);
+		stats.indicies += static_cast<uint32_t>(indicies.size());
+		renderPasses.push_back(pointLightPass);
 	}
 
-	void Renderer3D::submitSpotLights() {
-		auto spotLightEntts = curr()->scene->getAllEntitiesWith<PointLightComponent>();
+	void submitSpotLights() {
+		auto spotLightEntts = scene->getAllEntitiesWith<PointLightComponent>();
 		if (!spotLightEntts.size()) return;
 
 		uint32_t passes = 1;
@@ -346,7 +294,7 @@ namespace C78E {
 
 		std::vector<uint32_t> indicies = {  };
 		for (auto& spotLightEntt : spotLightEntts) {
-			Entity pointLightEnt(spotLightEntt, curr()->scene.get());
+			Entity pointLightEnt(spotLightEntt, scene.get());
 			if (!pointLightEnt.getComponent<StateComponent>().enable) continue;
 			uint32_t offset = static_cast<uint32_t>(indicies.size());
 			for (uint32_t i = 0; i < 6; i++)
@@ -373,91 +321,9 @@ namespace C78E {
 			{ currentCameraUniformBuffer(), currentLightsUniformBuffer() },
 			config
 		};
-		curr()->stats.indicies += static_cast<uint32_t>(indicies.size());
-		curr()->renderPasses.push_back(spotLightPass);
+		stats.indicies += static_cast<uint32_t>(indicies.size());
+		renderPasses.push_back(spotLightPass);
 	}
 
-	void Renderer3D::beginScene(std::string scene) {
-		s_Scenes.emplace(scene, createRef<Renderer3DScene>());
-		s_ActiveScene = scene;
-		resetStats(scene);
-		curr()->renderPasses.clear();
-	}
 
-	void Renderer3D::submit(Entity entity) {
-
-	}
-
-	void Renderer3D::submit(Ref<Scene>& scene) {
-		curr()->scene = scene;
-	}
-
-	void Renderer3D::endScene() {
-		auto r3Dscene = curr();
-
-		r3Dscene->renderPasses.clear();
-
-		//if(r3Dscene->elements.skyBox)
-			submitSkyBox();
-
-		//if (r3Dscene->elements.texMesh)
-			submitModels();
-
-		//if(r3Dscene->elements.pointLightSprites)
-			submitPointLights();
-
-		//if(r3Dscene->elements.spotLightSprites)
-			submitSpotLights();
-		
-		s_ActiveScene = "";
-	}
-
-	void Renderer3D::render(std::string scene, uint32_t width, uint32_t height) {
-		s_ActiveScene = scene;
-
-		s_MainFramebuffer->Resize(width, height);
-		s_MainFramebuffer->bind();
-		
-		//Render
-
-		RenderCommand::clear();
-
-		for (auto& pass : curr(scene)->renderPasses) {
-			if (!pass.passes) continue;
-			pass.shader->bind();
-			pass.vertexArray->bind();
-
-			C78_CORE_ASSERT(pass.textureSlots.size() <= s_MaxTextureSlots, "RenderPass cannot have this much Textures bound!");
-			uint32_t texID = 0;
-			for (auto& tex : pass.textureSlots)
-				tex->bind(texID++);
-			
-			for (uint32_t i = 0; i < pass.uniformBuffers.size(); i++)
-				pass.uniformBuffers.at(i)->bind(i);
-
-			RenderCommand::setDepthWrite(pass.config.writeDepthBuffer);
-			RenderCommand::setDepthFunc(pass.config.depthFunc);
-
-			RenderCommand::drawIndexed(pass.vertexArray);
-			curr(scene)->stats.drawCalls++;
-			pass.passes--;
-		}
-		
-		
-
-		//~Render
-		
-		s_MainFramebuffer->unbind();
-
-		RenderCommand::clear();
-
-		curr(scene)->stats.drawCalls++;
-		s_MainFramebuffer->BlitToFront();
-	}
-
-	void Renderer3D::resetStats() { memset(&curr()->stats, 0, sizeof(Statistics)); }
-	void Renderer3D::resetStats(std::string scene) { memset(&curr(scene)->stats, 0, sizeof(Statistics)); }
-
-	Renderer3D::Statistics Renderer3D::getStats() { return curr()->stats; }
-	Renderer3D::Statistics Renderer3D::getStats(std::string scene) { return curr(scene)->stats; }
 }

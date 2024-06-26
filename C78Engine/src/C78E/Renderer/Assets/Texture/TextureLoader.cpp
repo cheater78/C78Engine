@@ -4,7 +4,8 @@
 #include <C78E/Core/Buffer.h>
 #include <C78E/Project/Project.h>
 
-#include <C78E/Renderer/RendererAPI.h>
+#include <C78E/Renderer/API/RendererAPI.h>
+#include <C78E/Renderer/API/Texture.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>

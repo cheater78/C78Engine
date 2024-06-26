@@ -1,6 +1,7 @@
 #include "C78ePCH.h"
 #include "FileManagerAssets.h"
-#include <C78E/Assets/Texture/TextureLoader.h>
+
+#include <C78E/Renderer/Assets/Texture/TextureLoader.h>
 
 namespace C78E::GUI {
 

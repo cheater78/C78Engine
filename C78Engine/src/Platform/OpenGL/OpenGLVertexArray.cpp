@@ -54,7 +54,7 @@ namespace C78E {
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer> vertexBuffer)
 	{
 		
 
@@ -124,8 +124,7 @@ namespace C78E {
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
-	{
+	void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer> indexBuffer) {
 		
 
 		glBindVertexArray(m_RendererID);

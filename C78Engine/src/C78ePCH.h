@@ -1,4 +1,19 @@
 #pragma once
+//PLATFORM
+#ifdef C78_PLATFORM_WINDOWS
+#include <Windows.h>
+#define C78_PLATFORM_GLFW
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3.h>
+#include <glad.h>
+#include <vulkan/vulkan.h>
+#elif defined C78_PLATFORM_LINUX
+#define C78_PLATFORM_GLFW
+#include <GLFW/glfw3.h>
+#include <glad.h>
+#include <vulkan/vulkan.h>
+#endif
+
 //LIB::STD
 #include <iostream>
 #include <memory>
@@ -12,10 +27,13 @@
 #include <limits>
 #include <cstdint>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+
+#include <cassert>
 
 #include <semaphore>
 #include <thread>
@@ -35,6 +53,8 @@
 #include <C78E/Core/Assert.h>
 #include <C78E/Core/Log.h>
 #include <C78E/Core/UUID.h>
+#include <C78E/Core/Timer.h>
+#include <C78E/Core/Timestep.h>
 #include <C78E/Core/Buffer.h>
 #include <C78E/Core/Window.h>
 #include "C78E/Core/Application.h"
@@ -44,13 +64,4 @@
 #include <C78E/Utils/StdUtils.h>
 
 
-//PLATFORM
-#ifdef C78_PLATFORM_WINDOWS
-#include <Windows.h>
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3.h>
-#include <glad.h>
-#elif defined C78_PLATFORM_LINUX
-#include <GLFW/glfw3.h>
-#include <glad.h>
-#endif
+

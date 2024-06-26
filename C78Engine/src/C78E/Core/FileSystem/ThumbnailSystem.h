@@ -1,7 +1,7 @@
 #pragma once
 
-#include <C78E/Assets/Texture/Texture.h>
-#include <C78E/Assets/AssetManager.h>
+#include <C78E/Renderer/API/Texture.h>
+#include <C78E/Renderer/Assets/AssetManager.h>
 
 namespace C78E {
 

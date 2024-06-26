@@ -1,15 +1,13 @@
 #pragma once
 
-#include "C78E/Assets/Shader/Shader.h"
-#include <glm/glm.hpp>
+#include <C78E/Renderer/API/Shader.h>
 
 // TODO: REMOVE!
 typedef unsigned int GLenum;
 
 namespace C78E {
 
-	class OpenGLShader : public Shader
-	{
+	class OpenGLShader : public Shader {
 	public:
 		OpenGLShader(const std::string& filepath);
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);

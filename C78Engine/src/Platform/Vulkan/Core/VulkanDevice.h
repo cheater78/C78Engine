@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Platform/Vulkan/Core/VulkanWindow.h>
+
 namespace C78E {
 
     struct VulkanSwapChainSupportDetails {

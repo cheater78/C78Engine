@@ -1,9 +1,9 @@
 #pragma once
 
-#include <C78E/Assets/Mesh/Mesh.h>
-#include <C78E/Assets/Material/Material.h>
-#include <C78E/Assets/Texture/Texture.h>
-#include <C78E/Assets/Model/Model.h>
+#include <C78E/Renderer/Assets/Mesh/Mesh.h>
+#include <C78E/Renderer/Assets/Material/Material.h>
+#include <C78E/Renderer/Assets/Model/Model.h>
+#include <C78E/Renderer/API/Texture.h>
 
 namespace tinyobj {
 	struct material_t;

@@ -12,7 +12,7 @@
 
 using namespace std;
 
-namespace C78e {
+namespace C78E {
 
 	class VulkanRenderer {
 	public:

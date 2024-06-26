@@ -1,8 +1,8 @@
 #include "C78ePCH.h"
 #include "Project.h"
 #include "ProjectSerializer.h"
-#include <C78E/Assets/Scene/SceneSerializer.h>
-#include <C78E/Assets/Scene/Scene.h>
+#include <C78E/Renderer/Assets/Scene/SceneSerializer.h>
+#include <C78E/Renderer/Assets/Scene/Scene.h>
 
 namespace C78E {
 

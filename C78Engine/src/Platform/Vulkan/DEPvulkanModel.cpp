@@ -3,7 +3,7 @@
 #include <cstring>
 #include <iostream>
 
-namespace C78e {
+namespace C78E {
 	
 	VulkanModel::VulkanModel(VulkanDevice& device, std::vector<Vertex>& vertecies, std::vector<uint32_t>& indecies) : m_Device{ device } {
 		createBuffers(vertecies, indecies);

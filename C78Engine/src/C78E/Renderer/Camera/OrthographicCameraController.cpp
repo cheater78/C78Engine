@@ -1,5 +1,5 @@
 #include "C78EPCH.h"
-#include "C78E/Renderer/OrthographicCameraController.h"
+#include "OrthographicCameraController.h"
 
 #include "C78E/Core/Input.h"
 #include "C78E/Core/KeyCodes.h"

@@ -1,7 +1,7 @@
+#include "C78EPCH.h"
 #include "vulkanWindow.h"
-#include <stdexcept>
 
-namespace C78e {
+namespace C78E {
 
 	VulkanWindow::VulkanWindow(uint32_t w, uint32_t h, std::string name) : m_Width(w), m_Height(h), m_WinName(name) {
 		init();

@@ -2,14 +2,10 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
-#include <string>
-
-namespace C78e{
+namespace C78E {
 
 	class VulkanWindow {
-
 	public:
-
 		VulkanWindow(uint32_t w, uint32_t h, std::string name);
 		~VulkanWindow();
 

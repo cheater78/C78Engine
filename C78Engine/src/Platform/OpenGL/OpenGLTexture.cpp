@@ -1,7 +1,7 @@
 #include "C78EPCH.h"
-#include "Platform/OpenGL/OpenGLTexture.h"
+#include "OpenGLTexture.h"
 
-#include "C78E/Assets/Texture/Image.h"
+#include <C78E/Renderer/Assets/Texture/Image.h>
 
 namespace C78E {
 

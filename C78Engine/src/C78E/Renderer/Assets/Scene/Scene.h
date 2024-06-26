@@ -2,16 +2,14 @@
 
 #include "C78E/Core/UUID.h"
 #include "C78E/Core/Timestep.h"
-#include "C78E/Renderer/EditorCamera.h"
+#include "C78E/Renderer/Camera/EditorCamera.h"
 
-#include <C78E/Assets/Asset/Asset.h>
+#include <C78E/Renderer/Assets/Asset/Asset.h>
 
 namespace C78E {
 
-	using SceneHandle = AssetHandle;
-
 	class Entity;
-
+	using SceneHandle = AssetHandle;
 	class Scene : public Asset {
 	public:
 		static Ref<Scene> copy(Ref<Scene> other);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78E/Renderer/Camera.h"
+#include "C78E/Renderer/Camera/Camera.h"
 
 namespace C78E {
 
@@ -40,7 +40,7 @@ namespace C78E {
 		uint32_t getWidth() { return m_Width; }
 		uint32_t getHeight() { return m_Height; }
 
-		const glm::mat4& GetProjection() { RecalculateProjection(); return m_Projection; }
+		const glm::mat4& getProjection() { RecalculateProjection(); return m_Projection; }
 
 	private:
 		void RecalculateProjection();

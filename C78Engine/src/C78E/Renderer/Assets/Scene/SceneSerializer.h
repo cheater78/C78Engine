@@ -1,6 +1,6 @@
 #pragma once
-#include <C78E/Assets/Scene/Scene.h>
-#include <C78E/Assets/Scene/Entity.h>
+#include <C78E/Renderer/Assets/Scene/Scene.h>
+#include <C78E/Renderer/Assets/Scene/Entity.h>
 
 //pre decl
 namespace YAML {

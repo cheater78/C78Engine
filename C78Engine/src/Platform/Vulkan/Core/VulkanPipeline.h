@@ -1,14 +1,8 @@
 #pragma once
-#define GLFW_INCLUDE_VULKAN
-#include "GLFW/glfw3.h"
+#include "VulkanDevice.h"
 
-#include "vulkanDevice.h"
-#include "types.h"
 
-#include <string>
-#include <vector>
-
-namespace C78e{
+namespace C78E {
 
 	struct PipelineConfigInfo {
 		

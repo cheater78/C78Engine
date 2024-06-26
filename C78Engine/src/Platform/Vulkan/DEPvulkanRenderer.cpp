@@ -4,7 +4,7 @@
 #include <string>
 #include <array>
 
-namespace C78e {
+namespace C78E {
 
 	VulkanRenderer::VulkanRenderer(VulkanWindow& window, VulkanDevice& device) : m_Window{ window }, m_Device{ device } {
 		recreateSwapChain();

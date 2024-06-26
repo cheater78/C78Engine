@@ -1,12 +1,7 @@
-#include "vulkanPipeline.h"
+#include "C78EPCH.h"
+#include "VulkanPipeline.h"
 
-#include <fstream>
-#include <stdexcept>
-#include <iostream>
-#include <cassert>
-#include <filesystem>
-
-namespace C78e {
+namespace C78E {
 
 	VulkanPipeline::VulkanPipeline(VulkanDevice& device,
 					const std::string& vertFilepath,

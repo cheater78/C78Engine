@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Camera.h"
-#include "C78E/Core/Timestep.h"
 #include "C78E/Events/Event.h"
 #include "C78E/Events/MouseEvent.h"
 
@@ -9,8 +8,7 @@
 
 namespace C78E {
 
-	class EditorCamera : public Camera
-	{
+	class EditorCamera : public Camera {
 	public:
 		EditorCamera() = default;
 		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);

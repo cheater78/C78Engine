@@ -1,11 +1,8 @@
 #pragma once
 #include "Components.h"
-
 #include "Scene.h"
 
 namespace C78E {
-
-	//class Scene;
 
 	class Entity {
 	public:

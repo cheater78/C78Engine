@@ -13,7 +13,7 @@
 
 #include "systems/basicRenderSystem.h"
 
-namespace C78e {
+namespace C78E {
 	class VulkanInstance {
 	public:
 

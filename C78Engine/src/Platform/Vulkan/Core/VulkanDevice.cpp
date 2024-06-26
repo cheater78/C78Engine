@@ -1,7 +1,7 @@
 #include "C78ePCH.h"
 #include "VulkanDevice.h"
 
-namespace C78e {
+namespace C78E {
 
     // local callback functions
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(

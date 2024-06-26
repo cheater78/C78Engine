@@ -14,7 +14,7 @@
 #include <iostream>
 
 
-namespace C78e {
+namespace C78E {
 
 	RenderSystem::RenderSystem(VulkanDevice& vulkDevice, VkRenderPass renderPass, ShaderSet shaders, vector<VkDescriptorSetLayout>& descriptorSetLayouts) : vulkDevice{ vulkDevice }, shaders{ shaders } {
 		createPipelineLayout(descriptorSetLayouts);

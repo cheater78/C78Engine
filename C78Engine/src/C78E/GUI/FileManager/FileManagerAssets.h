@@ -1,7 +1,7 @@
 #pragma once
 
 #include <C78E/Core/FileSystem/FileSystem.h>
-#include <C78E/Assets/Texture/Texture.h>
+#include <C78E/Renderer/API/Texture.h>
 #include <C78E/GUI/ImGui/TextureHandle.h>
 
 namespace C78E::GUI {

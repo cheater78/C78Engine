@@ -1,8 +1,8 @@
 #pragma once
 
 #include <C78e/Core/Types.h>
-#include <C78E/Assets/Asset/Asset.h>
-#include <C78E/Assets/Texture/Texture.h>
+#include <C78E/Renderer/Assets/Asset/Asset.h>
+#include <C78E/Renderer/API/Texture.h>
 
 namespace C78E {
 

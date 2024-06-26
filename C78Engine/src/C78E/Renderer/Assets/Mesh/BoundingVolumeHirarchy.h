@@ -2,8 +2,8 @@
 
 #include <C78ePCH.h>
 
-#include <C78E/Assets/Mesh/Mesh.h>
-#include <C78E/Assets/Mesh/MeshUtils.h>
+#include <C78E/Renderer/Assets/Mesh/MeshUtils.h>
+#include <C78E/Renderer/Assets/Mesh/Mesh.h>
 
 namespace C78E {
 
@@ -68,7 +68,7 @@ namespace C78E {
 
 
 			for (TriangleIndex i = parent.triangleIndex; i < parent.triangleIndex + parent.triangleCount; i++) {
-				const Primitive::Triangle currentTriangle = m_Triangles[i]; // const copy of the current Triangle that should be sorted
+				const Geometry::Triangle currentTriangle = m_Triangles[i]; // const copy of the current Triangle that should be sorted
 
 				const bool isInChildA = currentTriangle.center()[splitAxisIndex] < splitAxisValue;
 				Node& enclosingChild = isInChildA ? childA : childB;
@@ -92,7 +92,7 @@ namespace C78E {
 	private:
 		Ref<Mesh> m_Mesh;
 		uint32_t m_MaxDepth;
-		std::vector<Primitive::Triangle> m_Triangles;
+		std::vector<Geometry::Triangle> m_Triangles;
 		std::vector<Node> m_Nodes;
 
 	};

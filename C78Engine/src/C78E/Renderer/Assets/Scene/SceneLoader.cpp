@@ -2,7 +2,7 @@
 #include "SceneLoader.h"
 
 #include <C78E/Project/Project.h>
-#include <C78E/Assets/Scene/SceneSerializer.h>
+#include <C78E/Renderer/Assets/Scene/SceneSerializer.h>
 
 namespace C78E {
 

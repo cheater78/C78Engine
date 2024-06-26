@@ -2,7 +2,7 @@
 #include "VulkanTexture.h"
 
 
-namespace C78e {
+namespace C78E {
 	VulkanTexture::VulkanTexture(VulkanDevice& device, std::string textureFile) : m_Device{ device }, m_File{textureFile} {
 		 
 		m_RawImg = Util::loadImage(textureFile);

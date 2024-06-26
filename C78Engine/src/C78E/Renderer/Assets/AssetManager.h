@@ -1,5 +1,5 @@
 #pragma once
-#include <Asset/Asset.h>
+#include <C78E/Renderer/Assets/Asset/Asset.h>
 
 namespace C78E {
 

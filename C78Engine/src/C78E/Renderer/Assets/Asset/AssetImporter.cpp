@@ -1,10 +1,11 @@
 #include "C78ePCH.h"
 #include "AssetImporter.h"
-#include "C78E/Assets/Texture/TextureLoader.h"
-#include "C78E/Assets/Scene/SceneLoader.h"
-#include "C78E/Assets/Model/ModelLoader.h"
-#include "C78E/Assets/Mesh/MeshLoader.h"
-#include "C78E/Assets/Material/MaterialLoader.h"
+
+#include <C78E/Renderer/Assets/Texture/TextureLoader.h>
+#include <C78E/Renderer/Assets/Scene/SceneLoader.h>
+#include <C78E/Renderer/Assets/Model/ModelLoader.h>
+#include <C78E/Renderer/Assets/Mesh/MeshLoader.h>
+#include <C78E/Renderer/Assets/Material/MaterialLoader.h>
 
 namespace C78E {
 

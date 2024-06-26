@@ -9,6 +9,11 @@ namespace C78E {
 		enum DepthFunc : uint32_t { NEVER = 0, LESS, EQUAL, LEQUAL, GREATER, NOTEQUAL, GEQUAL, ALWAYS };
 		enum ShaderType : uint32_t { VERTEX, TESSELATION, TESSEVALUATION, GEOMETRY, FRAGMENT, COMPUTE };
 	public:
+		static API getAPI() { return s_API; }
+		static Scope<RendererAPI> create();
+	private:
+		static API s_API;
+	public:
 		virtual ~RendererAPI() = default;
 
 		virtual void init() = 0;
@@ -26,11 +31,6 @@ namespace C78E {
 		virtual void drawLines(Ref<VertexArray> vertexArray, uint32_t vertexCount) = 0;
 		
 		virtual void setLineWidth(float width) = 0;
-		
-		static API getAPI() { return s_API; }
-		static Scope<RendererAPI> create();
-	private:
-		static API s_API;
 	};
 
 }

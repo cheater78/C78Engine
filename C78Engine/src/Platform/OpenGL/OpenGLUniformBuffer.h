@@ -1,11 +1,10 @@
 #pragma once
 
-#include "C78E/Renderer/UniformBuffer.h"
+#include <C78E/Renderer/API/UniformBuffer.h>
 
 namespace C78E {
 
-	class OpenGLUniformBuffer : public UniformBuffer
-	{
+	class OpenGLUniformBuffer : public UniformBuffer {
 	public:
 		OpenGLUniformBuffer(uint32_t size);
 		OpenGLUniformBuffer(uint32_t size, uint32_t binding);

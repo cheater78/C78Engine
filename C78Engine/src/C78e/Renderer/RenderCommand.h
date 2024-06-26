@@ -1,11 +1,9 @@
 #pragma once
-
-#include "C78E/Renderer/RendererAPI.h"
+#include "C78E/Renderer/API/RendererAPI.h"
 
 namespace C78E {
 
-	class RenderCommand
-	{
+	class RenderCommand {
 	public:
 		static void init() {
 			s_RendererAPI->init();
@@ -39,11 +37,11 @@ namespace C78E {
 			s_RendererAPI->setDepthWrite(enable);
 		}
 
-		static void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) {
+		static void drawIndexed(const Ref<VertexArray> vertexArray, uint32_t indexCount = 0) {
 			s_RendererAPI->drawIndexed(vertexArray, indexCount);
 		}
 
-		static void drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) {
+		static void drawLines(const Ref<VertexArray> vertexArray, uint32_t vertexCount) {
 			s_RendererAPI->drawLines(vertexArray, vertexCount);
 		}
 
