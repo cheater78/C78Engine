@@ -4,7 +4,6 @@
 #include <C78E/Renderer/API/RendererAPI.h>
 
 #include <Platform/OpenGL/OpenGLUniformBuffer.h>
-#include <Platform/Vulkan/VulkanUniformBuffer.h>
 
 namespace C78E {
 
@@ -12,7 +11,6 @@ namespace C78E {
 		switch (RendererAPI::getAPI()) {
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLUniformBuffer>(size);
-			case RendererAPI::API::Vulkan:  return createRef<VulkanUniformBuffer>(size);
 		}
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
@@ -22,7 +20,6 @@ namespace C78E {
 		switch (RendererAPI::getAPI()) {
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLUniformBuffer>(size, binding);
-		case RendererAPI::API::Vulkan:  return createRef<VulkanUniformBuffer>(size, binding);
 		}
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;

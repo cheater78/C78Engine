@@ -4,7 +4,6 @@
 #include <C78E/Renderer/API/RendererAPI.h>
 
 #include <Platform/OpenGL/OpenGLShader.h>
-#include <Platform/Vulkan/VulkanShader.h>
 
 namespace C78E {
 
@@ -12,7 +11,6 @@ namespace C78E {
 		switch (RendererAPI::getAPI()) {
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLShader>(filepath);
-			case RendererAPI::API::Vulkan:  return createRef<VulkanShader>(filepath);
 		}
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
@@ -22,7 +20,6 @@ namespace C78E {
 		switch (RendererAPI::getAPI()) {
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
-			case RendererAPI::API::Vulkan:  return createRef<VulkanShader>(name, vertexSrc, fragmentSrc);
 		}
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
@@ -33,7 +30,6 @@ namespace C78E {
 		{
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLShader>(name, computeSrc);
-			case RendererAPI::API::Vulkan:  return createRef<VulkanShader>(name, computeSrc);
 		}
 		C78_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;

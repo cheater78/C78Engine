@@ -4,7 +4,6 @@
 #include <C78E/Renderer/API/RendererAPI.h>
 
 #include <Platform/OpenGL/OpenGLTexture.h>
-#include <Platform/Vulkan/VulkanTexture.h>
 
 namespace C78E {
 
