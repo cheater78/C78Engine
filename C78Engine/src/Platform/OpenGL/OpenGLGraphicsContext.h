@@ -7,12 +7,14 @@ namespace C78E {
 
 	class OpenGLGraphicsContext : public GraphicsContext {
 	public:
-		OpenGLGraphicsContext(GLFWwindow* windowHandle);
+		OpenGLGraphicsContext(Window& window);
 
 		virtual void init() override;
 		virtual void swapBuffers() override;
 	private:
-		GLFWwindow* m_WindowHandle;
+		GLFWwindow* getGLFWwindow() const;
+	private:
+		Window& m_Window;
 	};
 
 }

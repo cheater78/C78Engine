@@ -3,13 +3,12 @@
 
 namespace C78E {
 
-	OpenGLGraphicsContext::OpenGLGraphicsContext(GLFWwindow* windowHandle)
-		: m_WindowHandle(windowHandle) {
-		C78_CORE_ASSERT(m_WindowHandle, "OpenGLGraphicsContext::OpenGLGraphicsContext: m_WindowHandle handle is null!")
+	OpenGLGraphicsContext::OpenGLGraphicsContext(Window& window)
+		: m_Window(window) {
 	}
 
 	void OpenGLGraphicsContext::init() {
-		glfwMakeContextCurrent(m_WindowHandle);
+		glfwMakeContextCurrent(getGLFWwindow());
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		C78_CORE_ASSERT(status, "Failed to initialize Glad!");
 		
@@ -22,7 +21,9 @@ namespace C78E {
 	}
 
 	void OpenGLGraphicsContext::swapBuffers() {
-		glfwSwapBuffers(m_WindowHandle);
+		glfwSwapBuffers(getGLFWwindow());
 	}
+
+	GLFWwindow* OpenGLGraphicsContext::getGLFWwindow() const { return static_cast<GLFWwindow*>(m_Window.getNativeWindow()); }
 
 }

@@ -5,17 +5,10 @@
 
 namespace C78E {
 
-	struct WindowProps {
-		std::string title;
-		uint32_t width;
-		uint32_t height;
-		//TODO: vsync
-
-		WindowProps(const std::string& title = "C78Engine Window",
-			        uint32_t width = 1920,
-			        uint32_t height = 1080)
-			: title(title), width(width), height(height)
-		{ }
+	enum RefreshMode {
+		Unlimited = 0,
+		Vsync = 1,
+		//Gsync / FreeSync
 	};
 
 	enum MouseMode {
@@ -23,6 +16,22 @@ namespace C78E {
 		HIDDEN = 1,
 		DISABLED = 2
 	};
+
+	struct WindowProps {
+		std::string title;
+		uint32_t width;
+		uint32_t height;
+		RefreshMode refreshMode = RefreshMode::Vsync;
+
+		WindowProps(const std::string& title = "C78Engine Window",
+			        uint32_t width = 1920,
+			        uint32_t height = 1080,
+					RefreshMode refreshMode = RefreshMode::Vsync)
+			: title(title), width(width), height(height), refreshMode(refreshMode)
+		{ }
+	};
+
+	
 
 	// Interface representing a desktop system based Window
 	class Window {

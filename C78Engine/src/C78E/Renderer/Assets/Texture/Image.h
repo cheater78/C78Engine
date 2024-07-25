@@ -4,6 +4,9 @@
 
 namespace C78E {
 
+	/*
+	* CPU Memory Image
+	*/
 	class Image {
 	public:
 		enum class ImageFormat : uint32_t {
@@ -16,6 +19,8 @@ namespace C78E {
 			R32 = 6,
 			D24S8 = 7
 		};
+
+	public:
 		static const size_t imageFormatSize(ImageFormat format) {
 			if ((uint32_t)format <= 4) return (uint32_t)format;
 			else if (format == ImageFormat::RGBA32F) return 16;
@@ -25,6 +30,7 @@ namespace C78E {
 		}
 
 	public:
+		Image() = delete; //TODO: Check
 		Image(uint32_t width, uint32_t height, ImageFormat format, void* data);
 		Image(const Image& copy);
 		~Image();
