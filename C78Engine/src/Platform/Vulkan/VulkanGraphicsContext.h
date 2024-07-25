@@ -1,18 +1,24 @@
 #pragma once
 #include <C78E/Renderer/API/GraphicsContext.h>
 
+
+#include "Core/VulkanDevice.h"
+
 struct GLFWwindow;
 
 namespace C78E {
 
 	class VulkanGraphicsContext : public GraphicsContext {
 	public:
-		VulkanGraphicsContext(GLFWwindow* windowHandle);
+		VulkanGraphicsContext(Window& window);
 
 		virtual void init() override;
 		virtual void swapBuffers() override;
 	private:
-		GLFWwindow* m_WindowHandle;
+		GLFWwindow* getGLFWwindow() const;
+	private:
+		Window& m_Window;
+
 	};
 
 }

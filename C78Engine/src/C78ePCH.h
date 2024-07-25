@@ -49,6 +49,7 @@
 #include <entt/entt.hpp>
 
 //C78E::CORE
+#include <C78E/Core/Base.h>
 #include <C78E/Core/Core.h>
 #include <C78E/Core/Assert.h>
 #include <C78E/Core/Log.h>

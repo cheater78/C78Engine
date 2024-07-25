@@ -3,15 +3,16 @@
 
 namespace C78E {
 
-	VulkanGraphicsContext::VulkanGraphicsContext(GLFWwindow* windowHandle)
-		: m_WindowHandle(windowHandle) {
-		C78_CORE_ASSERT(m_WindowHandle, "VulkanGraphicsContext::VulkanGraphicsContext: m_WindowHandle handle is null!");
+	VulkanGraphicsContext::VulkanGraphicsContext(Window& window)
+		: m_Window(window) {
 	}
 
 	void VulkanGraphicsContext::init() {
 	}
 
 	void VulkanGraphicsContext::swapBuffers() {
+
 	}
 
+	GLFWwindow* VulkanGraphicsContext::getGLFWwindow() const { return static_cast<GLFWwindow*>(m_Window.getNativeWindow()); }
 }

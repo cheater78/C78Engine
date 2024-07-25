@@ -4,31 +4,31 @@
 
 namespace C78E {
 
-	struct PipelineConfigInfo {
-		
-		PipelineConfigInfo() = default;
-		PipelineConfigInfo(const PipelineConfigInfo&) = delete;
-		PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
-		
-		std::vector<VkVertexInputBindingDescription> bindingDescriptions{};
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
-
-		VkPipelineViewportStateCreateInfo viewportInfo;
-		VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
-		VkPipelineRasterizationStateCreateInfo rasterizationInfo;
-		VkPipelineMultisampleStateCreateInfo multisampleInfo;
-		VkPipelineColorBlendAttachmentState colorBlendAttachment;
-		VkPipelineColorBlendStateCreateInfo colorBlendInfo;
-		VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
-
-		std::vector<VkDynamicState> dynamicStateEnables;
-		VkPipelineDynamicStateCreateInfo dynamicStateInfo;
-		VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
-		VkRenderPass renderPass = VK_NULL_HANDLE;
-		uint32_t subpass = 0;
-	};
-
 	class VulkanPipeline {
+	public:
+		struct PipelineConfigInfo {
+
+			PipelineConfigInfo() = default;
+			PipelineConfigInfo(const PipelineConfigInfo&) = delete;
+			PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
+
+			std::vector<VkVertexInputBindingDescription> bindingDescriptions{};
+			std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
+
+			VkPipelineViewportStateCreateInfo viewportInfo;
+			VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
+			VkPipelineRasterizationStateCreateInfo rasterizationInfo;
+			VkPipelineMultisampleStateCreateInfo multisampleInfo;
+			VkPipelineColorBlendAttachmentState colorBlendAttachment;
+			VkPipelineColorBlendStateCreateInfo colorBlendInfo;
+			VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+
+			std::vector<VkDynamicState> dynamicStateEnables;
+			VkPipelineDynamicStateCreateInfo dynamicStateInfo;
+			VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
+			VkRenderPass renderPass = VK_NULL_HANDLE;
+			uint32_t subpass = 0;
+		};
 
 	public:
 		VulkanPipeline(VulkanDevice &device, const std::string& vertFilepath, const std::string& fragFilepath, PipelineConfigInfo& configInfo);

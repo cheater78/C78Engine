@@ -1,60 +1,49 @@
 #include "C78ePCH.h"
 #include "TextureLoader.h"
 
-#include <C78E/Core/Buffer.h>
-#include <C78E/Project/Project.h>
-
-#include <C78E/Renderer/API/RendererAPI.h>
+#include <C78E/Utils/Image/ImageLoader.h>
 #include <C78E/Renderer/API/Texture.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include <C78E/Renderer/API/RendererAPI.h>
 
 namespace C78E {
 
 	Ref<Texture2D> TextureLoader::importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta) {
-		return loadImageFile(meta.fileSource);
-	}
+		FilePath textureFile = meta.fileSource;
+		FilePath textureExtension = textureFile.extension();
 
-	Ref<Texture2D> TextureLoader::loadImageFile(const FilePath& path) {
-		int width, height, channels;
-		Buffer data;
+		Ref<Image> image = nullptr;
+		bool flipVert = false;
+		uint32_t channelByteAlign = 0;
 
-		if (C78E::RendererAPI::getAPI() == C78E::RendererAPI::API::OpenGL) {
-			stbi_set_flip_vertically_on_load(0);
-		} else if (C78E::RendererAPI::getAPI() == C78E::RendererAPI::API::Vulkan) {
-			C78_CORE_WARN("TextureLoader::loadImageFile: flipping Image for Vulkan, check me!");
-			stbi_set_flip_vertically_on_load(1);
-		}
-		
-
-		// TODO: rework Format handling -> 3/4 channels become 4ch -> 4Byte aligned
-		{
-			std::string pathStr = path.string();
-			data.data = stbi_load(pathStr.c_str(), &width, &height, &channels, 4);
-			C78_CORE_WARN("TextureLoader::loadImageFile: not setting 4ch, but req is 4, check me!");
-			//channels = 4;
+		switch (RendererAPI::getAPI()) {
+		case RendererAPI::API::OpenGL:
+			flipVert = true;
+			channelByteAlign = 4;
+			break;
+		case RendererAPI::API::Vulkan:
+			flipVert = false;
+			break;
+		default: break;
 		}
 
-		if (data.data == nullptr) {
-			C78_CORE_ERROR("TextureLoader::loadTexture2D - Could not load texture from filepath: {}", path.string());
+		//TODO: hdr is stbi supported too, check
+		if (textureExtension == ".png" ||
+			textureExtension == ".jpg" ||
+			textureExtension == ".jpeg" ||
+			textureExtension == ".psd" ||
+			textureExtension == ".bmp" ||
+			textureExtension == ".gif" ||
+			textureExtension == ".pnm" ) {
+			image = ImageLoader::load(textureFile, flipVert, channelByteAlign);
+		} else {
+			C78_CORE_ERROR("TextureLoader::importTexture2D: File: '{}' not supported!", textureFile.string().c_str());
+			C78_CORE_ERROR("  extension: {}", textureExtension.string().c_str());
+			C78_CORE_ASSERT(false);
 			return nullptr;
 		}
 
-		
-		data.size = width * height * channels;
-
-		C78E::Texture2D::TextureSpecification spec;
-		spec.width = width;
-		spec.height = height;
-		switch (channels) {
-		case 3: spec.format = Image::ImageFormat::RGB8; break;
-		case 4: spec.format = Image::ImageFormat::RGBA8; break;
-		}
-
-		Ref<Texture2D> texture = Texture2D::create(spec, data);
-		data.release();
-		return texture;
+		return Texture2D::create(*image);
 	}
 
 }

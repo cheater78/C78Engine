@@ -90,4 +90,11 @@ namespace C78E {
         std::vector<VkWriteDescriptorSet> m_Writes;
     };
 
+
+    class VulkanDescriptorSetManager {
+
+#error "impl me"
+
+    };
+
 }

@@ -12,11 +12,8 @@ namespace C78E {
 		*/
 		static Ref<Texture2D> importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta);
 
-		
-		//static AssetHandle loadTexture2D();
-
-	public:
-		static Ref<Texture2D> loadImageFile(const FilePath& path);
+	private:
+		//TODO: extension map, if non stbi files
 	};
 
 
