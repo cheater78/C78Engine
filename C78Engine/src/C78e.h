@@ -21,38 +21,38 @@
 
 
 // Rendering
-#include "C78E/Renderer/RendererAPI.h"
 #include "C78E/Renderer/RenderCommand.h"
-#include "C78E/Renderer/Renderer.h"
+#include "C78E/Renderer/API/RendererAPI.h"
+#include "C78E/Renderer/Systems/Renderer.h"
 
-#include "C78E/Renderer/Buffer.h"
-#include "C78E/Renderer/VertexArray.h"
-#include "C78E/Renderer/UniformBuffer.h"
+#include "C78E/Renderer/API/Buffer.h"
+#include "C78E/Renderer/API/VertexArray.h"
+#include "C78E/Renderer/API/UniformBuffer.h"
 
-#include "C78E/Renderer/Camera.h"
-#include "C78E/Renderer/EditorCamera.h"
-#include "C78E/Renderer/OrthographicCamera.h"
+#include "C78E/Renderer/Camera/Camera.h"
+#include "C78E/Renderer/Camera/EditorCamera.h"
+#include "C78E/Renderer/Camera/OrthographicCamera.h"
 
 // Project
 #include <C78E/Project/Project.h>
 #include <C78E/Project/ProjectManager.h>
 
 // Assets
-#include "C78E/Assets/AssetManager.h"
+
+#include "C78E/Renderer/API/Texture.h"
+
+#include "C78E/Renderer/Assets/AssetManager.h"
 
 
-#include "C78E/Assets/Texture/Image.h"
-#include "C78E/Assets/Texture/Texture.h"
-#include "C78E/Assets/Texture/TextureLoader.h"
+#include "C78E/Renderer/Assets/Texture/Image.h"
+#include "C78E/Renderer/Assets/Texture/TextureLoader.h"
 
-#include "C78E/Assets/Scene/Components.h"
-#include "C78E/Assets/Scene/Entity.h"
-#include "C78E/Assets/Scene/Scene.h"
-#include "C78E/Assets/Scene/SceneManager.h"
-#include "C78E/Assets/Scene/SceneSerializer.h"
-#include "C78E/Assets/Scene/ScriptableEntity.h"
-
-#include "C78E/Renderer/GenericShape.h"
+#include "C78E/Renderer/Assets/Scene/Components.h"
+#include "C78E/Renderer/Assets/Scene/Entity.h"
+#include "C78E/Renderer/Assets/Scene/Scene.h"
+#include "C78E/Renderer/Assets/Scene/SceneManager.h"
+#include "C78E/Renderer/Assets/Scene/SceneSerializer.h"
+#include "C78E/Renderer/Assets/Scene/ScriptableEntity.h"
 
 //GUI
 #include <C78E/GUI/GUIUtils.h>

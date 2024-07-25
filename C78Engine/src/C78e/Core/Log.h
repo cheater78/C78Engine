@@ -17,15 +17,17 @@
 //----
 
 namespace C78E {
+
 	using LogCallbackFn = std::function<void(std::vector<std::string>)>;
+
 	class Log {
 	public:
 		static void init();
 
-		inline static std::shared_ptr<spdlog::logger>& getCoreLogger() { return s_CoreLogger;  }
-		inline static std::shared_ptr<spdlog::logger>& getEditorLogger() { return s_EditorLogger;  }
-		inline static std::shared_ptr<spdlog::logger>& getClientLogger() { return s_ClientLogger;  }
-		inline static std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt>& getRingBufferSink() { return s_RingbufferSink; }
+		inline static std::shared_ptr<spdlog::logger> getCoreLogger() { return s_CoreLogger;  }
+		inline static std::shared_ptr<spdlog::logger> getEditorLogger() { return s_EditorLogger;  }
+		inline static std::shared_ptr<spdlog::logger> getClientLogger() { return s_ClientLogger;  }
+		inline static std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt> getRingBufferSink() { return s_RingbufferSink; }
 
 	private:
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
@@ -39,6 +41,7 @@ namespace C78E {
 		static std::vector<LogCallbackFn> s_logCallbackFns;
 		static std::vector<std::string> s_lastLogLine;
 	};
+
 }
 
 template<typename OStream, glm::length_t L, typename T, glm::qualifier Q>

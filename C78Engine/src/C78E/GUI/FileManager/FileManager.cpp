@@ -60,7 +60,7 @@ namespace C78E::GUI {
 		case FileManagerUIWindow::Type::Browser: return false;
 		case FileManagerUIWindow::Type::Open: return std::reinterpret_pointer_cast<FileManagerUIOpen>(m_UIWindow)->ready();
 		case FileManagerUIWindow::Type::Save: return std::reinterpret_pointer_cast<FileManagerUISave>(m_UIWindow)->ready();
-		default: C78_CORE_ASSERT(false);
+		default: C78_CORE_ASSERT(false); return false;
 		}
 	}
 
@@ -69,7 +69,7 @@ namespace C78E::GUI {
 		case FileManagerUIWindow::Type::Browser: return "";
 		case FileManagerUIWindow::Type::Open: return std::reinterpret_pointer_cast<FileManagerUIOpen>(m_UIWindow)->getResult();
 		case FileManagerUIWindow::Type::Save: return std::reinterpret_pointer_cast<FileManagerUISave>(m_UIWindow)->getResult();
-		default: C78_CORE_ASSERT(false);
+		default: C78_CORE_ASSERT(false); return "";
 		}
 	}
 

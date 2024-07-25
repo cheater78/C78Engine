@@ -28,7 +28,8 @@ namespace C78Editor {
 
 			if (x != s_Width || y != s_Height) {
 				s_Width = x; s_Height = y;
-				C78E::Renderer::onWindowResize(x, y);
+				C78_EDITOR_ASSERT(false);
+				//C78E::Renderer::resizeTarget(x, y);
 			}
 
 			ImGui::Image(

@@ -15,7 +15,7 @@ namespace C78E {
 	const bool Renderer::invalidateTarget() { const bool prev = m_TargetReady; m_TargetReady = false; return prev; }
 	Ref<Texture2D> Renderer::getTargetTexture() const {
 		if (isTargetReady())
-			return m_TargetFrame->getTexture(); //TODO: getTexture impl
+			return m_TargetFrame->getColorAttachment(0);
 		return nullptr;
 	}
 

@@ -4,8 +4,9 @@
 #include <Windows.h>
 #define C78_PLATFORM_GLFW
 #define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3.h>
+
 #include <glad.h>
+#include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
 #elif defined C78_PLATFORM_LINUX
 #define C78_PLATFORM_GLFW

@@ -39,5 +39,3 @@ namespace C78E {
 	}
 
 }
-
-#include "C78E/Core/Log.h"

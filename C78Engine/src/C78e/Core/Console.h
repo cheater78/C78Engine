@@ -1,7 +1,8 @@
 #pragma once
-#include "C78E/Core/Core.h"
-#include "C78E/Core/Layer.h"
-#include "C78E/Core/KeyCodes.h"
+#include <C78E/Core/Core.h>
+#include <C78E/Core/Log.h>
+#include <C78E/Core/Layer.h>
+#include <C78E/Core/KeyCodes.h>
 #include <C78E/GUI/HotkeyManager/KeyCombo.h>
 
 struct ImGuiInputTextCallbackData;

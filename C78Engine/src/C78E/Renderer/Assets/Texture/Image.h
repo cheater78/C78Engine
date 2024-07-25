@@ -21,6 +21,7 @@ namespace C78E {
 			else if (format == ImageFormat::RGBA32F) return 16;
 			else if (format == ImageFormat::R32) return 4;
 			else if (format == ImageFormat::D24S8) return 4;
+			else C78_CORE_ERROR("Image::imageFormatSize: illegal ImageFormat!"); return 0;
 		}
 
 	public:

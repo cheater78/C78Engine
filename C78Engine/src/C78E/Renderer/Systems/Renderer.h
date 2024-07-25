@@ -60,6 +60,7 @@ namespace C78E {
 		virtual Ref<Texture2D> getTargetTexture() const;
 
 		virtual FrameInfo getTargetInfo() const;
+		virtual void resizeTarget(uint32_t width, uint32_t height);
 
 		virtual inline const RendererType getType() const;
 

@@ -43,7 +43,10 @@ namespace C78E {
 			m_LoadedAssets[handle] = asset;
 			m_AssetRegistry[handle] = meta;
 			//TODO: if autosave... then here -> EditorAssetManager do
+			return asset->m_AssetHandle;
 		}
+		C78_CORE_ERROR("EditorAssetManager::importAsset: '{}' failed to import!", filepath.string());
+		return 0;
 	}
 
 	const Asset::AssetMeta& EditorAssetManager::getMeta(AssetHandle handle) const {

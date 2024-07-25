@@ -1,8 +1,8 @@
 #include "EntityInspector.h"
-#include <C78E/Assets/Model/Model.h>
+#include <C78E/Renderer/Assets/Model/Model.h>
 #include <C78E/Project/Project.h>
-#include <C78E/Assets/Material/Material.h>
-#include <C78E/Assets/Shader/Shader.h>
+#include <C78E/Renderer/Assets/Material/Material.h>
+#include <C78E/Renderer/API/Shader.h>
 
 namespace C78Editor {
 
