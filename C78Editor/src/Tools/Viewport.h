@@ -9,7 +9,7 @@ namespace C78Editor {
 
 		static void init();
 		static void onUpdate(C78E::Ref<C78E::Texture2D> texture);
-		static void onImGuiRender(bool& captureMouse);
+		static void onImGuiRender(bool& captureMouse, C78E::Ref<C78E::Renderer> renderer);
 
 	private:
 		static C78E::Ref<C78E::Texture2D> s_Texture;

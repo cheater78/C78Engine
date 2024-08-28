@@ -42,6 +42,7 @@ namespace C78E {
 
 	public:
 		virtual AssetType getType() const { return AssetType::None; };
+		static AssetType getClassType() { return AssetType::None; };
 	public:
 		AssetHandle m_AssetHandle;
 	};

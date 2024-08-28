@@ -1,31 +1,31 @@
 #include "C78ePCH.h"
 #include "AssetImporter.h"
 
-#include <C78E/Renderer/Assets/Texture/TextureLoader.h>
-#include <C78E/Renderer/Assets/Scene/SceneLoader.h>
-#include <C78E/Renderer/Assets/Model/ModelLoader.h>
-#include <C78E/Renderer/Assets/Mesh/MeshLoader.h>
-#include <C78E/Renderer/Assets/Material/MaterialLoader.h>
+#include <C78E/Renderer/Assets/AssetManager.h>
+
+#include <C78E/Renderer/Assets/Texture/TextureImporter.h>
+#include <C78E/Renderer/Assets/Scene/SceneImporter.h>
+#include <C78E/Renderer/Assets/Model/ModelImporter.h>
+#include <C78E/Renderer/Assets/Shader/ShaderImporter.h>
 
 namespace C78E {
 
 	const std::map<Asset::AssetType, AssetImporter::AssetImportFunction> AssetImporter::s_AssetImportFunctions = {
-		{ Asset::AssetType::Scene, SceneLoader::importScene },
-		{ Asset::AssetType::Texture2D, TextureLoader::importTexture2D },
-		{ Asset::AssetType::Model, ModelLoader::importModel },
-		{ Asset::AssetType::Mesh, MeshLoader::importMesh },
-		{ Asset::AssetType::Material, MaterialLoader::importMaterial }
+		{ Asset::AssetType::Scene, SceneImporter::importScene },
+		{ Asset::AssetType::Texture2D, TextureImporter::importTexture2D },
+		{ Asset::AssetType::Model, ModelImporter::importModel },
+		{ Asset::AssetType::Shader, ShaderImporter::importShader },
 	};
 
-	Ref<Asset> AssetImporter::importAsset(AssetHandle handle, const Asset::AssetMeta& meta) {
+	Ref<Asset> AssetImporter::importAsset(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
 		if (s_AssetImportFunctions.find(meta.type) == s_AssetImportFunctions.end()) {
 			C78_CORE_ERROR("No AssetLoader exists for Type: {}", Asset::assetTypeToString(meta.type));
 			return nullptr;
 		}
-		return s_AssetImportFunctions.at(meta.type)(handle, meta);
+		return s_AssetImportFunctions.at(meta.type)(handle, meta, assetManager);
 	}
 
-	Ref<AsyncAsset> AssetImporter::importAssetAsync(AssetHandle handle, const Asset::AssetMeta& meta) {
+	Ref<AsyncAsset> AssetImporter::importAssetAsync(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
 		if (s_AssetImportFunctions.find(meta.type) == s_AssetImportFunctions.end()) {
 			C78_CORE_ERROR("No AssetLoader exists for Type: {}", Asset::assetTypeToString(meta.type));
 			return nullptr;
@@ -39,7 +39,7 @@ namespace C78E {
 		// get new Thread
 		//std::thread th;
 		{
-			assetRef->m_Asset = s_AssetImportFunctions.at(meta.type)(handle, meta);
+			assetRef->m_Asset = s_AssetImportFunctions.at(meta.type)(handle, meta, assetManager);
 			assetRef->m_Loaded = true;
 		}
 

@@ -20,8 +20,13 @@ namespace C78E {
 		if (!m_ActiveProject) return false;
 
 		if (projectFile.empty()) {
-			C78_CORE_ASSERT(m_ActiveProjectFile.empty(), "ProjectManager::saveProject: m_ActiveProjectFile is not set!");
-			if (m_ActiveProjectFile.empty()) return false;
+			C78_CORE_ASSERT(!m_ActiveProjectFile.empty(), "ProjectManager::saveProject: m_ActiveProjectFile is not set!");
+			if (m_ActiveProjectFile.empty()) {
+				C78E::FilePath path = FileDialogs::saveFile("C78Project (*.pce)\0*.pce\0");
+				if(path.empty())
+					return false;
+				m_ActiveProjectFile = path;
+			}
 		} else {
 			m_ActiveProjectFile = projectFile;
 		}
@@ -50,6 +55,10 @@ namespace C78E {
 
 	const bool ProjectManager::hasActiveProjectFile() const {
 		return !m_ActiveProjectFile.empty();
+	}
+
+	const FilePath ProjectManager::getActiveProjectFile() const {
+		return m_ActiveProjectFile;
 	}
 
 	Ref<Project> ProjectManager::reloadProject() {

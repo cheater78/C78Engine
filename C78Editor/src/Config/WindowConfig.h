@@ -2,17 +2,23 @@
 #include <C78E.h>
 #include <C78Elibs.h>
 
+#define C78EDITOR_CONFIG_FILE "config/editor.yml"
 
 namespace C78Editor {
 
 	class WindowConfig {
+	public:
+		static inline glm::vec<2, uint32_t> s_DefaultWindowSize = { 1920, 1080 };
+		static inline glm::vec<2, uint32_t> s_LastWindowSize = { 1920, 1080 };
 	private:
-		static const C78E::FilePath configFile;
+		static inline const C78E::FilePath configFile = C78EDITOR_CONFIG_FILE;
 
 	public:
-
 		static void load() {
-			if (!std::filesystem::exists(configFile)) save();
+			if (!std::filesystem::exists(configFile)) {
+				C78_EDITOR_INFO("Creating WindowConfig! (First time setup)");
+				save();
+			}
 
 			YAML::Node data;
 			try {
@@ -24,8 +30,10 @@ namespace C78Editor {
 
 			auto node = data["WindowConfig"];
 			if (!node) { save(); return; }
-			s_StartWindowSize = node["StartWindowSize"].as<glm::vec2>();
-			s_EditorWindowSize = node["EditorWindowSize"].as<glm::vec2>();
+			s_DefaultWindowSize = node["DefaultWindowSize"].as<glm::vec<2, uint32_t>>();
+			s_LastWindowSize = node["LastWindowSize"].as<glm::vec<2, uint32_t>>();
+
+			C78_EDITOR_INFO("WindowConfig loaded!");
 		}
 
 		static void save() {
@@ -35,8 +43,8 @@ namespace C78Editor {
 				out << YAML::Key << "WindowConfig" << YAML::Value;
 				{
 					out << YAML::BeginMap;// WindowConfig
-					out << YAML::Key << "StartWindowSize" << YAML::Value << s_StartWindowSize;
-					out << YAML::Key << "EditorWindowSize" << YAML::Value << s_EditorWindowSize;
+					out << YAML::Key << "DefaultWindowSize" << YAML::Value << s_DefaultWindowSize;
+					out << YAML::Key << "LastWindowSize" << YAML::Value << s_LastWindowSize;
 					out << YAML::EndMap; // WindowConfig
 				}
 				out << YAML::EndMap; // Root
@@ -44,21 +52,9 @@ namespace C78Editor {
 
 			std::ofstream fout(configFile);
 			fout << out.c_str();
+			C78_EDITOR_INFO("WindowConfig saved!");
 		}
 
-		static glm::vec2 getStartWindowSize() {
-			C78E::System::Monitor monitor = C78E::System::getPrimaryMonitor();
-			return { monitor.width * s_StartWindowSize.x, monitor.height * s_StartWindowSize.y };
-		}
-
-		static glm::vec2 getEditorWindowSize() {
-			C78E::System::Monitor monitor = C78E::System::getPrimaryMonitor();
-			return { monitor.width * s_EditorWindowSize.x, monitor.height * s_EditorWindowSize.y };
-		}
-
-	private:
-		static glm::vec2 s_StartWindowSize;
-		static glm::vec2 s_EditorWindowSize;
 	};
 
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C78EPCH.h"
+#include <glm/glm.hpp>
 
 namespace C78E::Primitive {
 
@@ -48,4 +48,5 @@ namespace C78E::Primitive {
 		void* getIndexData() const { return (void*)&indecies; }
 		uint32_t getIndexCount() const { return 36; }
 	};
+
 }

@@ -12,8 +12,21 @@ namespace C78E {
 		AssetManager() = default;
 		AssetManager(const AssetManager& other) = delete;
 		~AssetManager() = default;
-
+		
 		virtual Ref<Asset> getAsset(AssetHandle handle) = 0;
+
+		template <typename T>
+		Ref<T> getAssetAs(AssetHandle assetHandle) {
+			static_assert(std::is_base_of<Asset, T>::value, "AssetManager::getAssetAs: T must be derived of Asset!");
+			C78_CORE_ASSERT(assetHandle, "AssetManager::getAssetAs: AssetHandle is null!");
+			Ref<Asset> asset = getAsset(assetHandle);
+			if (T::getClassType() != asset->getType()) {
+				C78_CORE_ERROR("AssetManager::getAssetAs: Requested Type does not match the requested Asset!");
+				C78_CORE_ERROR("  no cast from {} to {}", Asset::assetTypeToString(asset->getType()), Asset::assetTypeToString(T::getClassType()));
+				C78_CORE_ASSERT(false);
+			}
+			return std::static_pointer_cast<T>(asset);
+		}
 
 		virtual bool isValid(AssetHandle handle) const = 0;
 		virtual bool isLoaded(AssetHandle handle) const = 0;
@@ -25,6 +38,7 @@ namespace C78E {
 		EditorAssetManager() = default;
 		EditorAssetManager(const EditorAssetManager& other) = delete;
 		~EditorAssetManager() = default;
+
 		/*
 		* Retrieves loaded Assets or otherwise loads them
 		* returns a reference of the Asset
@@ -57,6 +71,11 @@ namespace C78E {
 		* returns the AssetHandle of the created Asset
 		*/
 		AssetHandle importAsset(const FilePath& filepath);
+
+		/*
+		* Removes an Asset by AssetHandle from the Loaded Assets and AssetRegistry
+		*/
+		bool removeAsset(AssetHandle handle, bool fromDisk = false);
 
 		/*
 		* Retrieves the Asset Meta of an Asset given its Assethandle

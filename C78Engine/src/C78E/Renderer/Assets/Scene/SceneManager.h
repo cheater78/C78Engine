@@ -11,28 +11,35 @@ namespace C78E {
 		SceneManager(Ref<ProjectManager> projectManager);
 		~SceneManager();
 
-		Ref<Scene> createScene(const std::string& name); //Editor only
-		bool saveScene(SceneHandle sceneHandle = 0, const FilePath& sceneFile = ""); //Editor only
-		bool deleteScene(SceneHandle sceneHandle, bool fromDisk = false); //Editor only
+		Ref<Scene> createScene(const std::string& name = "Unnamed Scene");
+		bool saveScene(SceneHandle sceneHandle = 0, const FilePath& sceneFile = "");
+		bool deleteScene(SceneHandle sceneHandle, bool fromDisk = false);
 
-		const bool hasActiveScene() const;
-		Ref<Scene> getActiveScene();
+		Ref<Scene> getScene(SceneHandle sceneHandle) const;
+
+
+		bool hasActiveScene() const;
+		Ref<Scene> getActiveScene() const;
 		void setActiveSceneHandle(SceneHandle sceneHandle);
 		SceneHandle getActiveSceneHandle() const;
+		bool activeSceneIsEmpty() const;
 
-
+	public:	//Expose ProjectManager
+		bool hasActiveProjectManager() const;
+		Ref<ProjectManager> getProjectManager() const;
+		bool hasActiveProject() const;
+		Ref<Project> getActiveProject() const;
+		bool hasActiveProjectFile() const;
+		FilePath getActiveProjectFile() const;
 
 	private:
-		Ref<Scene> validateSceneHandle(SceneHandle sceneHandle);
-		Ref<Project> getActiveProject();
-
-		//Editor only
+		// Naming for Serialized Scene Files
 		FilePath fileFromScene(Ref<Scene> scene, Asset::AssetMeta meta);
 
 	private:
-		Ref<ProjectManager> m_ProjectManager;
+		WRef<ProjectManager> m_ProjectManager;
+		SceneHandle m_ActiveScene = (uint64_t)0;
 
-		SceneHandle m_ActiveScene = 0;
 	};
 
 }

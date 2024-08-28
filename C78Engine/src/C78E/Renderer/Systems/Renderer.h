@@ -1,3 +1,4 @@
+#pragma once
 #include <C78E/Renderer/RenderCommand.h>
 
 #include <C78E/Renderer/API/Buffer.h>
@@ -14,11 +15,11 @@
 #include <C78E/Renderer/Assets/Material/Material.h>
 #include <C78E/Renderer/Assets/Mesh/Mesh.h>
 #include <C78E/Renderer/Assets/Model/Model.h>
-#include <C78E/Renderer/Assets/Scene/Components.h>
-#include <C78E/Renderer/Assets/Scene/Entity.h>
+#include <C78E/Renderer/Assets/Scene/Entity/Component/Components.h>
+#include <C78E/Renderer/Assets/Scene/Entity/Entity.h>
 #include <C78E/Renderer/Assets/Scene/Scene.h>
 
-#include <C78E/Renderer/Assets/Scene/Uniform.h>
+#include <C78E/Renderer/Assets/Scene/Entity/Component/Uniform.h>
 
 namespace C78E {
 
@@ -69,15 +70,18 @@ namespace C78E {
 
 		virtual void resetTargetFrameInfo();
 
-	private:
+	protected:
 		Ref<AssetManager> m_AssetManager = nullptr;
 
-		std::binary_semaphore m_Busy{1};
+		
 		Ref<std::thread> m_RenderThread = nullptr;
 
-		bool m_TargetReady = false;
 		FrameInfo m_TargetFrameInfo{};
+
+		std::binary_semaphore m_BusyTarget{ 1 };
 		Ref<Framebuffer> m_TargetFrame = nullptr;
+
+		std::binary_semaphore m_BusyWorking{ 1 };
 		Ref<Framebuffer> m_WorkingFrame = nullptr;
 
 	};

@@ -7,6 +7,7 @@ namespace C78E {
 
 	// Non-owning raw buffer class
 	struct Buffer {
+	public:
 		uint8_t* data = nullptr;
 		uint64_t size = 0;
 

@@ -40,4 +40,11 @@ namespace YAML {
 		return out;
 	}
 
+	// GLM::vec<2, uint32_t>
+	Emitter& operator<<(Emitter& out, const glm::vec<2, uint32_t>& v) {
+		out << YAML::Flow;
+		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
+		return out;
+	}
+
 }

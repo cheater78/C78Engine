@@ -1,6 +1,0 @@
-Project:
-  Name: C78Proj
-  StartScene: 0
-  AssetDirectory: C:\dev\c-cpp\C78Engine\C78Project\assets
-  AssetRegistryPath: C:\dev\c-cpp\C78Engine\C78Project\assets\AssetRegistry.ace
-  ScriptModulePath: ./PlaceHolder

@@ -27,7 +27,6 @@ namespace YAML {
 
 	};
 
-
 	// GLM::vec2
 	Emitter& operator<<(Emitter& out, const glm::vec2& v);
 	template <>
@@ -103,6 +102,27 @@ namespace YAML {
 	};
 
 
+	// GLM::vec<2, uint32_t>
+	Emitter& operator<<(Emitter& out, const glm::vec<2, uint32_t>& v);
+	template <>
+	struct convert<glm::vec<2, uint32_t>> {
+		static Node encode(const glm::vec<2, uint32_t>& v) {
+			Node node;
+			node.push_back(v.x);
+			node.push_back(v.y);
+			return node;
+		}
+
+		static bool decode(const Node& node, glm::vec<2, uint32_t>& v) {
+			if (!node.IsSequence() || node.size() != 2)
+				return false;
+
+			v.x = node[0].as<uint32_t>();
+			v.y = node[1].as<uint32_t>();
+			return true;
+		}
+
+	};
 
 }
 

@@ -13,12 +13,17 @@ namespace C78Editor {
 	class C78Editor : public C78E::Application {
 	public:
 
-		C78Editor() : Application({"C78Editor", 1920, 1080 }), m_EditorLayer(C78E::createRef<EditorLayer>(this->getWindow())) {
+		C78Editor(C78E::WindowProps props)
+			: Application(props),
+			m_EditorLayer(C78E::createRef<EditorLayer>(this->getWindow())) {
 			pushLayer(m_EditorLayer);
 		}
 
 		C78Editor(const C78Editor&) = delete;
-		~C78Editor() = default;
+		~C78Editor() {
+			::C78Editor::WindowConfig::s_LastWindowSize = { getWindow().getWidth(), getWindow().getHeight() };
+			::C78Editor::WindowConfig::save();
+		}
 
 	private:
 		C78E::Ref<C78E::Layer> m_EditorLayer;
@@ -28,6 +33,13 @@ namespace C78Editor {
 
 // Register App in Engine
 C78E::Application* C78E::createApplication() {
-	C78Editor::WindowConfig::load(); //TODO: load real Window settings
-	return new C78Editor::C78Editor();
+	::C78Editor::WindowConfig::load();
+
+	C78E::WindowProps props{
+		"C78Editor",
+		::C78Editor::WindowConfig::s_LastWindowSize.x,
+		::C78Editor::WindowConfig::s_LastWindowSize.y
+	};
+
+	return new C78Editor::C78Editor(props);
 }

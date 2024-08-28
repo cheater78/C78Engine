@@ -36,6 +36,8 @@ namespace C78E {
 		static FilePath createDirectoryIfNotPresent(FilePath directoryPath);
 		static FilePath createFileIfNotPresent(FilePath filePath);
 
+		static bool isDirectory(C78E::FilePath filepath);
+		static bool isFile(C78E::FilePath filepath);
 	
 	public:
 		static Buffer readFileBinary(const FilePath& filepath);

@@ -203,8 +203,9 @@ namespace C78E::GUI {
 		if (m_LabelPostition == ABOVE || m_LabelPostition == LEFT) ImGui::TextWrapped(m_Label.c_str());
 		if (m_LabelPostition == LEFT) ImGui::SameLine();
 
+		//TODO
 		//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-		C78_CORE_WARN("TODO: ImGui Element Styling!");
+		//C78_CORE_WARN("TODO: ImGui Element Styling!");
 		if (
 			ImGui::ImageButton(
 				m_Texture,

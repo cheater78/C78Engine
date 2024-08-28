@@ -3,7 +3,7 @@
 
 #include "Asset/AssetImporter.h"
 
-#include <C78E/Utils/yaml-cpp/YamlUtils.h>
+#include <C78E/Utils/Yaml/YamlUtils.h>
 
 namespace C78E {
 
@@ -37,7 +37,7 @@ namespace C78E {
 			return 0;
 		}
 
-		Ref<Asset> asset = AssetImporter::importAsset(handle, meta);
+		Ref<Asset> asset = AssetImporter::importAsset(handle, meta, nullptr);
 		if (asset) {
 			asset->m_AssetHandle = handle;
 			m_LoadedAssets[handle] = asset;
@@ -49,10 +49,26 @@ namespace C78E {
 		return 0;
 	}
 
+	bool EditorAssetManager::removeAsset(AssetHandle handle, bool fromDisk) {
+		if (!isValid(handle)) {
+			C78_CORE_ERROR("EditorAssetManager::removeAsset: Assethandle is null!");
+			return false;
+		}
+		if (fromDisk) {
+			auto& assetMeta = getMeta(handle);
+			C78_CORE_ERROR("EditorAssetManager::removeAsset: TODO - Cannot remove from Disk yet!");
+		}
+		m_AssetRegistry.erase(handle);
+		m_LoadedAssets.erase(handle);
+		return true;
+	}
+
 	const Asset::AssetMeta& EditorAssetManager::getMeta(AssetHandle handle) const {
 		auto it = m_AssetRegistry.find(handle);
-		if (it == m_AssetRegistry.end())
+		if (it == m_AssetRegistry.end()) {
+			C78_CORE_ERROR("EditorAssetManager::getMeta: AssetHandle {} not found!", (uint64_t)handle);
 			return Asset::c_NullAssetMeta;
+		}
 		return it->second;
 	}
 
@@ -69,18 +85,19 @@ namespace C78E {
 		} else {
 			Ref<Asset> asset;
 			const Asset::AssetMeta& metadata = getMeta(handle);
-			asset = AssetImporter::importAsset(handle, metadata);
+			asset = AssetImporter::importAsset(handle, metadata, nullptr);
 			if (!asset) {
 				// import failed
 				C78_CORE_ERROR("EditorAssetManager::getAsset - loading Asset failed!");
 			}
+			asset->m_AssetHandle = handle;
 			m_LoadedAssets[handle] = asset;
 			return asset;
 		}
 	}
 
 	void EditorAssetManager::exportAssetRegistry(const FilePath& assetRegistryPath) {
-		FileSystem::createDirectoryIfNotPresent(assetRegistryPath);
+		FileSystem::createDirectoryIfNotPresent(assetRegistryPath.parent_path());
 		YAML::Emitter out;
 		{
 			out << YAML::BeginMap; // Root
@@ -116,8 +133,10 @@ namespace C78E {
 		}
 
 		auto rootNode = data["AssetRegistry"];
-		if (!rootNode)
+		if (!rootNode) {
+			C78_CORE_ERROR("EditorAssetManager::importAssetRegistry: Root Node not found!");
 			return false;
+		}
 
 		for (const auto& node : rootNode) {
 			AssetHandle handle = node["Handle"].as<uint64_t>();

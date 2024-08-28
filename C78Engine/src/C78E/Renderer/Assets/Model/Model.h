@@ -24,6 +24,7 @@ namespace C78E {
 		~Model() { }
 	public:
 		virtual AssetType getType() { return Asset::AssetType::Model; };
+		static AssetType getClassType() { return AssetType::Model; };
 	public:
 		std::vector<ModelPart> m_Parts; // list of pairs with Mesh and Material
 	};

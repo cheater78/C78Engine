@@ -15,8 +15,7 @@ namespace C78E {
 
 	namespace Utils {
 
-		static GLenum ShaderTypeFromString(const std::string& type)
-		{
+		static GLenum ShaderTypeFromString(const std::string& type) {
 			if (type == "vertex")
 				return GL_VERTEX_SHADER;
 			if (type == "fragment" || type == "pixel")
@@ -28,10 +27,8 @@ namespace C78E {
 			return 0;
 		}
 
-		static shaderc_shader_kind GLShaderStageToShaderC(GLenum stage)
-		{
-			switch (stage)
-			{
+		static shaderc_shader_kind GLShaderStageToShaderC(GLenum stage) {
+			switch (stage) {
 				case GL_VERTEX_SHADER:   return shaderc_glsl_vertex_shader;
 				case GL_FRAGMENT_SHADER: return shaderc_glsl_fragment_shader;
 				case GL_COMPUTE_SHADER:	 return shaderc_glsl_compute_shader;
@@ -40,10 +37,8 @@ namespace C78E {
 			return (shaderc_shader_kind)0;
 		}
 
-		static const char* GLShaderStageToString(GLenum stage)
-		{
-			switch (stage)
-			{
+		static const char* GLShaderStageToString(GLenum stage) {
+			switch (stage) {
 				case GL_VERTEX_SHADER:   return "GL_VERTEX_SHADER";
 				case GL_FRAGMENT_SHADER: return "GL_FRAGMENT_SHADER";
 				case GL_COMPUTE_SHADER: return "GL_COMPUTE_SHADER";
@@ -52,8 +47,7 @@ namespace C78E {
 			return nullptr;
 		}
 
-		static const char* GetCacheDirectory()
-		{
+		static const char* GetCacheDirectory() {
 			// TODO: make sure the assets directory is valid
 			return "assets/cache/shader/opengl";
 		}
@@ -92,14 +86,14 @@ namespace C78E {
 
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& filepath)
+	OpenGLShader::OpenGLShader(const FilePath filepath)
 		: m_FilePath(filepath)
 	{
 		Timer timer;
 
 		Utils::CreateCacheDirectoryIfNeeded();
 
-		std::string source = ReadFile(filepath);
+		std::string source = ReadFile(filepath.string());
 		auto shaderSources = PreProcess(source);
 		CompileOrGetVulkanBinaries(shaderSources);
 		CompileOrGetOpenGLBinaries();
@@ -139,17 +133,14 @@ namespace C78E {
 		C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
 	}
 
-	OpenGLShader::~OpenGLShader()
-	{
+	OpenGLShader::~OpenGLShader() {
 		glDeleteProgram(m_RendererID);
 	}
 
-	std::string OpenGLShader::ReadFile(const std::string& filepath)
-	{
+	std::string OpenGLShader::ReadFile(const std::string& filepath) {
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
-		if (in)
-		{
+		if (in) {
 			in.seekg(0, std::ios::end);
 			size_t size = in.tellg();
 			if (size != -1)
@@ -163,16 +154,14 @@ namespace C78E {
 				C78_CORE_ERROR("Could not read from ShaderSourceFile '{0}'", filepath);
 			}
 		}
-		else
-		{
+		else {
 			C78_CORE_ERROR("Could not open ShaderSourceFile '{0}'", filepath);
 		}
 
 		return result;
 	}
 
-	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
-	{
+	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source) {
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -229,7 +218,7 @@ namespace C78E {
 			}
 			else
 			{
-				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.c_str(), options);
+				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.string().c_str(), options);
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
 					C78_CORE_ERROR(module.GetErrorMessage());
@@ -290,7 +279,7 @@ namespace C78E {
 				m_OpenGLSourceCode[stage] = glslCompiler.compile();
 				auto& source = m_OpenGLSourceCode[stage];
 
-				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.c_str(), options);
+				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.string().c_str(), options);
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
 					C78_CORE_ERROR(module.GetErrorMessage());
@@ -311,13 +300,11 @@ namespace C78E {
 		}
 	}
 
-	void OpenGLShader::createProgram()
-	{
+	void OpenGLShader::createProgram() {
 		GLuint program = glCreateProgram();
 
 		std::vector<GLuint> shaderIDs;
-		for (auto&& [stage, spirv] : m_OpenGLSPIRV)
-		{
+		for (auto&& [stage, spirv] : m_OpenGLSPIRV) {
 			GLuint shaderID = shaderIDs.emplace_back(glCreateShader(stage));
 			glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), spirv.size() * sizeof(uint32_t));
 			glSpecializeShader(shaderID, "main", 0, nullptr, nullptr);
@@ -328,8 +315,7 @@ namespace C78E {
 
 		GLint isLinked;
 		glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
-		if (isLinked == GL_FALSE)
-		{
+		if (isLinked == GL_FALSE) {
 			GLint maxLength;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
 
@@ -337,7 +323,7 @@ namespace C78E {
 			glGetProgramInfoLog(program, maxLength, &maxLength, infoLog.data());
 			if (infoLog.empty())
 				infoLog.push_back('!');
-			C78_CORE_ERROR("Shader linking failed ({0}):\n{1}", m_FilePath, infoLog.data());
+			C78_CORE_ERROR("OpenGLShader::createProgram: Shader linking failed! ({0}):\n GLError: {1}", m_FilePath, infoLog.data());
 			
 
 			glDeleteProgram(program);

@@ -1,12 +1,10 @@
 #pragma once
-#include "C78EPCH.h"
+#include "C78ePCH.h"
 
-
-#include "C78E/Core/Types.h" // TODO: resolve and remove
-#include "SceneCamera.h"
-#include "Light.h"
-#include "C78E/Core/UUID.h"
-#include "C78E/Renderer/Assets/AssetManager.h"
+#include <C78E/Core/UUID.h>
+#include <C78E/Renderer/Camera/SceneCamera.h>
+#include <C78E/Renderer/Assets/Asset/Asset.h>
+#include <C78E/Renderer/Assets/Scene/Entity/Component/Light.h>
 
 namespace C78E {
 	class ScriptableEntity;
@@ -73,8 +71,8 @@ namespace C78E {
 	* (optional)
 	*/
 	struct CameraComponent {
-		SceneCamera Camera;
-		bool FixedAspectRatio = false;
+		SceneCamera camera;
+		bool fixedAspectRatio = false;
 	};
 
 	/*

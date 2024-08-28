@@ -8,12 +8,12 @@ namespace C78E {
 
 	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size) {
 		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW); 
+		glNamedBufferData(m_RendererID, size, nullptr, GL_STATIC_DRAW); 
 	}
 
 	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size, uint32_t binding) {
 		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW); // TODO: investigate usage hint
+		glNamedBufferData(m_RendererID, size, nullptr, GL_STATIC_DRAW); // TODO: investigate usage hint
 		glBindBufferBase(GL_UNIFORM_BUFFER, binding, m_RendererID);
 	}
 

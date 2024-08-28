@@ -1,16 +1,15 @@
 #include <C78ePCH.h>
 #include "SceneSerializer.h"
 
-#include <C78E/Utils/yaml-cpp/YamlUtils.h>
+
 
 namespace C78E {
 
-	SceneSerializer::SceneSerializer(const Ref<Scene>& scene, const Asset::AssetMeta& meta)
+	SceneSerializer::SceneSerializer(const Ref<Scene> scene, const Asset::AssetMeta& meta)
 		: m_Scene(scene), m_Meta(meta)
 	{ }
 
-	static void SerializeEntity(YAML::Emitter& out, Entity entity)
-	{
+	static void SerializeEntity(YAML::Emitter& out, Entity entity) {
 		C78_CORE_ASSERT(entity.hasComponent<IDComponent>());
 
 		out << YAML::BeginMap; // Entity
@@ -43,20 +42,32 @@ namespace C78E {
 			out << YAML::BeginMap; // CameraComponent
 
 			auto& cameraComponent = entity.getComponent<CameraComponent>();
-			auto& camera = cameraComponent.Camera;
+			auto& camera = cameraComponent.camera;
 
 			out << YAML::Key << "Camera" << YAML::Value;
 			out << YAML::BeginMap; // Camera
-			out << YAML::Key << "ProjectionType" << YAML::Value << (int)camera.GetProjectionType();
-			out << YAML::Key << "PerspectiveFOV" << YAML::Value << camera.GetPerspectiveVerticalFOV();
-			out << YAML::Key << "PerspectiveNear" << YAML::Value << camera.GetPerspectiveNearClip();
-			out << YAML::Key << "PerspectiveFar" << YAML::Value << camera.GetPerspectiveFarClip();
-			out << YAML::Key << "OrthographicSize" << YAML::Value << camera.GetOrthographicSize();
-			out << YAML::Key << "OrthographicNear" << YAML::Value << camera.GetOrthographicNearClip();
-			out << YAML::Key << "OrthographicFar" << YAML::Value << camera.GetOrthographicFarClip();
+			out << YAML::Key << "ProjectionType" << YAML::Value << (int)camera.getProjectionType();
+			out << YAML::Key << "PerspectiveFOV" << YAML::Value << camera.getPerspectiveVerticalFOV();
+			out << YAML::Key << "PerspectiveNear" << YAML::Value << camera.getPerspectiveNearClip();
+			out << YAML::Key << "PerspectiveFar" << YAML::Value << camera.getPerspectiveFarClip();
+			out << YAML::Key << "OrthographicSize" << YAML::Value << camera.getOrthographicSize();
+			out << YAML::Key << "OrthographicNear" << YAML::Value << camera.getOrthographicNearClip();
+			out << YAML::Key << "OrthographicFar" << YAML::Value << camera.getOrthographicFarClip();
 			out << YAML::EndMap; // Camera
 
-			out << YAML::Key << "FixedAspectRatio" << YAML::Value << cameraComponent.FixedAspectRatio;
+			out << YAML::Key << "FixedAspectRatio" << YAML::Value << cameraComponent.fixedAspectRatio;
+
+			out << YAML::EndMap; // CameraComponent
+		}
+
+		if (entity.hasComponent<ModelComponent>()) {
+			out << YAML::Key << "ModelComponent";
+			out << YAML::BeginMap; // CameraComponent
+
+			auto& modelComponent = entity.getComponent<ModelComponent>();
+			auto& model = modelComponent.model;
+
+			out << YAML::Key << "Model" << YAML::Value << model;
 
 			out << YAML::EndMap; // CameraComponent
 		}
@@ -107,7 +118,7 @@ namespace C78E {
 		m_Meta.name = data["Scene"].as<std::string>();
 		m_Meta.fileSource = filepath;
 		m_Meta.type = Asset::AssetType::Scene;
-		C78_CORE_TRACE("Deserializing scene '{0}'", m_Meta.name);
+		C78_CORE_TRACE("SceneSerializer::deserialize: Deserializing scene '{0}'", m_Meta.name);
 
 		auto entities = data["Entities"];
 		if (entities) {
@@ -119,7 +130,7 @@ namespace C78E {
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
-				C78_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
+				
 
 				Entity deserializedEntity = m_Scene->createEntityWithUUID(uuid, name);
 
@@ -137,20 +148,29 @@ namespace C78E {
 					auto& cc = deserializedEntity.addComponent<CameraComponent>();
 
 					auto cameraProps = cameraComponent["Camera"];
-					cc.Camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+					cc.camera.setProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
 
-					cc.Camera.SetPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());
-					cc.Camera.SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
-					cc.Camera.SetPerspectiveFarClip(cameraProps["PerspectiveFar"].as<float>());
+					cc.camera.setPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());
+					cc.camera.setPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
+					cc.camera.setPerspectiveFarClip(cameraProps["PerspectiveFar"].as<float>());
 
-					cc.Camera.SetOrthographicSize(cameraProps["OrthographicSize"].as<float>());
-					cc.Camera.SetOrthographicNearClip(cameraProps["OrthographicNear"].as<float>());
-					cc.Camera.SetOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
+					cc.camera.setOrthographicSize(cameraProps["OrthographicSize"].as<float>());
+					cc.camera.setOrthographicNearClip(cameraProps["OrthographicNear"].as<float>());
+					cc.camera.setOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
 
-					cc.FixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();
+					cc.fixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();
 				}
 
+				auto modelComponent = entity["ModelComponent"];
+				if (modelComponent) {
+					auto& mc = deserializedEntity.addComponent<ModelComponent>();
+
+					auto model = modelComponent["Model"];
+					mc.model = model.as<UUID>();
+				}
 				
+
+				C78_CORE_TRACE("SceneSerializer::deserialize: Deserialized entity with ID = {0}, name = {1}", uuid, name);
 			}
 		}
 

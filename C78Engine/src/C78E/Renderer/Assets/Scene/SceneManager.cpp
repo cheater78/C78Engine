@@ -12,88 +12,167 @@ namespace C78E {
 	SceneManager::~SceneManager() { }
 
 	Ref<Scene> SceneManager::createScene(const std::string& name) {
-		Ref<Scene> scene = C78E::createRef<C78E::Scene>(); //Scenes are nameless!
-		C78E::Asset::AssetMeta meta;
-		meta.name = name;
-		meta.fileSource = fileFromScene(scene, meta);
-		meta.type = C78E::Asset::AssetType::Scene;
-		m_ActiveScene = m_ProjectManager->getActiveProject()->getEditorAssetManager()->addAsset(meta, scene);
-		return std::static_pointer_cast<Scene>(m_ProjectManager->getActiveProject()->getEditorAssetManager()->getAsset(m_ActiveScene));
+		if (auto projectManager = m_ProjectManager.lock()) {
+			Ref<Scene> scene = C78E::createRef<C78E::Scene>(); //Scenes itself are nameless!
+			C78E::Asset::AssetMeta meta;
+			meta.name = name;
+			meta.fileSource = fileFromScene(scene, meta);
+			meta.type = C78E::Asset::AssetType::Scene;
+			m_ActiveScene = projectManager->getActiveProject()->getEditorAssetManager()->addAsset(meta, scene);
+			return projectManager->getActiveProject()->getEditorAssetManager()->getAssetAs<Scene>(m_ActiveScene);
+		} else {
+			C78_CORE_ERROR("SceneManager::createScene: Called without m_ProjectManager!");
+			return nullptr;
+		}
 	}
 
 	bool SceneManager::saveScene(SceneHandle sceneHandle, const FilePath& sceneFile) {
-		Ref<EditorAssetManager> assetManager = getActiveProject()->getEditorAssetManager();
-		if (!sceneHandle)
-			sceneHandle = m_ActiveScene;
-		Asset::AssetMeta meta = assetManager->getMeta(sceneHandle);
-		if (sceneFile.empty()) {
-			C78_CORE_ASSERT(!meta.fileSource.empty(), "SceneManager::saveScene: AssetMeta FileSource empty, but sceneFile path arg as well!");
-		} else {
-			meta.fileSource = sceneFile;
+		if (auto projectManager = m_ProjectManager.lock()) {
+			Ref<EditorAssetManager> assetManager = projectManager->getActiveProject()->getEditorAssetManager();
+			if (!sceneHandle)
+				sceneHandle = m_ActiveScene;
+			Asset::AssetMeta meta = assetManager->getMeta(sceneHandle);
+			if (sceneFile.empty()) {
+				if (meta.fileSource.empty()) {
+					C78_CORE_ERROR("SceneManager::saveScene: AssetMeta FileSource empty, so is arg sceneFile, atleast one must be set!");
+					return false;
+				}
+			} else {
+				meta.fileSource = sceneFile;
+			}
+			C78E::SceneSerializer serializer(std::static_pointer_cast<C78E::Scene>(assetManager->getAsset(sceneHandle)), meta);
+			serializer.serialize();
+			return true;
 		}
-		C78E::SceneSerializer serializer(std::static_pointer_cast<C78E::Scene>(assetManager->getAsset(sceneHandle)), meta);
-		serializer.serialize();
-		return true;
+		else {
+			C78_CORE_ERROR("SceneManager::createScene: Called without m_ProjectManager!");
+			return false;
+		}
 	}
 
 	bool SceneManager::deleteScene(SceneHandle sceneHandle, bool fromDisk) {
-		Ref<Scene> scene = validateSceneHandle(sceneHandle);
-		if (scene) {
-			C78_CORE_ERROR("SceneManager::deleteScene: not implemented in EditorAssetManager!");
-			return false;
-			//return m_ProjectManager->getActiveProject()->getEditorAssetManager()->removeAsset(fromDisk);
-		} else {
-			C78_CORE_ERROR("SceneManager::deleteScene: SceneHandle is null!");
-			C78_CORE_ASSERT(false);
+		if (auto projectManager = m_ProjectManager.lock()) {
+			Ref<Scene> scene = getScene(sceneHandle);
+			return projectManager->getActiveProject()->getEditorAssetManager()->removeAsset(sceneHandle, fromDisk);
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::createScene: Called without m_ProjectManager!");
 			return false;
 		}
 	}
 
-	const bool SceneManager::hasActiveScene() const {
-		return m_ActiveScene;
+	Ref<Scene> SceneManager::getScene(SceneHandle sceneHandle) const {
+		if (!sceneHandle) {
+			C78_CORE_ERROR("SceneManager::getScene: SceneHandle is null!");
+			return nullptr;
+		}
+		auto projectManager = getProjectManager();
+		if (!projectManager) {
+			C78_CORE_ERROR("SceneManager::createScene: Called without m_ProjectManager!");
+			return nullptr;
+		}
+		return projectManager->getActiveProject()->getAssetManager()->getAssetAs<Scene>(sceneHandle);
 	}
 
-	Ref<Scene> SceneManager::getActiveScene() {
-		return validateSceneHandle(m_ActiveScene);
+	bool SceneManager::hasActiveScene() const { return m_ActiveScene; }
+
+	Ref<Scene> SceneManager::getActiveScene() const {
+		if (auto projectManager = m_ProjectManager.lock()) {
+			if (hasActiveScene())
+				return getScene(m_ActiveScene);
+			else {
+				C78_CORE_ERROR("SceneManager::getActiveScene: Called without any Scene active!");
+				return nullptr;
+			}
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::getActiveScene: Called without m_ProjectManager!");
+			return nullptr;
+		}
 	}
 
+	//should expect and handle null SceneHandles
 	void SceneManager::setActiveSceneHandle(SceneHandle sceneHandle) {
-		Ref<Scene> scene = validateSceneHandle(sceneHandle);
-		if (scene)
+		if (auto projectManager = getProjectManager()) {
+			if (sceneHandle && !getScene(sceneHandle)) {
+				C78_CORE_ERROR("SceneManager::setActiveSceneHandle: SceneHandle provided was not null, but does not associate an existing Scene!");
+				return;
+			}
 			m_ActiveScene = sceneHandle;
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::setActiveSceneHandle: Called without m_ProjectManager!");
+			return;
+		}
 	}
 
-	SceneHandle SceneManager::getActiveSceneHandle() const {
-		return m_ActiveScene;
+	SceneHandle SceneManager::getActiveSceneHandle() const { return m_ActiveScene; }
+	bool SceneManager::activeSceneIsEmpty() const { return hasActiveScene() && getActiveScene()->isEmpty(); }
+
+
+
+	/*
+	* Expose ProjectManager
+	*/
+	bool SceneManager::hasActiveProjectManager() const { return !m_ProjectManager.expired(); }
+
+	Ref<ProjectManager> SceneManager::getProjectManager() const {
+		if (hasActiveProjectManager())
+			return m_ProjectManager.lock();
+		else {
+			C78_CORE_ERROR("SceneManager::getProjectManager: Called without m_ProjectManager!");
+			return nullptr;
+		}
 	}
+
+	bool SceneManager::hasActiveProject() const {
+		if (auto projectManager = getProjectManager()) {
+			return projectManager->hasActiveProject();
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::hasActiveProject: Called without m_ProjectManager!");
+			return false;
+		}
+	}
+
+	Ref<Project> SceneManager::getActiveProject() const {
+		if (auto projectManager = getProjectManager()) {
+			if (projectManager->hasActiveProject()) {
+				return projectManager->getActiveProject();
+			}
+			else {
+				C78_CORE_ERROR("SceneManager::getActiveProject: ProjectManager has no active project!");
+				return nullptr;
+			}
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::getActiveProject: Called without m_ProjectManager!");
+			return nullptr;
+		}
+	}
+
+	bool SceneManager::hasActiveProjectFile() const {
+		if (auto projectManager = getProjectManager()) {
+			return projectManager->hasActiveProjectFile();
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::hasActiveProject: Called without m_ProjectManager!");
+			return false;
+		}
+	}
+
+
 	
 
-	Ref<Scene> SceneManager::validateSceneHandle(SceneHandle sceneHandle) {
-		if (!sceneHandle) {
-			C78_CORE_ERROR("SceneManager::validateSceneHandle: SceneHandle is null!");
-			C78_CORE_ASSERT(false);
-			return nullptr;
-		}
-		Ref<AssetManager> assetManager = m_ProjectManager->getActiveProject()->getAssetManager();
-		Ref<Asset> asset = assetManager->getAsset(sceneHandle);
-		Asset::AssetType type = assetManager->getType(sceneHandle);
-		if (!asset || type != Asset::AssetType::Scene) {
-			C78_CORE_ERROR("SceneManager::validateSceneHandle: SceneHandle does not correspond to a Scene!");
-			C78_CORE_ASSERT(false);
-			return nullptr;
-		}
-		return std::static_pointer_cast<Scene>(asset);
-	}
-
-	Ref<Project> SceneManager::getActiveProject() {
-		C78_CORE_ASSERT(m_ProjectManager->hasActiveProject(), "SceneManager::getActiveProject: ProjectManager has no active project!");
-		return m_ProjectManager->getActiveProject();
-	}
-
-
-	//Editor only
+	
 	FilePath SceneManager::fileFromScene(Ref<Scene> scene, Asset::AssetMeta meta) {
-		return m_ProjectManager->getActiveProject()->getAssetDirectory() / C78E_ASSETLOC_SCENE / (meta.name + "-" + std::to_string(scene->m_AssetHandle) + C78E_FILE_EXT_SCENE);
+		if (auto projectManager = getProjectManager()) {
+			return projectManager->getActiveProject()->getAssetDirectory() / C78E_ASSETLOC_SCENE / (meta.name + "-" + std::to_string(scene->m_AssetHandle) + C78E_FILE_EXT_SCENE);
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::fileFromScene: Called without m_ProjectManager!");
+			return "";
+		}
 	}
 
 }

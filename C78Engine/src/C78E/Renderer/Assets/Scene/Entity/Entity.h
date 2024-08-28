@@ -1,6 +1,6 @@
 #pragma once
-#include "Components.h"
-#include "Scene.h"
+#include "Component/Components.h"
+#include "../Scene.h"
 
 namespace C78E {
 

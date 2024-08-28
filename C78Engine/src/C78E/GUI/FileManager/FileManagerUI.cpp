@@ -67,8 +67,9 @@ namespace C78E::GUI {
 		static const float searchButtonLength = 0.15f;
 		const float absItemWidth = GUI::getLeftOverWindowSpace().x;
 
-		if (absItemWidth > style().parentRelativeItemWidth * GUI::getFullWindowSpace().x)
-			C78_CORE_ERROR("FileSearchBar::show: getLeftOverWindowSpace does not work like u wished!");
+		//TODO:
+		//if (absItemWidth > style().parentRelativeItemWidth * GUI::getFullWindowSpace().x)
+		//	C78_CORE_ERROR("FileSearchBar::show: getLeftOverWindowSpace does not work like u wished!");
 
 		m_SearchInput->style().parentRelativeItemWidth = searchBarLength * absItemWidth;
 		m_SearchButton->style().parentRelativeItemWidth = searchButtonLength * absItemWidth;

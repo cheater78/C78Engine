@@ -1,18 +1,15 @@
 #pragma once
 #include <C78E/Renderer/Assets/Scene/Scene.h>
-#include <C78E/Renderer/Assets/Scene/Entity.h>
+#include <C78E/Renderer/Assets/Scene/Entity/Entity.h>
 
-//pre decl
-namespace YAML {
-	class Emitter;
-}
+#include <C78E/Utils/Yaml/YamlUtils.h>
 
 namespace C78E {
 
 	class SceneSerializer {
 	public:
 		SceneSerializer() = delete;
-		SceneSerializer(const Ref<Scene>& scene, const Asset::AssetMeta& meta);
+		SceneSerializer(const Ref<Scene> scene, const Asset::AssetMeta& meta);
 		SceneSerializer(const SceneSerializer& other) = delete;
 		~SceneSerializer() = default;
 

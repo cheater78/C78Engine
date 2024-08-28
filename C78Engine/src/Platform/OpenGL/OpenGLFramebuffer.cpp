@@ -110,7 +110,7 @@ namespace C78E {
 							Texture2D::TextureSpecification spec{ m_Specification.width, m_Specification.height, Image::ImageFormat::RGBA8, false };
 							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
 							Utils::bindTexture(multisample, rID);
-							Utils::attachColorTexture(rID, m_Specification.samples, GL_RGBA8, GL_RGBA, m_Specification.width, m_Specification.height, i);
+							Utils::attachColorTexture(rID, m_Specification.samples, GL_RGBA8, GL_RGBA, m_Specification.width, m_Specification.height, static_cast<int>(i));
 						}
 						break;
 					case FramebufferTextureFormat::RED_INTEGER:
@@ -118,7 +118,7 @@ namespace C78E {
 							Texture2D::TextureSpecification spec{ m_Specification.width, m_Specification.height, Image::ImageFormat::R32, false };
 							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
 							Utils::bindTexture(multisample, rID);
-							Utils::attachColorTexture(rID, m_Specification.samples, GL_R32I, GL_RED_INTEGER, m_Specification.width, m_Specification.height, i);
+							Utils::attachColorTexture(rID, m_Specification.samples, GL_R32I, GL_RED_INTEGER, m_Specification.width, m_Specification.height, static_cast<int>(i));
 						}
 						break;
 				}
@@ -141,7 +141,7 @@ namespace C78E {
 		if (m_ColorAttachments.size() > 1) {
 			C78_CORE_ASSERT(m_ColorAttachments.size() <= 4);
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-			glDrawBuffers(m_ColorAttachments.size(), buffers);
+			glDrawBuffers(static_cast<int>(m_ColorAttachments.size()), buffers);
 		} else if (m_ColorAttachments.empty()) {
 			// Only depth-pass
 			glDrawBuffer(GL_NONE);

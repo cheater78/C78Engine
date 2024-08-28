@@ -38,4 +38,11 @@ namespace C78E {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 
+	template<typename T>
+	using WRef = std::weak_ptr<T>;
+	template<typename T, typename ... Args>
+	constexpr WRef<T> createWRef(Args&& ... args) {
+		return std::weak_ptr<T>(std::forward<Args>(args)...);
+	}
+
 }

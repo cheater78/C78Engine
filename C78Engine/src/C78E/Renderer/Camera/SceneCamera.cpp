@@ -12,7 +12,7 @@ namespace C78E {
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetPerspective(float verticalFOV, float nearClip, float farClip) {
+	void SceneCamera::setPerspective(float verticalFOV, float nearClip, float farClip) {
 		m_ProjectionType = ProjectionType::Perspective;
 		m_PerspectiveFOV = verticalFOV;
 		m_PerspectiveNear = nearClip;
@@ -20,7 +20,7 @@ namespace C78E {
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip) {
+	void SceneCamera::setOrthographic(float size, float nearClip, float farClip) {
 		m_ProjectionType = ProjectionType::Orthographic;
 		m_OrthographicSize = size;
 		m_OrthographicNear = nearClip;
@@ -28,7 +28,7 @@ namespace C78E {
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height) {
+	void SceneCamera::setViewportSize(uint32_t width, uint32_t height) {
 		if (width <= 0 || height <= 0) return; // Minimized
 		m_Width = width; m_Height = height;
 		RecalculateProjection();

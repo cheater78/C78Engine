@@ -13,23 +13,52 @@ namespace C78E {
 		return	static_cast<float>(glfwGetTime());
 	}
 
-	C78E::FilePath FileDialogs::openFile(std::string filter, C78E::FilePath baseDir, Flags flags) {
-		C78_ERROR("FileDialogs::openFile: not implemented! -> use GUI::FileManager!");
-		C78_ASSERT(false);
-		return C78E::FilePath();
+	C78E::FilePath FileDialogs::openFile(const char* filter, C78E::FilePath baseDir) {
+		OPENFILENAMEA ofn;
+		CHAR szFile[260] = { 0 };
+		CHAR currentDir[256] = { 0 };
+		C78_CORE_ASSERT(baseDir.string().length() < 256, "FileDialogs::openFile: baseDir is longer than 256 chars!");
+		memcpy_s(currentDir, baseDir.string().length(), baseDir.string().c_str(), baseDir.string().length());
+		ZeroMemory(&ofn, sizeof(OPENFILENAME));
+		ofn.lStructSize = sizeof(OPENFILENAME);
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		if (GetCurrentDirectoryA(256, currentDir))
+			ofn.lpstrInitialDir = currentDir;
+		ofn.lpstrFilter = filter;
+		ofn.nFilterIndex = 1;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+		if (GetOpenFileNameA(&ofn) == TRUE)
+			return ofn.lpstrFile;
+
+		return std::string();
 
 	}
 
-	C78E::FilePath FileDialogs::openFolder(C78E::FilePath baseDir, Flags flags) {
-		C78_ERROR("FileDialogs::openFolder: not implemented! -> use GUI::FileManager!");
-		C78_ASSERT(false);
-		return "";
-	}
+	C78E::FilePath FileDialogs::saveFile(const char* filter) {
+		OPENFILENAMEA ofn;
+		CHAR szFile[260] = { 0 };
+		CHAR currentDir[256] = { 0 };
+		ZeroMemory(&ofn, sizeof(OPENFILENAME));
+		ofn.lStructSize = sizeof(OPENFILENAME);
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		if (GetCurrentDirectoryA(256, currentDir))
+			ofn.lpstrInitialDir = currentDir;
+		ofn.lpstrFilter = filter;
+		ofn.nFilterIndex = 1;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
-	C78E::FilePath FileDialogs::saveFile(std::string filter) {
-		C78_ERROR("FileDialogs::saveFile: not implemented! -> use GUI::FileManager!");
-		C78_ASSERT(false);
-		return C78E::FilePath();
+		// Sets the default extension by extracting it from the filter
+		ofn.lpstrDefExt = strchr(filter, '\0') + 1;
+
+		if (GetSaveFileNameA(&ofn) == TRUE)
+			return ofn.lpstrFile;
+
+		return std::string();
 	}
 
 	System::Monitor System::getPrimaryMonitor() {

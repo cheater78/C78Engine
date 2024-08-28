@@ -9,7 +9,7 @@ namespace C78E {
 
 	class OpenGLShader : public Shader {
 	public:
-		OpenGLShader(const std::string& filepath);
+		OpenGLShader(const FilePath filepath);
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& name, const std::string& computeSrc);
 		virtual ~OpenGLShader();
@@ -25,8 +25,6 @@ namespace C78E {
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value) override;
 		virtual void SetFloat4(const std::string& name, const glm::vec4& value) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
-
-		virtual const std::string& getName() const override { return m_FilePath; }
 
 		void UploadUniformInt(const std::string& name, int value);
 		void UploadUniformIntArray(const std::string& name, int* values, uint32_t count);
@@ -48,7 +46,7 @@ namespace C78E {
 		void Reflect(GLenum stage, const std::vector<uint32_t>& shaderData);
 	private:
 		uint32_t m_RendererID;
-		std::string m_FilePath;
+		FilePath m_FilePath;
 
 		std::unordered_map<GLenum, std::vector<uint32_t>> m_VulkanSPIRV;
 		std::unordered_map<GLenum, std::vector<uint32_t>> m_OpenGLSPIRV;

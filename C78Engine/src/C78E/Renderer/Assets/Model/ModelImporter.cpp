@@ -1,29 +1,24 @@
 #include "C78ePCH.h"
-#include "ModelLoader.h"
+#include "ModelImporter.h"
 
 #include <C78E/Project/Project.h>
-
+#include <C78E/Renderer/Assets/AssetManager.h>
 #include <C78E/Utils/Wavefront/WavefrontLoader.h>
 
 namespace C78E {
 
 	/*
-	* ModelLoader::importModel
+	* ModelImporter::importModel
 	* imports a Model, given its AssetMeta(filename, assetname gets written back)
 	*/
-	Ref<Model> ModelLoader::importModel(AssetHandle handle, const Asset::AssetMeta& meta) {
+	Ref<Model> ModelImporter::importModel(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
 		FilePath ext = meta.fileSource.extension();
 		if (ext == ".stl")
-			return loadWavefrontModel(handle, meta);
+			return loadWavefrontModel(handle, meta, assetManager);
 		if (ext == ".gltf" || ext == ".glb")
 			C78_CORE_ERROR("GLTF not implemented yet!");
 
-		C78_CORE_ERROR("ModelLoader::importModel: File '{}' is not supported!", meta.fileSource);
-		return nullptr;
-	}
-
-	Ref<Model> ModelLoader::loadModel(const FilePath& path) {
-		C78_CORE_ERROR("ModelLoader::loadModel not implemented!");
+		C78_CORE_ERROR("ModelImporter::importModel: File '{}' is not supported!", meta.fileSource);
 		return nullptr;
 	}
 
@@ -31,11 +26,11 @@ namespace C78E {
 
 
 	/*
-	* ModelLoader::loadWavefrontModel
+	* ModelImporter::loadWavefrontModel
 	* uses WavefrontLoader to load a Wavefront model and registers all its Meshes and Materials in the current AssetManager
 	* returns the resulting AssetHandle of the loaded Model
 	*/
-	Ref<Model> ModelLoader::loadWavefrontModel(AssetHandle handle, const Asset::AssetMeta& meta) {
+	Ref<Model> ModelImporter::loadWavefrontModel(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
 		Ref<WavefrontLoader::WavefrontModel> wavefrontmodel = WavefrontLoader::loadModel(meta.fileSource);
 
 		std::vector<Model::ModelPart> parts;
@@ -53,8 +48,7 @@ namespace C78E {
 				meshMeta.type = Asset::AssetType::Mesh;
 				meshMeta.fileSource = meta.fileSource;
 				meshMeta.name = wavefrontmodel->meshNames.at(meshID);
-				C78_CORE_ERROR("ModelLoader::loadWavefrontModel: DISABLED!");
-				//part.m_Mesh = Project::getActive()->getEditorAssetManager()->addAsset(meshMeta, mesh);
+				part.m_Mesh = assetManager->addAsset(meshMeta, mesh);
 			}
 
 			{
@@ -64,8 +58,7 @@ namespace C78E {
 				materialMeta.type = Asset::AssetType::Material;
 				materialMeta.fileSource = meta.fileSource;
 				materialMeta.name = wavefrontmodel->materialNames.at(materialID);
-				C78_CORE_ERROR("ModelLoader::loadWavefrontModel: DISABLED!");
-				//part.m_Material = Project::getActive()->getEditorAssetManager()->addAsset(materialMeta, material);
+				part.m_Material = assetManager->addAsset(materialMeta, material);
 			}
 
 			parts.push_back(part);

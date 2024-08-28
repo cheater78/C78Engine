@@ -68,6 +68,13 @@ namespace C78E {
 	}
 
 
+	bool FileSystem::isDirectory(C78E::FilePath filepath) {
+		return std::filesystem::is_directory(filepath);
+	}
+
+	bool FileSystem::isFile(C78E::FilePath filepath) {
+		return std::filesystem::is_regular_file(filepath);
+	}
 
 
 	Buffer FileSystem::readFileBinary(const FilePath& filepath) {

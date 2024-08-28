@@ -15,8 +15,10 @@ namespace C78Editor {
 		s_TextureId = s_Texture->getRendererID();
 	}
 
-	void Viewport::onImGuiRender(bool& captureMouse) {
+	void Viewport::onImGuiRender(bool& captureMouse, C78E::Ref<C78E::Renderer> renderer) {
 		
+		if (!s_Texture) return;
+
 		ImGui::Begin("Viewport");
 		if (s_Texture) {
 			if (ImGui::IsKeyPressed(ImGuiKey_Escape))
@@ -28,13 +30,12 @@ namespace C78Editor {
 
 			if (x != s_Width || y != s_Height) {
 				s_Width = x; s_Height = y;
-				C78_EDITOR_ASSERT(false);
-				//C78E::Renderer::resizeTarget(x, y);
+				renderer->resizeTarget(s_Width, s_Height);
 			}
 
 			ImGui::Image(
 				(void*)(intptr_t)s_TextureId,
-				ImVec2{ static_cast<float>(s_Texture->getWidth()), static_cast<float>(s_Texture->getHeight()) },
+				ImVec2{ (float)x, (float)y },//static_cast<float>(s_Texture->getWidth()), static_cast<float>(s_Texture->getHeight())
 				ImVec2{ 0.f, 1.f },
 				ImVec2{ 1.f, 0.f }
 			);

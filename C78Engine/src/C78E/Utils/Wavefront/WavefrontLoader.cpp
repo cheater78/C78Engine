@@ -7,7 +7,7 @@
 namespace C78E {
 
     Ref<WavefrontLoader::WavefrontModel> WavefrontLoader::loadModel(FilePath file) {
-        C78_CORE_ASSERT(file.extension() == ".stl", "WavefrontLoader::loadModel: cannot parse non .stl files!");
+        C78_CORE_ASSERT(file.extension() == ".obj", "WavefrontLoader::loadModel: cannot parse non .obj files!");
 
         Ref<WavefrontModel> model = createRef<WavefrontModel>();
 

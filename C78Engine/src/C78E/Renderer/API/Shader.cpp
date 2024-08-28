@@ -7,7 +7,7 @@
 
 namespace C78E {
 
-	Ref<Shader> Shader::create(const std::string& filepath) {
+	Ref<Shader> Shader::create(const FilePath filepath) {
 		switch (RendererAPI::getAPI()) {
 			case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 			case RendererAPI::API::OpenGL:  return createRef<OpenGLShader>(filepath);

@@ -1,9 +1,9 @@
 #include "C78EPCH.h"
 #include "Scene.h"
-#include "Entity.h"
+#include "Entity/Entity.h"
 
-#include "Components.h"
-#include "ScriptableEntity.h"
+#include "Entity/Component/Components.h"
+#include "Entity/ScriptableEntity.h"
 
 #include <glm/glm.hpp>
 
@@ -116,8 +116,8 @@ namespace C78E {
 		for (auto entity : view)
 		{
 			auto& cameraComponent = view.get<CameraComponent>(entity);
-			if (!cameraComponent.FixedAspectRatio)
-				cameraComponent.Camera.SetViewportSize(width, height);
+			if (!cameraComponent.fixedAspectRatio)
+				cameraComponent.camera.setViewportSize(width, height);
 		}
 	}
 
@@ -127,7 +127,7 @@ namespace C78E {
 		m_ActiveCam = camera.getUUID();
 	}
 
-	bool Scene::hasPrimaryCamera() { return (m_ActiveCam) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
+	bool Scene::hasPrimaryCamera() { return (!m_ActiveCam) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
 
 	Entity Scene::getPrimaryCamera() {
 		C78_CORE_ASSERT(hasPrimaryCamera(), "Scene currently does not have an Active Cam!");
@@ -136,6 +136,10 @@ namespace C78E {
 
 	void Scene::step(int frames) {
 		m_StepFrames = frames;
+	}
+
+	void Scene::forEachEntity(EntityFunction func) {
+		return m_Registry.each(func);
 	}
 
 	Entity Scene::duplicateEntity(Entity entity) {
@@ -196,7 +200,7 @@ namespace C78E {
 		if (!m_ActiveCam)
 			m_ActiveCam = entity.getUUID();
 		if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
-			component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+			component.camera.setViewportSize(m_ViewportWidth, m_ViewportHeight);
 	}
 
 	template<>

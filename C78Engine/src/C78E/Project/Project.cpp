@@ -28,7 +28,7 @@ namespace C78E {
 			project->m_ProjectDirectory = path.parent_path();
 			Ref<EditorAssetManager> editorAssetManager = createRef<EditorAssetManager>();
 			project->m_AssetManager = editorAssetManager;
-			editorAssetManager->importAssetRegistry(path);
+			editorAssetManager->importAssetRegistry(project->getAssetRegistryPath());
 
 			//Loading Assets
 			AssetRegistry assetRegistry = editorAssetManager->getAssetRegistry();
@@ -37,7 +37,7 @@ namespace C78E {
 				AssetHandle handle = entry.first;
 				Asset::AssetMeta meta = entry.second;
 
-				C78_CORE_INFO("Asset({}): '{}' from {}", Asset::assetTypeToString(meta.type), meta.name, meta.fileSource);
+				C78_CORE_INFO("Project::load: Asset({}) added: '{}' from {}", Asset::assetTypeToString(meta.type), meta.name, meta.fileSource);
 				
 				if (editorAssetManager->isValid(handle) && !editorAssetManager->isLoaded(handle) && meta.type != None)
 					editorAssetManager->getAsset(handle);
@@ -57,7 +57,7 @@ namespace C78E {
 			FileSystem::createDirectoryIfNotPresent(project->getAssetRegistryPath().parent_path());
 
 			project->m_ProjectDirectory = projectFile.parent_path();
-			project->getEditorAssetManager()->exportAssetRegistry(projectFile);
+			project->getEditorAssetManager()->exportAssetRegistry(project->getAssetRegistryPath());
 
 			//Saving Assets
 			Ref<C78E::EditorAssetManager> assetManager = project->getEditorAssetManager();

@@ -4,31 +4,11 @@
 
 namespace C78E {
 
-	class FileDialogs { //TODO: remove
-	public:
-		typedef uint32_t Flags;
-		enum Flag : uint32_t { // don't change -> compatible with win::GetOpenFileNameA
-			None = 0,
-
-			ReadOnly = 1<<0,
-			HideReadOnly = 1<<2,
-			NoReadOnlyReturn = 1<<15,
-
-			NoChangeDirectory = 1<<3,
-
-			AllowMultiSelect = 1<<9,
-
-			ExtensionDifferent = 1<<10,
-
-			PathMustExist = 1<<11,
-			FileMustExist = 1<<12
-		};
+	class FileDialogs {
 	public:
 		// on fail, return empty
-		static FilePath openFile(std::string filter = "", C78E::FilePath baseDir = "", Flags flags = FileMustExist | PathMustExist);
-		static FilePath openFolder(C78E::FilePath baseDir = "", Flags flags = PathMustExist);
-		static FilePath saveFile(std::string filter = "");
-		static std::string constructFilter(std::vector<std::string> extensions, std::vector<std::string> labels = {});
+		static FilePath openFile(const char* filter = "", C78E::FilePath baseDir = "");
+		static FilePath saveFile(const char* filter = "");
 
 	};
 

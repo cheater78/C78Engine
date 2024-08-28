@@ -7,11 +7,13 @@
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <vulkan/vulkan.h>
 #elif defined C78_PLATFORM_LINUX
 #define C78_PLATFORM_GLFW
-#include <GLFW/glfw3.h>
 #include <glad.h>
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <vulkan/vulkan.h>
 #endif
 
@@ -63,6 +65,7 @@
 #include <C78E/Core/FileSystem/Extensions.h>
 //C78E::UTILS
 #include <C78E/Utils/StdUtils.h>
+#include <C78E/Utils/PlatformUtils.h>
 
 
 

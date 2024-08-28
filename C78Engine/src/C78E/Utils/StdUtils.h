@@ -4,6 +4,7 @@
 
 //std lib
 #include <string>
+#include <algorithm>
 #include <vector>
 
 // external Libs

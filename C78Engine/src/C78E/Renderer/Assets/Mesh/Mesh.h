@@ -58,8 +58,16 @@ namespace C78E {
 			return triangles;
 		}
 
+		Primitive::Vertex* getVertexData() { return m_Vertecies.data(); }
+		uint32_t* getIndexData() { return m_Indicies.data(); }
+
+		uint32_t getVertexCount() { return static_cast<uint32_t>(m_Vertecies.size()); }
+		uint32_t getVertexByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::Vertex)); }
+		uint32_t getIndexCount() { return static_cast<uint32_t>(m_Indicies.size()); }
+
 	public:
 		virtual AssetType getType() { return Asset::AssetType::Mesh; };
+		static AssetType getClassType() { return AssetType::Mesh; };
 	public:
 		std::vector<uint32_t> m_Indicies;
 		std::vector<Primitive::Vertex> m_Vertecies;

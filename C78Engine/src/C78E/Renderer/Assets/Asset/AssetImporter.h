@@ -3,18 +3,14 @@
 #include "AsyncAsset.h"
 
 namespace C78E {
-
-	/*
-	*  AssetSourceFile(.*) <- AssetMetaFile(.*ce) <- AssetRegistry
-	*	-> AssetImporter::load*File;		->AssetSerializer		->AssetManager
-	*/
+	class EditorAssetManager;
 
 	class AssetImporter {
 	public:
-		static Ref<Asset> importAsset(AssetHandle handle, const Asset::AssetMeta& meta);
-		static Ref<AsyncAsset> importAssetAsync(AssetHandle handle, const Asset::AssetMeta& meta);
+		static Ref<Asset> importAsset(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager);
+		static Ref<AsyncAsset> importAssetAsync(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager);
 	private:
-		using AssetImportFunction = std::function<Ref<Asset>(AssetHandle, const Asset::AssetMeta&)>;
+		using AssetImportFunction = std::function<Ref<Asset>(AssetHandle, const Asset::AssetMeta&, Ref<EditorAssetManager>)>;
 
 		static const std::map<Asset::AssetType, AssetImportFunction> s_AssetImportFunctions;
 	};

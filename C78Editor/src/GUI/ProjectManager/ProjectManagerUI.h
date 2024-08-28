@@ -6,65 +6,44 @@
 
 namespace C78Editor::GUI {
 
-	class ProjectManager;
-
-	
-
-	class CreateProjectUI : public C78E::GUI::Element {
-	public:
-		CreateProjectUI(::C78Editor::GUI::ProjectManager* projectManager);
-		~CreateProjectUI();
-
-		virtual void show() override final;
-
-		virtual void widget();
-	private:
-		::C78Editor::GUI::ProjectManager* m_ProjectManager;
-
-		C78E::Ref<C78E::GUI::FileManager> m_ProjectFileManager;
-		C78E::Ref<C78E::GUI::FileManager> m_AssetFileManager;
-		C78E::Ref<C78E::GUI::TextButton> m_CancelTB;
-		C78E::Ref<C78E::GUI::TextButton> m_CreateProjectTB;
-
-	};
-
-	class OpenProjectUI : public C78E::GUI::Element {
-	public:
-		OpenProjectUI(::C78Editor::GUI::ProjectManager* projectManager);
-		~OpenProjectUI();
-
-		virtual void show() override final;
-
-		virtual void widget();
-	private:
-		::C78Editor::GUI::ProjectManager* m_ProjectManager;
-		C78E::Ref<C78E::GUI::FileManager> m_FileManager;
-	};
-
-
 	class ProjectManagerUI {
 	public:
-		ProjectManagerUI(::C78Editor::GUI::ProjectManager* projectManager);
+		ProjectManagerUI(C78E::Ref<C78E::ProjectManager> projectManager);
 		~ProjectManagerUI();
 
+		virtual void onImGuiMainMenuBar();
 		virtual void onImGuiRender();
 
 	private:
-		void onWelcomeScreen(); //TODO: move to own UIWindow
-	private:
-		enum UIState {
-			WELCOME,
-			CREATEPROJECT,
-			OPENPROJECT,
-			VIEWPROJECT
-		};
-	private:
-		UIState m_UIState = UIState::WELCOME;
+		void drawNoProject();
+		void drawCreateProject();
+		void drawProjectInfo();
 
-		::C78Editor::GUI::ProjectManager* m_ProjectManager;
+	private:
+		C78E::WRef<C78E::ProjectManager> m_ProjectManager;
 
-		CreateProjectUI m_CreateProjectUI;
-		OpenProjectUI m_OpenProjectUI;
+		struct ProjectCreateConfigBuffers {
+		public:
+			C78E::Buffer projectName{64};
+			C78E::Buffer projectDirectory{256};
+			C78E::Buffer assetDirectory{256};
+			C78E::Buffer assetRegistry{256};
+			C78E::Buffer scriptModulePath{256};
+		public:
+			C78E::FilePath getProjectFilePath() {
+				C78E::FilePath filepath = C78E::FilePath(std::string(projectDirectory.as<char>())) /
+					C78E::FilePath(std::string(projectName.as<char>()) + C78E_FILE_EXT_PROJECT);
+				if (!C78E::FileSystem::isFile(filepath)) {
+					C78_EDITOR_ERROR("ProjectManagerUI::ProjectCreateConfigBuffers::getProjectFilePath: Input is not a FilePath! {}", filepath.string());
+					return "";
+				}
+				return filepath;
+			}
+
+
+
+
+		} m_PCCB;
 	};
 
 }

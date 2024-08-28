@@ -69,7 +69,7 @@ namespace C78E {
 		~Material() = default;
 	public:
 		virtual AssetType getType() { return Asset::AssetType::Material; };
-
+		static AssetType getClassType() { return AssetType::Material; };
 	public:
 		AssetHandle m_Shader;
 		uint32_t m_IlluminationModel;
