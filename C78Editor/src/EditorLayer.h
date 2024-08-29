@@ -8,15 +8,16 @@
 #include <C78E/Project/Project.h>
 
 #include "GUI/EntityManager/EntityManagerUI.h"
+#include "GUI/SceneManager/SceneManagerUI.h"
 #include "GUI/ProjectManager/ProjectManagerUI.h"
 
 namespace C78Editor {
 
     /*
-    * UI System
-    * Asset Loader Importer..
+    * SpriteRenderComponent -> Support at EntityManagerUI
     * 
-    * EnttInspector
+    * Sprite for Renderer3D
+    * 
     */
 
     class EditorLayer : public C78E::Layer {
@@ -28,11 +29,11 @@ namespace C78Editor {
             m_SceneManager(C78E::createRef<C78E::SceneManager>(m_ProjectManager)),
 
             m_ProjectManagerUI(C78E::createRef <::C78Editor::GUI::ProjectManagerUI>(m_ProjectManager)),
+            m_SceneManagerUI(C78E::createRef <::C78Editor::GUI::SceneManagerUI>(m_SceneManager)),
             m_EntityManagerUI(C78E::createRef<::C78Editor::GUI::EntityManagerUI>(m_SceneManager))
         { }
 
-        void onAttach() {
-        }
+        void onAttach() { }
 
         void onDetach() {
             if (m_ProjectManager->hasActiveProject())
@@ -43,6 +44,7 @@ namespace C78Editor {
             m_LastFrameTime = dt;
             
             if (m_ProjectManager->hasActiveProject()) {
+                //RendererManager?
                 if (!m_Renderer) {
                     m_Renderer = std::static_pointer_cast<C78E::Renderer>(C78E::createRef<C78E::Raytracer3D>(m_ProjectManager->getActiveProject()->getEditorAssetManager()));
                 }
@@ -91,6 +93,7 @@ namespace C78Editor {
                     }
                     else m_Window.setMouseMode(C78E::MouseMode::NORMAL);
 
+                    //RendererManager?
                     m_Renderer->render(m_SceneManager->getActiveScene());
 
                     
@@ -136,235 +139,12 @@ namespace C78Editor {
 
             ImGui::ShowDemoWindow();
             
-
-
-            {
-                m_ProjectManagerUI->onImGuiRender();
-            }
-
-            if(m_ProjectManager->hasActiveProject()) {
-                ImGui::Begin("SceneManager");
-
-                C78E::Ref<C78E::Project> project = m_ProjectManager->getActiveProject();
-                C78E::Ref<C78E::EditorAssetManager> assetManager = project->getEditorAssetManager();
-                C78E::AssetRegistry assetRegistry = assetManager->getAssetRegistry();
-
-                if (m_SceneManager->hasActiveScene()) {
-                    C78E::SceneHandle sceneHandle = m_SceneManager->getActiveSceneHandle();
-
-                    ImGui::Text(("Current Scene: " + assetManager->getMeta(sceneHandle).name).c_str());
-                    if (ImGui::Button("Save")) m_SceneManager->saveScene();
-                }
-                else {
-                    m_SceneManager->setActiveSceneHandle(m_ProjectManager->getActiveProject()->getConfig().startScene);
-                }
-
-                static C78E::GUI::TextInput createSceneTI("Create Scene:", "UnnamedScene");
-                static C78E::GUI::TextButton createSceneTB("New Scene",
-                    [this]() {
-                        m_SceneManager->createScene(createSceneTI.getContent());
-                    }
-                );
-
-                createSceneTI.show();
-                C78E::GUI::SameLine();
-                createSceneTB.show();
-
-                for (C78E::AssetRegistryEntry entry : assetRegistry) {
-                    C78E::AssetHandle handle = entry.first;
-                    C78E::Asset::AssetMeta meta = entry.second;
-
-                    if (meta.type == C78E::Asset::AssetType::Scene) {
-                        std::string infoLine = meta.name + " (" + std::to_string(handle) + ")";
-                        if (ImGui::Button(infoLine.c_str())) {
-                            m_SceneManager->setActiveSceneHandle(handle);
-                        }
-                        ImGui::SameLine();
-                        if (ImGui::Button(("MakeStartupScene -" + std::to_string(handle)).c_str())) {
-                            m_ProjectManager->getActiveProject()->getConfig().startScene = handle;
-                        }
-                    }
-
-                }
-                ImGui::End();
-            }
-
-
+            m_ProjectManagerUI->onImGuiRender();
+            m_SceneManagerUI->onImGuiRender();
             m_EntityManagerUI->onImGuiRender();
 
 
-            /*
-            if (m_SceneManager->hasActiveScene()) {
-                ImGui::Begin("EntityManager");
-                C78E::Ref<C78E::Scene> scene = std::static_pointer_cast<C78E::Scene>(m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->getAsset(m_SceneManager->getActiveSceneHandle()));
-                static C78E::UUID activeEnt = 0;
 
-                if (scene->hasPrimaryCamera()) {
-                    C78E::Entity entity = scene->getPrimaryCamera();
-                    auto& transComp = entity.getTransform();
-                    auto& camComp = entity.getComponent<C78E::CameraComponent>();
-
-                    ImGui::Text("Camera");
-                    ImGui::Text("Pos: "); ImGui::SameLine(); ImGui::Text(std::to_string(transComp.Translation).c_str());
-                    ImGui::Text("Rot: "); ImGui::SameLine(); ImGui::Text(std::to_string(transComp.Rotation).c_str());
-                    ImGui::Text("Sca: "); ImGui::SameLine(); ImGui::Text(std::to_string(transComp.Scale).c_str());
-
-
-                    ImGui::Text("FoV: "); ImGui::SameLine(); ImGui::Text(std::to_string(camComp.camera.getPerspectiveVerticalFOV()).c_str());
-
-                    if (ImGui::Button("reset Cam")) {
-                        entity.setTransform({ 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f });
-                    }
-                }
-
-                static C78E::GUI::TextInput createEntityTI("Create Entity:", "Unnamed Entity");
-                static C78E::GUI::TextButton createEntityTB("New Entity",
-                    [this, scene]() {
-                        scene->createEntity(createEntityTI.getContent());
-                    }
-                );
-
-                createEntityTI.show();
-                C78E::GUI::SameLine();
-                createEntityTB.show();
-
-                for (auto entt : scene->getAllEntitiesWith<C78E::IDComponent>()) {
-                    C78E::Entity entity{ entt, scene.get()};
-
-                    if (ImGui::Button((entity.getTag() + " (" + std::to_string(entity.getUUID()) + ")").c_str())) {
-                        activeEnt = entity.getUUID();
-                    }
-                    ImGui::SameLine();
-                    ImGui::Checkbox(("Active (" + std::to_string(entity.getUUID()) + ")").c_str(), &entity.getComponent<C78E::StateComponent>().enable);
-
-                    
-
-                }
-
-                ImGui::End();
-
-                if (activeEnt) {
-                    ImGui::Begin("EntityInspector");
-                    auto entt = scene->getEntityByUUID(activeEnt);
-                    C78E::Entity entity{ entt, scene.get() };
-
-                    ImGui::Text(("Name: " + entity.getTag()).c_str());
-
-                    
-
-                    static C78E::GUI::TextInput addMeshTI("Add Mesh", "C:\\");
-                    static C78E::GUI::TextButton addMeshTB("Add Mesh",
-                        [this, scene]() {
-                            auto entt = scene->getEntityByUUID(activeEnt);
-                            C78E::Entity entity{ entt, scene.get() };
-
-                            C78E::FilePath path = "C:\\dev\\c-cpp\\C78Engine\\C78Project\\assets\\models\\Misc\\smooth_vase.obj";
-
-
-                            C78E::Ref<C78E::WavefrontLoader::WavefrontModel> wavefrontmodel = C78E::WavefrontLoader::loadModel(path);
-
-                            static C78E::AssetHandle shaderHandle = 0;
-                            if(!shaderHandle)
-                                shaderHandle = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->importAsset("C:\\dev\\c-cpp\\C78Engine\\C78Editor\\assets\\shaders\\Renderer3D_FlatShader.glsl");
-
-                            std::vector<C78E::Model::ModelPart> parts;
-
-                            for (auto& wfpart : wavefrontmodel->parts) {
-                                uint64_t meshID = wfpart.first;
-                                uint64_t materialID = wfpart.second;
-
-                                C78E::Model::ModelPart part;
-
-                                {
-                                    C78E::Asset::AssetMeta meshMeta;
-                                    C78E::Ref<C78E::Mesh> mesh = wavefrontmodel->meshes.at(meshID);
-
-                                    meshMeta.type = C78E::Asset::AssetType::Mesh;
-                                    meshMeta.fileSource = path;
-                                    meshMeta.name = wavefrontmodel->meshNames.at(meshID);
-                                    part.m_Mesh = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->addAsset(meshMeta, mesh);
-                                }
-
-                                {
-                                    C78E::Asset::AssetMeta materialMeta;
-                                    C78E::Ref<C78E::Material> material = wavefrontmodel->materials.at(materialID);
-                                    material->m_Shader = shaderHandle;
-
-                                    materialMeta.type = C78E::Asset::AssetType::Material;
-                                    materialMeta.fileSource = path;
-                                    materialMeta.name = wavefrontmodel->materialNames.at(materialID);
-                                    part.m_Material = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->addAsset(materialMeta, material);
-                                }
-
-                                parts.push_back(part);
-                            }
-
-                            C78E::Asset::AssetMeta modelMeta;
-                            modelMeta.type = C78E::Asset::AssetType::Model;
-                            modelMeta.fileSource = path;
-                            modelMeta.name = path.filename().string();
-                            C78E::AssetHandle modelHandle = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->addAsset(modelMeta, createRef<C78E::Model>(parts));
-
-                            entity.addComponent<C78E::ModelComponent>(modelHandle);
-                        }
-                    );
-
-                    addMeshTI.show();
-                    C78E::GUI::SameLine();
-                    addMeshTB.show();
-
-                    static C78E::AssetHandle cubeID = 0;
-                    if (!cubeID) {
-                        C78E::Asset::AssetMeta meshMeta{
-                            C78E::Asset::AssetType::Mesh,
-                            "/"
-                            "CubeMesh"
-                        };
-                        C78E::Asset::AssetMeta materialMeta{
-                            C78E::Asset::AssetType::Material,
-                            "/"
-                            "CubeMaterial"
-                        };
-                        C78E::Asset::AssetMeta modelMeta{
-                            C78E::Asset::AssetType::Model,
-                            "/"
-                            "CubeModel"
-                        };
-
-                        C78E::Geometry::Cube cube{};
-                        std::vector<C78E::Primitive::Vertex> verts{std::begin(cube.vertecies), std::end(cube.vertecies)};
-                        std::vector<uint32_t> indecies{ std::begin(cube.indecies), std::end(cube.indecies) };
-
-                        C78E::Ref<C78E::Mesh> mesh = C78E::createRef<C78E::Mesh>(verts, indecies);
-                        C78E::AssetHandle meshHandle = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->addAsset(meshMeta, mesh);
-
-                        C78E::Ref<C78E::Material> material = C78E::createRef<C78E::Material>();
-                        static C78E::AssetHandle shaderHandle = 0;
-                        if (!shaderHandle)
-                            shaderHandle = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->importAsset("C:\\dev\\c-cpp\\C78Engine\\C78Editor\\assets\\shaders\\Renderer3D_FlatShader.glsl");
-                        material->m_Shader = shaderHandle;
-                        C78E::AssetHandle materialHandle = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->addAsset(materialMeta, material);
-
-                        C78E::Model::ModelPart modelPart{
-                            meshHandle, materialHandle
-                        };
-
-                        std::vector<C78E::Model::ModelPart> parts = { modelPart };
-
-                        cubeID = m_ProjectManager->getManager()->getActiveProject()->getEditorAssetManager()->addAsset(modelMeta, C78E::createRef<C78E::Model>(parts));
-                    }
-
-                    if (ImGui::Button("Add Cube Model") && !entity.hasComponent<C78E::ModelComponent>()) {
-                        C78_EDITOR_INFO("Added Cube Model");
-                        entity.setTransform({ 0.f, 0.f, 3.f });
-                        entity.addComponent<C78E::ModelComponent>(cubeID);
-                    }
-
-                    ImGui::End();
-                }
-
-            }
-            */
             {
                 ImGui::Begin("FrameInfo");
                 ImGui::Text(("FPS: " + std::to_string((uint32_t)(1 / m_LastFrameTime.getSeconds()))).c_str());
@@ -390,7 +170,7 @@ namespace C78Editor {
                 }
             }
 
-            {
+            {//RendererManager?
                 if(m_Renderer)
                     Viewport::onUpdate(m_Renderer->getTargetTexture());
                 Viewport::onImGuiRender(m_MouseCapture, m_Renderer);
@@ -410,18 +190,11 @@ namespace C78Editor {
         C78E::Ref<C78E::ProjectManager> m_ProjectManager = nullptr;
         C78E::Ref<C78E::SceneManager> m_SceneManager = nullptr;
 
-
-
-
         C78E::Ref<::C78Editor::GUI::ProjectManagerUI> m_ProjectManagerUI = nullptr;
+        C78E::Ref<::C78Editor::GUI::SceneManagerUI> m_SceneManagerUI = nullptr;
         C78E::Ref<::C78Editor::GUI::EntityManagerUI> m_EntityManagerUI = nullptr;
 
-        //C78E::Ref<C78E::GUI::HotkeyManager> m_HotkeyManager;
-
-
-        
-
-
+        //RendererManager?
         C78E::Ref<C78E::Renderer> m_Renderer = nullptr;
 
     };

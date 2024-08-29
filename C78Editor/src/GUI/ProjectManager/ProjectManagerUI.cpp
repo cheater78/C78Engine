@@ -108,28 +108,24 @@ namespace C78Editor::GUI {
 
 			ImGui::Begin("Project Info");
 
+			if (ImGui::Button("Save"))
+				projectManager->saveProject();
+			ImGui::SameLine();
+			if (ImGui::Button("Reload"))
+				projectManager->reloadProject();
+			ImGui::SameLine();
+			if (ImGui::Button("Close"))
+				projectManager->closeProject();
+
 			if (projectManager->hasActiveProject()) {
 				C78E::ProjectConfig projConf = projectManager->getActiveProject()->getConfig();
 
 				ImGui::Text(("Project: " + projConf.name).c_str());
-				ImGui::Text(("File: " + (projectManager->hasActiveProjectFile()) ? projectManager->getActiveProjectFile().string() : "No File set!").c_str());
+				ImGui::Text((std::string("File: ") + ((projectManager->hasActiveProjectFile()) ? projectManager->getActiveProjectFile().string() : "No File set!")).c_str());
 				ImGui::Text(("StartScene: " + std::to_string(projConf.startScene)).c_str());
 				ImGui::Text(("AssetDirectory: " + projConf.assetDirectory.string()).c_str());
 				ImGui::Text(("AssetRegistry: " + projConf.assetRegistryPath.string()).c_str());
 				ImGui::Text(("ScriptModules: " + projConf.scriptModulePath.string()).c_str());
-
-				if (ImGui::Button("Reload")) {
-					projectManager->reloadProject();
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Save")) {
-					projectManager->saveProject();
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Close")) {
-					projectManager->closeProject();
-				}
-
 
 			}
 			else {

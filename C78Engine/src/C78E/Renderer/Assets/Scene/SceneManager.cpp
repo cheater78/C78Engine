@@ -74,7 +74,16 @@ namespace C78E {
 		return projectManager->getActiveProject()->getAssetManager()->getAssetAs<Scene>(sceneHandle);
 	}
 
-	bool SceneManager::hasActiveScene() const { return m_ActiveScene; }
+	bool SceneManager::hasActiveScene() const {
+		if (auto projectManager = m_ProjectManager.lock()) {
+			if (projectManager->hasActiveProject())
+				return m_ActiveScene;
+		}
+		else {
+			C78_CORE_ERROR("SceneManager::getActiveScene: Called without m_ProjectManager!");
+		}
+		return false;
+	}
 
 	Ref<Scene> SceneManager::getActiveScene() const {
 		if (auto projectManager = m_ProjectManager.lock()) {

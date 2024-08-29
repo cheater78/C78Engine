@@ -158,6 +158,12 @@ namespace C78Editor::GUI {
 
 	void EntityManagerUI::drawEntityComponentList(C78E::Entity entity) {
 		
+		if (entity.hasComponent<C78E::StateComponent>()) {
+			bool* enable = &entity.getComponent<C78E::StateComponent>().enable;
+			ImGui::Checkbox("##Entity State", enable);
+			ImGui::SameLine();
+		}
+
 
 		if (entity.hasComponent<C78E::TagComponent>()) {
 			auto& tag = entity.getComponent<C78E::TagComponent>().tag;

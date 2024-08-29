@@ -50,7 +50,13 @@ namespace C78E {
 	}
 
 	const Ref<Project> ProjectManager::getActiveProject() const {
-		return m_ActiveProject;
+		if (hasActiveProject()) {
+			return m_ActiveProject;
+		}
+		else {
+			C78_CORE_ERROR("ProjectManager::getActiveProject: Called but no active Project!");
+			return nullptr;
+		}
 	}
 
 	const bool ProjectManager::hasActiveProjectFile() const {
