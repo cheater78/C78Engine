@@ -254,7 +254,7 @@ namespace C78E::GUI {
 		memcpy_s(m_Buffer->data, content.size(), content.c_str(), content.size());
 	}
 
-	std::string TextInput::getContent() {
+	std::string TextInput::getContent() const {
 		std::string out = "";
 		for (size_t off = 0; off < m_Buffer->size; off++) {
 			const char* chr = ((char*)m_Buffer->data + off);

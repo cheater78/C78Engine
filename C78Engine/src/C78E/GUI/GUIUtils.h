@@ -19,6 +19,4 @@ namespace C78E::GUI {
 	static glm::vec2 getLeftOverWindowSpace() { ImVec2 size = ImGui::GetContentRegionAvail(); return glm::vec2(size.x, size.y); }
 	static glm::vec2 getFullWindowSpace() { ImVec2 size = ImGui::GetContentRegionMax(); return glm::vec2(size.x, size.y); }
 
-
-
 }

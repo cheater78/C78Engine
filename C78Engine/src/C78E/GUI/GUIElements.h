@@ -224,7 +224,7 @@ namespace C78E::GUI {
 		~TextInput();
 
 		void setContent(const std::string& content);
-		std::string getContent(); // ascii chars and symbols only!, 0x20(' ') <= char <= 0x7E('~')
+		std::string getContent() const; // ascii chars and symbols only!, 0x20(' ') <= char <= 0x7E('~')
 
 		virtual void show() override;
 

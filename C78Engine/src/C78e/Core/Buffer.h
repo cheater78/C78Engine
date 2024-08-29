@@ -39,7 +39,7 @@ namespace C78E {
 		}
 
 		template<typename T>
-		T* as() {
+		T* as() const {
 			return (T*)data;
 		}
 

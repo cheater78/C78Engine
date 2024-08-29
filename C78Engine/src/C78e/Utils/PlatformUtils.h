@@ -7,8 +7,8 @@ namespace C78E {
 	class FileDialogs {
 	public:
 		// on fail, return empty
-		static FilePath openFile(const char* filter = "", C78E::FilePath baseDir = "");
-		static FilePath saveFile(const char* filter = "");
+		static FilePath openFile(const char* filter = "", C78E::FilePath baseDir = "", C78E::FilePath baseFile = "");
+		static FilePath saveFile(const char* filter = "", C78E::FilePath baseDir = "", C78E::FilePath baseFile = "");
 
 	};
 

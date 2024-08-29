@@ -13,9 +13,11 @@ namespace C78E {
 		return	static_cast<float>(glfwGetTime());
 	}
 
-	C78E::FilePath FileDialogs::openFile(const char* filter, C78E::FilePath baseDir) {
+	C78E::FilePath FileDialogs::openFile(const char* filter, C78E::FilePath baseDir, C78E::FilePath baseFile) {
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
+		C78_CORE_ASSERT(baseFile.string().length() < 260, "FileDialogs::openFile: baseFile is longer than 260 chars!");
+		memcpy_s(szFile, baseFile.string().length(), baseFile.string().c_str(), baseFile.string().length());
 		CHAR currentDir[256] = { 0 };
 		C78_CORE_ASSERT(baseDir.string().length() < 256, "FileDialogs::openFile: baseDir is longer than 256 chars!");
 		memcpy_s(currentDir, baseDir.string().length(), baseDir.string().c_str(), baseDir.string().length());
@@ -24,7 +26,7 @@ namespace C78E {
 		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
-		if (GetCurrentDirectoryA(256, currentDir))
+		if (baseDir.empty() && GetCurrentDirectoryA(256, currentDir))
 			ofn.lpstrInitialDir = currentDir;
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
@@ -37,16 +39,22 @@ namespace C78E {
 
 	}
 
-	C78E::FilePath FileDialogs::saveFile(const char* filter) {
+	C78E::FilePath FileDialogs::saveFile(const char* filter, C78E::FilePath baseDir, C78E::FilePath baseFile) {
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
+		if (baseFile.is_relative()) baseFile = std::filesystem::absolute(baseFile);
+		C78_CORE_ASSERT(baseFile.string().length() < 260, "FileDialogs::saveFile: baseFile is longer than 260 chars!");
+		memcpy_s(szFile, baseFile.string().length(), baseFile.string().c_str(), baseFile.string().length());
 		CHAR currentDir[256] = { 0 };
+		if (baseDir.is_relative()) baseDir = std::filesystem::absolute(baseDir);
+		C78_CORE_ASSERT(baseDir.string().length() < 256, "FileDialogs::saveFile: baseDir is longer than 256 chars!");
+		memcpy_s(currentDir, baseDir.string().length(), baseDir.string().c_str(), baseDir.string().length());
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		ofn.lStructSize = sizeof(OPENFILENAME);
 		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
-		if (GetCurrentDirectoryA(256, currentDir))
+		if (baseDir.empty() && GetCurrentDirectoryA(256, currentDir))
 			ofn.lpstrInitialDir = currentDir;
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;

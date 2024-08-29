@@ -5,7 +5,7 @@
 namespace C78Editor::GUI {
 
 	ProjectManagerUI::ProjectManagerUI(C78E::Ref<C78E::ProjectManager> projectManager)
-		: m_ProjectManager{ projectManager }, m_ProjectCreateConfig{} {
+		: m_ProjectManager{ projectManager }, m_PCCB{} {
 		ProjectHistory::load();
 	}
 
@@ -29,7 +29,7 @@ namespace C78Editor::GUI {
 			ImGui::Begin("Project Manager");
 
 			if (ImGui::Button("Create Project")) {
-				m_ProjectCreateStage = 1;
+				
 			}
 			if (ImGui::Button("Open Project")) {
 				C78E::FilePath path = C78E::FileDialogs::openFile("C78Project (*.pce)\0*.pce\0");
@@ -61,25 +61,39 @@ namespace C78Editor::GUI {
 	}
 
 	void ProjectManagerUI::drawCreateProject() {
-		if (!m_ProjectCreateStage) return;
 		if (auto projectManager = m_ProjectManager.lock()) {
 
 			ImGui::Begin("Create Project");
-			// buffer to complex for UI -> move to projectmanager
-			ImGui::InputText("Project Name", m_ProjectCreateConfig.name.data(), m_ProjectCreateConfig.name.size());
-			ImGui::InputText("Project Directory", m_ProjectCreateDirectory.string().data(), m_ProjectCreateDirectory.string().size());
-			ImGui::InputText("Asset Directory", m_ProjectCreateConfig.assetDirectory.string().data(), m_ProjectCreateConfig.assetDirectory.string().size());
-			ImGui::InputText("Asset Registry", m_ProjectCreateConfig.assetRegistryPath.string().data(), m_ProjectCreateConfig.assetRegistryPath.string().size());
-			ImGui::InputText("ScriptModulePath", m_ProjectCreateConfig.scriptModulePath.string().data(), m_ProjectCreateConfig.scriptModulePath.string().size());
+			
+			m_PCCB.projectName.show();
+			m_PCCB.projectDirectory.show();
+			ImGui::SameLine();
+			m_PCCB.saveProjectFile.show();
+
+			m_PCCB.assetRegistry.show();
+			m_PCCB.assetDirectory.show();
+			ImGui::SameLine();
+			m_PCCB.saveAssetRegistryFile.show();
+			
+			
+			m_PCCB.scriptModulePath.show();
 
 			if (ImGui::Button("Create Project")) {
-				C78E::FilePath projectFile = m_ProjectCreateDirectory / C78E::FilePath(m_ProjectCreateConfig.name + std::string(C78E_FILE_EXT_PROJECT));
-				projectManager->createProject(m_ProjectCreateConfig);
-				projectManager->saveProject(projectFile);
+				C78E::ProjectConfig cfg{
+					m_PCCB.getProjectName(),
+					0,
+					m_PCCB.getAssetDirectoryPath(),
+					m_PCCB.getAssetRegistryFilePath(),
+					m_PCCB.getScriptModulePath(),
+				};
 
-				ProjectHistory::projects.insert(projectFile);
+				projectManager->createProject(cfg);
+				projectManager->saveProject(m_PCCB.getProjectFilePath());
+
+				ProjectHistory::projects.insert(m_PCCB.getProjectFilePath());
 				ProjectHistory::save();
 			}
+
 
 			ImGui::End();
 		}
