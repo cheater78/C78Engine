@@ -25,7 +25,6 @@ namespace C78E {
 		bool activeSceneIsEmpty() const;
 
 	public:	//Expose ProjectManager
-		bool hasActiveProjectManager() const;
 		Ref<ProjectManager> getProjectManager() const;
 		bool hasActiveProject() const;
 		Ref<Project> getActiveProject() const;
@@ -37,7 +36,7 @@ namespace C78E {
 		FilePath fileFromScene(Ref<Scene> scene, Asset::AssetMeta meta);
 
 	private:
-		WRef<ProjectManager> m_ProjectManager;
+		Ref<ProjectManager> m_ProjectManager;
 		SceneHandle m_ActiveScene = (uint64_t)0;
 
 	};

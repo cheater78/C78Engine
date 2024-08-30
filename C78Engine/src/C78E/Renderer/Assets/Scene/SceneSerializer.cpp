@@ -62,12 +62,24 @@ namespace C78E {
 
 		if (entity.hasComponent<ModelComponent>()) {
 			out << YAML::Key << "ModelComponent";
-			out << YAML::BeginMap; // CameraComponent
+			out << YAML::BeginMap; // ModelComponent
 
 			auto& modelComponent = entity.getComponent<ModelComponent>();
 			auto& model = modelComponent.model;
 
 			out << YAML::Key << "Model" << YAML::Value << model;
+
+			out << YAML::EndMap; // ModelComponent
+		}
+
+		if (entity.hasComponent<SpriteRendererComponent>()) {
+			out << YAML::Key << "SpriteRendererComponent";
+			out << YAML::BeginMap; // CameraComponent
+
+			auto& spriteComponent = entity.getComponent<SpriteRendererComponent>();
+			out << YAML::Key << "Color" << YAML::Value << spriteComponent.color;
+			out << YAML::Key << "Texture" << YAML::Value << spriteComponent.texture;
+			out << YAML::Key << "Tiling" << YAML::Value << spriteComponent.tilingFactor;
 
 			out << YAML::EndMap; // CameraComponent
 		}
@@ -168,7 +180,15 @@ namespace C78E {
 					auto model = modelComponent["Model"];
 					mc.model = model.as<UUID>();
 				}
-				
+
+				auto spriteComponent = entity["SpriteRendererComponent"];
+				if (spriteComponent) {
+					auto& src = deserializedEntity.addComponent<SpriteRendererComponent>();
+					src.color = spriteComponent["Color"].as<glm::vec4>();
+					src.texture = spriteComponent["Texture"].as<AssetHandle>();
+					src.tilingFactor = spriteComponent["Tiling"].as<float>();
+				}
+
 
 				C78_CORE_TRACE("SceneSerializer::deserialize: Deserialized entity with ID = {0}, name = {1}", uuid, name);
 			}

@@ -125,11 +125,8 @@ namespace C78E {
 
 	struct SpriteRendererComponent {
 		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
-		AssetHandle texture;
+		AssetHandle texture = 0;
 		float tilingFactor = 1.0f;
-
-		SpriteRendererComponent(const glm::vec4& color)
-			: color(color) {}
 	};
 
 	struct CircleRendererComponent {

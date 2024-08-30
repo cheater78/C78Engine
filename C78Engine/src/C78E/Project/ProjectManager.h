@@ -19,10 +19,10 @@ namespace C78E {
 		bool closeProject(bool save = true);
 		bool removeProject(const FilePath& projectFile);
 
-		const bool hasActiveProject() const;
-		const Ref<Project> getActiveProject() const;
-		const bool hasActiveProjectFile() const;
-		const FilePath getActiveProjectFile() const;
+		bool hasActiveProject() const;
+		Ref<Project> getActiveProject() const;
+		bool hasActiveProjectFile() const;
+		FilePath getActiveProjectFile() const;
 
 		Ref<Project> reloadProject();
 

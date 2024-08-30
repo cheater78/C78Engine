@@ -14,7 +14,6 @@
 namespace C78Editor {
 
     /*
-    * SpriteRenderComponent -> Support at EntityManagerUI
     * 
     * Sprite for Renderer3D
     * 

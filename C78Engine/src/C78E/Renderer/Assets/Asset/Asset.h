@@ -22,6 +22,7 @@ namespace C78E {
 			Material
 
 		};
+		static const uint8_t c_AssetTypeCount = 8;
 
 		struct AssetMeta {
 			AssetType type = AssetType::None;
@@ -35,7 +36,7 @@ namespace C78E {
 		static AssetType fileToAssetType(const FilePath& filePath);
 		static std::string assetTypeToString(AssetType type);
 		static AssetType assetTypeFromString(std::string str);
-		
+
 	public:
 		static const std::map<FilePath, AssetType> c_AssetExtensionMap;
 		static const AssetMeta c_NullAssetMeta;

@@ -81,19 +81,14 @@ namespace C78Editor::GUI {
 
 		}
 		else {
-			ImGui::Text("No Active Scene...");
+			ImGui::Text("No Active Scene!");
 		}
 		ImGui::End();
 	}
 
 	void EntityManagerUI::drawEntityComponentManager(C78E::Ref<C78E::SceneManager> sceneManager) {
 		ImGui::Begin("Entity Component Manager");
-		if (m_ActiveEntity) {
-			drawEntityComponentList(m_ActiveEntity);
-		}
-		else {
-			ImGui::Text("No Entity Selected...");
-		}
+		drawEntityComponentList(m_ActiveEntity);
 		ImGui::End();
 	}
 
@@ -130,7 +125,7 @@ namespace C78Editor::GUI {
 					ImGui::TreePop();
 				}
 
-				if (ImGui::TreeNodeEx(std::string("Enable: " + (entity.getComponent<C78E::StateComponent>().enable) ? "True" : "False").c_str(), flags)) {
+				if (ImGui::TreeNodeEx(std::string("Enable: " + std::string((entity.getComponent<C78E::StateComponent>().enable) ? "True" : "False")).c_str(), flags)) {
 					if (ImGui::IsItemClicked())
 						m_ActiveEntity = entity;
 					ImGui::TreePop();
@@ -157,42 +152,54 @@ namespace C78Editor::GUI {
 	}
 
 	void EntityManagerUI::drawEntityComponentList(C78E::Entity entity) {
-		
-		if (entity.hasComponent<C78E::StateComponent>()) {
-			bool* enable = &entity.getComponent<C78E::StateComponent>().enable;
-			ImGui::Checkbox("##Entity State", enable);
-			ImGui::SameLine();
-		}
-
-
-		if (entity.hasComponent<C78E::TagComponent>()) {
-			auto& tag = entity.getComponent<C78E::TagComponent>().tag;
-
-			char buffer[256];
-			memset(buffer, 0, sizeof(buffer));
-			strncpy_s(buffer, sizeof(buffer), tag.c_str(), sizeof(buffer));
-			if (ImGui::InputText("##Tag", buffer, sizeof(buffer))) {
-				tag = std::string(buffer);
+		if (auto sceneManager = m_SceneManager.lock()) {
+			if (!sceneManager->hasActiveProject()) {
+				ImGui::Text("No Active Project!");
+				return;
 			}
-		}
+			if (!sceneManager->hasActiveScene()) {
+				ImGui::Text("No Active Scene!");
+				return;
+			}
+			if (!entity) {
+				ImGui::Text("No Active Entity!");
+				return;
+			}
 
-		ImGui::SameLine();
-		ImGui::PushItemWidth(-1);
+			if (entity.hasComponent<C78E::StateComponent>()) {
+				bool* enable = &entity.getComponent<C78E::StateComponent>().enable;
+				ImGui::Checkbox("##Entity State", enable);
+				ImGui::SameLine();
+			}
 
-		if (ImGui::Button("Add Component"))
-			ImGui::OpenPopup("AddComponent");
 
-		if (ImGui::BeginPopup("AddComponent"))
-		{
-			drawManagedAddComponentEntry<C78E::CameraComponent>("Camera");
+			if (entity.hasComponent<C78E::TagComponent>()) {
+				auto& tag = entity.getComponent<C78E::TagComponent>().tag;
 
-			ImGui::EndPopup();
-		}
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strncpy_s(buffer, sizeof(buffer), tag.c_str(), sizeof(buffer));
+				if (ImGui::InputText("##Tag", buffer, sizeof(buffer))) {
+					tag = std::string(buffer);
+				}
+			}
 
-		ImGui::PopItemWidth();
+			ImGui::SameLine();
+			ImGui::PushItemWidth(-1);
 
-		drawComponent<C78E::TransformComponent>("Transform", entity, [](auto& component)
-			{
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("AddComponent");
+
+			if (ImGui::BeginPopup("AddComponent")) {
+				drawManagedAddComponentEntry<C78E::CameraComponent>("Camera");
+				drawManagedAddComponentEntry<C78E::SpriteRendererComponent>("Sprite");
+
+				ImGui::EndPopup();
+			}
+
+			ImGui::PopItemWidth();
+
+			drawComponent<C78E::TransformComponent>("Transform", entity, [](C78E::TransformComponent& component) {
 				drawVec3Control("Translation", component.Translation);
 				glm::vec3 rotation = glm::degrees(component.Rotation);
 				drawVec3Control("Rotation", rotation);
@@ -200,8 +207,7 @@ namespace C78Editor::GUI {
 				drawVec3Control("Scale", component.Scale, 1.0f);
 			});
 
-		drawComponent<C78E::CameraComponent>("Camera", entity, [](auto& component)
-			{
+			drawComponent<C78E::CameraComponent>("Camera", entity, [](C78E::CameraComponent& component) {
 				auto& camera = component.camera;
 
 				const char* projectionTypeStrings[] = { "Perspective", "Orthographic" };
@@ -252,6 +258,15 @@ namespace C78Editor::GUI {
 				}
 			});
 
+			drawComponent<C78E::SpriteRendererComponent>("Sprite", entity, [](C78E::SpriteRendererComponent& component) {
+				ImGui::ColorEdit4("Color", &component.color[0], ImGuiColorEditFlags_NoInputs);
+				ImGui::Text(("Texture: " + std::to_string(component.texture)).c_str());
+				ImGui::DragFloat("Tiling", &component.tilingFactor, .1f, .001f, 100.f);
+			});
+		}
+		else {
+			C78_EDITOR_ERROR("EntityManagerUI::drawEntityComponentList: called without m_SceneManager!");
+		}
 	}
 
 	template<typename T>
@@ -298,6 +313,7 @@ namespace C78Editor::GUI {
 				entity.removeComponent<T>();
 		}
 	}
+
 }
 
 
