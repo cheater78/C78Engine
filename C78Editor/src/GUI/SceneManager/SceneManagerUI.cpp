@@ -9,18 +9,16 @@ namespace C78Editor::GUI {
     SceneManagerUI::~SceneManagerUI() { }
 
     void C78Editor::GUI::SceneManagerUI::onImGuiRender() {
+        ImGui::Begin("SceneManager");
+        
         if (m_SceneManager.expired()) {
-
+            ImGui::End();
             return;
         }
         auto sceneManager = m_SceneManager.lock();
-        if (!sceneManager->hasActiveProjectManager()) {
-
-            return;
-        }
         auto projectManager = sceneManager->getProjectManager();
         if (!projectManager->hasActiveProject()) {
-
+            ImGui::End();
             return;
         }
         C78E::Ref<C78E::Project> project = projectManager->getActiveProject();
@@ -28,7 +26,7 @@ namespace C78Editor::GUI {
         C78E::AssetRegistry assetRegistry = assetManager->getAssetRegistry();
 
 
-        ImGui::Begin("SceneManager");
+        
 
         if (ImGui::Button("Create Unnamed Scene"))
             sceneManager->createScene();

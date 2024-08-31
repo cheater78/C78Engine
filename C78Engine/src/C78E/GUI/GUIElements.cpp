@@ -2,6 +2,11 @@
 #include "GUIElements.h"
 
 #include "GUIUtils.h"
+
+
+#include "C78E/Renderer/Assets/AssetManager.h"
+
+
 namespace C78E::GUI {
 	
 	/*
@@ -274,6 +279,89 @@ namespace C78E::GUI {
 		//if (width) ImGui::PopItemWidth();
 		end();
 	}
+
+	/*
+	* ComboInput
+	*/
+	template <typename T>
+	ComboInput<T>::ComboInput(std::function<std::string(const T&)> toString, const std::string& label, const std::vector<T>& elements, int selected)
+		: m_Label{ label }, m_Elements{ elements }, m_ToString(toString), m_Selected{ selected } {
+		C78_CORE_ASSERT(!m_Elements.size() || m_Selected < (int)m_Elements.size(), "ComboInput::ComboInput: Initial selection for ComboInput out of Bounds!");
+	}
+	
+	template <typename T>
+	ComboInput<T>::~ComboInput() { }
+
+	template <typename T>
+	bool ComboInput<T>::isUnSelected() const {
+		return m_Selected < 0;
+	}
+
+	template <typename T>
+	bool ComboInput<T>::hasSelected() const {
+		return m_Elements.size() && m_Selected < m_Elements.size() && !isUnSelected();
+	}
+
+	template <typename T>
+	T& ComboInput<T>::getSelected() const {
+		C78_CORE_ASSERT(hasSelected(), "ComboInput::getSelected: No Elements or selection for ComboInput out of Bounds!");
+		return *(T*)(((char*)m_Elements.data()) + m_Selected * sizeof(T));
+	}
+
+	template <typename T>
+	int ComboInput<T>::getSelectionIndex() const { return m_Selected; }
+
+	template <typename T>
+	void ComboInput<T>::setSelected(const T& o) {
+		int index = -1;
+		for (uint32_t i = 0; i < m_Elements.size(); i++)
+			if (m_ToString(o) == m_ToString(m_Elements.at(i)))
+				index = i;
+		if (index < 0) {
+			C78_CORE_ERROR("ComboInput<T>::setSelected: Provided Object not found in Elements!");
+			return;
+		}
+		m_Selected = index;
+	}
+
+	template <typename T>
+	void ComboInput<T>::setSelectionIndex(int index) { 
+		m_Selected = (index < -1) ? -1 : index;
+	}
+
+	template <typename T>
+	void ComboInput<T>::show() {
+		if (!m_Visible) return;
+		begin();
+		if (m_Elements.size()) {
+			const size_t elementCount = m_Elements.size();
+			std::vector<std::string> elements;
+			elements.reserve(elementCount);
+			auto entries = new const char*[elementCount];
+			for (uint32_t i = 0; i < elementCount; i++) {
+				elements.emplace(elements.begin() + i, m_ToString(m_Elements.at(i)));
+				entries[i] = elements.at(i).c_str();
+				std::string s = entries[i];
+				int j = 0;
+			}
+
+			ImGui::Text(m_Label.c_str());
+			ImGui::SameLine();
+			ImGui::Combo("##ComboInput", &m_Selected, entries, elementCount);
+			delete[] entries;
+		}
+		else {
+			const char* entries[1] = { "None" };
+			ImGui::Combo(m_Label.c_str(), &m_Selected, entries, 1);
+		}
+		end();
+	}
+
+	template <typename T>
+	std::vector<T>& ComboInput<T>::elements() { return m_Elements; }
+
+	//instantiations
+	template class ComboInput<C78E::Asset::AssetType>;
 
 
 	/*

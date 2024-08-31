@@ -40,7 +40,7 @@ namespace C78E {
 		if (save)
 			if (!saveProject())
 				return false;
-		m_ActiveProject = nullptr;
+		m_ActiveProject.reset();
 		m_ActiveProjectFile.clear();
 		return true;
 	}

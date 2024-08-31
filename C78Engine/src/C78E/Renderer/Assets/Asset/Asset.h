@@ -10,19 +10,24 @@ namespace C78E {
 		enum AssetType : uint8_t {
 			None = 0,
 
-			Project = 1,
-			Scene = 2,
-
-			Texture2D,
-
-			Shader,
+			Scene = 1,
 
 			Model,
 			Mesh,
-			Material
+			Material,
+
+			Shader,
+			Texture2D,
 
 		};
-		static const uint8_t c_AssetTypeCount = 8;
+		static const uint8_t c_AssetTypeCount = 7;
+		static const std::vector<AssetType> getAllAssetTypes() {
+			std::vector<AssetType> types;
+			types.reserve(c_AssetTypeCount);
+			for (uint8_t i = 0; i < c_AssetTypeCount; i++)
+				types.emplace(types.begin() + i, static_cast<AssetType>(i));
+			return types;
+		}
 
 		struct AssetMeta {
 			AssetType type = AssetType::None;

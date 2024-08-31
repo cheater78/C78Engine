@@ -2,41 +2,37 @@
 
 namespace C78Editor::GUI {
 
-	AssetManagerUI::AssetManagerUI(C78E::Ref<C78E::EditorAssetManager> assetManager)
-		: m_AssetManager{ assetManager } {
+	AssetManagerUI::AssetManagerUI(C78E::Ref<C78E::ProjectManager> projectManager)
+		: m_ProjectManager{ projectManager } {
 	}
 
 	AssetManagerUI::~AssetManagerUI() { }
 
 	void AssetManagerUI::onImGuiRender() {
-		if (auto assetManager = m_AssetManager.lock()) {
+		if (auto assetManager = getAssetManager()) {
 
 			ImGui::Begin("Asset Manager");
+			m_CreateAssetPanel.onImGuiRender();
 
-			ImGui::InputText("AssetName", nullptr, 0);
-			ImGui::InputText("FileSource", nullptr, 0);
-			ImGui::InputText("UUID", nullptr, 0);
+			for (auto entry : assetManager->getAssetRegistry()) {
+				C78E::AssetHandle handle = entry.first;
+				C78E::Asset::AssetMeta meta = entry.second;
 
-			int icb = 0;
-			std::vector<std::string> label(C78E::Asset::c_AssetTypeCount);
-			const char* labelptrs[C78E::Asset::c_AssetTypeCount];
-			for (uint8_t i = 0; i < C78E::Asset::c_AssetTypeCount; i++) {
-				label.push_back(C78E::Asset::assetTypeToString(static_cast<C78E::Asset::AssetType>(i)));
-				labelptrs[i] = label.back().c_str();
+				ImGui::Spacing();
+
+				ImGui::Text(std::to_string(handle).c_str());
+
+				ImGui::Spacing();
 			}
-
-			
-
-			ImGui::Combo("AssetType", &icb, labelptrs, label.size());
-
-
-			ImGui::Button("Create Asset");
 
 			ImGui::End();
 		}
 	}
 
-	void AssetManagerUI::drawAssetPanelForType(C78E::Asset::AssetType assetType) {
+	C78E::Ref<C78E::EditorAssetManager> AssetManagerUI::getAssetManager() const {
+		if (m_ProjectManager->hasActiveProject())
+			return m_ProjectManager->getActiveProject()->getEditorAssetManager();
+		return nullptr;
 	}
 	
 

@@ -234,6 +234,33 @@ namespace C78E::GUI {
 	};
 
 	/*
+	* ComboInput
+	*/
+	template <typename T>
+	class ComboInput : public Element {
+	public:
+		ComboInput(const std::function<std::string(const T&)> toString, const std::string& label = "", const std::vector<T>& elements = {}, int selected = -1);
+		ComboInput(const TextInput& other) = delete;
+		~ComboInput();
+
+		bool isUnSelected() const;
+		bool hasSelected() const;
+		T& getSelected() const;
+		int getSelectionIndex() const;
+		void setSelected(const T& o);
+		void setSelectionIndex(int index);
+
+		virtual void show() override;
+
+		std::vector<T>& elements();
+	protected:
+		std::string m_Label = "";
+		int m_Selected = 0;
+		std::vector<T> m_Elements;
+		const std::function<std::string(const T&)> m_ToString;
+	};
+
+	/*
 	* DragFloat
 	*/
 	class DragFloat : public Element {

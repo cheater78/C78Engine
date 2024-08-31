@@ -8,6 +8,7 @@
 #include <C78E/Project/Project.h>
 
 #include "GUI/EntityManager/EntityManagerUI.h"
+#include "GUI/AssetManager/AssetManagerUI.h"
 #include "GUI/SceneManager/SceneManagerUI.h"
 #include "GUI/ProjectManager/ProjectManagerUI.h"
 
@@ -28,6 +29,7 @@ namespace C78Editor {
             m_SceneManager(C78E::createRef<C78E::SceneManager>(m_ProjectManager)),
 
             m_ProjectManagerUI(C78E::createRef <::C78Editor::GUI::ProjectManagerUI>(m_ProjectManager)),
+            m_AssetManagerUI(C78E::createRef <::C78Editor::GUI::AssetManagerUI>(m_ProjectManager)),
             m_SceneManagerUI(C78E::createRef <::C78Editor::GUI::SceneManagerUI>(m_SceneManager)),
             m_EntityManagerUI(C78E::createRef<::C78Editor::GUI::EntityManagerUI>(m_SceneManager))
         { }
@@ -139,6 +141,7 @@ namespace C78Editor {
             ImGui::ShowDemoWindow();
             
             m_ProjectManagerUI->onImGuiRender();
+            m_AssetManagerUI->onImGuiRender();
             m_SceneManagerUI->onImGuiRender();
             m_EntityManagerUI->onImGuiRender();
 
@@ -190,6 +193,7 @@ namespace C78Editor {
         C78E::Ref<C78E::SceneManager> m_SceneManager = nullptr;
 
         C78E::Ref<::C78Editor::GUI::ProjectManagerUI> m_ProjectManagerUI = nullptr;
+        C78E::Ref<::C78Editor::GUI::AssetManagerUI> m_AssetManagerUI = nullptr;
         C78E::Ref<::C78Editor::GUI::SceneManagerUI> m_SceneManagerUI = nullptr;
         C78E::Ref<::C78Editor::GUI::EntityManagerUI> m_EntityManagerUI = nullptr;
 

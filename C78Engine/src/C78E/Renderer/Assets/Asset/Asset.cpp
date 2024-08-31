@@ -1,10 +1,3 @@
-/*****************************************************************//**
- * \file   Asset.cpp
- * \brief  Implentation of class Asset
- * 
- * \author c78
- * \date   April 2024
- *********************************************************************/
 #include "C78ePCH.h"
 #include "Asset.h"
 
@@ -13,7 +6,6 @@ namespace C78E {
 	const Asset::AssetMeta Asset::c_NullAssetMeta{};
 
 	const std::map<FilePath, Asset::AssetType> Asset::c_AssetExtensionMap = {
-		{ ".pce", Asset::AssetType::Project },
 		{ ".sce", Asset::AssetType::Scene },
 
 		{ ".png", Asset::AssetType::Texture2D },
@@ -51,17 +43,16 @@ namespace C78E {
 	std::string Asset::assetTypeToString(Asset::AssetType type) {
 		switch (type) {
 		case C78E::Asset::AssetType::None:			return "AssetType::None";
-
-		case C78E::Asset::AssetType::Project:		return "AssetType::Project";
+		
 		case C78E::Asset::AssetType::Scene:			return "AssetType::Scene";
-
-		case C78E::Asset::AssetType::Texture2D:		return "AssetType::Texture2D";
-
-		case C78E::Asset::AssetType::Shader:		return "AssetType::Shader";
 
 		case C78E::Asset::AssetType::Model:			return "AssetType::Model";
 		case C78E::Asset::AssetType::Mesh:			return "AssetType::Mesh";
 		case C78E::Asset::AssetType::Material:		return "AssetType::Material";
+
+		case C78E::Asset::AssetType::Shader:		return "AssetType::Shader";
+
+		case C78E::Asset::AssetType::Texture2D:		return "AssetType::Texture2D";
 
 		default: return "AssetType::None";
 		}
@@ -74,16 +65,15 @@ namespace C78E {
 	 * \return the deserialized Asset::AssetType
 	 */
 	Asset::AssetType Asset::assetTypeFromString(std::string str) {
-		if (str == "AssetType::Project")	return AssetType::Project;
 		if (str == "AssetType::Scene")		return AssetType::Scene;
-
-		if (str == "AssetType::Texture2D")	return AssetType::Texture2D;
-
-		if (str == "AssetType::Shader")		return AssetType::Shader;
 
 		if (str == "AssetType::Model")		return AssetType::Model;
 		if (str == "AssetType::Mesh")		return AssetType::Mesh;
 		if (str == "AssetType::Material")	return AssetType::Material;
+
+		if (str == "AssetType::Shader")		return AssetType::Shader;
+
+		if (str == "AssetType::Texture2D")	return AssetType::Texture2D;
 
 		return AssetType::None;
 	}

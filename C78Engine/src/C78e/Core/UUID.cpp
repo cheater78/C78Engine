@@ -18,4 +18,14 @@ namespace C78E {
 		: m_UUID(uuid)
 	{ }
 
+	UUID UUID::fromString(std::string string) {
+		C78_CORE_FATAL("UUID::fromString not impl!");
+		return UUID();
+	}
+
+	std::string UUID::toString(UUID uuid) {
+		C78_CORE_FATAL("UUID::toString not impl!");
+		return std::string();
+	}
+
 }

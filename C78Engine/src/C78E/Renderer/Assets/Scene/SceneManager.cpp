@@ -12,6 +12,7 @@ namespace C78E {
 	SceneManager::~SceneManager() { }
 
 	Ref<Scene> SceneManager::createScene(const std::string& name) {
+		if (!m_ProjectManager->hasActiveProject()) return nullptr;
 		Ref<Scene> scene = C78E::createRef<C78E::Scene>(); //Scenes itself are nameless!
 		C78E::Asset::AssetMeta meta;
 		meta.name = name;
@@ -22,6 +23,7 @@ namespace C78E {
 	}
 
 	bool SceneManager::saveScene(SceneHandle sceneHandle, const FilePath& sceneFile) {
+		if (!m_ProjectManager->hasActiveProject()) return false;
 		Ref<EditorAssetManager> assetManager = m_ProjectManager->getActiveProject()->getEditorAssetManager();
 		if (!sceneHandle)
 			sceneHandle = m_ActiveScene;
@@ -40,11 +42,13 @@ namespace C78E {
 	}
 
 	bool SceneManager::deleteScene(SceneHandle sceneHandle, bool fromDisk) {
+		if (!m_ProjectManager->hasActiveProject()) return false;
 		Ref<Scene> scene = getScene(sceneHandle);
 		return m_ProjectManager->getActiveProject()->getEditorAssetManager()->removeAsset(sceneHandle, fromDisk);
 	}
 
 	Ref<Scene> SceneManager::getScene(SceneHandle sceneHandle) const {
+		if (!m_ProjectManager->hasActiveProject()) return nullptr;
 		if (!sceneHandle) {
 			C78_CORE_ERROR("SceneManager::getScene: SceneHandle is null!");
 			return nullptr;
@@ -53,12 +57,12 @@ namespace C78E {
 	}
 
 	bool SceneManager::hasActiveScene() const {
-		if (m_ProjectManager->hasActiveProject())
-			return m_ActiveScene;
-		return false;
+		if (!m_ProjectManager->hasActiveProject()) return false;
+		return m_ActiveScene;
 	}
 
 	Ref<Scene> SceneManager::getActiveScene() const {
+		if (!m_ProjectManager->hasActiveProject()) return nullptr;
 		if (hasActiveScene())
 			return getScene(m_ActiveScene);
 		else {
@@ -69,6 +73,8 @@ namespace C78E {
 
 	//should expect and handle null SceneHandles
 	void SceneManager::setActiveSceneHandle(SceneHandle sceneHandle) {
+		if (!m_ProjectManager->hasActiveProject())
+			return;
 		if (sceneHandle && !getScene(sceneHandle)) {
 			C78_CORE_ERROR("SceneManager::setActiveSceneHandle: SceneHandle provided was not null, but does not associate an existing Scene!");
 			return;

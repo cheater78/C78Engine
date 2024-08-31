@@ -1,4 +1,6 @@
 #pragma once
+
+#define _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
 // Core
 #include "C78E/Core/Core.h"
 #include "C78E/Core/Log.h"
