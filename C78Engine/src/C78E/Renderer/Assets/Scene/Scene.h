@@ -63,7 +63,7 @@ namespace C78E {
 	private:
 		// Entities
 		entt::registry m_Registry;
-		UUID m_ActiveCam{ 0 };
+		UUID m_ActiveCam = UUID::invalid();
 		std::unordered_map<UUID, entt::entity> m_EntityMap;
 
 		// Runtime

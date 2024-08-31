@@ -8,7 +8,7 @@ namespace C78E {
 
 	class SceneImporter {
 	public:
-		static Ref<Scene> importScene(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager);
+		static Ref<Scene> importScene(AssetHandle handle, const Asset::AssetMeta& meta);
 	};
 
 }

@@ -19,7 +19,7 @@ namespace C78E {
 			{
 				out << YAML::BeginMap;// Project
 				out << YAML::Key << "Name" << YAML::Value << config.name;
-				out << YAML::Key << "StartScene" << YAML::Value << (uint64_t)config.startScene;
+				out << YAML::Key << "StartScene" << YAML::Value << config.startScene;
 				out << YAML::Key << "AssetDirectory" << YAML::Value << config.assetDirectory.string();
 				out << YAML::Key << "AssetRegistryPath" << YAML::Value << config.assetRegistryPath.string();
 				out << YAML::Key << "ScriptModulePath" << YAML::Value << config.scriptModulePath.string();
@@ -51,7 +51,7 @@ namespace C78E {
 			return false;
 
 		config.name = projectNode["Name"].as<std::string>();
-		config.startScene = projectNode["StartScene"].as<uint64_t>();
+		config.startScene = projectNode["StartScene"].as<UUID>();
 		config.assetDirectory = projectNode["AssetDirectory"].as<std::string>();
 		if (projectNode["AssetRegistryPath"])
 			config.assetRegistryPath = projectNode["AssetRegistryPath"].as<std::string>();

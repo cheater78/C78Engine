@@ -135,7 +135,7 @@ namespace C78E {
 		auto entities = data["Entities"];
 		if (entities) {
 			for (auto entity : entities) {
-				uint64_t uuid = entity["Entity"].as<uint64_t>();
+				UUID uuid = entity["Entity"].as<UUID>();
 
 				std::string name;
 				auto tagComponent = entity["TagComponent"];

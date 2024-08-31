@@ -8,7 +8,7 @@
 
 namespace C78E {
 
-	Ref<Scene> SceneImporter::importScene(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
+	Ref<Scene> SceneImporter::importScene(AssetHandle handle, const Asset::AssetMeta& meta) {
 		Ref<Scene> scene = createRef<Scene>();
 		SceneSerializer serializer(scene, meta);
 		serializer.deserialize(meta.fileSource);

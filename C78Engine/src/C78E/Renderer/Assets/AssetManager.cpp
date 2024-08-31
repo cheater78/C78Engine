@@ -25,19 +25,18 @@ namespace C78E {
 		return m_AssetRegistry.at(handle).type;
 	}
 
-	AssetHandle EditorAssetManager::importAsset(const FilePath& filepath) {
-		AssetHandle handle;
-		Asset::AssetMeta meta;
-		meta.name = "Unnamed Asset"; //TODO: centrl
-		meta.fileSource = filepath;
-		meta.type = Asset::fileToAssetType(filepath);
-
+	AssetHandle EditorAssetManager::importAsset(const FilePath& filepath, Asset::AssetMeta meta, AssetHandle handle) {
+		if (!handle.isValid())
+			handle = UUID();
 		if (meta.type == Asset::AssetType::None) {
-			C78_CORE_ERROR("EditorAssetManager::importAsset: '{}' files are not supported yet!", filepath.extension().string());
-			return 0;
+			meta.type = Asset::fileToAssetType(filepath);
+			if (meta.type == Asset::AssetType::None) {
+				C78_CORE_ERROR("EditorAssetManager::importAsset: '{}' files are not supported yet!", filepath.extension().string());
+				return AssetHandle::invalid();
+			}
 		}
 
-		Ref<Asset> asset = AssetImporter::importAsset(handle, meta, nullptr);
+		Ref<Asset> asset = AssetImporter::importAsset(handle, meta);
 		if (asset) {
 			asset->m_AssetHandle = handle;
 			m_LoadedAssets[handle] = asset;
@@ -46,7 +45,7 @@ namespace C78E {
 			return asset->m_AssetHandle;
 		}
 		C78_CORE_ERROR("EditorAssetManager::importAsset: '{}' failed to import!", filepath.string());
-		return 0;
+		return AssetHandle::invalid();
 	}
 
 	bool EditorAssetManager::removeAsset(AssetHandle handle, bool fromDisk) {
@@ -63,16 +62,13 @@ namespace C78E {
 		return true;
 	}
 
-	const Asset::AssetMeta& EditorAssetManager::getMeta(AssetHandle handle) const {
+	Asset::AssetMeta& EditorAssetManager::getMeta(AssetHandle handle) {
 		auto it = m_AssetRegistry.find(handle);
-		if (it == m_AssetRegistry.end()) {
-			C78_CORE_ERROR("EditorAssetManager::getMeta: AssetHandle {} not found!", (uint64_t)handle);
-			return Asset::c_NullAssetMeta;
-		}
+		C78_CORE_ASSERT(it != m_AssetRegistry.end(), "EditorAssetManager::getMeta: AssetHandle not found!");
 		return it->second;
 	}
 
-	const FilePath& EditorAssetManager::getFile(AssetHandle handle) const {
+	const FilePath& EditorAssetManager::getFile(AssetHandle handle) {
 		return getMeta(handle).fileSource;
 	}
 
@@ -85,7 +81,7 @@ namespace C78E {
 		} else {
 			Ref<Asset> asset;
 			const Asset::AssetMeta& metadata = getMeta(handle);
-			asset = AssetImporter::importAsset(handle, metadata, nullptr);
+			asset = AssetImporter::importAsset(handle, metadata);
 			if (!asset) {
 				// import failed
 				C78_CORE_ERROR("EditorAssetManager::getAsset - loading Asset failed!");
@@ -139,7 +135,7 @@ namespace C78E {
 		}
 
 		for (const auto& node : rootNode) {
-			AssetHandle handle = node["Handle"].as<uint64_t>();
+			AssetHandle handle = node["Handle"].as<AssetHandle>();
 			auto& metadata = m_AssetRegistry[handle];
 			metadata.name = node["Name"].as<std::string>();
 			metadata.fileSource = node["FilePath"].as<std::string>();
@@ -151,7 +147,7 @@ namespace C78E {
 	AssetHandle EditorAssetManager::addAsset(Asset::AssetMeta meta, Ref<Asset> asset) {
 		if (meta.type == Asset::AssetType::None) {
 			C78_CORE_ERROR("EditorAssetManager::addAsset: given AssetMeta.type cannot be None!");
-			return 0;
+			return AssetHandle::invalid();
 		}
 		if (asset) {
 			AssetHandle handle; // generate new handle
@@ -162,7 +158,7 @@ namespace C78E {
 			return handle;
 		} else {
 			C78_CORE_ERROR("EditorAssetManager::addAsset: given asset is a nullptr!");
-			return 0;
+			return AssetHandle::invalid();
 		}
 		
 	}

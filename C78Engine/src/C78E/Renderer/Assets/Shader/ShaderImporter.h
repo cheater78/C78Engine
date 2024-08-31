@@ -11,7 +11,7 @@ namespace C78E {
 		* Imports the Shader specified in meta.fileSource
 		* returns a reference to the Shader
 		*/
-		static Ref<Shader> importShader(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager);
+		static Ref<Shader> importShader(AssetHandle handle, const Asset::AssetMeta& meta);
 
 	};
 

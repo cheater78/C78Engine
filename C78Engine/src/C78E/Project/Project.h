@@ -12,7 +12,7 @@ namespace C78E {
 	struct ProjectConfig {
 		std::string name = "Untitled Project";
 
-		AssetHandle startScene = 0;
+		AssetHandle startScene = AssetHandle::invalid();
 
 		FilePath assetDirectory; //absolute
 		FilePath assetRegistryPath; //relative to AssetDirectory

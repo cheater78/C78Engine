@@ -9,7 +9,7 @@
 
 namespace C78E {
 
-	Ref<Texture2D> TextureImporter::importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
+	Ref<Texture2D> TextureImporter::importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta) {
 
 		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(meta.fileSource, false, 4);
 

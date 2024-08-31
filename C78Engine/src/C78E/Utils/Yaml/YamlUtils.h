@@ -16,12 +16,12 @@ namespace YAML {
 	struct convert<C78E::UUID> {
 		static Node encode(const C78E::UUID& id) {
 			Node node;
-			node.push_back((uint64_t)id);
+			node.push_back(C78E::UUID::toString(id));
 			return node;
 		}
 
 		static bool decode(const Node& node, C78E::UUID& id) {
-			id = node.as<uint64_t>();
+			id = C78E::UUID::fromString(node.as<std::string>());
 			return true;
 		}
 

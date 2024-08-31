@@ -12,7 +12,7 @@ namespace C78E {
 		~SceneManager();
 
 		Ref<Scene> createScene(const std::string& name = "Unnamed Scene");
-		bool saveScene(SceneHandle sceneHandle = 0, const FilePath& sceneFile = "");
+		bool saveScene(SceneHandle sceneHandle = AssetHandle::invalid(), const FilePath& sceneFile = "");
 		bool deleteScene(SceneHandle sceneHandle, bool fromDisk = false);
 
 		Ref<Scene> getScene(SceneHandle sceneHandle) const;
@@ -33,11 +33,11 @@ namespace C78E {
 
 	private:
 		// Naming for Serialized Scene Files
-		FilePath fileFromScene(Ref<Scene> scene, Asset::AssetMeta meta);
+		FilePath fileFromScene(Ref<Scene> scene, Asset::AssetMeta meta, bool forceNotExisting = false);
 
 	private:
 		Ref<ProjectManager> m_ProjectManager;
-		SceneHandle m_ActiveScene = (uint64_t)0;
+		SceneHandle m_ActiveScene = AssetHandle::invalid();
 
 	};
 

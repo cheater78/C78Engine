@@ -70,7 +70,7 @@ namespace C78E {
 		* Creates an Asset of a specified Asset source file, does not load the Asset, does not save the Registry
 		* returns the AssetHandle of the created Asset
 		*/
-		AssetHandle importAsset(const FilePath& filepath);
+		AssetHandle importAsset(const FilePath& filepath, Asset::AssetMeta meta = Asset::c_NullAssetMeta, AssetHandle handle = AssetHandle::invalid());
 
 		/*
 		* Removes an Asset by AssetHandle from the Loaded Assets and AssetRegistry
@@ -81,12 +81,12 @@ namespace C78E {
 		* Retrieves the Asset Meta of an Asset given its Assethandle
 		* returns the Asset Meta
 		*/
-		const Asset::AssetMeta& getMeta(AssetHandle handle) const;
+		Asset::AssetMeta& getMeta(AssetHandle handle);
 		/*
 		* Retrieves the Source File of an Asset given its Assethandle
 		* returns the Source File Path
 		*/
-		const FilePath& getFile(AssetHandle handle) const;
+		const FilePath& getFile(AssetHandle handle);
 
 		/*
 		* Provides access to the AssetRegistry

@@ -5,21 +5,24 @@ namespace C78E {
 	class UUID {
 	public:
 		UUID();
-		UUID(uint64_t uuid);
 		UUID(const UUID&) = default;
 
 		bool isValid() const { return (bool)*this; }
 
-		operator uint64_t() const { return m_UUID; }
-		operator bool() const { return m_UUID; }
-		friend bool operator<(const UUID& l, const UUID& r) { return l.m_UUID < r.m_UUID; }
-		friend bool operator==(const UUID& l, const UUID& r) { return l.m_UUID == r.m_UUID; }
+		void* data() const { return (void*)&m_UUID[0]; }
+		const size_t size() const { return 2 * sizeof(uint64_t); }
+
+		operator bool() const { return (m_UUID[0] | m_UUID[1]); }
+		friend bool operator<(const UUID& l, const UUID& r) { return l.m_UUID[1] < r.m_UUID[1] || (l.m_UUID[1] == r.m_UUID[1] && l.m_UUID[0] < r.m_UUID[0]); }
+		friend bool operator==(const UUID& l, const UUID& r) { return l.m_UUID[1] == r.m_UUID[1] && l.m_UUID[0] == r.m_UUID[0]; }
 
 	public:
-		static UUID fromString(std::string string);
+		static UUID fromString(std::string str);
 		static std::string toString(UUID uuid);
+
+		static UUID invalid() { UUID uuid; uuid.m_UUID[0] = 0; uuid.m_UUID[1] = 0; return uuid; }
 	private:
-		uint64_t m_UUID; // Change to 128 or 256
+		uint64_t m_UUID[2] = { 0 };
 	};
 
 }
@@ -35,6 +38,6 @@ namespace std {
 	};
 
 	_EXPORT_STD _NODISCARD inline string to_string(C78E::UUID uuid) {
-		return std::to_string((uint64_t)uuid);
+		return C78E::UUID::toString(uuid);
 	}
 }

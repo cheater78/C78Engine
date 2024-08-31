@@ -162,7 +162,7 @@ namespace C78E {
 
     Ref<Material> WavefrontLoader::toMaterial(const tinyobj::material_t& material) {
         return createRef<Material>(
-            0, //TODO Shader handle
+            AssetHandle::invalid(), //TODO Shader handle
             material.illum,
             toMaterialProperties(material),
             toMaterialTextures(material),
@@ -186,7 +186,7 @@ namespace C78E {
 
     Material::MaterialTextures WavefrontLoader::toMaterialTextures(const tinyobj::material_t& material) {
         return {
-            0,0,0,0,0,0,0,0
+            AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid()
         };
         /*
         return {
@@ -223,7 +223,7 @@ namespace C78E {
     }
 
     Material::MaterialTexturesPBRext WavefrontLoader::toMaterialTexturesPBRext(const tinyobj::material_t& material) {
-        return {0,0,0,0,0};
+        return { AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid(),AssetHandle::invalid() };
 
         /*
         return {

@@ -20,14 +20,14 @@ namespace C78E {
 		};
 
 		struct MaterialTextures {
-			AssetHandle ambient = 0;             // map_Ka. For ambient or ambient occlusion.
-			AssetHandle diffuse = 0;             // map_Kd
-			AssetHandle specular = 0;            // map_Ks
-			AssetHandle specularHighlight = 0;	 // map_Ns
-			AssetHandle bump = 0;                // map_bump, map_Bump, bump
-			AssetHandle displacement = 0;        // disp
-			AssetHandle alpha = 0;               // map_d
-			AssetHandle reflection = 0;          // refl
+			AssetHandle ambient = AssetHandle::invalid();             // map_Ka. For ambient or ambient occlusion.
+			AssetHandle diffuse = AssetHandle::invalid();             // map_Kd
+			AssetHandle specular = AssetHandle::invalid();            // map_Ks
+			AssetHandle specularHighlight = AssetHandle::invalid();	 // map_Ns
+			AssetHandle bump = AssetHandle::invalid();                // map_bump, map_Bump, bump
+			AssetHandle displacement = AssetHandle::invalid();        // disp
+			AssetHandle alpha = AssetHandle::invalid();               // map_d
+			AssetHandle reflection = AssetHandle::invalid();          // refl
 		};
 
 		struct MaterialPropertiesPBRext {
@@ -41,11 +41,11 @@ namespace C78E {
 		};
 
 		struct MaterialTexturesPBRext {
-			AssetHandle roughness = 0;		// map_Pr
-			AssetHandle metallic = 0;		// map_Pm
-			AssetHandle sheen = 0;			// map_Ps
-			AssetHandle emissive = 0;		// map_Ke
-			AssetHandle normal = 0;			// norm. For normal mapping.
+			AssetHandle roughness = AssetHandle::invalid();		// map_Pr
+			AssetHandle metallic = AssetHandle::invalid();		// map_Pm
+			AssetHandle sheen = AssetHandle::invalid();			// map_Ps
+			AssetHandle emissive = AssetHandle::invalid();		// map_Ke
+			AssetHandle normal = AssetHandle::invalid();			// norm. For normal mapping.
 		};
 
 	public:

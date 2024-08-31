@@ -81,7 +81,7 @@ namespace C78Editor::GUI {
 			if (ImGui::Button("Create Project")) {
 				C78E::ProjectConfig cfg{
 					m_PCCB.getProjectName(),
-					0,
+					C78E::AssetHandle::invalid(),
 					m_PCCB.getAssetDirectoryPath(),
 					m_PCCB.getAssetRegistryFilePath(),
 					m_PCCB.getScriptModulePath(),

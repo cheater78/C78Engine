@@ -4,11 +4,13 @@
 namespace C78E {
 
 	Ref<Project> ProjectManager::createProject(ProjectConfig config) {
+		if (m_ActiveProject) closeProject(true);
 		m_ActiveProject = Project::create(config);
 		return m_ActiveProject;
 	}
 
 	Ref<Project> ProjectManager::openProject(const FilePath& projectFile) {
+		if (m_ActiveProject) closeProject(true);
 		m_ActiveProject = Project::load(projectFile);
 		if (m_ActiveProject)
 			m_ActiveProjectFile = projectFile;

@@ -17,15 +17,15 @@ namespace C78E {
 		{ Asset::AssetType::Shader, ShaderImporter::importShader },
 	};
 
-	Ref<Asset> AssetImporter::importAsset(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
+	Ref<Asset> AssetImporter::importAsset(AssetHandle handle, const Asset::AssetMeta& meta) {
 		if (s_AssetImportFunctions.find(meta.type) == s_AssetImportFunctions.end()) {
 			C78_CORE_ERROR("No AssetLoader exists for Type: {}", Asset::assetTypeToString(meta.type));
 			return nullptr;
 		}
-		return s_AssetImportFunctions.at(meta.type)(handle, meta, assetManager);
+		return s_AssetImportFunctions.at(meta.type)(handle, meta);
 	}
 
-	Ref<AsyncAsset> AssetImporter::importAssetAsync(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
+	Ref<AsyncAsset> AssetImporter::importAssetAsync(AssetHandle handle, const Asset::AssetMeta& meta) {
 		if (s_AssetImportFunctions.find(meta.type) == s_AssetImportFunctions.end()) {
 			C78_CORE_ERROR("No AssetLoader exists for Type: {}", Asset::assetTypeToString(meta.type));
 			return nullptr;
@@ -39,7 +39,7 @@ namespace C78E {
 		// get new Thread
 		//std::thread th;
 		{
-			assetRef->m_Asset = s_AssetImportFunctions.at(meta.type)(handle, meta, assetManager);
+			assetRef->m_Asset = s_AssetImportFunctions.at(meta.type)(handle, meta);
 			assetRef->m_Loaded = true;
 		}
 

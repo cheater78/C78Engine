@@ -13,8 +13,8 @@ namespace C78E {
 	class Model : public Asset {
 	public:
 		struct ModelPart {
-			AssetHandle m_Mesh = 0;
-			AssetHandle m_Material = 0;
+			AssetHandle m_Mesh = AssetHandle::invalid();
+			AssetHandle m_Material = AssetHandle::invalid();
 		};
 	public:
 		Model() = default;

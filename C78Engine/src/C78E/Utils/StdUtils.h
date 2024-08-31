@@ -42,6 +42,14 @@ namespace std {
 		return to_string(static_cast<double>(_Val), _Dec);
 	}
 
+	template <typename T>
+	_EXPORT_STD _NODISCARD inline string to_string(const std::vector<T>& vec) {
+		std::string str;
+		for (auto& e : vec)
+			str += ((str.empty()) ? "{ " : " ; ") + std::to_string(e);
+		return str + " }";
+	}
+
 	_EXPORT_STD _NODISCARD inline std::vector<std::string> split(const std::string& s, char seperator)
 	{
 		std::vector<std::string> output;

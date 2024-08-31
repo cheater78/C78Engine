@@ -111,8 +111,11 @@ namespace C78E {
 	
 
 	
-	FilePath SceneManager::fileFromScene(Ref<Scene> scene, Asset::AssetMeta meta) {
-		return m_ProjectManager->getActiveProject()->getAssetDirectory() / C78E_ASSETLOC_SCENE / (meta.name + "-" + std::to_string(scene->m_AssetHandle) + C78E_FILE_EXT_SCENE);
+	FilePath SceneManager::fileFromScene(Ref<Scene> scene, Asset::AssetMeta meta, bool forceNotExisting) {
+		FilePath file = m_ProjectManager->getActiveProject()->getAssetDirectory() / C78E_ASSETLOC_SCENE / (meta.name + C78E_FILE_EXT_SCENE);
+		for (uint64_t i = 1; forceNotExisting && C78E::FileSystem::exists(file); i++)
+			file = m_ProjectManager->getActiveProject()->getAssetDirectory() / C78E_ASSETLOC_SCENE / (meta.name + std::to_string(i + 1) + C78E_FILE_EXT_SCENE);
+		return file;
 	}
 
 }

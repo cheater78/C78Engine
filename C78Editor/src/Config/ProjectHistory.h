@@ -36,8 +36,10 @@ namespace C78Editor {
 			if (!node) { save(); return; }
 			if(!node.IsSequence()) { save(); return; }
 			std::set<C78E::FilePath> projectFiles = {};
-			for (auto pathNode : node)
-				projectFiles.insert(pathNode.as<std::string>());
+			for (auto pathNode : node) {
+				if(C78E::FileSystem::exists(pathNode.as<std::string>()))
+					projectFiles.insert(pathNode.as<std::string>());
+			}
 			projects = projectFiles;
 			C78_EDITOR_INFO("ProjectHistory loaded!");
 		}

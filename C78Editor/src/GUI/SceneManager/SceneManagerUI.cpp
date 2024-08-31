@@ -33,13 +33,20 @@ namespace C78Editor::GUI {
 
 
         if (sceneManager->hasActiveScene()) {
+            C78E::SceneHandle sceneHandle = sceneManager->getActiveSceneHandle();
+            char nameBuffer[64] = { 0 };
+            auto& currName = assetManager->getMeta(sceneHandle).name;
+            const size_t currNameSize = currName.size();
+            C78_EDITOR_ASSERT(currNameSize < 65, "");
+            memcpy_s(nameBuffer, currNameSize, assetManager->getMeta(sceneHandle).name.c_str(), currNameSize);
+
+            ImGui::InputText("##SceneName", nameBuffer, 64);
+            currName = nameBuffer;
+
             ImGui::SameLine();
             if (ImGui::Button("Save")) sceneManager->saveScene();
             ImGui::SameLine();
-            if (ImGui::Button("Close")) sceneManager->setActiveSceneHandle(0);
-
-            C78E::SceneHandle sceneHandle = sceneManager->getActiveSceneHandle();
-            ImGui::Text(("Current Scene: " + assetManager->getMeta(sceneHandle).name).c_str());
+            if (ImGui::Button("Close")) sceneManager->setActiveSceneHandle(C78E::AssetHandle::invalid());
             
         }
 

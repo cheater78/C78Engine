@@ -11,10 +11,10 @@ namespace C78E {
 	* ModelImporter::importModel
 	* imports a Model, given its AssetMeta(filename, assetname gets written back)
 	*/
-	Ref<Model> ModelImporter::importModel(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
+	Ref<Model> ModelImporter::importModel(AssetHandle handle, const Asset::AssetMeta& meta) {
 		FilePath ext = meta.fileSource.extension();
 		if (ext == ".stl")
-			return loadWavefrontModel(handle, meta, assetManager);
+			return loadWavefrontModel(handle, meta);
 		if (ext == ".gltf" || ext == ".glb")
 			C78_CORE_ERROR("GLTF not implemented yet!");
 
@@ -30,7 +30,7 @@ namespace C78E {
 	* uses WavefrontLoader to load a Wavefront model and registers all its Meshes and Materials in the current AssetManager
 	* returns the resulting AssetHandle of the loaded Model
 	*/
-	Ref<Model> ModelImporter::loadWavefrontModel(AssetHandle handle, const Asset::AssetMeta& meta, Ref<EditorAssetManager> assetManager) {
+	Ref<Model> ModelImporter::loadWavefrontModel(AssetHandle handle, const Asset::AssetMeta& meta) {
 		Ref<WavefrontLoader::WavefrontModel> wavefrontmodel = WavefrontLoader::loadModel(meta.fileSource);
 
 		std::vector<Model::ModelPart> parts;
@@ -48,7 +48,7 @@ namespace C78E {
 				meshMeta.type = Asset::AssetType::Mesh;
 				meshMeta.fileSource = meta.fileSource;
 				meshMeta.name = wavefrontmodel->meshNames.at(meshID);
-				part.m_Mesh = assetManager->addAsset(meshMeta, mesh);
+				//part.m_Mesh = assetManager->addAsset(meshMeta, mesh);
 			}
 
 			{
@@ -58,7 +58,7 @@ namespace C78E {
 				materialMeta.type = Asset::AssetType::Material;
 				materialMeta.fileSource = meta.fileSource;
 				materialMeta.name = wavefrontmodel->materialNames.at(materialID);
-				part.m_Material = assetManager->addAsset(materialMeta, material);
+				//part.m_Material = assetManager->addAsset(materialMeta, material);
 			}
 
 			parts.push_back(part);
