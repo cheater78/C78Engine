@@ -19,6 +19,9 @@ namespace C78Editor::GUI {
 		void drawCreateProject();
 		void drawProjectInfo();
 
+		void startCreateProcess();
+		void abortCreateProcess();
+
 	private:
 		C78E::WRef<C78E::ProjectManager> m_ProjectManager;
 
@@ -87,8 +90,8 @@ namespace C78Editor::GUI {
 			C78E::FilePath getScriptModulePath() {
 				return C78E::FilePath(scriptModulePath.getContent());
 			}
-		} m_PCCB;
-
+		};
+		C78E::Ref<ProjectCreateConfigBuffers> m_PCCB = nullptr;
 
 
 

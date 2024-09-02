@@ -19,7 +19,8 @@ namespace C78E {
 
 	UUID UUID::fromString(std::string str) {
 		UUID uuid = UUID::invalid();
-		if ( str.length() != 45 || str.find("UUID::") == std::string::npos ) {
+		if (str == toString(uuid)) { /* String represents UUID::0, return */ }
+		else if (str.length() != 45 || str.find("UUID::") == std::string::npos) {
 			C78_CORE_ERROR("UUID::fromString: UUID string provided was invalid!");
 			C78_CORE_TRACE("  {}", str);
 		}
@@ -45,6 +46,7 @@ namespace C78E {
 
 	std::string UUID::toString(UUID uuid) {
 		char str[] = "UUID::0000:0000:0000:0000:0000:0000:0000:0000";
+		if (uuid == UUID::invalid()) return "UUID::Invalid";
 		const std::string lo = (std::stringstream() << std::uppercase << std::hex << uuid.m_UUID[0] << std::dec).str();
 		const std::string up = (std::stringstream() << std::uppercase << std::hex << uuid.m_UUID[1] << std::dec).str();
 		const size_t loSiz = lo.length();

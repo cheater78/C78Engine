@@ -158,18 +158,9 @@ namespace C78Editor {
                 else
                     ImGui::Text("No Renderer");
 
+                ImGui::Text("ImGui Win: [active: %1i, visible: %1i]", ImGui::GetIO().MetricsActiveWindows, ImGui::GetIO().MetricsRenderWindows);
 
                 ImGui::End();
-            }
-
-            {
-                if (m_ProjectManager->hasActiveProject()) {
-                    ImGui::Begin("Assets");
-                    for (auto& entry : m_ProjectManager->getActiveProject()->getEditorAssetManager()->getAssetRegistry()) {
-                        ImGui::Text((C78E::Asset::assetTypeToString(entry.second.type) + " " + entry.second.name + " " + entry.second.fileSource.string()).c_str());
-                    }
-                    ImGui::End();
-                }
             }
 
             {//RendererManager?

@@ -55,7 +55,7 @@ namespace C78Editor::GUI {
 			auto& meta = sceneManager->getProjectManager()->getActiveProject()->getEditorAssetManager()->getMeta(sceneManager->getActiveSceneHandle());
 
 			std::string sceneName = meta.name;
-			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)scene->m_AssetHandle, flags, sceneName.c_str());
+			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)scene->m_AssetHandle, flags | ImGuiTreeNodeFlags_DefaultOpen, sceneName.c_str());
 
 			if (opened) {
 				scene->forEachEntity([&](auto entityID)

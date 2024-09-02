@@ -1,6 +1,0 @@
-Project:
-  Name: C78Project
-  StartScene: UUID::BDE3:2A00:CDE3:AD98:2938:C696:CB9E:9336
-  AssetDirectory: C:\dev\c-cpp\C78Engine\C78Editor\assets
-  AssetRegistryPath: C:\dev\c-cpp\C78Engine\C78Editor\assets\AssetRegistry.ace
-  ScriptModulePath: ./scripts

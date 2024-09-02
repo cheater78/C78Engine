@@ -56,7 +56,7 @@ namespace C78Editor::GUI {
             C78E::Asset::AssetMeta meta = entry.second;
 
             if (meta.type == C78E::Asset::AssetType::Scene) {
-                std::string infoLine = meta.name + " (" + std::to_string(handle) + ")";
+                std::string infoLine = meta.name + "##(" + std::to_string(handle) + ")";
                 if (ImGui::Button(infoLine.c_str())) {
                     sceneManager->setActiveSceneHandle(handle);
                 }
