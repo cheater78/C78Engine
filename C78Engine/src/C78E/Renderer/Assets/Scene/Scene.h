@@ -47,10 +47,12 @@ namespace C78E {
 		template<typename... Components>
 		auto getAllEntitiesWith() { return m_Registry.view<Components...>(); }
 
-		bool isEmpty() const { return m_Registry.empty(); }
+		bool isEmpty() const { return m_Registry.storage<entt::entity>()->empty(); }
 
 		using EntityFunction = std::function<void(entt::entity)>;
-		void forEachEntity(EntityFunction func);
+
+		using Func = std::function<void(entt::entity)>;
+		void forEachEntity(Func func);
 
 	public:
 		virtual AssetType getType() const override { return Asset::AssetType::Scene; };

@@ -1,6 +1,9 @@
 #pragma once
 #include "C78E/Core/Core.h"
 #include "C78E/Utils/StdUtils.h"
+#include "C78E/Core/UUID.h"
+
+#include <filesystem>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
@@ -8,8 +11,7 @@
 // This ignores all warnings raised inside External headers
 #pragma warning(push, 0)
 #include <spdlog/spdlog.h>
-#include <spdlog/fmt/ostr.h>
-
+#include <spdlog/fmt/bundled/format.h>
 #include <spdlog/sinks/ringbuffer_sink.h>
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/basic_file_sink.h"
@@ -24,9 +26,9 @@ namespace C78E {
 	public:
 		static void init();
 
-		inline static std::shared_ptr<spdlog::logger> getCoreLogger() { return s_CoreLogger;  }
-		inline static std::shared_ptr<spdlog::logger> getEditorLogger() { return s_EditorLogger;  }
-		inline static std::shared_ptr<spdlog::logger> getClientLogger() { return s_ClientLogger;  }
+		inline static std::shared_ptr<spdlog::logger> getCoreLogger() { return s_CoreLogger; }
+		inline static std::shared_ptr<spdlog::logger> getEditorLogger() { return s_EditorLogger; }
+		inline static std::shared_ptr<spdlog::logger> getClientLogger() { return s_ClientLogger; }
 		inline static std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt> getRingBufferSink() { return s_RingbufferSink; }
 
 	private:
@@ -44,23 +46,40 @@ namespace C78E {
 
 }
 
-template<typename OStream, glm::length_t L, typename T, glm::qualifier Q>
-inline OStream& operator<<(OStream& os, const glm::vec<L, T, Q>& vector)
-{
-	return os << glm::to_string(vector);
+#define DefineFormatter(type, func)																		\
+struct fmt::formatter<type> {																			\
+	constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {							\
+		return ctx.end();																				\
+	}																									\
+																										\
+	template <typename FormatContext>																	\
+	auto format(const type& input, FormatContext& ctx) -> decltype(ctx.out()) {							\
+		return fmt::format_to(ctx.out(),																		\
+			"{}",																						\
+			func);																						\
+	}																									\
 }
 
-template<typename OStream, glm::length_t C, glm::length_t R, typename T, glm::qualifier Q>
-inline OStream& operator<<(OStream& os, const glm::mat<C, R, T, Q>& matrix)
-{
-	return os << glm::to_string(matrix);
-}
 
-template<typename OStream, typename T, glm::qualifier Q>
-inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
-{
-	return os << glm::to_string(quaternion);
-}
+
+template<>
+DefineFormatter(std::filesystem::path, input.string());
+
+template<>
+DefineFormatter(std::stringstream, input.str());
+
+template<>
+DefineFormatter(C78E::UUID, C78E::UUID::toString(input));
+
+template<glm::length_t L, typename T, glm::qualifier Q>
+DefineFormatter(C78_EXPANDALL_MACRO(glm::vec<L, T, Q>), glm::to_string(input));
+
+template<glm::length_t C, glm::length_t R, typename T, glm::qualifier Q>
+DefineFormatter(C78_EXPANDALL_MACRO(glm::mat<C, R, T, Q>), glm::to_string(input));
+
+template<typename T, glm::qualifier Q>
+DefineFormatter(C78_EXPANDALL_MACRO(glm::qua<T, Q>), glm::to_string(input));
+
 
 #ifdef C78_DEBUG
 

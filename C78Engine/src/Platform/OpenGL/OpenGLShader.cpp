@@ -306,7 +306,7 @@ namespace C78E {
 		std::vector<GLuint> shaderIDs;
 		for (auto&& [stage, spirv] : m_OpenGLSPIRV) {
 			GLuint shaderID = shaderIDs.emplace_back(glCreateShader(stage));
-			glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), spirv.size() * sizeof(uint32_t));
+			glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), static_cast<uint32_t>(spirv.size()) * sizeof(uint32_t));
 			glSpecializeShader(shaderID, "main", 0, nullptr, nullptr);
 			glAttachShader(program, shaderID);
 		}
@@ -354,9 +354,9 @@ namespace C78E {
 		for (const auto& resource : resources.uniform_buffers)
 		{
 			const auto& bufferType = compiler.get_type(resource.base_type_id);
-			uint32_t bufferSize = compiler.get_declared_struct_size(bufferType);
+			uint32_t bufferSize = static_cast<uint32_t>(compiler.get_declared_struct_size(bufferType));
 			uint32_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
-			int memberCount = bufferType.member_types.size();
+			int memberCount = static_cast<int>(bufferType.member_types.size());
 
 			C78_CORE_TRACE("  {0}", resource.name);
 			C78_CORE_TRACE("    Size = {0}", bufferSize);

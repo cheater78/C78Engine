@@ -37,7 +37,7 @@ namespace C78E {
 				AssetHandle handle = entry.first;
 				Asset::AssetMeta meta = entry.second;
 
-				C78_CORE_INFO("Project::load: Asset({}) added: '{}' from {}", Asset::assetTypeToString(meta.type), meta.name, meta.fileSource);
+				C78_CORE_INFO("Project::load: Asset({}) added: '{}' from {}", Asset::assetTypeToString(meta.type), meta.name, meta.fileSource.string());
 				
 				if (editorAssetManager->isValid(handle) && !editorAssetManager->isLoaded(handle) && meta.type != None)
 					editorAssetManager->getAsset(handle);

@@ -41,8 +41,8 @@ namespace C78E::GUI {
 	glm::vec2 UIContext::toRelative(glm::vec2 absolute) const { return glm::vec2(absolute.x / m_Specs.monitor.width, absolute.y / m_Specs.monitor.height); }
 	
 	glm::vec2 UIContext::getScreenSize() const { return glm::vec2(m_Specs.monitor.width, m_Specs.monitor.height); }
-	float UIContext::getShorterScreenSideLength() const { return std::min<float>(m_Specs.monitor.width, m_Specs.monitor.height); }
-	float UIContext::getLongerScreenSideLength() const { return std::max<float>(m_Specs.monitor.width, m_Specs.monitor.height); }
+	float UIContext::getShorterScreenSideLength() const { return std::min<float>(static_cast<float>(m_Specs.monitor.width), static_cast<float>(m_Specs.monitor.height)); }
+	float UIContext::getLongerScreenSideLength() const { return std::max<float>(static_cast<float>(m_Specs.monitor.width), static_cast<float>(m_Specs.monitor.height)); }
 
 	glm::vec2 UIContext::resizeToScale(glm::vec2 size) const { return m_Scale * size; }
 
@@ -213,11 +213,12 @@ namespace C78E::GUI {
 		//C78_CORE_WARN("TODO: ImGui Element Styling!");
 		if (
 			ImGui::ImageButton(
+				"##imagebutton",
 				m_Texture,
 				{ 10.f, 10.f },
 				{ 0,0 },
-				{ 1,1 },
-				0//,
+				{ 1,1 }
+				//,
 				//{ backGroundColor.r, backGroundColor.g, backGroundColor.b, backGroundColor.a },
 				//{ tintColor.r, tintColor.g, tintColor.b, tintColor.a }
 			)
@@ -347,7 +348,7 @@ namespace C78E::GUI {
 
 			ImGui::Text(m_Label.c_str());
 			ImGui::SameLine();
-			ImGui::Combo("##ComboInput", &m_Selected, entries, elementCount);
+			ImGui::Combo("##ComboInput", &m_Selected, entries, static_cast<int>(elementCount));
 			delete[] entries;
 		}
 		else {

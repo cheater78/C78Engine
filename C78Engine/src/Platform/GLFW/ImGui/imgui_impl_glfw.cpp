@@ -2,6 +2,7 @@
 
 #ifdef C78_PLATFORM_GLFW
 
+#define _CRT_SECURE_NO_WARNINGS
 
 
 // dear imgui: Platform Backend for GLFW

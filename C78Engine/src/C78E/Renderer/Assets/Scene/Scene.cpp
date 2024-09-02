@@ -138,8 +138,9 @@ namespace C78E {
 		m_StepFrames = frames;
 	}
 
-	void Scene::forEachEntity(EntityFunction func) {
-		return m_Registry.each(func);
+	
+	void Scene::forEachEntity(Func func) {
+		m_Registry.each(func);
 	}
 
 	Entity Scene::duplicateEntity(Entity entity) {

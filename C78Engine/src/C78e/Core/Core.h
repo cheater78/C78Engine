@@ -19,6 +19,7 @@
 #define BIND_CALLBACK_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
 #define C78_EXPAND_MACRO(x) x
+#define C78_EXPANDALL_MACRO(...) __VA_ARGS__
 #define C78_STRINGIFY_MACRO(x) #x
 
 #include <memory>
