@@ -47,7 +47,7 @@ namespace C78E {
 		}
 
 
-		m_Context = GraphicsContext::create(m_Window);
+		m_Context = GraphicsContext::create(*this);
 		m_Context->init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
