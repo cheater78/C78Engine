@@ -18,7 +18,7 @@ namespace C78Editor::GUI {
 			for (auto entry : assetManager->getAssetRegistry()) {
 				C78E::AssetHandle handle = entry.first;
 				C78E::Asset::AssetMeta meta = entry.second;
-				ImGui::Separator();
+				ImGui::SeparatorText((C78E::AssetHandle::toString(handle) + ", " + meta.name).c_str());
 				ImGui::Spacing();
 				ImGui::Text(meta.name.c_str()); ImGui::SameLine();; ImGui::Text(C78E::Asset::assetTypeToString(meta.type).c_str());
 				ImGui::Text(meta.fileSource.string().c_str());

@@ -13,8 +13,7 @@ namespace C78Editor::GUI {
 	
 	EntityManagerUI::~EntityManagerUI() { }
 	
-	void EntityManagerUI::onImGuiMainMenuBar() {
-	}
+	void EntityManagerUI::onImGuiMainMenuBar() { }
 	
 	void EntityManagerUI::onImGuiRender() {
 		if (auto sceneManager = m_SceneManager.lock()) {
@@ -258,9 +257,9 @@ namespace C78Editor::GUI {
 				}
 			});
 
-			drawComponent<C78E::SpriteRendererComponent>("Sprite", entity, [](C78E::SpriteRendererComponent& component) {
+			drawComponent<C78E::SpriteRendererComponent>("Sprite", entity, [this](C78E::SpriteRendererComponent& component) {
 				ImGui::ColorEdit4("Color", &component.color[0], ImGuiColorEditFlags_NoInputs);
-				ImGui::Text(("Texture: " + std::to_string(component.texture)).c_str());
+				drawAssetEdit(C78E::Asset::AssetType::Texture2D, component.texture, "Texture");
 				ImGui::DragFloat("Tiling", &component.tilingFactor, .1f, .001f, 100.f);
 			});
 		}
@@ -312,6 +311,52 @@ namespace C78Editor::GUI {
 			if (removeComponent)
 				entity.removeComponent<T>();
 		}
+	}
+
+
+	void EntityManagerUI::drawAssetPreview(C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label) {
+		// show asset overwiew
+		// edit -> call drawAssetEdit()
+	}
+
+	void EntityManagerUI::drawAssetEdit(C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label) {
+		auto sceneManager = m_SceneManager.lock();
+		if (!sceneManager || !sceneManager->hasActiveProject()) return;
+		auto assetManager = sceneManager->getProjectManager()->getActiveProject()->getEditorAssetManager();
+		if (!sceneManager) return;
+
+		if (!label.empty()) {
+			ImGui::SeparatorText(label.c_str());
+		} else ImGui::Separator();
+
+		std::unordered_map<std::string, C78E::AssetHandle> assetofSameType{};
+		int selected = 0;
+		std::vector<const char*> comboEntries;
+
+		for (auto& [entryHandle, entryMeta] : assetManager->getAssetRegistry())
+			if(entryMeta.type == type) {
+				if (entryHandle == handle)
+					selected = static_cast<int>(comboEntries.size());
+				assetofSameType[entryMeta.name] = entryHandle;
+				comboEntries.push_back(entryMeta.name.c_str());
+			}
+		if (!assetofSameType.size()) {
+			const char* none = "None";
+			assetofSameType[none] = C78E::AssetHandle::invalid();
+			comboEntries.push_back(none);
+		}
+		
+		ImGui::Combo("##AssetEditSelect", &selected, comboEntries.data(), static_cast<int>(comboEntries.size()));
+
+		handle = assetofSameType[comboEntries.at(selected)];
+
+		ImGui::Text(("AssetHandle: " + C78E::AssetHandle::toString(handle)).c_str());
+		ImGui::Text(("AssetType: " + C78E::Asset::assetTypeToString(type)).c_str());
+
+		if (handle.isValid()) {
+
+		}
+		ImGui::Separator();
 	}
 
 }
