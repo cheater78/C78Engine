@@ -24,6 +24,8 @@ namespace C78E {
 		bool hasActiveProjectFile() const;
 		FilePath getActiveProjectFile() const;
 
+		Ref<EditorAssetManager> getEditorAssetManager();
+
 		Ref<Project> reloadProject();
 
 	private:

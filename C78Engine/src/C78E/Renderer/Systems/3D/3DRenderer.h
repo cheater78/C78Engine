@@ -12,7 +12,9 @@ namespace C78E {
 		Renderer3D(const Renderer3D& other) = delete;
 		~Renderer3D();
 
-		virtual bool render(Ref<Scene> scene) override = 0;
+		virtual bool beginScene(Camera& camera, const glm::mat4& viewMatrix) override = 0;
+		virtual void submit(Ref<Scene> scene) override = 0;
+		virtual bool endScene() override = 0;
 
 		virtual bool display() override = 0;
 

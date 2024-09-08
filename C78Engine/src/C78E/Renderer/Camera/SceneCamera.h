@@ -11,27 +11,27 @@ namespace C78E {
 		SceneCamera();
 		virtual ~SceneCamera() = default;
 
-		
+
 		ProjectionType& getProjectionType() { return m_ProjectionType; }
-		void setProjectionType(ProjectionType type) { m_ProjectionType = type; RecalculateProjection(); }
+		void setProjectionType(ProjectionType type) { m_ProjectionType = type; recalculateProjection(); }
 
 
 		void setPerspective(float verticalFOV, float nearClip, float farClip);
 		float& getPerspectiveVerticalFOV() { return m_PerspectiveFOV; }
-		void setPerspectiveVerticalFOV(float verticalFov) { m_PerspectiveFOV = verticalFov; RecalculateProjection(); }
+		void setPerspectiveVerticalFOV(float verticalFov) { m_PerspectiveFOV = verticalFov; recalculateProjection(); }
 		float& getPerspectiveNearClip() { return m_PerspectiveNear; }
-		void setPerspectiveNearClip(float nearClip) { m_PerspectiveNear = nearClip; RecalculateProjection(); }
+		void setPerspectiveNearClip(float nearClip) { m_PerspectiveNear = nearClip; recalculateProjection(); }
 		float& getPerspectiveFarClip() { return m_PerspectiveFar; }
-		void setPerspectiveFarClip(float farClip) { m_PerspectiveFar = farClip; RecalculateProjection(); }
+		void setPerspectiveFarClip(float farClip) { m_PerspectiveFar = farClip; recalculateProjection(); }
 		
 
 		void setOrthographic(float size, float nearClip, float farClip);
 		float& getOrthographicSize() { return m_OrthographicSize; }
-		void setOrthographicSize(float size) { m_OrthographicSize = size; RecalculateProjection(); }
+		void setOrthographicSize(float size) { m_OrthographicSize = size; recalculateProjection(); }
 		float& getOrthographicNearClip() { return m_OrthographicNear; }
-		void setOrthographicNearClip(float nearClip) { m_OrthographicNear = nearClip; RecalculateProjection(); }
+		void setOrthographicNearClip(float nearClip) { m_OrthographicNear = nearClip; recalculateProjection(); }
 		float& getOrthographicFarClip() { return m_OrthographicFar; }
-		void setOrthographicFarClip(float farClip) { m_OrthographicFar = farClip; RecalculateProjection(); }
+		void setOrthographicFarClip(float farClip) { m_OrthographicFar = farClip; recalculateProjection(); }
 
 
 		void setViewportSize(uint32_t width, uint32_t height);
@@ -40,11 +40,11 @@ namespace C78E {
 		uint32_t getWidth() { return m_Width; }
 		uint32_t getHeight() { return m_Height; }
 
-		const glm::mat4& getProjection() { RecalculateProjection(); return m_Projection; }
+		const glm::mat4& getProjection() { recalculateProjection(); return m_Projection; }
 
-	private:
-		void RecalculateProjection();
-	private:
+	protected:
+		void recalculateProjection();
+	protected:
 		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
 
 		float m_PerspectiveFOV = glm::radians(45.0f);

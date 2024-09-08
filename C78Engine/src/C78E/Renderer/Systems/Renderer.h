@@ -52,13 +52,15 @@ namespace C78E {
 		Renderer(const Renderer& other) = delete;
 		~Renderer();
 
-		virtual bool render(Ref<Scene> scene) = 0;
+		//?????
+		virtual bool beginScene(Camera& camera, const glm::mat4& viewMatrix) = 0;
+		virtual void submit(Ref<Scene> scene) = 0;
+		virtual bool endScene() = 0;
 
-		virtual bool display() = 0;
+		virtual bool display();
 
-		virtual const bool isTargetReady() const;
 		virtual const bool invalidateTarget();
-		virtual Ref<Texture2D> getTargetTexture() const;
+		virtual Ref<Texture2D> getTargetTexture();
 
 		virtual FrameInfo getTargetInfo() const;
 		virtual void resizeTarget(uint32_t width, uint32_t height);
@@ -73,15 +75,14 @@ namespace C78E {
 	protected:
 		Ref<AssetManager> m_AssetManager = nullptr;
 
-		
 		Ref<std::thread> m_RenderThread = nullptr;
 
 		FrameInfo m_TargetFrameInfo{};
 
-		std::binary_semaphore m_BusyTarget{ 1 };
+		std::mutex m_BusyTarget;
 		Ref<Framebuffer> m_TargetFrame = nullptr;
 
-		std::binary_semaphore m_BusyWorking{ 1 };
+		std::mutex m_BusyWorking;
 		Ref<Framebuffer> m_WorkingFrame = nullptr;
 
 	};

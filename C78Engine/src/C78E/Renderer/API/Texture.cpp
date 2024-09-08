@@ -32,7 +32,7 @@ namespace C78E {
 		}
 	}
 
-	Ref<Texture2D> Texture2D::create(Image& image) {
+	Ref<Texture2D> Texture2D::create(const Image& image) {
 		switch (RendererAPI::getAPI()) {
 		case RendererAPI::API::None:    C78_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return createRef<OpenGLTexture2D>(image);

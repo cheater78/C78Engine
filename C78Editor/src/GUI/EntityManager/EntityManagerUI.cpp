@@ -333,6 +333,10 @@ namespace C78Editor::GUI {
 		int selected = 0;
 		std::vector<const char*> comboEntries;
 
+		const char* none = "None";
+		assetofSameType[none] = C78E::AssetHandle::invalid();
+		comboEntries.push_back(none);
+
 		for (auto& [entryHandle, entryMeta] : assetManager->getAssetRegistry())
 			if(entryMeta.type == type) {
 				if (entryHandle == handle)
@@ -340,17 +344,12 @@ namespace C78Editor::GUI {
 				assetofSameType[entryMeta.name] = entryHandle;
 				comboEntries.push_back(entryMeta.name.c_str());
 			}
-		if (!assetofSameType.size()) {
-			const char* none = "None";
-			assetofSameType[none] = C78E::AssetHandle::invalid();
-			comboEntries.push_back(none);
-		}
 		
 		ImGui::Combo("##AssetEditSelect", &selected, comboEntries.data(), static_cast<int>(comboEntries.size()));
 
 		handle = assetofSameType[comboEntries.at(selected)];
 
-		ImGui::Text(("AssetHandle: " + C78E::AssetHandle::toString(handle)).c_str());
+		ImGui::Text(("AssetHandle: " + C78E::AssetHandle::encodeToString(handle)).c_str());
 		ImGui::Text(("AssetType: " + C78E::Asset::assetTypeToString(type)).c_str());
 
 		if (handle.isValid()) {

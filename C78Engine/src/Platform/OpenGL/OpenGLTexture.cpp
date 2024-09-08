@@ -42,7 +42,7 @@ namespace C78E {
 		: m_RendererID(rendererID), m_Specification(specification), m_IsLoaded(false)
 	{ }
 
-	OpenGLTexture2D::OpenGLTexture2D(Image& image) {
+	OpenGLTexture2D::OpenGLTexture2D(const Image& image) {
 		C78_CORE_ASSERT(image.isValid(), "Image must be valid!");
 		m_Specification.width = image.getWidth();
 		m_Specification.height = image.getHeight();

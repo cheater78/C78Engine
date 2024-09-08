@@ -3,7 +3,7 @@
 
 namespace C78E {
 
-	Image::Image(uint32_t width, uint32_t height, ImageFormat format, void* data)
+	Image::Image(uint32_t width, uint32_t height, ImageFormat format, const  void* data)
 		: m_Width(width), m_Height(height), m_Format(format) {
 		size_t imagesize = getByteSize();
 		m_Data = Buffer(imagesize);
@@ -19,7 +19,7 @@ namespace C78E {
 	Image::~Image() { }
 
 
-	size_t Image::getByteSize() {
+	size_t Image::getByteSize() const {
 		if ((uint32_t)m_Format <= 4) return static_cast<size_t>(m_Width * m_Height * (uint32_t)m_Format);
 		if (m_Format == ImageFormat::RGBA32F) return static_cast<size_t>(m_Width * m_Height * 4 * 4); //RGBA32F -> 4ch á 4Byte
 		C78_CORE_ASSERT("ImageFormat currently not supported!");

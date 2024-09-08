@@ -11,7 +11,7 @@ namespace C78E {
 
 	Ref<Texture2D> TextureImporter::importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta) {
 
-		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(meta.fileSource, false, 4);
+		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(meta.fileSource, true, 4);
 
 		C78E::Texture2D::TextureSpecification spec;
 		spec.width = image->width;
@@ -32,7 +32,7 @@ namespace C78E {
 
 	//Temp
 	Ref<Texture2D> TextureImporter::loadImageFile(FilePath file) {
-		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(file, false, 4);
+		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(file, true, 4);
 
 		C78E::Texture2D::TextureSpecification spec;
 		spec.width = image->width;

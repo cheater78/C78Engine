@@ -9,7 +9,9 @@ namespace C78E {
 		Raytracer3D(const Raytracer3D& other) = delete;
 		~Raytracer3D();
 
-		virtual bool render(Ref<Scene> scene) override;
+		virtual bool beginScene(Camera& camera, const glm::mat4& viewMatrix);
+		virtual void submit(Ref<Scene> scene);
+		virtual bool endScene();
 
 		virtual bool display() override;
 

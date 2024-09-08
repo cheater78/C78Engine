@@ -2,7 +2,7 @@
 #include <C78E/Renderer/Assets/Asset/Asset.h>
 
 namespace C78E {
-
+	
 	using AssetMap = std::map<AssetHandle, Ref<Asset>>;
 	using AssetRegistryEntry = std::pair<AssetHandle, Asset::AssetMeta>;
 	using AssetRegistry = std::map<AssetHandle, Asset::AssetMeta>;
@@ -35,7 +35,7 @@ namespace C78E {
 	
 	class EditorAssetManager : public AssetManager {
 	public:
-		EditorAssetManager() = default;
+		EditorAssetManager();
 		EditorAssetManager(const EditorAssetManager& other) = delete;
 		~EditorAssetManager() = default;
 
@@ -103,11 +103,22 @@ namespace C78E {
 		*/
 		bool importAssetRegistry(const FilePath& assetRegistryPath);
 		
+	public:
+		struct Default {
+		public:
+			static const AssetHandle Texture2D_White;
+			static const AssetHandle Shader_SpriteRenderComponent;
+		private:
+			static const AssetHandle getAssetHandle(uint64_t lowerID);
+			static void createDefaultAssets(EditorAssetManager* assetManager);
+
+			friend class EditorAssetManager;
+		};
 	private:
 		AssetRegistry m_AssetRegistry;
 		AssetMap m_LoadedAssets;
-
-		friend class ModelLoader;
+		AssetMap m_DefaultAssets;
+		
 	};
 
 	class RuntimeAssetManager : public AssetManager {

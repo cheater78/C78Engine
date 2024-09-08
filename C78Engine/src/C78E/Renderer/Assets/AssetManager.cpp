@@ -5,11 +5,18 @@
 
 #include <C78E/Utils/Yaml/YamlUtils.h>
 
+#include <C78E/Renderer/API/Texture.h>
+#include <C78E/Renderer/API/Shader.h>
+
 namespace C78E {
 
 	/*
 	* EditorAssetManager
 	*/
+
+	EditorAssetManager::EditorAssetManager() {
+		Default::createDefaultAssets(this);
+	}
 
 	bool EditorAssetManager::isValid(AssetHandle handle) const {
 		return handle.isValid() && m_AssetRegistry.find(handle) != m_AssetRegistry.end();
@@ -73,6 +80,8 @@ namespace C78E {
 	}
 
 	Ref<Asset> EditorAssetManager::getAsset(AssetHandle handle) {
+		if (handle.isValid() && m_DefaultAssets.find(handle) != m_DefaultAssets.end()) return m_DefaultAssets.at(handle);
+
 		if (!isValid(handle))
 			return nullptr;
 		
@@ -163,6 +172,30 @@ namespace C78E {
 		
 	}
 
+	const AssetHandle EditorAssetManager::Default::Texture2D_White = EditorAssetManager::Default::getAssetHandle(1);
+	const AssetHandle EditorAssetManager::Default::Shader_SpriteRenderComponent = EditorAssetManager::Default::getAssetHandle(2);
+
+	const AssetHandle EditorAssetManager::Default::getAssetHandle(uint64_t lowerID) {
+		if (!lowerID) return AssetHandle::invalid();
+		AssetHandle staticHandle{};
+		uint64_t* data = static_cast<uint64_t*>(staticHandle.data());
+		data[1] = 0xDEF0000000000000;
+		data[0] = 0x0000000000000000 | lowerID;
+		return staticHandle;
+	}
+
+	void EditorAssetManager::Default::createDefaultAssets(EditorAssetManager* assetManager) {
+		if (!assetManager) return;
+
+		const uint32_t color_white_rgba8 = 0xFFFFFFFF;
+		Ref<Texture2D> texture2d_white = Texture2D::create(Image(1, 1, Image::ImageFormat::RGBA8, &color_white_rgba8));
+		texture2d_white->m_AssetHandle = EditorAssetManager::Default::Texture2D_White;
+		
+		assetManager->m_DefaultAssets[EditorAssetManager::Default::Texture2D_White] = texture2d_white;
+
+		assetManager->m_DefaultAssets[EditorAssetManager::Default::Shader_SpriteRenderComponent] = Shader::create("../C78Editor/assets/shaders/Renderer3D_SpriteRenderComponent.glsl");
+
+	}
 
 	/*
 	* RuntimeAssetManager

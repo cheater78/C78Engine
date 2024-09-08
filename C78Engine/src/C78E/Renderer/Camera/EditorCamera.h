@@ -13,40 +13,40 @@ namespace C78E {
 		EditorCamera() = default;
 		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
-		void OnUpdate(Timestep ts);
-		void OnEvent(Event& e);
+		void onUpdate(Timestep ts);
+		void onEvent(Event& e);
 
-		inline float GetDistance() const { return m_Distance; }
-		inline void SetDistance(float distance) { m_Distance = distance; }
+		inline float getDistance() const { return m_Distance; }
+		inline void setDistance(float distance) { m_Distance = distance; }
 
-		inline void setViewportSize(float width, float height) { m_ViewportWidth = width; m_ViewportHeight = height; UpdateProjection(); }
+		inline void setViewportSize(float width, float height) { m_ViewportWidth = width; m_ViewportHeight = height; updateProjection(); }
 
-		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		glm::mat4 GetViewProjection() const { return m_Projection * m_ViewMatrix; }
+		const glm::mat4& getViewMatrix() const { return m_ViewMatrix; }
+		glm::mat4 getViewProjection() const { return m_Projection * m_ViewMatrix; }
 
-		glm::vec3 GetUpDirection() const;
-		glm::vec3 GetRightDirection() const;
-		glm::vec3 GetForwardDirection() const;
-		const glm::vec3& GetPosition() const { return m_Position; }
-		glm::quat GetOrientation() const;
+		glm::vec3 getUpDirection() const;
+		glm::vec3 getRightDirection() const;
+		glm::vec3 getForwardDirection() const;
+		const glm::vec3& getPosition() const { return m_Position; }
+		glm::quat getOrientation() const;
 
-		float GetPitch() const { return m_Pitch; }
-		float GetYaw() const { return m_Yaw; }
+		float getPitch() const { return m_Pitch; }
+		float getYaw() const { return m_Yaw; }
 	private:
-		void UpdateProjection();
-		void UpdateView();
+		void updateProjection();
+		void updateView();
 
-		bool OnMouseScroll(MouseScrolledEvent& e);
+		bool onMouseScroll(MouseScrolledEvent& e);
 
-		void MousePan(const glm::vec2& delta);
-		void MouseRotate(const glm::vec2& delta);
-		void MouseZoom(float delta);
+		void mousePan(const glm::vec2& delta);
+		void mouseRotate(const glm::vec2& delta);
+		void mouseZoom(float delta);
 
-		glm::vec3 CalculatePosition() const;
+		glm::vec3 calculatePosition() const;
 
-		std::pair<float, float> PanSpeed() const;
-		float RotationSpeed() const;
-		float ZoomSpeed() const;
+		std::pair<float, float> panSpeed() const;
+		float rotationSpeed() const;
+		float zoomSpeed() const;
 	private:
 		float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f, m_FarClip = 1000.0f;
 

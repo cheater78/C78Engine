@@ -17,8 +17,10 @@ namespace C78E {
 		friend bool operator==(const UUID& l, const UUID& r) { return l.m_UUID[1] == r.m_UUID[1] && l.m_UUID[0] == r.m_UUID[0]; }
 
 	public:
-		static UUID fromString(std::string str);
-		static std::string toString(UUID uuid);
+		static bool decodesToUUID(const std::string& str);
+		static bool decodesToValidUUID(const std::string& str);
+		static UUID decodeFromString(std::string str);
+		static std::string encodeToString(UUID uuid);
 
 		static UUID invalid() { UUID uuid; uuid.m_UUID[0] = 0; uuid.m_UUID[1] = 0; return uuid; }
 	private:
@@ -38,6 +40,6 @@ namespace std {
 	};
 
 	_EXPORT_STD _NODISCARD inline string to_string(C78E::UUID uuid) {
-		return C78E::UUID::toString(uuid);
+		return C78E::UUID::encodeToString(uuid);
 	}
 }

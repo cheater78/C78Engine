@@ -35,6 +35,7 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+#include <regex>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>

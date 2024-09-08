@@ -21,10 +21,10 @@ namespace C78E {
 
 		};
 		static const uint8_t c_AssetTypeCount = 7;
-		static const std::vector<AssetType> getAllAssetTypes() {
+		static const std::vector<AssetType> getAllAssetTypes(bool includeNone = true) {
 			std::vector<AssetType> types;
 			types.reserve(c_AssetTypeCount);
-			for (uint8_t i = 0; i < c_AssetTypeCount; i++)
+			for (uint8_t i = (includeNone) ? 0 : 1; i < c_AssetTypeCount; i++)
 				types.emplace(types.begin() + i, static_cast<AssetType>(i));
 			return types;
 		}
@@ -52,5 +52,4 @@ namespace C78E {
 	public:
 		AssetHandle m_AssetHandle;
 	};
-
 }

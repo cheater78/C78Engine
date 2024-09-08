@@ -7,6 +7,7 @@
 
 #include <C78E/Project/Project.h>
 
+#include "GUI/Viewport/ViewportUI.h"
 #include "GUI/EntityManager/EntityManagerUI.h"
 #include "GUI/AssetManager/AssetManagerUI.h"
 #include "GUI/SceneManager/SceneManagerUI.h"
@@ -31,7 +32,8 @@ namespace C78Editor {
             m_ProjectManagerUI(C78E::createRef <::C78Editor::GUI::ProjectManagerUI>(m_ProjectManager)),
             m_AssetManagerUI(C78E::createRef <::C78Editor::GUI::AssetManagerUI>(m_ProjectManager)),
             m_SceneManagerUI(C78E::createRef <::C78Editor::GUI::SceneManagerUI>(m_SceneManager)),
-            m_EntityManagerUI(C78E::createRef<::C78Editor::GUI::EntityManagerUI>(m_SceneManager))
+            m_EntityManagerUI(C78E::createRef<::C78Editor::GUI::EntityManagerUI>(m_SceneManager)),
+            m_ViewportUI(C78E::createRef<::C78Editor::GUI::ViewportUI>(m_ProjectManager))
         { }
 
         void onAttach() { }
@@ -47,21 +49,12 @@ namespace C78Editor {
             if (m_ProjectManager->hasActiveProject()) {
                 //RendererManager?
                 if (!m_Renderer) {
-                    m_Renderer = std::static_pointer_cast<C78E::Renderer>(C78E::createRef<C78E::Raytracer3D>(m_ProjectManager->getActiveProject()->getEditorAssetManager()));
+                    m_Renderer = std::static_pointer_cast<C78E::Renderer>(C78E::createRef<C78E::Rasterizer3D>(m_ProjectManager->getActiveProject()->getEditorAssetManager()));
                 }
 
                 if (m_SceneManager->hasActiveScene()) {
                     C78E::Ref<C78E::Scene> scene = m_SceneManager->getActiveScene();
-
-                    if (!scene->hasPrimaryCamera()) {
-                        C78E::Entity camera = scene->createEntity("Camera");
-                        C78E::CameraComponent& camComp = camera.addComponent<C78E::CameraComponent>();
-                        camComp.camera.setPerspective(45.f*glm::two_pi<float>()/360.f, 0.0001f, 1000.f);
-                        camera.setTransform({ 0.f, 0.f, 0.f }, {0.f, 0.f, 0.f});
-                        scene->setPrimaryCamera(camera);
-                    }
-
-                    scene->onViewportResize(m_Window.getWidth(), m_Window.getHeight());
+                    /*
                     if (m_MouseCapture) {
                         if (m_Window.getMouseMode() != C78E::MouseMode::DISABLED) {
                             C78E::Input::setMousePosition(m_Window.getWidth() / 2, m_Window.getHeight() / 2);
@@ -93,9 +86,11 @@ namespace C78Editor {
                         if (C78E::Input::isKeyPressed(C78E::Key::LeftControl)) { transform -= upDir * dt.getSeconds() * MoveSpeed; }
                     }
                     else m_Window.setMouseMode(C78E::MouseMode::NORMAL);
+                    */
 
                     //RendererManager?
-                    m_Renderer->render(m_SceneManager->getActiveScene());
+                    m_ViewportUI->setActiveScene(m_SceneManager->getActiveScene());
+                    m_ViewportUI->onUpdate(dt);
 
                     
                 }
@@ -106,20 +101,10 @@ namespace C78Editor {
         }
 
         void onEvent(C78E::Event& e) override {
+            m_ViewportUI->onEvent(e); //TODO: cleanup
+
             C78E::EventDispatcher dispatcher(e);
-            dispatcher.dispatch<C78E::KeyPressedEvent>(BIND_CALLBACK_FN(EditorLayer::onKeyPressed));
             dispatcher.dispatch<C78E::WindowResizeEvent>(BIND_CALLBACK_FN(EditorLayer::onWindowResize));
-        }
-
-        bool onKeyPressed(C78E::KeyPressedEvent e) {
-            //TODO: HotkeyManager
-            //if (m_HotkeyManager->onKeyPressedEvent(e)) return true; //Hotkeys
-
-            if (e.getKeyCode() == C78E::Key::Escape) {
-                m_MouseCapture = !m_MouseCapture;
-            }
-
-            return false;
         }
 
         bool onWindowResize(C78E::WindowResizeEvent e) {
@@ -144,6 +129,7 @@ namespace C78Editor {
             m_AssetManagerUI->onImGuiRender();
             m_SceneManagerUI->onImGuiRender();
             m_EntityManagerUI->onImGuiRender();
+            m_ViewportUI->onImGuiRender();
 
 
 
@@ -163,11 +149,8 @@ namespace C78Editor {
                 ImGui::End();
             }
 
-            {//RendererManager?
-                if(m_Renderer)
-                    Viewport::onUpdate(m_Renderer->getTargetTexture());
-                Viewport::onImGuiRender(m_MouseCapture, m_Renderer);
-            }
+            
+
 
         }
 
@@ -176,9 +159,10 @@ namespace C78Editor {
     private:
         C78E::Window& m_Window;
         C78E::Timestep m_LastFrameTime = 0;
-        bool m_MouseCapture = false;
 
         //C78E::Ref<C78E::AssetManager> m_EditorAssetManager; //TODO: for Editor GÙI assets -> Functional: EAM and loaf files -> Goal: RuntimeManager with AssetPack
+
+        C78E::Ref<C78E::Scene> m_EditorScene = nullptr;
 
         C78E::Ref<C78E::ProjectManager> m_ProjectManager = nullptr;
         C78E::Ref<C78E::SceneManager> m_SceneManager = nullptr;
@@ -187,6 +171,7 @@ namespace C78Editor {
         C78E::Ref<::C78Editor::GUI::AssetManagerUI> m_AssetManagerUI = nullptr;
         C78E::Ref<::C78Editor::GUI::SceneManagerUI> m_SceneManagerUI = nullptr;
         C78E::Ref<::C78Editor::GUI::EntityManagerUI> m_EntityManagerUI = nullptr;
+        C78E::Ref<::C78Editor::GUI::ViewportUI> m_ViewportUI = nullptr;
 
         //RendererManager?
         C78E::Ref<C78E::Renderer> m_Renderer = nullptr;

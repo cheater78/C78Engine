@@ -8,15 +8,20 @@ namespace C78E::Primitive {
 		glm::vec3 position;
 		glm::vec3 normal;
 
+		static constexpr uint32_t getSize() { return 24; }
 	};
 
 	struct VertexColor {
 		glm::vec4 color;
+
+		static constexpr uint32_t getSize() { return 16; }
 	};
 
 	struct VertexTexture {
 		glm::vec2 textureCoordinate;
-		alignas(16) float textureIndex; //TODO: check align
+		int textureIndex;
+
+		static constexpr uint32_t getSize() { return 12; }
 	};
 
 	struct CubeMap {

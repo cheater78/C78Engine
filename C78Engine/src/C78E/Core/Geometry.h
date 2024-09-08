@@ -12,6 +12,7 @@ namespace C78E::Geometry {
 		
 		void* getVertexData() { return this; }
 		size_t getVertexSize() const { return 2*sizeof(Primitive::Vertex); }
+		uint32_t getVertexCount() const { return 2; }
 		void* getIndexData() const { return (void*) &indecies; }
 		uint32_t getIndexCount() const { return 2; }
 
@@ -33,6 +34,7 @@ namespace C78E::Geometry {
 
 		void* getVertexData() { return this; }
 		size_t getVertexSize() const { return 3 * sizeof(Primitive::Vertex); }
+		uint32_t getVertexCount() const { return 3; }
 		void* getIndexData() const { return (void*)&indecies; }
 		uint32_t getIndexCount() const { return 3; }
 
@@ -50,6 +52,7 @@ namespace C78E::Geometry {
 
 		void* getVertexData() { return this; }
 		size_t getVertexSize() const { return 4 * sizeof(Primitive::Vertex); }
+		uint32_t getVertexCount() const { return 4; }
 		void* getIndexData() const { return (void*)&indecies; }
 		uint32_t getIndexCount() const { return 6; }
 
@@ -102,6 +105,7 @@ namespace C78E::Geometry {
 
 		void* getVertexData() { return this; }
 		size_t getVertexSize() const { return 24 * sizeof(Primitive::Vertex); }
+		uint32_t getVertexCount() const { return 24; }
 		void* getIndexData() const { return (void*)&indecies; }
 		uint32_t getIndexCount() const { return 36; }
 	};

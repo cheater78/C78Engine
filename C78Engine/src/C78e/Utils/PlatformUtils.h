@@ -2,6 +2,7 @@
 
 #include <string>
 
+
 namespace C78E {
 
 	class FileDialogs {

@@ -69,6 +69,12 @@ namespace C78E {
 		return m_ActiveProjectFile;
 	}
 
+	Ref<EditorAssetManager> ProjectManager::getEditorAssetManager() {
+		if (hasActiveProject())
+			return getActiveProject()->getEditorAssetManager();
+		return nullptr;
+	}
+
 	Ref<Project> ProjectManager::reloadProject() {
 		return Project::load(m_ActiveProjectFile);
 	}

@@ -12,7 +12,7 @@ namespace YAML {
 
 	// UUID
 	Emitter& operator<<(Emitter& out, const C78E::UUID& id) {
-		out << C78E::UUID::toString(id);
+		out << C78E::UUID::encodeToString(id);
 		return out;
 	}
 

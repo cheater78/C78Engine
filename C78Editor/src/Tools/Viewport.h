@@ -8,12 +8,15 @@ namespace C78Editor {
 	public:
 
 		static void init();
-		static void onUpdate(C78E::Ref<C78E::Texture2D> texture);
+
 		static void onImGuiRender(bool& captureMouse, C78E::Ref<C78E::Renderer> renderer);
+
+		static glm::vec<2, uint32_t> getSize() { return { s_Width, s_Height }; }
 
 	private:
 		static C78E::Ref<C78E::Texture2D> s_Texture;
 		static uint32_t s_TextureId;
+		static C78E::Renderer::FrameInfo s_TextureInfo;
 
 		static uint32_t s_Width, s_Height;
 

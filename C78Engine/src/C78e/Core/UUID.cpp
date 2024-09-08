@@ -6,6 +6,9 @@
 
 namespace C78E {
 
+	static const std::regex uuid_regex{ "UUID::([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4})" };
+	static const char* uuid_invalid{ "UUID::Invalid" };
+
 	static std::random_device s_RandomDevice;
 	static std::mt19937_64 s_EngineL(s_RandomDevice());
 	static std::mt19937_64 s_EngineU(s_RandomDevice());
@@ -16,35 +19,37 @@ namespace C78E {
 		m_UUID[1] = s_UniformDistribution(s_EngineU);
 	}
 
+	bool UUID::decodesToUUID(const std::string& str) {
+		if (str == uuid_invalid) return true;
+		else return decodesToValidUUID(str);
+	}
 
-	UUID UUID::fromString(std::string str) {
+	bool UUID::decodesToValidUUID(const std::string& str) {
+		std::smatch match;
+		return std::regex_match(str, match, uuid_regex);
+	}
+
+	UUID UUID::decodeFromString(std::string str) {
 		UUID uuid = UUID::invalid();
-		if (str == toString(uuid)) { /* String represents UUID::0, return */ }
-		else if (str.length() != 45 || str.find("UUID::") == std::string::npos) {
-			C78_CORE_ERROR("UUID::fromString: UUID string provided was invalid!");
-			C78_CORE_TRACE("  {}", str);
+		if (str == uuid_invalid) return uuid;
+		std::smatch match;
+		if (std::regex_match(str, match, uuid_regex) && match.size() == 9) { // match[0] = uuid.encodeToString(), match[1-8] are the fragments
+			std::stringstream lo;
+			lo << std::hex << match[1] << match[2] << match[3] << match[4];
+			lo >> uuid.m_UUID[1];
+
+			std::stringstream up;
+			up << std::hex  << match[5] << match[6] << match[7] << match[8];
+			up >> uuid.m_UUID[0];
 		}
 		else {
-			auto chunks = std::split(str.substr(6), ':');
-			if(chunks.size() != 8) {
-				C78_CORE_ERROR("UUID::fromString: UUID Decode failed!");
-				C78_CORE_TRACE("  {}", str);
-				C78_CORE_TRACE("     -> {}", std::to_string(chunks));
-			}
-			else {
-				std::stringstream lo;
-				lo << std::hex << chunks.at(4) << chunks.at(5) << chunks.at(6) << chunks.at(7);
-				lo >> uuid.m_UUID[0];
-
-				std::stringstream up;
-				up << std::hex << chunks.at(0) << chunks.at(1) << chunks.at(2) << chunks.at(3);
-				up >> uuid.m_UUID[1];
-			}
+			C78_CORE_ERROR("UUID::decodeFromString: UUID Decode failed!");
+			C78_CORE_TRACE("  {}", str);
 		}
 		return uuid;
 	}
 
-	std::string UUID::toString(UUID uuid) {
+	std::string UUID::encodeToString(UUID uuid) {
 		char str[] = "UUID::0000:0000:0000:0000:0000:0000:0000:0000";
 		if (uuid == UUID::invalid()) return "UUID::Invalid";
 		const std::string lo = (std::stringstream() << std::uppercase << std::hex << uuid.m_UUID[0] << std::dec).str();

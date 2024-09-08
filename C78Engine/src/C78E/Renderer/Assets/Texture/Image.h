@@ -31,18 +31,18 @@ namespace C78E {
 
 	public:
 		Image() = delete; //TODO: Check
-		Image(uint32_t width, uint32_t height, ImageFormat format, void* data);
+		Image(uint32_t width, uint32_t height, ImageFormat format, const void* data);
 		Image(const Image& copy);
 		~Image();
 
-		bool isValid() { return m_Data; }
-		void* getData() { return m_Data.data; }
+		bool isValid() const { return m_Data; }
+		void* getData() const { return m_Data.data; }
 
-		uint32_t getWidth() { return m_Width; }
-		uint32_t getHeight() { return m_Height; }
-		ImageFormat& getFormat() { return m_Format; }
+		uint32_t getWidth() const { return m_Width; }
+		uint32_t getHeight() const { return m_Height; }
+		ImageFormat getFormat() const { return m_Format; }
 
-		size_t getByteSize();
+		size_t getByteSize() const;
 
 		/*
 		void expandLeft(Image& image);

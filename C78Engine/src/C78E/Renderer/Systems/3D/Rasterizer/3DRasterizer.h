@@ -6,15 +6,23 @@ namespace C78E {
 	class Rasterizer3D : public Renderer3D {
 	public:
 		struct RenderPass {
-			Ref<Shader> shader = nullptr;
-			Ref<VertexBuffer> vertexBuffer = nullptr;
+			Ref<Material> material = nullptr;
+			std::vector <Ref<VertexBuffer>> vertexBuffers{};
 			Ref<IndexBuffer> indexBuffer = nullptr;
 			Ref<VertexArray> vertexArray = nullptr;
-			std::vector<Ref<Texture>> textureSlots{};
+			std::vector<std::pair<AssetHandle, Ref<Texture>>> textureSlots{};
 			std::vector<Ref<UniformBuffer>> uniformBuffers{};
 
 			bool writeDepthBuffer = true;
 			RendererAPI::DepthFunc depthFunc = RendererAPI::DepthFunc::LESS;
+		};
+		
+		struct RenderScene {
+			CameraUniform cameraUniform;
+			std::vector<RenderPass> renderPasses;
+			bool commit = false;
+
+			void addCamUBOToCurrentRenderPass();
 		};
 	private:
 		static uint32_t s_MaxTextureSlots;
@@ -23,7 +31,11 @@ namespace C78E {
 		Rasterizer3D(const Rasterizer3D& other) = delete;
 		~Rasterizer3D();
 
-		virtual bool render(Ref<Scene> scene) override;
+		virtual bool beginScene(Camera& camera, const glm::mat4& viewMatrix) override;
+		virtual void submit(Ref<Scene> scene) override;
+		virtual bool endScene() override;
+
+		void render(Ref<RenderScene> currentScene);
 
 		virtual bool display() override;
 
@@ -39,7 +51,10 @@ namespace C78E {
 		//virtual bool initTarget() final;
 		//virtual void resetTargetFrameInfo();
 	private:
+		void submitSprites(C78E::Ref<Scene> scene);
 
+	private:
+		Ref<RenderScene> m_CurrentScene = nullptr;
 	};
 
 }

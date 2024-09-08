@@ -69,7 +69,7 @@ template<>
 DefineFormatter(std::stringstream, input.str());
 
 template<>
-DefineFormatter(C78E::UUID, C78E::UUID::toString(input));
+DefineFormatter(C78E::UUID, C78E::UUID::encodeToString(input));
 
 template<glm::length_t L, typename T, glm::qualifier Q>
 DefineFormatter(C78_EXPANDALL_MACRO(glm::vec<L, T, Q>), glm::to_string(input));
