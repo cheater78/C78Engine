@@ -29,7 +29,9 @@ project "C78Engine"
 		"%{IncludeDir.VulkanSDK}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.tinobj}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.msdfgen}",
+		"%{IncludeDir.msdf_atlas_gen}",
 	}
 	
 	links
@@ -37,7 +39,8 @@ project "C78Engine"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"yaml-cpp"
+		"yaml-cpp",
+		"msdf-atlas-gen"
 	}
 	
 	defines

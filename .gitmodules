@@ -29,3 +29,6 @@
 [submodule "C78Engine/vendor/yaml-cpp"]
 	path = C78Engine/vendor/yaml-cpp
 	url = https://github.com/cheater78/yaml-cpp.git
+[submodule "C78Engine/vendor/msdf-atlas-gen"]
+	path = C78Engine/vendor/msdf-atlas-gen
+	url = https://github.com/cheater78/msdf-atlas-gen.git

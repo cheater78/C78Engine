@@ -1,19 +1,22 @@
 #include "C78EPCH.h"
 #include "Font.h"
 
+#include "MSDFData.h"
+#include <C78E/Renderer/Assets/Texture/Image.h>
+#include <C78E/Renderer/API/Texture.h>
+
 #undef INFINITE
 #include "msdf-atlas-gen.h"
 #include "FontGeometry.h"
 #include "GlyphGeometry.h"
 
-#include "MSDFData.h"
+
 
 namespace C78E {
 
 	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S, N> GenFunc>
-	static Ref<Texture2D> CreateAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs,
-		const msdf_atlas::FontGeometry& fontGeometry, uint32_t width, uint32_t height)
-	{
+	static Ref<Texture2D> createAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs,
+		const msdf_atlas::FontGeometry& fontGeometry, uint32_t width, uint32_t height) {
 		msdf_atlas::GeneratorAttributes attributes;
 		attributes.config.overlapSupport = true;
 		attributes.scanlinePass = true;
@@ -25,21 +28,21 @@ namespace C78E {
 
 		msdfgen::BitmapConstRef<T, N> bitmap = (msdfgen::BitmapConstRef<T, N>)generator.atlasStorage();
 
-		TextureSpecification spec;
-		spec.Width = bitmap.width;
-		spec.Height = bitmap.height;
-		spec.Format = ImageFormat::RGB8;
-		spec.GenerateMips = false;
+		Texture2D::TextureSpecification spec;
+		spec.width = bitmap.width;
+		spec.height = bitmap.height;
+		spec.format = Image::ImageFormat::RGB8;
+		spec.generateMips = false;
 
-		Ref<Texture2D> texture = Texture2D::Create(spec);
-		texture->SetData((void*)bitmap.pixels, bitmap.width * bitmap.height * 3);
+		Ref<Texture2D> texture = Texture2D::create(spec);
+		texture->setData((void*)bitmap.pixels, bitmap.width * bitmap.height * 3);
 		return texture;
 	}
 
 	Font::Font(const FilePath& filepath)
 		: m_Data(new MSDFData()) {
 		msdfgen::FreetypeHandle* ft = msdfgen::initializeFreetype();
-		HZ_CORE_ASSERT(ft);
+		C78_CORE_ASSERT(ft);
 		
 		std::string fileString = filepath.string();
 
@@ -50,20 +53,17 @@ namespace C78E {
 			return;
 		}
 
-		struct CharsetRange
-		{
+		struct CharsetRange {
 			uint32_t Begin, End;
 		};
 
 		// From imgui_draw.cpp
-		static const CharsetRange charsetRanges[] =
-		{
+		static const CharsetRange charsetRanges[] = {
 			{ 0x0020, 0x00FF }
 		};
 
 		msdf_atlas::Charset charset;
-		for (CharsetRange range : charsetRanges)
-		{
+		for (CharsetRange range : charsetRanges) {
 			for (uint32_t c = range.Begin; c <= range.End; c++)
 				charset.add(c);
 		}
@@ -103,7 +103,7 @@ namespace C78E {
 				unsigned long long glyphSeed = (LCG_MULTIPLIER * (coloringSeed ^ i) + LCG_INCREMENT) * !!coloringSeed;
 				glyphs[i].edgeColoring(msdfgen::edgeColoringInkTrap, DEFAULT_ANGLE_THRESHOLD, glyphSeed);
 				return true;
-				}, m_Data->Glyphs.size()).finish(THREAD_COUNT);
+				}, static_cast<int>(m_Data->Glyphs.size())).finish(THREAD_COUNT);
 		}
 		else {
 			unsigned long long glyphSeed = coloringSeed;
@@ -115,7 +115,7 @@ namespace C78E {
 		}
 
 
-		m_AtlasTexture = CreateAndCacheAtlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>("Test", (float)emSize, m_Data->Glyphs, m_Data->FontGeometry, width, height);
+		m_AtlasTexture = createAndCacheAtlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>("Test", (float)emSize, m_Data->Glyphs, m_Data->FontGeometry, width, height);
 
 
 #if 0
@@ -145,7 +145,7 @@ namespace C78E {
 	Ref<Font> Font::GetDefault() {
 		static Ref<Font> DefaultFont;
 		if (!DefaultFont)
-			DefaultFont = CreateRef<Font>("assets/fonts/opensans/OpenSans-Regular.ttf");
+			DefaultFont = createRef<Font>("assets/fonts/opensans/OpenSans-Regular.ttf");
 
 		return DefaultFont;
 	}
