@@ -5,6 +5,7 @@
 #include <C78E/Renderer/Camera/SceneCamera.h>
 #include <C78E/Renderer/Assets/Asset/Asset.h>
 #include <C78E/Renderer/Assets/Scene/Entity/Component/Light.h>
+#include<C78E/Renderer/Assets/Font/Font.h>
 
 namespace C78E {
 	class ScriptableEntity;
@@ -84,6 +85,14 @@ namespace C78E {
 	};
 
 	/*
+	* ModelComposite Component, AssetHandles for registered Models to be rendered as visual representation of the Entity
+	* (optional)
+	*/
+	struct ModelCompositeComponent {
+		AssetHandle modelComposite;
+	};
+
+	/*
 	* SkyBox Component, AssetHandles for registered Textures (TODO Cubemaps only?!) to be used as SkyBox for the Scene (TODO blending for multiple?!)
 	* (optional)
 	*/
@@ -138,6 +147,13 @@ namespace C78E {
 		CircleRendererComponent(const CircleRendererComponent&) = default;
 	};
 
+	struct TextComponent {
+		std::string textString;
+		AssetHandle fontAsset;
+		glm::vec4 color{ 1.0f };
+		float kerning = 0.0f;
+		float lineSpacing = 0.0f;
+	};
 
 	struct ScriptComponent {
 		std::string className;
@@ -186,7 +202,7 @@ namespace C78E {
 
 		SpriteRendererComponent,
 		CircleRendererComponent,
-		CameraComponent,
+		TextComponent,
 		ScriptComponent,
 		NativeScriptComponent
 	>;

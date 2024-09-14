@@ -19,7 +19,7 @@ namespace C78E {
 
 	void EditorCamera::updateProjection() {
 		m_AspectRatio = m_ViewportWidth / m_ViewportHeight;
-		m_Projection = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
+		m_Projection = perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
 	}
 
 	void EditorCamera::updateView() {
@@ -89,15 +89,14 @@ namespace C78E {
 	}
 
 	void EditorCamera::mouseRotate(const glm::vec2& delta) {
-		float yawSign = getUpDirection().y < 0 ? -1.0f : 1.0f;
+		float yawSign = getUpDirection().y > 0 ? -1.0f : 1.0f;
 		m_Yaw += yawSign * delta.x * rotationSpeed();
-		m_Pitch += delta.y * rotationSpeed();
+		m_Pitch += -delta.y * rotationSpeed();
 	}
 
 	void EditorCamera::mouseZoom(float delta) {
 		m_Distance -= delta * zoomSpeed();
-		if (m_Distance < 1.0f)
-		{
+		if (m_Distance < 1.0f) {
 			m_FocalPoint += getForwardDirection();
 			m_Distance = 1.0f;
 		}
@@ -112,7 +111,7 @@ namespace C78E {
 	}
 
 	glm::vec3 EditorCamera::getForwardDirection() const {
-		return glm::rotate(getOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
+		return glm::rotate(getOrientation(), glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 
 	glm::vec3 EditorCamera::calculatePosition() const {

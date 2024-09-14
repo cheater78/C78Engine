@@ -7,9 +7,12 @@
 namespace C78E {
 
     Ref<WavefrontLoader::WavefrontModel> WavefrontLoader::loadModel(FilePath file) {
+        C78_CORE_TRACE("WavefrontLoader::loadModel: Loading Wavefront Model File: {}", file.string());
+        Timer timer;
+
         C78_CORE_ASSERT(file.extension() == ".obj", "WavefrontLoader::loadModel: cannot parse non .obj files!");
 
-        Ref<WavefrontModel> model = createRef<WavefrontModel>();
+        Ref<WavefrontModel> wvfModel = createRef<WavefrontModel>();
 
         tinyobj::ObjReaderConfig reader_config;
         // Path to material files must be in the same directory as the .stl
@@ -17,30 +20,40 @@ namespace C78E {
 
         tinyobj::ObjReader reader;
 
-        if (!reader.ParseFromFile(file.string(), reader_config))
-            C78_CORE_ERROR("WavefrontLoader::loadModel: failed to read ModelFile: \n   " + reader.Error());
+        if (!reader.ParseFromFile(file.string(), reader_config)) {
+            C78_CORE_ERROR("WavefrontLoader::loadModel:   failed to read Wavefront Model File: \n   " + reader.Error());
+            return nullptr;
+        }
 
-        if (!reader.Warning().empty())
-            C78_CORE_WARN("WavefrontLoader::loadModel: Reader Warn: \n   " + reader.Warning());
+        if (!reader.Warning().empty()) {
+            C78_CORE_WARN("WavefrontLoader::loadModel:   Parsed File successfully, Status: Warning\n   " + reader.Warning());
+        }
+        else {
+            C78_CORE_TRACE("WavefrontLoader::loadModel:   Parsed File successfully, Status: Ok");
+        }
 
+        C78_CORE_TRACE("WavefrontLoader::loadModel:   Reading Data:");
         auto& attrib = reader.GetAttrib();
         auto& shapes = reader.GetShapes();
         auto& materials = reader.GetMaterials();
 
         // copy all materials
         for (uint64_t mat_id = 0; mat_id < materials.size(); mat_id++) {
-            model->materialNames.emplace(mat_id, materials.at(mat_id).name);
-            model->materials.emplace(mat_id, WavefrontLoader::toMaterial(materials.at(mat_id)));
+            wvfModel->materialNames.emplace(mat_id, materials.at(mat_id).name);
+            wvfModel->materials.emplace(mat_id, WavefrontLoader::toMaterial(materials.at(mat_id)));
         }
-
+        C78_CORE_TRACE("WavefrontLoader::loadModel:     Materials: {}", materials.size());
+        
         uint64_t meshID = 0;
         // Loop over shapes
         for (size_t s = 0; s < shapes.size(); s++) {
             tinyobj::shape_t shape = shapes[s];
             std::string shapeName = shape.name;
 
-            std::unordered_map<Vertex, uint32_t> uniqueVertecies{};
-            std::vector<Vertex> vertecies{};
+            std::unordered_map<Primitive::Vertex, uint32_t> uniqueVertecies{};
+            std::vector<Primitive::Vertex> vertecies{};
+            std::vector<Primitive::VertexColor> vertexColors{};
+            std::vector<Primitive::VertexTexture> vertexTextures{};
             std::vector<uint32_t> indecies{};
 
             // Loop over faces(polygon)
@@ -60,10 +73,10 @@ namespace C78E {
                     if (materialID != -1) {
                         // Material Changed and not first run -> Save Current Model and start a new one
                         Ref<Mesh> mesh = createRef<Mesh>(vertecies, indecies);
-                        model->meshes.emplace(meshID, mesh);
-                        model->meshNames.emplace(meshID, shapeName);
+                        wvfModel->meshes.emplace(meshID, mesh);
+                        wvfModel->meshNames.emplace(meshID, shapeName);
 
-                        model->parts.emplace(meshID, materialID);
+                        wvfModel->parts.emplace(meshID, materialID);
 
                         meshID++;
 
@@ -79,20 +92,11 @@ namespace C78E {
                 for (size_t v = 0; v < fv; v++) {
                     tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
 
-                    Vertex vertex;
-                    uint32_t index = shapes[s].mesh.indices[index_offset + v].vertex_index;
-
+                    Primitive::Vertex vertex;
                     vertex.position = {
-                        attrib.vertices[3 * size_t(index) + 0],
-                        attrib.vertices[3 * size_t(index) + 1],
-                        attrib.vertices[3 * size_t(index) + 2]
-                    };
-
-                    vertex.color = glm::vec4{
-                        attrib.colors[3 * size_t(idx.vertex_index) + 0],
-                        attrib.colors[3 * size_t(idx.vertex_index) + 1],
-                        attrib.colors[3 * size_t(idx.vertex_index) + 2],
-                        1
+                        attrib.vertices[3 * size_t(idx.vertex_index) + 0],
+                        attrib.vertices[3 * size_t(idx.vertex_index) + 1],
+                        attrib.vertices[3 * size_t(idx.vertex_index) + 2]
                     };
 
                     // Check if `normal_index` is zero or positive. negative = no normal data
@@ -101,18 +105,30 @@ namespace C78E {
                         attrib.normals[3 * size_t(idx.normal_index) + 1],
                         attrib.normals[3 * size_t(idx.normal_index) + 2]
                     } : glm::vec3{ 0, 0, 0 };
+                    
+                    Primitive::VertexColor vertexColor;
+                    vertexColor.color = glm::vec4{
+                        attrib.colors[3 * size_t(idx.vertex_index) + 0],
+                        attrib.colors[3 * size_t(idx.vertex_index) + 1],
+                        attrib.colors[3 * size_t(idx.vertex_index) + 2],
+                        1
+                    };
 
+                    Primitive::VertexTexture vertexTexture;
                     // Check if `texcoord_index` is zero or positive. negative = no texcoord data
-                    vertex.texCoord = (idx.texcoord_index >= 0) ? glm::vec2{
+                    vertexTexture.textureCoordinate = (idx.texcoord_index >= 0) ? glm::vec2{
                         attrib.texcoords[2 * size_t(idx.texcoord_index) + 0],
                         attrib.texcoords[2 * size_t(idx.texcoord_index) + 1]
                     } : glm::vec2{ 0, 0 };
+                    vertexTexture.textureIndex = 0;
 
-                    vertex.texIndex = 0.f;
-
+                    //TODO: unique Vertecies by all elements!
                     if (uniqueVertecies.count(vertex) <= 0) {
                         uniqueVertecies[vertex] = static_cast<uint32_t>(vertecies.size());
                         vertecies.push_back(vertex);
+                        vertexColors.push_back(vertexColor);
+                        if(idx.texcoord_index >= 0)
+                            vertexTextures.push_back(vertexTexture);
                     }
                     indecies.push_back(uniqueVertecies[vertex]);
                 }
@@ -120,14 +136,21 @@ namespace C78E {
             }
 
             Ref<Mesh> mesh = createRef<Mesh>(vertecies, indecies);
-            model->meshes.emplace(meshID, mesh);
-            model->meshNames.emplace(meshID, shapeName);
+            mesh->setVertexColorData(vertexColors);
+            if(!vertexTextures.empty())
+                mesh->setVertexTextureData(vertexTextures);
+            wvfModel->meshes.emplace(meshID, mesh);
+            wvfModel->meshNames.emplace(meshID, shapeName);
 
-            model->parts.emplace(meshID, materialID);
+            wvfModel->parts.emplace(meshID, materialID);
 
             meshID++;
         }
-        return model;
+        C78_CORE_TRACE("WavefrontLoader::loadModel:     Models: {}", wvfModel->parts.size());
+        C78_CORE_TRACE("WavefrontLoader::loadModel:     Meshes: {}", wvfModel->meshes.size());
+
+        C78_CORE_TRACE("FontLoader::loadFont: Loading Wavefront Model Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
+        return wvfModel;
     }
 
     Ref<WavefrontLoader::WavefrontMaterial> WavefrontLoader::loadMaterial(FilePath file) {

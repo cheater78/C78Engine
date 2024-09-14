@@ -5,7 +5,6 @@
 #include <C78E/Renderer/API/Texture.h>
 
 #include <C78E/Utils/Image/ImageLoader.h>
-#include <C78E/Renderer/Assets/AssetManager.h>
 
 namespace C78E {
 

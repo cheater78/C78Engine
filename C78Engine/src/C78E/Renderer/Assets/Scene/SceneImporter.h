@@ -4,7 +4,6 @@
 #include <C78E/Renderer/Assets/Scene/Scene.h>
 
 namespace C78E {
-	class EditorAssetManager;
 
 	class SceneImporter {
 	public:

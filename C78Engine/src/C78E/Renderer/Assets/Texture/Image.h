@@ -19,8 +19,6 @@ namespace C78E {
 			R32 = 6,
 			D24S8 = 7
 		};
-
-	public:
 		static const size_t imageFormatSize(ImageFormat format) {
 			if ((uint32_t)format <= 4) return (uint32_t)format;
 			else if (format == ImageFormat::RGBA32F) return 16;
@@ -28,6 +26,8 @@ namespace C78E {
 			else if (format == ImageFormat::D24S8) return 4;
 			else C78_CORE_ERROR("Image::imageFormatSize: illegal ImageFormat!"); return 0;
 		}
+		static std::string imageFormatToString(ImageFormat format);
+		static ImageFormat imageFormatFromString(const std::string& str);
 
 	public:
 		Image() = delete; //TODO: Check

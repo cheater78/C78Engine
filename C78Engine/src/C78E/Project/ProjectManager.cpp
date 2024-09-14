@@ -42,13 +42,13 @@ namespace C78E {
 		if (save)
 			if (!saveProject())
 				return false;
-		m_ActiveProject.reset();
+		m_ActiveProject = nullptr;
 		m_ActiveProjectFile.clear();
 		return true;
 	}
 
 	bool ProjectManager::hasActiveProject() const {
-		return m_ActiveProject.get();
+		return m_ActiveProject.get() != nullptr;
 	}
 
 	Ref<Project> ProjectManager::getActiveProject() const {

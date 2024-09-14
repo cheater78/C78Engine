@@ -1,32 +1,30 @@
 #pragma once
 
-#include <C78E/Core/Types.h>
 #include <C78E/Renderer/Assets/Asset/Asset.h>
+#include <C78E/Renderer/Assets/Mesh/Mesh.h>
+#include <C78E/Renderer/Assets/Material/Material.h>
 
 namespace C78E {
 
 	/*
 	* Model
-	* consisting of parts, with each part containing a Mesh and its corresponding material
+	* consisting of a Mesh and its corresponding material
 	* only stores AssetHandles which must be registered at the current AssetManager instance
 	*/
 	class Model : public Asset {
 	public:
-		struct ModelPart {
-			AssetHandle m_Mesh = AssetHandle::invalid();
-			AssetHandle m_Material = AssetHandle::invalid();
-		};
+		Model(Ref<C78E::Mesh> mesh, Ref<C78E::Material> material) : m_Mesh(mesh), m_Material(material) { }
+		Model(const Model& other) = delete;
+		~Model() = default;
+
+		Ref<C78E::Mesh> mesh() { return m_Mesh; }
+		Ref<C78E::Material> material() { return m_Material; }
 	public:
-		Model() = default;
-		Model(const std::vector<ModelPart>& parts)
-			: m_Parts(parts) { }
-		Model(const Model& other) = default;
-		~Model() { }
-	public:
-		virtual AssetType getType() { return Asset::AssetType::Model; };
+		virtual AssetType getType() const override { return Asset::AssetType::Model; };
 		static AssetType getClassType() { return AssetType::Model; };
-	public:
-		std::vector<ModelPart> m_Parts; // list of pairs with Mesh and Material
+	private:
+		Ref<C78E::Mesh> m_Mesh;
+		Ref<C78E::Material> m_Material;
 	};
 
 }

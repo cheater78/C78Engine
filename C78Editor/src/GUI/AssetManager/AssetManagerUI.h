@@ -13,6 +13,9 @@ namespace C78Editor::GUI {
 
 		void onImGuiRender();
 
+		static void drawAssetEditPreview(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label = "");
+		static void drawAssetPreview(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Ref<C78E::Asset> asset, const std::string& label = "");
+		static void drawAssetEdit(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label);
 	private:
 		C78E::Ref<C78E::ProjectManager> m_ProjectManager;
 
@@ -98,7 +101,7 @@ namespace C78Editor::GUI {
 			C78E::GUI::TextButton fileSourcePicker{ "...",
 				[this](void) -> void {
 					C78_EDITOR_WARN("AssetManagerUI::CreateAssetPanel::fileSourcePicker::onClick: File filter hard coded to .png!");
-					fileSource.setContent(C78E::FileDialogs::openFile("Texture\0*.png\0",fileSource.getContent()).string()); // TODO Asset File Filter List
+					fileSource.setContent(C78E::FileDialogs::openFile("Texture\0*.png\0Font\0*.ttf\0Model\0*.obj\0",fileSource.getContent()).string()); // TODO Asset File Filter List
 				}
 			};
 			C78E::GUI::TextInput uuid{ "UUID", std::to_string(C78E::UUID()), 32 + (8 - 1) + 2 + 4 + 1 };

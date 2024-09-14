@@ -78,6 +78,11 @@ namespace C78E {
 		bool removeAsset(AssetHandle handle, bool fromDisk = false);
 
 		/*
+		* Removes an Asset by AssetHandle from the Loaded Assets and AssetRegistry
+		*/
+		bool reloadAsset(AssetHandle handle);
+
+		/*
 		* Retrieves the Asset Meta of an Asset given its Assethandle
 		* returns the Asset Meta
 		*/
@@ -108,6 +113,8 @@ namespace C78E {
 		public:
 			static const AssetHandle Texture2D_White;
 			static const AssetHandle Shader_SpriteRenderComponent;
+			static const AssetHandle Shader_TextCompoent;
+			static const AssetHandle Shader_ModelCompoent;
 		private:
 			static const AssetHandle getAssetHandle(uint64_t lowerID);
 			static void createDefaultAssets(EditorAssetManager* assetManager);

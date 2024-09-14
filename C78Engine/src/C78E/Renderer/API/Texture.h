@@ -48,9 +48,7 @@ namespace C78E {
 
 		virtual bool operator==(const Texture& other) const = 0;
 	public:
-		// TODO: revisit, Texture loading/handling, 2D and Cubemap don't differ as file rn
 		virtual AssetType getType() const override { return Asset::AssetType::None; };
-
 		static AssetType getClassType() { return AssetType::None; };
 	public:
 		// virtual
@@ -79,7 +77,6 @@ namespace C78E {
 		virtual const TextureSpecification& getSpecification() const = 0;
 
 		virtual AssetType getType() const override { return Asset::AssetType::Texture2D; };
-
 		static AssetType getClassType() { return AssetType::Texture2D; };
 	};
 
@@ -96,9 +93,9 @@ namespace C78E {
 		virtual uint32_t getSize() const = 0;
 		virtual const CubeMap::TextureSpecification& getSpecification() const = 0;
 
-		virtual AssetType getType() const override { return Asset::AssetType::None; };
+		virtual AssetType getType() const override { return Asset::AssetType::CubeMap; };
 
-		static AssetType getClassType() { return AssetType::None; }; //TODO
+		static AssetType getClassType() { return AssetType::CubeMap; };
 	};
 
 }

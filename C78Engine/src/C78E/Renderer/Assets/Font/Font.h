@@ -6,18 +6,19 @@ namespace C78E {
 
 	struct MSDFData;
 
-	class Font {
+	class Font : public Asset {
 	public:
-		Font(const FilePath& font);
+		Font(MSDFData* data, Ref<C78E::Texture2D> atlasTexture);
 		~Font();
 
-		const MSDFData* GetMSDFData() const { return m_Data; }
-		Ref<Texture2D> GetAtlasTexture() const { return m_AtlasTexture; }
+		const MSDFData* getMSDFData() const { return m_Data; }
+		Ref<C78E::Texture2D> getAtlasTexture() const { return m_AtlasTexture; }
 
-		static Ref<Font> GetDefault();
+		virtual Asset::AssetType getType() const override { return Asset::AssetType::Font; }
+		static Asset::AssetType getClassType() { return Asset::AssetType::Font; }
 	private:
 		MSDFData* m_Data;
-		Ref<Texture2D> m_AtlasTexture;
+		Ref<C78E::Texture2D> m_AtlasTexture;
 	};
 
 }

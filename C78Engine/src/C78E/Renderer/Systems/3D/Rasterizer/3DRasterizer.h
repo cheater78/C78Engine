@@ -51,7 +51,8 @@ namespace C78E {
 		//virtual bool initTarget() final;
 		//virtual void resetTargetFrameInfo();
 	private:
-		void submitSprites(C78E::Ref<Scene> scene);
+		void submitSpriteComponents(C78E::Ref<Scene> scene);
+		void submitTextComponents(C78E::Ref<Scene> scene);
 
 	private:
 		Ref<RenderScene> m_CurrentScene = nullptr;

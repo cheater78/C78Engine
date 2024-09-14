@@ -1,6 +1,8 @@
 #include "EntityManagerUI.h"
 #include "../uitils.h"
 
+#include "../AssetManager/AssetManagerUI.h"
+
 namespace C78Editor::GUI {
 
 	
@@ -165,6 +167,9 @@ namespace C78Editor::GUI {
 				return;
 			}
 
+			auto assetManager = sceneManager->getProjectManager()->getActiveProject()->getEditorAssetManager();
+
+
 			if (entity.hasComponent<C78E::StateComponent>()) {
 				bool* enable = &entity.getComponent<C78E::StateComponent>().enable;
 				ImGui::Checkbox("##Entity State", enable);
@@ -192,6 +197,8 @@ namespace C78Editor::GUI {
 			if (ImGui::BeginPopup("AddComponent")) {
 				drawManagedAddComponentEntry<C78E::CameraComponent>("Camera");
 				drawManagedAddComponentEntry<C78E::SpriteRendererComponent>("Sprite");
+				drawManagedAddComponentEntry<C78E::TextComponent>("Text");
+				drawManagedAddComponentEntry<C78E::ModelComponent>("Model");
 
 				ImGui::EndPopup();
 			}
@@ -199,11 +206,12 @@ namespace C78Editor::GUI {
 			ImGui::PopItemWidth();
 
 			drawComponent<C78E::TransformComponent>("Transform", entity, [](C78E::TransformComponent& component) {
-				drawVec3Control("Translation", component.Translation);
+				float labelSize = ImGui::GetContentRegionAvail().x;
+				TypeControl::drawFloat3("Translation", component.Translation, 0.f, false, labelSize);
 				glm::vec3 rotation = glm::degrees(component.Rotation);
-				drawVec3Control("Rotation", rotation);
+				TypeControl::drawFloat3("Rotation", rotation, 0.f, false, labelSize);
 				component.Rotation = glm::radians(rotation);
-				drawVec3Control("Scale", component.Scale, 1.0f);
+				TypeControl::drawFloat3("Scale", component.Scale, 1.0f, false, labelSize);
 			});
 
 			drawComponent<C78E::CameraComponent>("Camera", entity, [](C78E::CameraComponent& component) {
@@ -257,11 +265,61 @@ namespace C78Editor::GUI {
 				}
 			});
 
-			drawComponent<C78E::SpriteRendererComponent>("Sprite", entity, [this](C78E::SpriteRendererComponent& component) {
+			drawComponent<C78E::SpriteRendererComponent>("Sprite", entity, [this, assetManager](C78E::SpriteRendererComponent& component) {
 				ImGui::ColorEdit4("Color", &component.color[0], ImGuiColorEditFlags_NoInputs);
-				drawAssetEdit(C78E::Asset::AssetType::Texture2D, component.texture, "Texture");
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, component.texture, "Texture");
 				ImGui::DragFloat("Tiling", &component.tilingFactor, .1f, .001f, 100.f);
 			});
+
+			drawComponent<C78E::TextComponent>("Text", entity, [this, assetManager](C78E::TextComponent& component) {
+				{
+					std::string text = component.textString;
+					{ // convert '\n' and '\t' to Literals "\n" and "\t"
+						size_t newLines = newLines = text.find("\n");
+						while (newLines != std::string::npos) {
+							text = text.substr(0, newLines) + "\\n" + text.substr(newLines + 1);
+							newLines = text.find("\n");
+						}
+						size_t tabs = newLines = text.find("\t");
+						while (tabs != std::string::npos) {
+							text = text.substr(0, tabs) + "\\t" + text.substr(tabs + 1);
+							tabs = text.find("\t");
+						}
+					}
+					{ // Write to Temp buffer, draw Input Text, writeBack
+						C78E::Buffer buf{ 1024 };
+						buf.clear<char>('\0');
+						const size_t displayStringSize = text.size();
+						memcpy_s(buf.data, displayStringSize, text.c_str(), displayStringSize);
+						ImGui::InputText("DisplayText", buf.as<char>(), buf.size);
+						text = std::string(buf.as<char>());
+					}
+					{ // convert Literals "\n" and "\t" to '\n' and '\t' 
+						size_t newLines = newLines = text.find("\\n");
+						while (newLines != std::string::npos) {
+							text = text.substr(0, newLines) + "\n" + text.substr(newLines + 2);
+							newLines = text.find("\\n");
+						}
+						size_t tabs = newLines = text.find("\\t");
+						while (tabs != std::string::npos) {
+							text = text.substr(0, tabs) + "\t" + text.substr(tabs + 2);
+							tabs = text.find("\\t");
+						}
+					}
+					component.textString = text;
+				}
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Font, component.fontAsset, "Font");
+				ImGui::ColorEdit4("Color", &component.color[0], ImGuiColorEditFlags_NoInputs);
+				ImGui::DragFloat("Kerning", &component.kerning, 0.1f, 0.0f, 3.f);
+				ImGui::DragFloat("LineSpacing", &component.lineSpacing, 0.1f, 0.0f, 3.f);
+			});
+
+
+			drawComponent<C78E::ModelComponent>("Model", entity, [this, assetManager](C78E::ModelComponent& component) {
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Model, component.model, "Model");
+			});
+
+
 		}
 		else {
 			C78_EDITOR_ERROR("EntityManagerUI::drawEntityComponentList: called without m_SceneManager!");
@@ -311,51 +369,6 @@ namespace C78Editor::GUI {
 			if (removeComponent)
 				entity.removeComponent<T>();
 		}
-	}
-
-
-	void EntityManagerUI::drawAssetPreview(C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label) {
-		// show asset overwiew
-		// edit -> call drawAssetEdit()
-	}
-
-	void EntityManagerUI::drawAssetEdit(C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label) {
-		auto sceneManager = m_SceneManager.lock();
-		if (!sceneManager || !sceneManager->hasActiveProject()) return;
-		auto assetManager = sceneManager->getProjectManager()->getActiveProject()->getEditorAssetManager();
-		if (!sceneManager) return;
-
-		if (!label.empty()) {
-			ImGui::SeparatorText(label.c_str());
-		} else ImGui::Separator();
-
-		std::unordered_map<std::string, C78E::AssetHandle> assetofSameType{};
-		int selected = 0;
-		std::vector<const char*> comboEntries;
-
-		const char* none = "None";
-		assetofSameType[none] = C78E::AssetHandle::invalid();
-		comboEntries.push_back(none);
-
-		for (auto& [entryHandle, entryMeta] : assetManager->getAssetRegistry())
-			if(entryMeta.type == type) {
-				if (entryHandle == handle)
-					selected = static_cast<int>(comboEntries.size());
-				assetofSameType[entryMeta.name] = entryHandle;
-				comboEntries.push_back(entryMeta.name.c_str());
-			}
-		
-		ImGui::Combo("##AssetEditSelect", &selected, comboEntries.data(), static_cast<int>(comboEntries.size()));
-
-		handle = assetofSameType[comboEntries.at(selected)];
-
-		ImGui::Text(("AssetHandle: " + C78E::AssetHandle::encodeToString(handle)).c_str());
-		ImGui::Text(("AssetType: " + C78E::Asset::assetTypeToString(type)).c_str());
-
-		if (handle.isValid()) {
-
-		}
-		ImGui::Separator();
 	}
 
 }

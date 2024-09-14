@@ -20,6 +20,7 @@ include "C78Engine/vendor/Glad"
 include "C78Engine/vendor/ImGui"
 include "C78Engine/vendor/yaml-cpp"
 include "C78Engine/vendor/msdf-atlas-gen"
+include "C78Engine/vendor/msdf-atlas-gen/msdfgen"
 
 include "C78Engine"
 include "C78Editor"

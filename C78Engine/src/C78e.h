@@ -6,7 +6,6 @@
 #include "C78E/Core/Log.h"
 #include "C78E/Core/Timestep.h"
 #include "C78E/Core/UUID.h"
-#include "C78E/Core/Types.h"
 #include "C78E/Core/Application.h"
 #include <C78E/Core/FileSystem/Extensions.h>
 
@@ -58,12 +57,15 @@
 #include "C78E/Renderer/Assets/Texture/Image.h"
 #include "C78E/Renderer/Assets/Texture/TextureImporter.h"
 
+#include "C78E/Renderer/Assets/Font/Font.h"
+
 #include "C78E/Renderer/Assets/Scene/Entity/Component/Components.h"
 #include "C78E/Renderer/Assets/Scene/Entity/Entity.h"
 #include "C78E/Renderer/Assets/Scene/Scene.h"
 #include "C78E/Renderer/Assets/Scene/SceneManager.h"
 #include "C78E/Renderer/Assets/Scene/SceneSerializer.h"
 #include "C78E/Renderer/Assets/Scene/Entity/ScriptableEntity.h"
+
 
 //GUI
 #include <C78E/GUI/GUIUtils.h>

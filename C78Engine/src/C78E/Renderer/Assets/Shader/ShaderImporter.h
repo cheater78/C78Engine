@@ -3,7 +3,6 @@
 #include <C78E/Renderer/API/Shader.h>
 
 namespace C78E {
-	class EditorAssetManager;
 
 	class ShaderImporter {
 	public:

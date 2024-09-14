@@ -8,6 +8,8 @@ namespace C78E::Primitive {
 		glm::vec3 position;
 		glm::vec3 normal;
 
+		bool operator==(const Vertex& other) const { return other.position == position && other.normal == normal; }
+
 		static constexpr uint32_t getSize() { return 24; }
 	};
 

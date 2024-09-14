@@ -18,9 +18,12 @@ namespace C78E {
 
 			Shader,
 			Texture2D,
+			CubeMap,
+
+			Font,
 
 		};
-		static const uint8_t c_AssetTypeCount = 7;
+		static const uint8_t c_AssetTypeCount = 9;
 		static const std::vector<AssetType> getAllAssetTypes(bool includeNone = true) {
 			std::vector<AssetType> types;
 			types.reserve(c_AssetTypeCount);

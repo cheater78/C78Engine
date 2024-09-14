@@ -61,6 +61,8 @@ namespace C78Editor::GUI {
 			if (x * m_TargetScaling != target->getWidth() || y * m_TargetScaling != target->getHeight()) {
 				m_Renderer->resizeTarget(x * m_TargetScaling, y * m_TargetScaling);
 				m_EditorCamera->setViewportSize(x, y);
+				if (m_ViewPortCamera.isValid())
+					m_ActiveScene->getEntityByUUID(m_ViewPortCamera).getComponent<C78E::CameraComponent>().camera.setViewportSize(x, y);
 			}
 
 			auto regionCorner = ImGui::GetCursorPos();
@@ -80,10 +82,11 @@ namespace C78Editor::GUI {
 				m_ViewPortCamera = C78E::UUID::invalid();
 			}
 			m_ActiveScene->getAllEntitiesWith<C78E::CameraComponent>().each(
-				[this](entt::entity enttity, C78E::CameraComponent& camComponent) {
+				[this, x, y](entt::entity enttity, C78E::CameraComponent& camComponent) {
 					C78E::Entity entity{ enttity, m_ActiveScene.get() };
 					if (ImGui::Button((entity.getTag() + "##" + std::to_string(entity.getUUID())).c_str())) {
 						m_ViewPortCamera = entity.getUUID();
+						entity.getComponent<C78E::CameraComponent>().camera.setViewportSize(x, y);
 					}
 				}
 			);

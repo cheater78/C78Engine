@@ -32,10 +32,6 @@ namespace C78Editor::GUI {
 		template<typename T, typename UIFunction>
 		void drawComponent(const std::string& name, C78E::Entity entity, UIFunction uiFunction);
 
-		void drawAssetPreview(C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label = "");
-		void drawAssetEdit(C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label = "");
-
-
 	private:
 		C78E::WRef<C78E::SceneManager> m_SceneManager;
 		C78E::Entity m_ActiveEntity;

@@ -69,6 +69,28 @@ namespace C78E {
 		return true;
 	}
 
+	bool EditorAssetManager::reloadAsset(AssetHandle handle) {
+		if (!handle.isValid()) return false;
+
+		auto defaultAssetIndex = m_DefaultAssets.find(handle);
+		if (defaultAssetIndex != m_DefaultAssets.end()) {
+			Default::createDefaultAssets(this);
+			return defaultAssetIndex->second != nullptr;
+		}
+
+		bool isKnown = getAssetRegistry().find(handle) != getAssetRegistry().end();
+		if (!isKnown) return false;
+		Asset::AssetMeta meta = getMeta(handle);
+		if (meta == Asset::c_NullAssetMeta) return false;
+
+		if (!isLoaded(handle)) {
+			Ref<Asset> asset = getAsset(handle);
+			return asset != nullptr;
+		}
+		m_LoadedAssets[handle] = AssetImporter::importAsset(handle, meta);
+		return m_LoadedAssets[handle] != nullptr;
+	}
+
 	Asset::AssetMeta& EditorAssetManager::getMeta(AssetHandle handle) {
 		auto it = m_AssetRegistry.find(handle);
 		C78_CORE_ASSERT(it != m_AssetRegistry.end(), "EditorAssetManager::getMeta: AssetHandle not found!");
@@ -174,6 +196,8 @@ namespace C78E {
 
 	const AssetHandle EditorAssetManager::Default::Texture2D_White = EditorAssetManager::Default::getAssetHandle(1);
 	const AssetHandle EditorAssetManager::Default::Shader_SpriteRenderComponent = EditorAssetManager::Default::getAssetHandle(2);
+	const AssetHandle EditorAssetManager::Default::Shader_TextCompoent = EditorAssetManager::Default::getAssetHandle(3);
+	const AssetHandle EditorAssetManager::Default::Shader_ModelCompoent = EditorAssetManager::Default::getAssetHandle(4);
 
 	const AssetHandle EditorAssetManager::Default::getAssetHandle(uint64_t lowerID) {
 		if (!lowerID) return AssetHandle::invalid();
@@ -194,6 +218,10 @@ namespace C78E {
 		assetManager->m_DefaultAssets[EditorAssetManager::Default::Texture2D_White] = texture2d_white;
 
 		assetManager->m_DefaultAssets[EditorAssetManager::Default::Shader_SpriteRenderComponent] = Shader::create("../C78Editor/assets/shaders/Renderer3D_SpriteRenderComponent.glsl");
+		
+		assetManager->m_DefaultAssets[EditorAssetManager::Default::Shader_TextCompoent] = Shader::create("../C78Editor/assets/shaders/Renderer3D_TextComponent.glsl");
+		
+		assetManager->m_DefaultAssets[EditorAssetManager::Default::Shader_ModelCompoent] = Shader::create("../C78Editor/assets/shaders/Renderer3D_ModelComponent.glsl");
 
 	}
 

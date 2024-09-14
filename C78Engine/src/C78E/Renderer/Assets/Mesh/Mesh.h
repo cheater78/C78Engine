@@ -1,5 +1,4 @@
 #pragma once
-#include <C78E/Core/Types.h> //TODO: resolve and remove
 #include <C78E/Core/Primitives.h>
 #include <C78E/Core/Geometry.h>
 #include <C78E/Renderer/Assets/Asset/Asset.h>
@@ -8,26 +7,7 @@ namespace C78E {
 
 	class Mesh : public Asset {
 	public:
-		Mesh() = delete;
-
-
-		//Deprecated
-		Mesh(const std::vector<Vertex>& vertecies)
-			: m_Indicies(), m_HasIndicies(false){
-			
-			for (auto& vertex : vertecies)
-				m_Vertecies.push_back(Primitive::Vertex{ vertex.position, vertex.normal });
-		}
-		Mesh(const std::vector<Vertex>& vertecies, const std::vector<uint32_t>& indicies)
-			: m_Indicies(indicies), m_HasIndicies(true) {
-		
-			for (auto& vertex : vertecies)
-				m_Vertecies.push_back(Primitive::Vertex{ vertex.position, vertex.normal });
-		}
-
-
-
-		Mesh(const std::vector<Primitive::Vertex>&vertecies)
+		Mesh(const std::vector<Primitive::Vertex>& vertecies)
 			: m_Vertecies(vertecies), m_Indicies(), m_HasIndicies(false)
 		{ }
 		Mesh(const std::vector<Primitive::Vertex>& vertecies, const std::vector<uint32_t>& indicies)
@@ -58,20 +38,32 @@ namespace C78E {
 			return triangles;
 		}
 
-		Primitive::Vertex* getVertexData() { return m_Vertecies.data(); }
 		uint32_t* getIndexData() { return m_Indicies.data(); }
-
-		uint32_t getVertexCount() { return static_cast<uint32_t>(m_Vertecies.size()); }
-		uint32_t getVertexByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::Vertex)); }
 		uint32_t getIndexCount() { return static_cast<uint32_t>(m_Indicies.size()); }
 
+		Primitive::Vertex* getVertexData() { return m_Vertecies.data(); }
+		uint32_t getVertexCount() { return static_cast<uint32_t>(m_Vertecies.size()); }
+		uint32_t getVertexByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::Vertex)); }
+
+		bool hasVertexColor() { return !m_VertexColors.empty(); }
+		Primitive::VertexColor* getVertexColorData() { return m_VertexColors.data(); }
+		void setVertexColorData(const std::vector<Primitive::VertexColor>& vertexColors) { m_VertexColors = vertexColors; }
+		uint32_t getVertexColorByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::VertexColor)); }
+
+		bool hasVertexTexture() { return !m_VertexTextures.empty(); }
+		Primitive::VertexTexture* getVertexTextureData() { return m_VertexTextures.data(); }
+		void setVertexTextureData(const std::vector<Primitive::VertexTexture>& vertexTextures) { m_VertexTextures = vertexTextures; }
+		uint32_t getVertexTextureByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::VertexTexture)); }
+
 	public:
-		virtual AssetType getType() { return Asset::AssetType::Mesh; };
+		virtual AssetType getType() const override { return Asset::AssetType::Mesh; };
 		static AssetType getClassType() { return AssetType::Mesh; };
 	public:
 		std::vector<uint32_t> m_Indicies;
 		std::vector<Primitive::Vertex> m_Vertecies;
+		std::vector<Primitive::VertexColor> m_VertexColors;
+		std::vector<Primitive::VertexTexture> m_VertexTextures;
 	private:
-		bool m_HasIndicies = false; // TODO: unused...
+		bool m_HasIndicies = false;
 	};
 }

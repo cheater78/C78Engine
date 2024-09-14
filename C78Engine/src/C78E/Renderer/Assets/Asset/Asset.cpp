@@ -12,11 +12,13 @@ namespace C78E {
 		{ ".jpg", Asset::AssetType::Texture2D },
 		{ ".jpeg", Asset::AssetType::Texture2D },
 
-		{ ".stl", Asset::AssetType::Model },
+		{ ".obj", Asset::AssetType::Model },
 		{ ".mtl", Asset::AssetType::Material },
 
 		{ ".glsl", Asset::AssetType::Shader },
-		{ ".hlsl", Asset::AssetType::Shader }
+		{ ".hlsl", Asset::AssetType::Shader },
+
+		{ ".ttf", Asset::AssetType::Font },
 	};
 
 	/**
@@ -53,6 +55,9 @@ namespace C78E {
 		case C78E::Asset::AssetType::Shader:		return "AssetType::Shader";
 
 		case C78E::Asset::AssetType::Texture2D:		return "AssetType::Texture2D";
+		case C78E::Asset::AssetType::CubeMap:		return "AssetType::CubeMap";
+
+		case C78E::Asset::AssetType::Font:		return "AssetType::Font";
 
 		default: return "AssetType::None";
 		}
@@ -74,6 +79,9 @@ namespace C78E {
 		if (str == "AssetType::Shader")		return AssetType::Shader;
 
 		if (str == "AssetType::Texture2D")	return AssetType::Texture2D;
+		if (str == "AssetType::CubeMap")	return AssetType::CubeMap;
+
+		if (str == "AssetType::Font")	return AssetType::Font;
 
 		return AssetType::None;
 	}

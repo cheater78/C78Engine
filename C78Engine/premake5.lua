@@ -31,6 +31,7 @@ project "C78Engine"
 		"%{IncludeDir.tinobj}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.msdfgen}",
+		"%{IncludeDir.freetype}",
 		"%{IncludeDir.msdf_atlas_gen}",
 	}
 	
@@ -40,7 +41,8 @@ project "C78Engine"
 		"Glad",
 		"ImGui",
 		"yaml-cpp",
-		"msdf-atlas-gen"
+		"msdf-atlas-gen",
+		"msdfgen"
 	}
 	
 	defines

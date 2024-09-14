@@ -74,14 +74,28 @@ namespace C78E {
 
 		if (entity.hasComponent<SpriteRendererComponent>()) {
 			out << YAML::Key << "SpriteRendererComponent";
-			out << YAML::BeginMap; // CameraComponent
+			out << YAML::BeginMap; // SpriteRendererComponent
 
 			auto& spriteComponent = entity.getComponent<SpriteRendererComponent>();
 			out << YAML::Key << "Color" << YAML::Value << spriteComponent.color;
 			out << YAML::Key << "Texture" << YAML::Value << spriteComponent.texture;
 			out << YAML::Key << "Tiling" << YAML::Value << spriteComponent.tilingFactor;
 
-			out << YAML::EndMap; // CameraComponent
+			out << YAML::EndMap; // SpriteRendererComponent
+		}
+
+		if (entity.hasComponent<TextComponent>()) {
+			out << YAML::Key << "TextComponent";
+			out << YAML::BeginMap; // TextComponent
+
+			auto& spriteComponent = entity.getComponent<TextComponent>();
+			out << YAML::Key << "DisplayText" << YAML::Value << spriteComponent.textString;
+			out << YAML::Key << "Color" << YAML::Value << spriteComponent.color;
+			out << YAML::Key << "Font" << YAML::Value << spriteComponent.fontAsset;
+			out << YAML::Key << "Kerning" << YAML::Value << spriteComponent.kerning;
+			out << YAML::Key << "LineSpacing" << YAML::Value << spriteComponent.lineSpacing;
+			
+			out << YAML::EndMap; // TextComponent
 		}
 
 
@@ -187,6 +201,16 @@ namespace C78E {
 					src.color = spriteComponent["Color"].as<glm::vec4>();
 					src.texture = spriteComponent["Texture"].as<AssetHandle>();
 					src.tilingFactor = spriteComponent["Tiling"].as<float>();
+				}
+
+				auto textComponent = entity["TextComponent"];
+				if (textComponent) {
+					auto& src = deserializedEntity.addComponent<TextComponent>();
+					src.textString = textComponent["DisplayText"].as<std::string>();
+					src.color = textComponent["Color"].as<glm::vec4>();
+					src.fontAsset = textComponent["Font"].as<AssetHandle>();
+					src.kerning = textComponent["Kerning"].as<float>();
+					src.lineSpacing = textComponent["LineSpacing"].as<float>();
 				}
 
 

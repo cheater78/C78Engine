@@ -1,6 +1,5 @@
 #pragma once
-
-#include <C78E/Core/Types.h>
+#include <C78E/Core/Primitives.h>
 
 //std lib
 #include <string>
@@ -174,10 +173,10 @@ namespace std {
 	};
 
 	template <>
-	struct hash<C78E::Vertex> {
-		size_t operator()(C78E::Vertex const& vertex) const {
+	struct hash<C78E::Primitive::Vertex> {
+		size_t operator()(C78E::Primitive::Vertex const& vertex) const {
 			size_t seed = 0;
-			hashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.texCoord, vertex.texIndex);
+			hashCombine(seed, vertex.position, vertex.normal);
 			return seed;
 		}
 	};

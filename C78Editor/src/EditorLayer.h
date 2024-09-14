@@ -4,6 +4,7 @@
 
 #include "Tools/Viewport.h"
 
+#include "C78E/Renderer/Assets/Asset/AssetImporter.h"
 
 #include <C78E/Project/Project.h>
 
@@ -146,11 +147,15 @@ namespace C78Editor {
 
                 ImGui::Text("ImGui Win: [active: %1i, visible: %1i]", ImGui::GetIO().MetricsActiveWindows, ImGui::GetIO().MetricsRenderWindows);
 
+
+                if(m_ProjectManager->hasActiveProject() && ImGui::Button("Reload Default Shaders")) {
+                    m_ProjectManager->getEditorAssetManager()->reloadAsset(C78E::EditorAssetManager::Default::Shader_SpriteRenderComponent);
+                    m_ProjectManager->getEditorAssetManager()->reloadAsset(C78E::EditorAssetManager::Default::Shader_TextCompoent);
+                    m_ProjectManager->getEditorAssetManager()->reloadAsset(C78E::EditorAssetManager::Default::Shader_ModelCompoent);
+                }
+
                 ImGui::End();
             }
-
-            
-
 
         }
 

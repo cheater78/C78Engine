@@ -3,6 +3,32 @@
 
 namespace C78E {
 
+	std::string Image::imageFormatToString(ImageFormat format) {
+		switch (format)
+		{
+		case C78E::Image::ImageFormat::None: return "ImageFormat::None";
+		case C78E::Image::ImageFormat::R8: return "ImageFormat::R8";
+		case C78E::Image::ImageFormat::RG8: return "ImageFormat::RG8";
+		case C78E::Image::ImageFormat::RGB8: return "ImageFormat::RGB8";
+		case C78E::Image::ImageFormat::RGBA8: return "ImageFormat::RGBA8";
+		case C78E::Image::ImageFormat::RGBA32F: return "ImageFormat::RGBA32F";
+		case C78E::Image::ImageFormat::R32: return "ImageFormat::R32";
+		case C78E::Image::ImageFormat::D24S8: return "ImageFormat::D24S8";
+		default: return "ImageFormat::None";
+		}
+	}
+
+	Image::ImageFormat Image::imageFormatFromString(const std::string& str) {
+		if (str == "ImageFormat::R8") return C78E::Image::ImageFormat::R8;
+		if (str == "ImageFormat::RG8") return C78E::Image::ImageFormat::RG8;
+		if (str == "ImageFormat::RGB8") return C78E::Image::ImageFormat::RGB8;
+		if (str == "ImageFormat::RGBA8") return C78E::Image::ImageFormat::RGBA8;
+		if (str == "ImageFormat::RGBA32F") return C78E::Image::ImageFormat::RGBA32F;
+		if (str == "ImageFormat::R32") return C78E::Image::ImageFormat::R32;
+		if (str == "ImageFormat::D24S8") return C78E::Image::ImageFormat::D24S8;
+		return ImageFormat::None;
+	}
+
 	Image::Image(uint32_t width, uint32_t height, ImageFormat format, const  void* data)
 		: m_Width(width), m_Height(height), m_Format(format) {
 		size_t imagesize = getByteSize();

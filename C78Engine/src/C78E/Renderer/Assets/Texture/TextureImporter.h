@@ -3,7 +3,6 @@
 #include <C78E/Renderer/API/Texture.h>
 
 namespace C78E {
-	class EditorAssetManager;
 
 	class TextureImporter {
 	public:
