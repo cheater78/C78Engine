@@ -81,6 +81,7 @@ namespace C78E {
 	* (optional)
 	*/
 	struct ModelComponent {
+		glm::vec3 offset = { 0.f, 0.f, 0.f };
 		AssetHandle model;
 	};
 
@@ -93,11 +94,11 @@ namespace C78E {
 	};
 
 	/*
-	* SkyBox Component, AssetHandles for registered Textures (TODO Cubemaps only?!) to be used as SkyBox for the Scene (TODO blending for multiple?!)
+	* SkyBox Component, AssetHandle for registered Texture to be used as SkyBox for the Scene
 	* (optional)
 	*/
 	struct SkyBoxComponent {
-		std::vector<AssetHandle> skyboxes;
+		AssetHandle skybox;
 	};
 
 
@@ -117,15 +118,15 @@ namespace C78E {
 	typedef Light::SpotLight SpotLightComponent;
 	// ----
 
-	struct MeshComponent {
+	struct MeshComponent {//
 		AssetHandle mesh;
 	};
 
-	struct MaterialComponent {
+	struct MaterialComponent {//
 		AssetHandle material;
 	};
 
-	struct TextureComponent {
+	struct TextureComponent { //
 		std::vector<AssetHandle> textures;
 	};
 

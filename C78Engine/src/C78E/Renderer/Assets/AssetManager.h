@@ -115,6 +115,7 @@ namespace C78E {
 			static const AssetHandle Shader_SpriteRenderComponent;
 			static const AssetHandle Shader_TextCompoent;
 			static const AssetHandle Shader_ModelCompoent;
+			static const AssetHandle Shader_SkyBoxComponent;
 		private:
 			static const AssetHandle getAssetHandle(uint64_t lowerID);
 			static void createDefaultAssets(EditorAssetManager* assetManager);

@@ -18,9 +18,6 @@ namespace C78E {
 			static AssetImportFunctionMap createAssetImportFunctionMap();
 		};
 
-		
-
-		
 	};
 
 }

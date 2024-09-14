@@ -63,10 +63,9 @@ namespace C78Editor::GUI {
 						if (C78E::FileSystem::exists(fileSourceStr)) {
 							meta.name = assetName.getContent();
 							meta.fileSource = fileSourceStr;
-							meta.type = C78E::Asset::fileToAssetType(fileSourceStr);
+							meta.type = assetType.getSelected();
 							if (C78E::AssetHandle::decodesToValidUUID(uuidStr)) {
 								handle = C78E::AssetHandle::decodeFromString(uuidStr);
-
 								assetManager->importAsset(fileSourceStr, meta, handle);
 							}
 							else {
@@ -102,6 +101,7 @@ namespace C78Editor::GUI {
 				[this](void) -> void {
 					C78_EDITOR_WARN("AssetManagerUI::CreateAssetPanel::fileSourcePicker::onClick: File filter hard coded to .png!");
 					fileSource.setContent(C78E::FileDialogs::openFile("Texture\0*.png\0Font\0*.ttf\0Model\0*.obj\0",fileSource.getContent()).string()); // TODO Asset File Filter List
+					assetType.setSelected(C78E::Asset::fileToAssetType(fileSource.getContent()));
 				}
 			};
 			C78E::GUI::TextInput uuid{ "UUID", std::to_string(C78E::UUID()), 32 + (8 - 1) + 2 + 4 + 1 };

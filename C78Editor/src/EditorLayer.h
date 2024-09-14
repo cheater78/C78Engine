@@ -149,9 +149,8 @@ namespace C78Editor {
 
 
                 if(m_ProjectManager->hasActiveProject() && ImGui::Button("Reload Default Shaders")) {
+                    // Reload any reloads all
                     m_ProjectManager->getEditorAssetManager()->reloadAsset(C78E::EditorAssetManager::Default::Shader_SpriteRenderComponent);
-                    m_ProjectManager->getEditorAssetManager()->reloadAsset(C78E::EditorAssetManager::Default::Shader_TextCompoent);
-                    m_ProjectManager->getEditorAssetManager()->reloadAsset(C78E::EditorAssetManager::Default::Shader_ModelCompoent);
                 }
 
                 ImGui::End();

@@ -98,6 +98,16 @@ namespace C78E {
 			out << YAML::EndMap; // TextComponent
 		}
 
+		if (entity.hasComponent<SkyBoxComponent>()) {
+			out << YAML::Key << "SkyBoxComponent";
+			out << YAML::BeginMap; // SkyBoxComponent
+
+			auto& skyblockComponent = entity.getComponent<SkyBoxComponent>();
+			out << YAML::Key << "CubeMap" << YAML::Value << skyblockComponent.skybox;
+
+			out << YAML::EndMap; // SkyBoxComponent
+		}
+
 
 		out << YAML::EndMap; // Entity
 	}
@@ -213,6 +223,11 @@ namespace C78E {
 					src.lineSpacing = textComponent["LineSpacing"].as<float>();
 				}
 
+				auto skyboxComponent = entity["SkyBoxComponent"];
+				if (skyboxComponent) {
+					auto& src = deserializedEntity.addComponent<SkyBoxComponent>();
+					src.skybox = skyboxComponent["CubeMap"].as<AssetHandle>();
+				}
 
 				C78_CORE_TRACE("SceneSerializer::deserialize: Deserialized entity with ID = {0}, name = {1}", uuid, name);
 			}

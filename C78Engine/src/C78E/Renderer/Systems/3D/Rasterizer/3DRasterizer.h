@@ -53,7 +53,8 @@ namespace C78E {
 	private:
 		void submitSpriteComponents(C78E::Ref<Scene> scene);
 		void submitTextComponents(C78E::Ref<Scene> scene);
-
+		void submitModelComponents(C78E::Ref<Scene> scene);
+		void submitSkyBoxComponents(C78E::Ref<Scene> scene);
 	private:
 		Ref<RenderScene> m_CurrentScene = nullptr;
 	};

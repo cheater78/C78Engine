@@ -4,6 +4,7 @@
 #include <C78E/Renderer/Assets/AssetManager.h>
 
 #include <C78E/Renderer/Assets/Texture/TextureImporter.h>
+#include <C78E/Renderer/Assets/Texture/CubeMapImporter.h>
 #include <C78E/Renderer/Assets/Scene/SceneImporter.h>
 #include <C78E/Renderer/Assets/Model/ModelImporter.h>
 #include <C78E/Renderer/Assets/Shader/ShaderImporter.h>
@@ -18,6 +19,7 @@ namespace C78E {
 		map[Asset::AssetType::Model] = ModelImporter::importModel;
 		map[Asset::AssetType::Shader] = ShaderImporter::importShader;
 		map[Asset::AssetType::Texture2D] = TextureImporter::importTexture2D;
+		map[Asset::AssetType::CubeMap] = CubeMapImporter::importCubeMap;
 		map[Asset::AssetType::Font] = FontImporter::importFont;
 		return map;
 	}

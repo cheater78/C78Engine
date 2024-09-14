@@ -296,27 +296,7 @@ namespace C78E {
 		}
 	}
 
-
-	Rasterizer3D::Rasterizer3D(Ref<AssetManager> assetManager)
-		: Renderer3D(assetManager){
-	}
-
-	Rasterizer3D::~Rasterizer3D() {
-	}
-
-	bool Rasterizer3D::beginScene(Camera& camera, const glm::mat4& viewMatrix) {
-		m_CurrentScene = createRef<RenderScene>();
-		m_CurrentScene->cameraUniform = CameraUniform{ camera.getProjection(), viewMatrix, glm::inverse(viewMatrix) };
-		m_CurrentScene->renderPasses.clear();
-		return false;
-	}
-
-	void Rasterizer3D::submit(Ref<Scene> scene) {
-		if (!scene) return;
-
-		submitSpriteComponents(scene);
-		submitTextComponents(scene);
-
+	void Rasterizer3D::submitModelComponents(C78E::Ref<Scene> scene) {
 		// submit ModelComponent
 		for (auto& entt : scene->getAllEntitiesWith<ModelComponent>()) {
 			Entity entity(entt, scene.get());
@@ -337,26 +317,34 @@ namespace C78E {
 			pass.uniformBuffers.push_back(getMaterialUBO(model->material(), 1)); // Entity UBO
 			pass.uniformBuffers.push_back(getEntityUBO(entity, 2)); // Entity UBO
 
-			
+
 
 			{ //Vertex
-				uint32_t vertSize = model->mesh()->getVertexByteSize();
-				float* vertecies = (float*)model->mesh()->getVertexData();
-				Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(vertecies, vertSize);
+				Buffer meshBuffer{ model->mesh()->getVertexByteSize() };
+				meshBuffer.data = (uint8_t*)model->mesh()->getVertexData();
+
+				Buffer buffer = Buffer::copy(meshBuffer);
+
+				for (glm::vec3* vertex = buffer.as<glm::vec3>(); (size_t)vertex - (size_t)buffer.data < (size_t)buffer.size; vertex += 2) {
+					vertex[0] += modelComponent.offset;
+				}
+
+				Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(buffer.as<float>(), buffer.size);
 				vertexBuffer->setLayout({
 						{ ShaderDataType::Float3, "a_Position" },
 						{ ShaderDataType::Float3, "a_Normal" }
-				});
+					});
 				pass.vertexBuffers.push_back(vertexBuffer);
+				buffer.release();
 			}
 
-			if(model->mesh()->hasVertexColor()) { //Vertex Color
-				uint32_t colorVertSize = model->mesh()->getVertexColorByteSize(); 
+			if (model->mesh()->hasVertexColor()) { //Vertex Color
+				uint32_t colorVertSize = model->mesh()->getVertexColorByteSize();
 				float* colorVertecies = (float*)model->mesh()->getVertexColorData();
 				Ref<VertexBuffer> vertexColorBuffer = VertexBuffer::create(colorVertecies, colorVertSize);
 				vertexColorBuffer->setLayout({
 						{ ShaderDataType::Float4, "a_Color" }
-				});
+					});
 				pass.vertexBuffers.push_back(vertexColorBuffer);
 			}
 
@@ -413,9 +401,63 @@ namespace C78E {
 					pass.vertexArray->addVertexBuffer(vbo);
 				pass.vertexArray->setIndexBuffer(pass.indexBuffer);
 			}
-
-
 		}
+	}
+
+	void Rasterizer3D::submitSkyBoxComponents(C78E::Ref<Scene> scene) {
+		for (auto& enttity : scene->getAllEntitiesWith<SkyBoxComponent>()) {
+			Entity entity(enttity, scene.get());
+			if (!entity.getComponent<StateComponent>().enable) continue;
+			AssetHandle skyBoxTex = entity.getComponent<SkyBoxComponent>().skybox;
+			if (!skyBoxTex.isValid()) continue;
+
+			m_CurrentScene->renderPasses.push_back(RenderPass());
+			RenderPass& pass = m_CurrentScene->renderPasses.back();
+			pass.material = createRef<Material>();
+			m_CurrentScene->addCamUBOToCurrentRenderPass(); // Camera UBO
+			pass.material->m_Shader = EditorAssetManager::Default::Shader_SkyBoxComponent;
+
+			// Default Texture
+			pass.textureSlots.push_back(std::make_pair(EditorAssetManager::Default::Texture2D_White, m_AssetManager->getAssetAs<Texture2D>(EditorAssetManager::Default::Texture2D_White)));
+			pass.textureSlots.push_back(std::make_pair(skyBoxTex, m_AssetManager->getAssetAs<CubeMap>(skyBoxTex)));
+
+			Primitive::CubeMap cubeMap;
+
+			Ref<VertexBuffer> vertexBuffer = VertexBuffer::create((float*)cubeMap.getVertexData(), cubeMap.getVertexSize());
+			vertexBuffer->setLayout({ { ShaderDataType::Float3, "a_Position"} });
+			pass.vertexBuffers.push_back(vertexBuffer);
+			pass.indexBuffer = IndexBuffer::create((uint32_t*)cubeMap.getIndexData(), cubeMap.getIndexCount());
+
+			pass.vertexArray = VertexArray::create();
+			for (auto vbo : pass.vertexBuffers)
+				pass.vertexArray->addVertexBuffer(vbo);
+			pass.vertexArray->setIndexBuffer(pass.indexBuffer);
+
+			pass.depthFunc = RendererAPI::DepthFunc::LEQUAL;
+			pass.writeDepthBuffer = true;
+		}
+	}
+
+	Rasterizer3D::Rasterizer3D(Ref<AssetManager> assetManager)
+		: Renderer3D(assetManager){
+	}
+
+	Rasterizer3D::~Rasterizer3D() { }
+
+	bool Rasterizer3D::beginScene(Camera& camera, const glm::mat4& viewMatrix) {
+		m_CurrentScene = createRef<RenderScene>();
+		m_CurrentScene->cameraUniform = CameraUniform{ camera.getProjection(), viewMatrix, glm::inverse(viewMatrix) };
+		m_CurrentScene->renderPasses.clear();
+		return false;
+	}
+
+	void Rasterizer3D::submit(Ref<Scene> scene) {
+		if (!scene) return;
+
+		submitSpriteComponents(scene);
+		submitTextComponents(scene);
+		submitModelComponents(scene);
+		submitSkyBoxComponents(scene);
 
 	}
 

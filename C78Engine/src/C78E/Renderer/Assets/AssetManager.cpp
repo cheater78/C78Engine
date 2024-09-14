@@ -198,6 +198,7 @@ namespace C78E {
 	const AssetHandle EditorAssetManager::Default::Shader_SpriteRenderComponent = EditorAssetManager::Default::getAssetHandle(2);
 	const AssetHandle EditorAssetManager::Default::Shader_TextCompoent = EditorAssetManager::Default::getAssetHandle(3);
 	const AssetHandle EditorAssetManager::Default::Shader_ModelCompoent = EditorAssetManager::Default::getAssetHandle(4);
+	const AssetHandle EditorAssetManager::Default::Shader_SkyBoxComponent = EditorAssetManager::Default::getAssetHandle(5);
 
 	const AssetHandle EditorAssetManager::Default::getAssetHandle(uint64_t lowerID) {
 		if (!lowerID) return AssetHandle::invalid();
@@ -223,6 +224,7 @@ namespace C78E {
 		
 		assetManager->m_DefaultAssets[EditorAssetManager::Default::Shader_ModelCompoent] = Shader::create("../C78Editor/assets/shaders/Renderer3D_ModelComponent.glsl");
 
+		assetManager->m_DefaultAssets[EditorAssetManager::Default::Shader_SkyBoxComponent] = Shader::create("../C78Editor/assets/shaders/Renderer3D_SkyBoxComponent.glsl");
 	}
 
 	/*

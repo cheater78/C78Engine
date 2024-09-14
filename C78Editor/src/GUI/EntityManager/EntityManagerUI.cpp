@@ -199,6 +199,7 @@ namespace C78Editor::GUI {
 				drawManagedAddComponentEntry<C78E::SpriteRendererComponent>("Sprite");
 				drawManagedAddComponentEntry<C78E::TextComponent>("Text");
 				drawManagedAddComponentEntry<C78E::ModelComponent>("Model");
+				drawManagedAddComponentEntry<C78E::SkyBoxComponent>("SkyBox");
 
 				ImGui::EndPopup();
 			}
@@ -316,7 +317,12 @@ namespace C78Editor::GUI {
 
 
 			drawComponent<C78E::ModelComponent>("Model", entity, [this, assetManager](C78E::ModelComponent& component) {
+				TypeControl::drawFloat3("Offset", component.offset, 0.f, false, ImGui::GetContentRegionAvail().x);
 				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Model, component.model, "Model");
+			});
+
+			drawComponent<C78E::SkyBoxComponent>("SkyBox", entity, [this, assetManager](C78E::SkyBoxComponent& component) {
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::CubeMap, component.skybox, "CubeMapTexture");
 			});
 
 
