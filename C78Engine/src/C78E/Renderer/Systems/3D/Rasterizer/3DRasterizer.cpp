@@ -320,7 +320,8 @@ namespace C78E {
 
 
 			{ //Vertex
-				Buffer meshBuffer{ model->mesh()->getVertexByteSize() };
+				Buffer meshBuffer{};
+				meshBuffer.size = model->mesh()->getVertexByteSize();
 				meshBuffer.data = (uint8_t*)model->mesh()->getVertexData();
 
 				Buffer buffer = Buffer::copy(meshBuffer);
@@ -407,7 +408,6 @@ namespace C78E {
 	void Rasterizer3D::submitSkyBoxComponents(C78E::Ref<Scene> scene) {
 		for (auto& enttity : scene->getAllEntitiesWith<SkyBoxComponent>()) {
 			Entity entity(enttity, scene.get());
-			if (!entity.getComponent<StateComponent>().enable) continue;
 			AssetHandle skyBoxTex = entity.getComponent<SkyBoxComponent>().skybox;
 			if (!skyBoxTex.isValid()) continue;
 
@@ -451,7 +451,7 @@ namespace C78E {
 		return false;
 	}
 
-	void Rasterizer3D::submit(Ref<Scene> scene) {
+	void Rasterizer3D::submit(Ref<Scene> scene) { // if (!entity.getComponent<StateComponent>().enable) continue;
 		if (!scene) return;
 
 		submitSpriteComponents(scene);

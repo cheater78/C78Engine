@@ -143,22 +143,7 @@ namespace C78Editor::GUI {
 		break;
 		case C78E::Asset::CubeMap:
 		{
-			C78E::Ref<C78E::CubeMap> cubeMap = std::static_pointer_cast<C78E::CubeMap>(asset);
-
-			const ImVec2 atlasSize = { static_cast<float>(cubeMap->getSize()), static_cast<float>(cubeMap->getSize()) };
-			const ImVec2 screenSize = [atlasSize]() -> ImVec2 {
-				ImVec2 size = ImGui::GetContentRegionAvail();
-				size.x /= 1;
-				size.y = size.x;
-
-				if (atlasSize.x > atlasSize.y)
-					size.y *= static_cast<float>(atlasSize.y) / atlasSize.x;
-				else
-					size.x *= static_cast<float>(atlasSize.x) / atlasSize.y;
-				return size;
-				}();
 			ImGui::Text("CubeMap: TODO");
-			//ImGui::Image(C78E::GUI::TextureHandle(cubeMap->getRendererID()), screenSize, ImVec2{ 0.f,1.f }, ImVec2{ 1.f,0.f });
 		}
 		break;
 		case C78E::Asset::Font:

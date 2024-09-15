@@ -294,6 +294,7 @@ namespace C78Editor::GUI {
 						memcpy_s(buf.data, displayStringSize, text.c_str(), displayStringSize);
 						ImGui::InputText("DisplayText", buf.as<char>(), buf.size);
 						text = std::string(buf.as<char>());
+						buf.release();
 					}
 					{ // convert Literals "\n" and "\t" to '\n' and '\t' 
 						size_t newLines = newLines = text.find("\\n");
