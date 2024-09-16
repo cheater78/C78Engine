@@ -70,9 +70,10 @@ namespace C78E {
 		updateView();
 	}
 
-	void EditorCamera::onEvent(Event& e) {
+	bool EditorCamera::onEvent(Event& e) {
 		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<MouseScrolledEvent>(BIND_CALLBACK_FN(EditorCamera::onMouseScroll));
+		if(dispatcher.dispatch<MouseScrolledEvent>(BIND_CALLBACK_FN(EditorCamera::onMouseScroll))) return true;
+		return false;
 	}
 
 	bool EditorCamera::onMouseScroll(MouseScrolledEvent& e) {

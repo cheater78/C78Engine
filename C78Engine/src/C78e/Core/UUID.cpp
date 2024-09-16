@@ -29,7 +29,7 @@ namespace C78E {
 		return std::regex_match(str, match, uuid_regex);
 	}
 
-	UUID UUID::decodeFromString(std::string str) {
+	UUID UUID::decodeFromString(const std::string& str) {
 		UUID uuid = UUID::invalid();
 		if (str == uuid_invalid) return uuid;
 		std::smatch match;

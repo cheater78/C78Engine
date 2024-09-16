@@ -27,7 +27,7 @@ namespace C78E {
         virtual void onDetach();
         virtual void onUpdate(Timestep ts);
         virtual void onImGuiRender();
-        virtual void onEvent(Event& event);
+        virtual bool onEvent(Event& event);
 
         void show(bool show) { m_Visible = show; }
         bool onToggleConsole(KeyPressedEvent event);
@@ -36,7 +36,7 @@ namespace C78E {
         std::string m_Title = "";
         bool m_Visible = false;
         //TODO: make variable
-        GUI::KeyCombo m_ToggleVisibleKeyCombo;
+        GUI::KeyCombo m_ToggleVisibleKeyCombo{ { Key::LeftAlt, Key::F1 } };
 
         std::unordered_map<std::string, const CmdCallbackFn> m_Commands{};
         std::vector<std::string> m_History{};

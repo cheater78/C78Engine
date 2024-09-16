@@ -62,12 +62,13 @@ namespace C78E::GUI {
 		C78_CORE_INFO("ImGui Layer stopped.");
 	}
 
-	void ImGuiLayer::onEvent(Event& e) {
+	bool ImGuiLayer::onEvent(Event& e) {
 		if (m_BlockEvents) {
 			ImGuiIO& io = ImGui::GetIO();
 			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
 			e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
 		}
+		return e.Handled;
 	}
 	
 	void ImGuiLayer::begin() {

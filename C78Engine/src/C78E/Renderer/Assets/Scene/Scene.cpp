@@ -237,6 +237,14 @@ namespace C78E {
 	}
 
 	template<>
+	void Scene::onComponentAdded<SkyBoxComponent>(Entity entity, SkyBoxComponent& component) {
+	}
+
+	template<>
+	void Scene::onComponentAdded<TextComponent>(Entity entity, TextComponent& component) {
+	}
+
+	template<>
 	void Scene::onComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component) {
 	}
 

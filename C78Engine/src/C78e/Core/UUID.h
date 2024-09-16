@@ -19,7 +19,7 @@ namespace C78E {
 	public:
 		static bool decodesToUUID(const std::string& str);
 		static bool decodesToValidUUID(const std::string& str);
-		static UUID decodeFromString(std::string str);
+		static UUID decodeFromString(const std::string& str);
 		static std::string encodeToString(UUID uuid);
 
 		static UUID invalid() { UUID uuid; uuid.m_UUID[0] = 0; uuid.m_UUID[1] = 0; return uuid; }

@@ -15,7 +15,7 @@ namespace C78E {
 		virtual void onDetach() {}
 		virtual void onUpdate(Timestep ts) {}
 		virtual void onImGuiRender() {}
-		virtual void onEvent(Event& event) {}
+		virtual bool onEvent(Event& event) { return false; }
 
 		const std::string& getName() const { return m_DebugName; }
 	protected:

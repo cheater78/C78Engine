@@ -30,9 +30,9 @@ namespace C78E {
 			out << YAML::BeginMap; // TransformComponent
 
 			auto& tc = entity.getComponent<TransformComponent>();
-			out << YAML::Key << "Translation" << YAML::Value << tc.Translation;
-			out << YAML::Key << "Rotation" << YAML::Value << tc.Rotation;
-			out << YAML::Key << "Scale" << YAML::Value << tc.Scale;
+			out << YAML::Key << "Translation" << YAML::Value << tc.translation;
+			out << YAML::Key << "Rotation" << YAML::Value << tc.rotation;
+			out << YAML::Key << "Scale" << YAML::Value << tc.scale;
 
 			out << YAML::EndMap; // TransformComponent
 		}
@@ -174,9 +174,9 @@ namespace C78E {
 				if (transformComponent) {
 					// Entities always have transforms
 					auto& tc = deserializedEntity.getComponent<TransformComponent>();
-					tc.Translation = transformComponent["Translation"].as<glm::vec3>();
-					tc.Rotation = transformComponent["Rotation"].as<glm::vec3>();
-					tc.Scale = transformComponent["Scale"].as<glm::vec3>();
+					tc.translation = transformComponent["Translation"].as<glm::vec3>();
+					tc.rotation = transformComponent["Rotation"].as<glm::vec3>();
+					tc.scale = transformComponent["Scale"].as<glm::vec3>();
 				}
 
 				auto cameraComponent = entity["CameraComponent"];

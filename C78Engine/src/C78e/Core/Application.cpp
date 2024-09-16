@@ -56,26 +56,19 @@ namespace C78E {
 
 	void Application::onEvent(Event& e) {
 		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<WindowCloseEvent>(BIND_CALLBACK_FN(Application::onWindowClose));
-		dispatcher.dispatch<WindowResizeEvent>(BIND_CALLBACK_FN(Application::onWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 			(*--it)->onEvent(e);
 			if (e.Handled)
 				break;
 		}
-	}
 
-	bool Application::onWindowClose(WindowCloseEvent e) {
+		dispatcher.dispatch<WindowCloseEvent>(BIND_CALLBACK_FN(Application::onWindowCloseEvent));
+	}
+	bool Application::onWindowCloseEvent(WindowCloseEvent& event) {
 		m_Running = false;
 		return true;
 	}
-
-	bool Application::onWindowResize(WindowResizeEvent e) {
-
-		return false;
-	}
-
 
 
 	void Application::onCMDClose(std::string cmd) { m_Running = false; }

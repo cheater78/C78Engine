@@ -100,7 +100,7 @@ namespace C78Editor::GUI {
 			C78E::GUI::TextButton fileSourcePicker{ "...",
 				[this](void) -> void {
 					C78_EDITOR_WARN("AssetManagerUI::CreateAssetPanel::fileSourcePicker::onClick: File filter hard coded to .png!");
-					fileSource.setContent(C78E::FileDialogs::openFile("Texture\0*.png\0Font\0*.ttf\0Model\0*.obj\0",fileSource.getContent()).string()); // TODO Asset File Filter List
+					fileSource.setContent(C78E::FileDialogs::openFile("Texture\0*.png\0Texture\0*.jpg\0Texture\0*.jpeg\0Font\0*.ttf\0Model\0*.obj\0",fileSource.getContent()).string()); // TODO Asset File Filter List
 					assetType.setSelected(C78E::Asset::fileToAssetType(fileSource.getContent()));
 				}
 			};

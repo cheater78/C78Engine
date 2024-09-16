@@ -37,7 +37,7 @@ namespace C78E {
 			Entity entity(enttity, scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
 			auto& pLight = entity.getComponent<PointLightComponent>();
-			pLight.position = entity.getComponent<TransformComponent>().Translation;
+			pLight.position = entity.getComponent<TransformComponent>().translation;
 			sceneLightUniform.pointLights[sceneLightUniform.pointLightCount++] = pLight;
 		}
 
@@ -45,7 +45,7 @@ namespace C78E {
 			Entity entity(enttity, scene.get());
 			if (!entity.getComponent<StateComponent>().enable) continue;
 			auto& sLight = entity.getComponent<SpotLightComponent>();
-			sLight.position = entity.getComponent<TransformComponent>().Translation;
+			sLight.position = entity.getComponent<TransformComponent>().translation;
 			sceneLightUniform.spotLights[sceneLightUniform.spotLightCount++] = sLight;
 		}
 

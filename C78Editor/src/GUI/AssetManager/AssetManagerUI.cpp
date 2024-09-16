@@ -16,6 +16,12 @@ namespace C78Editor::GUI {
 		if (auto assetManager = m_ProjectManager->getEditorAssetManager()) {
 
 			ImGui::Begin("Asset Manager");
+
+			if (ImGui::Button("Reload Default Assets")) {
+				// Reload any reloads all
+				assetManager->reloadAsset(C78E::EditorAssetManager::Default::Texture2D_White);
+			}
+
 			m_CreateAssetPanel.onImGuiRender();
 			ImGui::Spacing();
 			ImGui::Separator();

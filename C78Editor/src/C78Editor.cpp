@@ -17,6 +17,7 @@ namespace C78Editor {
 			: Application(props),
 			m_EditorLayer(C78E::createRef<EditorLayer>(this->getWindow())) {
 			pushLayer(m_EditorLayer);
+			getImGuiLayer()->blockEvents(false);
 		}
 
 		C78Editor(const C78Editor&) = delete;

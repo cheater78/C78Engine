@@ -13,6 +13,10 @@
 namespace C78E {
 
 	class Application {
+	private:
+		static Application* s_App; //Application Singelton
+	public:
+		static Application& get() { return *s_App; }
 	public:
 		Application(const WindowProps& windowProperties = WindowProps());
 		virtual ~Application();
@@ -24,13 +28,9 @@ namespace C78E {
 		void pushOverlay(Ref<Layer> layer);
 
 		Window& getWindow() { return *m_Window.get(); }
-
-		static Application& get() { return *s_App; }
-
+	protected:
+		Ref<GUI::ImGuiLayer> getImGuiLayer() { return m_ImGuiLayer; }
 	private:
-		//Singelton Application
-		static Application* s_App;
-
 		Scope<Window> m_Window;
 		bool m_Running = true;
 
@@ -39,11 +39,7 @@ namespace C78E {
 		Ref<GUI::ImGuiLayer> m_ImGuiLayer;
 		Ref<Console> m_Console;
 
-
-		//Events
-		bool onWindowClose(WindowCloseEvent e);
-		bool onWindowResize(WindowResizeEvent e);
-
+		bool onWindowCloseEvent(WindowCloseEvent& event);
 
 		//Commands
 		void onCMDClose(std::string cmd);

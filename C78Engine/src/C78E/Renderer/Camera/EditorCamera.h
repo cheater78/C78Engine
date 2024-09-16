@@ -14,7 +14,7 @@ namespace C78E {
 		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
 		void onUpdate(Timestep ts);
-		void onEvent(Event& e);
+		bool onEvent(Event& e);
 
 		inline float getDistance() const { return m_Distance; }
 		inline void setDistance(float distance) { m_Distance = distance; }
@@ -32,6 +32,9 @@ namespace C78E {
 
 		float getPitch() const { return m_Pitch; }
 		float getYaw() const { return m_Yaw; }
+
+		float getFOV() const { return m_FOV; }
+
 	private:
 		void updateProjection();
 		void updateView();

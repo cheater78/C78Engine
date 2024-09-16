@@ -27,7 +27,7 @@ namespace C78E {
 		Ref<EditorAssetManager> assetManager = m_ProjectManager->getActiveProject()->getEditorAssetManager();
 		if (!sceneHandle)
 			sceneHandle = m_ActiveScene;
-		Asset::AssetMeta meta = assetManager->getMeta(sceneHandle);
+		Asset::AssetMeta& meta = assetManager->getMeta(sceneHandle);
 		if (sceneFile.empty()) {
 			if (meta.fileSource.empty()) {
 				C78_CORE_ERROR("SceneManager::saveScene: AssetMeta FileSource empty, so is arg sceneFile, atleast one must be set!");
@@ -35,6 +35,14 @@ namespace C78E {
 			}
 		} else {
 			meta.fileSource = sceneFile;
+		}
+		const FilePath expectedSourcePath = meta.fileSource.parent_path() / (meta.name + C78E_FILE_EXT_SCENE);
+		if (meta.fileSource != expectedSourcePath) {
+			if (std::filesystem::remove(meta.fileSource)) {
+				C78_CORE_TRACE("SceneManager::saveScene: SceneName changed: removed old Source: {}", meta.fileSource);
+			}
+			meta.fileSource = expectedSourcePath;
+			assetManager->exportAssetRegistry(m_ProjectManager->getActiveProject()->getAssetRegistryPath());
 		}
 		C78E::SceneSerializer serializer(std::static_pointer_cast<C78E::Scene>(assetManager->getAsset(sceneHandle)), meta);
 		serializer.serialize();
@@ -58,7 +66,7 @@ namespace C78E {
 
 	bool SceneManager::hasActiveScene() const {
 		if (!m_ProjectManager->hasActiveProject()) return false;
-		return m_ActiveScene;
+		return m_ActiveScene.isValid();
 	}
 
 	Ref<Scene> SceneManager::getActiveScene() const {

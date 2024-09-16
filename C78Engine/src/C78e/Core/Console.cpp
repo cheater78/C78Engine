@@ -129,34 +129,31 @@ namespace C78E {
 				(pair.second)(pair.first);
 			}
 		}
-
-
 		m_ScrollToBottom = true;
 	}
 
 	int Console::commandTypeCallback(ImGuiInputTextCallbackData* data) {
 		switch (data->EventFlag) {
 			case ImGuiInputTextFlags_CallbackCompletion: {
-
-				break;
+				//TODO
 			}
 			case ImGuiInputTextFlags_CallbackHistory: {
-
+				//TODO
 			}
 		}
 		return 0;
 	}
 
-	void Console::onEvent(Event& event) {
-		if (m_BlockEvents)
-		{
+	bool Console::onEvent(Event& event) {
+		if (m_BlockEvents) {
 			ImGuiIO& io = ImGui::GetIO();
 			event.Handled |= event.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
 			event.Handled |= event.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
 		}
 		EventDispatcher dispatcher(event);
-		dispatcher.dispatch<KeyPressedEvent>(BIND_CALLBACK_FN(Console::onToggleConsole));
+		if(dispatcher.dispatch<KeyPressedEvent>(BIND_CALLBACK_FN(Console::onToggleConsole))) return true;
 
+		return false;
 	}
 
 	bool Console::onToggleConsole(KeyPressedEvent event) {

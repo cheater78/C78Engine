@@ -32,7 +32,7 @@ namespace C78Editor::GUI {
 	void EntityManagerUI::selectEntity(C78E::UUID entityID) {
 		if (auto sceneManager = m_SceneManager.lock()) {
 			if (!sceneManager->hasActiveScene()) return;
-			sceneManager->getActiveScene()->getEntityByUUID(entityID);
+			m_ActiveEntity = sceneManager->getActiveScene()->getEntityByUUID(entityID);
 		}
 		else {
 			C78_EDITOR_ERROR("EntityManagerUI::selectEntity: called without m_SceneManager!");
@@ -176,7 +176,6 @@ namespace C78Editor::GUI {
 				ImGui::SameLine();
 			}
 
-
 			if (entity.hasComponent<C78E::TagComponent>()) {
 				auto& tag = entity.getComponent<C78E::TagComponent>().tag;
 
@@ -208,11 +207,11 @@ namespace C78Editor::GUI {
 
 			drawComponent<C78E::TransformComponent>("Transform", entity, [](C78E::TransformComponent& component) {
 				float labelSize = ImGui::GetContentRegionAvail().x;
-				TypeControl::drawFloat3("Translation", component.Translation, 0.f, false, labelSize);
-				glm::vec3 rotation = glm::degrees(component.Rotation);
+				TypeControl::drawFloat3("Translation", component.translation, 0.f, false, labelSize);
+				glm::vec3 rotation = glm::degrees(component.rotation);
 				TypeControl::drawFloat3("Rotation", rotation, 0.f, false, labelSize);
-				component.Rotation = glm::radians(rotation);
-				TypeControl::drawFloat3("Scale", component.Scale, 1.0f, false, labelSize);
+				component.rotation = glm::radians(rotation);
+				TypeControl::drawFloat3("Scale", component.scale, 1.0f, false, labelSize);
 			});
 
 			drawComponent<C78E::CameraComponent>("Camera", entity, [](C78E::CameraComponent& component) {
