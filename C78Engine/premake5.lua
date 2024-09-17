@@ -60,7 +60,7 @@ project "C78Engine"
 
 		defines{
 			"C78_PLATFORM_WINDOWS",
-			"C78_BUILD_DLL",
+			"C78_PLATFORM_GLFW",
 			"GLFW_INCLUDE_NONE"
 		}
 		
@@ -73,7 +73,7 @@ project "C78Engine"
 
 		defines{
 			"C78_PLATFORM_LINUX",
-			"C78_BUILD_DLL",
+			"C78_PLATFORM_GLFW",
 			"GLFW_INCLUDE_NONE"
 		}
 

@@ -24,7 +24,7 @@ namespace C78E {
 	void FPSCameraEntityController::onUpdate(C78E::Timestep dt) {
 		if (!m_Active) {
 			if (m_MousePosBeforeActive != glm::vec2()) {
-				C78E::Application::get().getWindow().setMouseMode(MouseMode::NORMAL);
+				C78E::Application::get().getWindow().setMouseMode(Window::MouseMode::Normal);
 				C78E::Input::setMousePosition(m_MousePosBeforeActive.x, m_MousePosBeforeActive.y);
 				m_MousePosBeforeActive = glm::vec2();
 			}
@@ -32,7 +32,7 @@ namespace C78E {
 		}
 		if (m_MousePosBeforeActive == glm::vec2()) {
 			Window& window = C78E::Application::get().getWindow();
-			window.setMouseMode(MouseMode::DISABLED);
+			window.setMouseMode(Window::MouseMode::Disabled);
 			glm::vec2 windowSize = { window.getWidth(), window.getHeight() };
 			m_MousePosBeforeActive = glm::floor(C78E::Input::getMousePosition());
 			C78E::Input::setMousePosition(windowSize.x / 2, windowSize.y / 2);

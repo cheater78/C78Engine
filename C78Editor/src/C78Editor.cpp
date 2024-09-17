@@ -13,7 +13,7 @@ namespace C78Editor {
 	class C78Editor : public C78E::Application {
 	public:
 
-		C78Editor(C78E::WindowProps props)
+		C78Editor(C78E::Window::WindowProps props)
 			: Application(props),
 			m_EditorLayer(C78E::createRef<EditorLayer>(this->getWindow())) {
 			pushLayer(m_EditorLayer);
@@ -36,7 +36,7 @@ namespace C78Editor {
 C78E::Application* C78E::createApplication() {
 	::C78Editor::WindowConfig::load();
 
-	C78E::WindowProps props{
+	C78E::Window::WindowProps props{
 		"C78Editor",
 		::C78Editor::WindowConfig::s_LastWindowSize.x,
 		::C78Editor::WindowConfig::s_LastWindowSize.y

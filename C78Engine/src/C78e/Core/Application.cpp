@@ -5,7 +5,7 @@ namespace C78E {
 
 	Application* Application::s_App = nullptr;
 
-	Application::Application(const WindowProps& windowProperties) {
+	Application::Application(const Window::WindowProps& windowProperties) {
 		C78_CORE_ASSERT(!s_App, "There can only be one Application!");
 		s_App = this;
 

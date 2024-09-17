@@ -18,7 +18,7 @@ namespace C78E {
 	public:
 		static Application& get() { return *s_App; }
 	public:
-		Application(const WindowProps& windowProperties = WindowProps());
+		Application(const Window::WindowProps& windowProperties = Window::WindowProps());
 		virtual ~Application();
 
 		void run();
@@ -48,4 +48,3 @@ namespace C78E {
 	Application* createApplication();
 
 }
-

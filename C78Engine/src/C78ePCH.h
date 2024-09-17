@@ -1,11 +1,9 @@
 #pragma once
 
-#define _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
-
 //PLATFORM
 #ifdef C78_PLATFORM_WINDOWS
 #include <Windows.h>
-#define C78_PLATFORM_GLFW
+#define C78_PLATFORM_GLFW 1
 #define GLFW_EXPOSE_NATIVE_WIN32
 
 #include <glad.h>
@@ -13,7 +11,7 @@
 #include <GLFW/glfw3native.h>
 #include <vulkan/vulkan.h>
 #elif defined C78_PLATFORM_LINUX
-#define C78_PLATFORM_GLFW
+#define C78_PLATFORM_GLFW 1
 #include <glad.h>
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
@@ -55,6 +53,7 @@
 //LIB::ENTT
 #include <entt/entt.hpp>
 
+namespace C78E { }
 //C78E::CORE
 #include <C78E/Core/Base.h>
 #include <C78E/Core/Core.h>

@@ -1,8 +1,5 @@
 #pragma once
-
 #include "C78E/Core/Buffer.h"
-
-
 
 namespace C78E {
 
