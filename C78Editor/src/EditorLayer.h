@@ -61,6 +61,36 @@ namespace C78Editor {
 
                 m_ProjectManagerUI->onImGuiMainMenuBar();
 
+                if (ImGui::BeginMenu("Window")) {
+                    auto& window = C78E::Application::get().getWindow();
+                    C78E::Window::WindowMode mode = window.getWindowMode();
+                    if (ImGui::BeginMenu("Mode")) {
+                        {
+                            bool b = mode == C78E::Window::WindowMode::Windowed;
+                            ImGui::MenuItem("Windowed", (b) ? "" : "F11", &b, false);
+                            if (b && mode != C78E::Window::WindowMode::Windowed) {
+                                window.setWindowMode(C78E::Window::WindowMode::Windowed);
+                            }
+                        }
+                        {
+                            bool b = mode == C78E::Window::WindowMode::FullScreen;
+                            ImGui::MenuItem("FullScreen", (b) ? "" : "F11", &b, false);
+                            if (b && mode != C78E::Window::WindowMode::FullScreen) {
+                                window.setWindowMode(C78E::Window::WindowMode::FullScreen);
+                            }
+                        }
+                        {
+                            bool b = mode == C78E::Window::WindowMode::BorderlessWindow;
+                            ImGui::MenuItem("BorderlessWindow", "", &b, false);
+                            if (b && mode != C78E::Window::WindowMode::BorderlessWindow) {
+                                window.setWindowMode(C78E::Window::WindowMode::BorderlessWindow);
+                            }
+                        }
+                        ImGui::EndMenu();
+                    }
+                    ImGui::EndMenu();
+                }
+
                 ImGui::EndMainMenuBar();
             }
 

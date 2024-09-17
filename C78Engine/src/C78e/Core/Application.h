@@ -31,7 +31,7 @@ namespace C78E {
 	protected:
 		Ref<GUI::ImGuiLayer> getImGuiLayer() { return m_ImGuiLayer; }
 	private:
-		Scope<Window> m_Window;
+		Scope<Window> m_Window; //multiple Windows?
 		bool m_Running = true;
 
 		Scope<Timer> m_RunTime;

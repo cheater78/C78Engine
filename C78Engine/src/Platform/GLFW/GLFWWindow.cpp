@@ -40,7 +40,33 @@ namespace C78E {
 		#if defined(C78_DEBUG)
 			if (RendererAPI::getAPI() == RendererAPI::API::OpenGL) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 		#endif
-			m_Window = glfwCreateWindow((int)props.width, (int)props.height, m_Data.title.c_str(), nullptr, nullptr);
+
+			//TODO: Monitor selection API
+			//int monitorCount = 0;
+			//GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+			//GLFWmonitor* monitor = monitors[0];
+			//const char* name = glfwGetMonitorName(monitor);
+			GLFWmonitor* monitor = nullptr;
+
+			switch (m_Data.windowMode) {
+			case WindowMode::Windowed:
+				monitor = nullptr;
+				break;
+			case WindowMode::FullScreen:
+				monitor = glfwGetPrimaryMonitor();
+				break;
+			case WindowMode::BorderlessWindow:
+				monitor = glfwGetPrimaryMonitor();
+				const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+				glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+				glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+				glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+				glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+				m_Data.width = mode->width;
+				m_Data.height = mode->height;
+				break;
+			}
+			m_Window = glfwCreateWindow((int)m_Data.width, (int)m_Data.height, m_Data.title.c_str(), monitor, NULL);
 			++s_GLFWWindowCount;
 		}
 
@@ -143,10 +169,13 @@ namespace C78E {
 	Window::WindowProps GLFWWindow::getWindowProperties() const { return m_Data; }
 	void GLFWWindow::setEventCallback(const EventCallbackFn& callback) { m_Data.eventCallback = callback; }
 
+	/* TODO: reset Window and replace -> ImGui must be reinited */
 	void GLFWWindow::setWindowMode(WindowMode windowMode) {
 		m_Data.windowMode = windowMode;
-		shutdown();
-		init(m_Data);
+		//shutdown();
+		//init(m_Data);
+		//WindowResizeEvent event(m_Data.width, m_Data.height);
+		//m_Data.eventCallback(event);
 	}
 
 	Window::WindowMode GLFWWindow::getWindowMode() const {
