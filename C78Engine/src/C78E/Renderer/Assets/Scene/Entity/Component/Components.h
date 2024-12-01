@@ -1,5 +1,5 @@
 #pragma once
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 
 #include <C78E/Core/UUID.h>
 #include <C78E/Renderer/Camera/SceneCamera.h>
@@ -83,14 +83,6 @@ namespace C78E {
 	struct ModelComponent {
 		glm::vec3 offset = { 0.f, 0.f, 0.f };
 		AssetHandle model;
-	};
-
-	/*
-	* ModelComposite Component, AssetHandles for registered Models to be rendered as visual representation of the Entity
-	* (optional)
-	*/
-	struct ModelCompositeComponent {
-		AssetHandle modelComposite;
 	};
 
 	/*

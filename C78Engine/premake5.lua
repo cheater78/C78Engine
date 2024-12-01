@@ -42,7 +42,9 @@ project "C78Engine"
 		"ImGui",
 		"yaml-cpp",
 		"msdf-atlas-gen",
-		"msdfgen"
+		"msdfgen",
+		"freetype",
+		"%{Library.Vulkan}"
 	}
 	
 	defines
@@ -59,8 +61,8 @@ project "C78Engine"
 		systemversion "latest"
 
 		defines{
-			"C78_PLATFORM_WINDOWS",
-			"C78_PLATFORM_GLFW",
+			"C78E_PLATFORM_WINDOWS",
+			"C78E_PLATFORM_GLFW",
 			"GLFW_INCLUDE_NONE"
 		}
 		
@@ -72,17 +74,21 @@ project "C78Engine"
 		systemversion "latest"
 
 		defines{
-			"C78_PLATFORM_LINUX",
-			"C78_PLATFORM_GLFW",
+			"C78E_PLATFORM_LINUX",
+			"C78E_PLATFORM_GLFW",
 			"GLFW_INCLUDE_NONE"
 		}
 
 		links{
-			"GL"
+			"GL",
+			"X11",
+			"Xcursor",
+			"Xxf86vm",
+			"Xinerama"
 		}
 
 	filter "configurations:Debug"
-		defines{ "C78_DEBUG", "C78_ENABLE_ASSERTS" }
+		defines{ "C78E_DEBUG", "C78E_ENABLE_ASSERTS" }
 		runtime "Debug"
 		symbols "on"
 		
@@ -90,11 +96,12 @@ project "C78Engine"
 		{
 			"%{Library.ShaderC_Debug}",
 			"%{Library.SPIRV_Cross_Debug}",
-			"%{Library.SPIRV_Cross_GLSL_Debug}"
+			"%{Library.SPIRV_Cross_GLSL_Debug}",
+			"%{Library.SPIRV_Tools_Debug}"
 		}
 
 	filter "configurations:Release"
-		defines "C78_RELEASE"
+		defines "C78E_RELEASE"
 		runtime "Release"
 		optimize "on"
 
@@ -106,7 +113,7 @@ project "C78Engine"
 		}
 
 	filter "configurations:Dist"
-		defines "C78_DIST"
+		defines "C78E_DIST"
 		runtime "Release"
 		optimize "on"
 

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <C78ePCH.h>
+#include <C78EPCH.h>
 
 #include <C78E/Renderer/Assets/Mesh/MeshUtils.h>
 #include <C78E/Renderer/Assets/Mesh/Mesh.h>
 
 namespace C78E {
-
+	/*
 	class BVH {
 	private:
 
@@ -96,5 +96,5 @@ namespace C78E {
 		std::vector<Node> m_Nodes;
 
 	};
-
+	*/
 }

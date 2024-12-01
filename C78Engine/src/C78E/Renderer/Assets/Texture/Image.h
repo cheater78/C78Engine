@@ -1,5 +1,5 @@
 #pragma once
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include <C78E/Core/Buffer.h>
 
 namespace C78E {
@@ -24,7 +24,7 @@ namespace C78E {
 			else if (format == ImageFormat::RGBA32F) return 16;
 			else if (format == ImageFormat::R32) return 4;
 			else if (format == ImageFormat::D24S8) return 4;
-			else C78_CORE_ERROR("Image::imageFormatSize: illegal ImageFormat!"); return 0;
+			else C78E_CORE_ERROR("Image::imageFormatSize: illegal ImageFormat!"); return 0;
 		}
 		static std::string imageFormatToString(ImageFormat format);
 		static ImageFormat imageFormatFromString(const std::string& str);

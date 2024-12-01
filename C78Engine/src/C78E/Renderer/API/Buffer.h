@@ -1,4 +1,5 @@
 #pragma once
+#include <C78E/Core/Log/SmartLog.h>
 
 namespace C78E {
 
@@ -19,7 +20,7 @@ namespace C78E {
 			case ShaderDataType::Bool:     return 1;
 		}
 
-		C78_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		C78E_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -50,7 +51,7 @@ namespace C78E {
 				case ShaderDataType::Int4:    return 4;
 				case ShaderDataType::Bool:    return 1;
 			}
-			C78_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			C78E_CORE_ASSERT(false, "Unknown ShaderDataType!");
 			return 0;
 		}
 	};

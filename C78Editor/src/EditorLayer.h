@@ -1,6 +1,5 @@
 #pragma once
 #include <C78E.h>
-#include <C78Elibs.h>
 
 #include "GUI/Viewport/ViewportUI.h"
 #include "GUI/EntityManager/EntityManagerUI.h"
@@ -46,6 +45,7 @@ namespace C78Editor {
             dispatcher.dispatch<C78E::WindowResizeEvent>(BIND_CALLBACK_FN(EditorLayer::onWindowResizeEvent));
             
             if (m_ViewportUI->onEvent(e)) return true;
+            return false;
         }
 
         bool onWindowResizeEvent(C78E::WindowResizeEvent event) {

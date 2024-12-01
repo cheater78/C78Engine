@@ -2,7 +2,6 @@
 
 #include <C78E/Renderer/Assets/Mesh/Mesh.h>
 #include <C78E/Renderer/Assets/Material/Material.h>
-#include <C78E/Renderer/Assets/Model/Model.h>
 #include <C78E/Renderer/API/Texture.h>
 
 namespace tinyobj {

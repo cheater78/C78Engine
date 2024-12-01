@@ -1,5 +1,5 @@
 #include "C78EPCH.h"
-#ifdef C78_PLATFORM_GLFW
+#ifdef C78E_PLATFORM_GLFW
 #include "GLFWWindow.h"
 
 #include <C78E/Renderer/API/RendererAPI.h>
@@ -13,7 +13,7 @@ namespace C78E {
 	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description) {
-		C78_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+		C78E_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
 	GLFWWindow::GLFWWindow(const WindowProps& props) {
@@ -21,23 +21,23 @@ namespace C78E {
 	}
 
 	GLFWWindow::~GLFWWindow() {
-		C78_CORE_WARN("Destroying GLFWWindow...");
+		C78E_CORE_WARN("Destroying GLFWWindow...");
 		shutdown();
 	}
 
 	void GLFWWindow::init(const WindowProps& props) {
 		m_Data = props;
 
-		C78_CORE_INFO("Creating window {0} ({1}, {2}) on platform: GLFW", props.title, props.width, props.height);
+		C78E_CORE_INFO("Creating window {0} ({1}, {2}) on platform: GLFW", props.title, props.width, props.height);
 
 		if (s_GLFWWindowCount == 0) {
 			int success = glfwInit();
-			C78_CORE_ASSERT(success, "Could not initialize GLFW!");
+			C78E_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
 		{
-		#if defined(C78_DEBUG)
+		#if defined(C78E_DEBUG)
 			if (RendererAPI::getAPI() == RendererAPI::API::OpenGL) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 		#endif
 
@@ -149,7 +149,7 @@ namespace C78E {
 	}
 
 	void GLFWWindow::shutdown() {
-		C78_CORE_TRACE("Windows onClose({0} windows closed)", s_GLFWWindowCount);
+		C78E_CORE_TRACE("Windows onClose({0} windows closed)", s_GLFWWindowCount);
 
 		glfwDestroyWindow(m_Window);
 		--s_GLFWWindowCount;
@@ -200,11 +200,19 @@ namespace C78E {
 		case C78E::Window::Normal: mode = GLFW_CURSOR_NORMAL; break;
 		case C78E::Window::Hidden: mode = GLFW_CURSOR_HIDDEN; break;
 		case C78E::Window::Disabled: mode = GLFW_CURSOR_DISABLED; break;
-		default: C78_CORE_ASSERT("GLFWWindow::setMouseMode: Illegal Mouse Input Mode!"); break;
+		default: C78E_CORE_ASSERT("GLFWWindow::setMouseMode: Illegal Mouse Input Mode!"); break;
 		}
 		glfwSetInputMode(m_Window, GLFW_CURSOR, mode);
 	}
 
+	std::string GLFWWindow::getClipBoardString() const {
+		return std::string(glfwGetClipboardString(m_Window));
+	}
+	
+	void GLFWWindow::setClipboardString(const std::string& str) {
+		glfwSetClipboardString(m_Window, str.c_str());
+	}
+
 }
 
-#endif // C78_PLATFORM_GLFW
+#endif // C78E_PLATFORM_GLFW

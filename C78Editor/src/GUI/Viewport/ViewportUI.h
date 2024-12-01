@@ -1,8 +1,6 @@
 #pragma once
 
 #include <C78E.h>
-#include <C78Egui.h>
-#include <C78Elibs.h>
 
 #include "../EntityManager/EntityManagerUI.h"
 

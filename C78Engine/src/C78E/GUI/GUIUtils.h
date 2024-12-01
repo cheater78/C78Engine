@@ -21,4 +21,70 @@ namespace C78E::GUI {
 	static glm::vec2 getLeftOverWindowSpace() { ImVec2 size = ImGui::GetContentRegionAvail(); return glm::vec2(size.x, size.y); }
 	static glm::vec2 getFullWindowSpace() { ImVec2 size = ImGui::GetContentRegionMax(); return glm::vec2(size.x, size.y); }
 
+	template<std::size_t bufferSize>
+	static void drawLabeledTextInput(const std::string& label, std::string& input) {
+		ImGui::PushID(label.c_str());
+		ImGui::Text(label.c_str());
+		ImGui::SameLine();
+		std::array<char, bufferSize> buffer = { 0 };
+		std::memcpy(buffer.data(), input.data(), input.size());
+		ImGui::InputText("", buffer.data(), bufferSize);
+		input = std::string(buffer.data());
+		ImGui::PopID();
+	}
+
+	static bool drawTextButton(const std::string& label) {
+		ImGui::PushID(label.c_str());
+		const bool pressed = ImGui::Button(label.c_str());
+		ImGui::PopID();
+		return pressed;
+	}
+
+	template<std::size_t bufferSize>
+	static void drawLabeledFileInput(const std::string& label, std::string& input, bool save, const std::vector<FileSystem::EntryType>& filter, const FilePath& filePickerBasePath = FileSystem::C78RootDirectory) {
+		ImGui::PushID(label.c_str());
+		drawLabeledTextInput<bufferSize>(label, input);
+		ImGui::SameLine();
+		if(drawTextButton("...")) {
+			if(save)
+				input = FileDialogs::saveFile(filter, filePickerBasePath, input, label);
+			else
+				input = FileDialogs::openFile(filter, filePickerBasePath, input, label);
+			input = FileSystem::getRelativePathTo(input, filePickerBasePath);
+		}
+		ImGui::PopID();
+	}
+	template<std::size_t bufferSize>
+	static void drawLabeledFileInput(const std::string& label, FilePath& input, bool save, const std::vector<FileSystem::EntryType>& filter, const FilePath& filePickerBasePath = FileSystem::C78RootDirectory) {
+		std::string inputStr = input;
+		drawLabeledFileInput<bufferSize>(label, inputStr, save, filter, filePickerBasePath);
+		input = inputStr;
+	}
+
+	template<typename T>
+	static T drawLabeledComboInput(const std::string& label, T& value, const std::vector<T>& entries) {
+		ImGui::PushID(label.c_str());
+		ImGui::Text(label.c_str());
+		ImGui::SameLine();
+
+		std::vector<std::string> labelStrings;
+		std::vector<const char*> labelStringsPtrs;
+		labelStrings.reserve(entries.size());
+		labelStringsPtrs.reserve(entries.size());
+		int index = -1;
+		for(auto entry : entries) {
+			labelStrings.push_back(std::to_string(entry));
+			labelStringsPtrs.push_back(labelStrings.back().c_str());
+			if(value == entry)
+				index = labelStringsPtrs.size() - 1;
+		}
+
+		ImGui::Combo("", &index, labelStringsPtrs.data(), labelStringsPtrs.size());
+
+		ImGui::PopID();
+		if(index > -1 && index < entries.size())
+			value = entries.at(index);
+		return value;
+	}
+	
 }

@@ -6,7 +6,7 @@ namespace C78E {
 
 	class FontImporter {
 	public:
-		static Ref<Font> importFont(AssetHandle handle, const Asset::AssetMeta& meta);
+		static Ref<Font> importFont(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle);
 	};
 
 }

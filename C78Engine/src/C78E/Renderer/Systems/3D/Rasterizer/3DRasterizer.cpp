@@ -39,32 +39,36 @@ namespace C78E {
 
 			SpriteRendererComponent& spriteComponent = entity.getComponent<SpriteRendererComponent>();
 
-			C78E::Geometry::Quad spriteBase{};
-			uint32_t indCount = spriteBase.getIndexCount();
-			uint32_t* indecies = static_cast<uint32_t*>(spriteBase.getIndexData());
+			{ //Positions
+				float vertecies[] = {
+					-.5f, -.5f, 0.f,
+					+.5f, -.5f, 0.f,
+					+.5f, +.5f, 0.f,
+					-.5f, +.5f, 0.f,
+				};
+				Ref<VertexBuffer> positionVertexBuffer = VertexBuffer::create(vertecies, 4 * 3 * sizeof(float));
+				positionVertexBuffer->setLayout( { { ShaderDataType::Float3, "a_Position" } } );
+				pass.vertexBuffers.push_back(positionVertexBuffer);
+			}
 
+			{ //Normals
+				float normals[] = {
+					0.f, 0.f, 1.f,
+					0.f, 0.f, 1.f,
+					0.f, 0.f, 1.f,
+					0.f, 0.f, 1.f,
+				};
 
-			{ //Vertex
-				uint32_t vertSize = static_cast<uint32_t>(spriteBase.getVertexSize());
-				float* vertecies = (float*)spriteBase.getVertexData();
-				Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(vertecies, vertSize);
-				vertexBuffer->setLayout({
-						{ ShaderDataType::Float3, "a_Position" },
-						{ ShaderDataType::Float3, "a_Normal" }
-					}
-				);
-				pass.vertexBuffers.push_back(vertexBuffer);
+				Ref<VertexBuffer> normalVertexBuffer = VertexBuffer::create(normals, 4 * 3 * sizeof(float));
+				normalVertexBuffer->setLayout( { { ShaderDataType::Float3, "a_Normal" } } );
+				pass.vertexBuffers.push_back(normalVertexBuffer);
 			}
 
 			glm::vec4 color = spriteComponent.color;
 			{ //Vertex Color
-				uint32_t colorVertSize = spriteBase.getVertexCount() * sizeof(glm::vec4);
 				glm::vec4 colorVertecies[4] = { color, color, color, color };
-				Ref<VertexBuffer> vertexColorBuffer = VertexBuffer::create(&colorVertecies[0].x, colorVertSize);
-				vertexColorBuffer->setLayout({
-						{ ShaderDataType::Float4, "a_Color" }
-					}
-				);
+				Ref<VertexBuffer> vertexColorBuffer = VertexBuffer::create(&colorVertecies[0].x, 4 * 4 * sizeof(float));
+				vertexColorBuffer->setLayout( { { ShaderDataType::Float4, "a_Color" } } );
 				pass.vertexBuffers.push_back(vertexColorBuffer);
 			}
 
@@ -76,7 +80,7 @@ namespace C78E {
 					AssetHandle texHandle = texture;
 					auto& texSlots = pass.textureSlots;
 
-					C78_CORE_ASSERT(texSlots.size() <= RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::FRAGMENT));
+					C78E_CORE_ASSERT(texSlots.size() <= RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::FRAGMENT));
 
 					for (uint32_t i = 0; i < texSlots.size(); i++)
 						if (texSlots.at(i).first == texHandle) {
@@ -92,24 +96,24 @@ namespace C78E {
 				}
 
 				float tf = spriteComponent.tilingFactor;
-				uint32_t textureVertSize = spriteBase.getVertexCount() * C78E::Primitive::VertexTexture::getSize();
-				C78E::Primitive::VertexTexture textureVertecies[4] = {
-					{ { 0.f, 0.f }, textureID },
-					{ { tf, 0.f }, textureID },
-					{ { tf, tf }, textureID },
-					{ { 0.f, tf }, textureID },
+				float textureVertecies[] = {
+					0.f, 0.f, (float)textureID,
+					tf, 0.f, (float)textureID,
+					tf, tf, (float)textureID,
+					0.f, tf, (float)textureID,
 				};
-				Ref<VertexBuffer> vertexTextureBuffer = VertexBuffer::create(&textureVertecies[0].textureCoordinate.x, textureVertSize);
+				Ref<VertexBuffer> vertexTextureBuffer = VertexBuffer::create(textureVertecies, 4 * 3 * sizeof(float));
 				vertexTextureBuffer->setLayout({
 						{ ShaderDataType::Float2, "a_TextureCoordinate" },
-						{ ShaderDataType::Int, "a_TextureSlot" }
+						{ ShaderDataType::Float, "a_TextureSlot" }
 					}
 				);
 				pass.vertexBuffers.push_back(vertexTextureBuffer);
 			}
 
 			{
-				pass.indexBuffer = IndexBuffer::create(indecies, indCount);
+				uint32_t indecies[] = { 0, 1, 2, 2, 3, 0 };
+				pass.indexBuffer = IndexBuffer::create(indecies, 6);
 			}
 
 			{
@@ -156,7 +160,7 @@ namespace C78E {
 			const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
 
 			std::vector<glm::vec3> vertecies;
-			std::vector<C78E::Primitive::VertexColor> colorVertecies;
+			std::vector<glm::vec4> colorVertecies;
 			std::vector<glm::vec2> textureVertecies;
 			std::vector<uint32_t> indecies;
 
@@ -194,7 +198,7 @@ namespace C78E {
 				auto glyph = fontGeometry.getGlyph(character);
 				if (!glyph)
 					glyph = fontGeometry.getGlyph('?');
-				C78_CORE_ASSERT(glyph);
+				C78E_CORE_ASSERT(glyph);
 
 				double al, ab, ar, at;
 				glyph->getQuadAtlasBounds(al, ab, ar, at);
@@ -250,7 +254,7 @@ namespace C78E {
 
 
 			const size_t vertexCount = vertecies.size();
-			C78_CORE_ASSERT(vertexCount % 4 == 0 && vertexCount == colorVertecies.size() && vertexCount == textureVertecies.size());
+			C78E_CORE_ASSERT(vertexCount % 4 == 0 && vertexCount == colorVertecies.size() && vertexCount == textureVertecies.size());
 
 			{ //Vertex
 				Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(&((*vertecies.data())[0]), vertexCount * sizeof(glm::vec3));
@@ -263,7 +267,7 @@ namespace C78E {
 
 			glm::vec4 color = textComponent.color;
 			{ //Vertex Color
-				Ref<VertexBuffer> vertexColorBuffer = VertexBuffer::create(&colorVertecies[0].color.r, vertexCount * sizeof(C78E::Primitive::VertexColor));
+				Ref<VertexBuffer> vertexColorBuffer = VertexBuffer::create(&colorVertecies[0].x, vertexCount * sizeof(glm::vec4));
 				vertexColorBuffer->setLayout({
 						{ ShaderDataType::Float4, "a_Color" }
 					}
@@ -272,7 +276,7 @@ namespace C78E {
 			}
 
 			{ //Vertex Texture
-				Ref<VertexBuffer> vertexTextureBuffer = VertexBuffer::create(&textureVertecies[0].x, vertexCount * sizeof(C78E::Primitive::VertexTexture));
+				Ref<VertexBuffer> vertexTextureBuffer = VertexBuffer::create(&textureVertecies[0].x, vertexCount * sizeof(glm::vec2));
 				vertexTextureBuffer->setLayout({
 						{ ShaderDataType::Float2, "a_TextureCorrdinate" }
 					}
@@ -298,6 +302,8 @@ namespace C78E {
 
 	void Rasterizer3D::submitModelComponents(C78E::Ref<Scene> scene) {
 		// submit ModelComponent
+
+		/*
 		for (auto& entt : scene->getAllEntitiesWith<ModelComponent>()) {
 			Entity entity(entt, scene.get());
 			ModelComponent& modelComponent = entity.getComponent<ModelComponent>();
@@ -403,6 +409,7 @@ namespace C78E {
 				pass.vertexArray->setIndexBuffer(pass.indexBuffer);
 			}
 		}
+		*/
 	}
 
 	void Rasterizer3D::submitSkyBoxComponents(C78E::Ref<Scene> scene) {
@@ -421,12 +428,35 @@ namespace C78E {
 			pass.textureSlots.push_back(std::make_pair(EditorAssetManager::Default::Texture2D_White, m_AssetManager->getAssetAs<Texture2D>(EditorAssetManager::Default::Texture2D_White)));
 			pass.textureSlots.push_back(std::make_pair(skyBoxTex, m_AssetManager->getAssetAs<CubeMap>(skyBoxTex)));
 
-			Primitive::CubeMap cubeMap;
+			float vertecies[] = {
+				-1.f, -1.f, -1.f,
+				+1.f, -1.f, -1.f,
+				+1.f, +1.f, -1.f,
+				-1.f, +1.f, -1.f,
+				-1.f, -1.f, +1.f,
+				+1.f, -1.f, +1.f,
+				+1.f, +1.f, +1.f,
+				-1.f, +1.f, +1.f,
+			};
+			uint32_t indecies[] = {
+				0, 1, 2, // front face
+				2, 3, 0, // front face
+				7, 6, 5, // back face
+				5, 4, 7, // back face
+				1, 0, 4, // bot face	
+				4, 5, 1, // bot face	
+				2, 1, 5, // right face
+				5, 6, 2, // right face
+				3, 2, 6, // top face
+				6, 7, 3, // top face
+				0, 3, 7, // left face
+				7, 4, 0, // left face
+			};
 
-			Ref<VertexBuffer> vertexBuffer = VertexBuffer::create((float*)cubeMap.getVertexData(), cubeMap.getVertexSize());
+			Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(vertecies, 8 * 3 * sizeof(float));
 			vertexBuffer->setLayout({ { ShaderDataType::Float3, "a_Position"} });
 			pass.vertexBuffers.push_back(vertexBuffer);
-			pass.indexBuffer = IndexBuffer::create((uint32_t*)cubeMap.getIndexData(), cubeMap.getIndexCount());
+			pass.indexBuffer = IndexBuffer::create(indecies, 36);
 
 			pass.vertexArray = VertexArray::create();
 			for (auto vbo : pass.vertexBuffers)
@@ -483,7 +513,7 @@ namespace C78E {
 		FrameInfo info;
 
 		for (auto& pass : currentScene->renderPasses) {
-			C78_CORE_ASSERT(pass.textureSlots.size() <= RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::FRAGMENT));
+			C78E_CORE_ASSERT(pass.textureSlots.size() <= RenderCommand::getMaxTextureSlots(RendererAPI::ShaderType::FRAGMENT));
 
 			Ref<Shader> shader = m_AssetManager->getAssetAs<Shader>(pass.material->m_Shader);
 

@@ -64,12 +64,12 @@ namespace C78E {
 	
 	public:
 		struct Keys {
-			KeyCode keyForward = Key::W;
-			KeyCode keyBackward = Key::S;
-			KeyCode keyRight = Key::D;
-			KeyCode keyLeft = Key::A;
-			KeyCode keyUp = Key::Space;
-			KeyCode keyDown = Key::LeftShift;
+			Input::KeyCode keyForward = Input::Key::W;
+			Input::KeyCode keyBackward = Input::Key::S;
+			Input::KeyCode keyRight = Input::Key::D;
+			Input::KeyCode keyLeft = Input::Key::A;
+			Input::KeyCode keyUp = Input::Key::Space;
+			Input::KeyCode keyDown = Input::Key::LeftShift;
 		};
 		struct Speed { //TODO: speed -> Physics, Sense to other settings
 			glm::vec3 speed = glm::vec3{ 1.f, 1.f, 1.f };

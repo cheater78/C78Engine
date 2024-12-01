@@ -2,7 +2,6 @@
 
 #define C78E_ENTRYPOINT
 #include <C78E.h>
-#include <C78Elibs.h>
 
 #include "Config/WindowConfig.h"
 #include "EditorLayer.h"

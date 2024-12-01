@@ -403,12 +403,8 @@ bin/
 bin-int/
 C78E-cppcheck-build-dir/
 
-C78Editor/assets
-C78Project/assets
+*/assets/*
 
-
-
-vendor/premake
 .idea/
 
 *.vcxproj
@@ -416,3 +412,7 @@ vendor/premake
 *.vcxproj.user
 *.sln
 *Makefile
+
+.vscode/
+
+config/

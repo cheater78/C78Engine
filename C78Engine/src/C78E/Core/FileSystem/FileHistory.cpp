@@ -1,4 +1,4 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "FileHistory.h"
 
 namespace C78E {
@@ -39,17 +39,17 @@ namespace C78E {
 	}
 
 	void FileHistory::cdParent() {
-		C78_CORE_ASSERT(canCDParent(), "FileHistory::cdParent: no Parent Path to cd to!");
+		C78E_CORE_ASSERT(canCDParent(), "FileHistory::cdParent: no Parent Path to cd to!");
 		cd(m_History.at(m_CurrentIndex).parent_path());
 	}
 
 	void FileHistory::cdForward() {
-		C78_CORE_ASSERT(canCDForward(), "FileHistory::cdForward: no History to move forward to!");
+		C78E_CORE_ASSERT(canCDForward(), "FileHistory::cdForward: no History to move forward to!");
 		m_CurrentIndex++;
 	}
 
 	void FileHistory::cdBackward() {
-		C78_CORE_ASSERT(canCDBackward(), "FileHistory::cdBackward: no History to move backward to!");
+		C78E_CORE_ASSERT(canCDBackward(), "FileHistory::cdBackward: no History to move backward to!");
 		m_CurrentIndex--;
 	}
 

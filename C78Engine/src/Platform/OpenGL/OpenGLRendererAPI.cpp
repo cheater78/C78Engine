@@ -12,16 +12,16 @@ namespace C78E {
 		const char* message,
 		const void* userParam) {
 		switch (severity) {
-			case GL_DEBUG_SEVERITY_HIGH:         C78_CORE_FATAL(message); return;
-			case GL_DEBUG_SEVERITY_MEDIUM:       C78_CORE_ERROR(message); return;
-			case GL_DEBUG_SEVERITY_LOW:          C78_CORE_WARN(message); return;
-			case GL_DEBUG_SEVERITY_NOTIFICATION: C78_CORE_TRACE(message); return;
+			case GL_DEBUG_SEVERITY_HIGH:         C78E_CORE_FATAL(message); return;
+			case GL_DEBUG_SEVERITY_MEDIUM:       C78E_CORE_ERROR(message); return;
+			case GL_DEBUG_SEVERITY_LOW:          C78E_CORE_WARN(message); return;
+			case GL_DEBUG_SEVERITY_NOTIFICATION: C78E_CORE_TRACE(message); return;
 		}
-		C78_CORE_ASSERT(false, "Unknown severity level!");
+		C78E_CORE_ASSERT(false, "Unknown severity level!");
 	}
 
 	void OpenGLRendererAPI::init() {
-	#ifdef C78_DEBUG
+	#ifdef C78E_DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(openGLMessageCallback, nullptr);

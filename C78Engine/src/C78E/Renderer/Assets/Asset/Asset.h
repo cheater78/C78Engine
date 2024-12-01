@@ -9,10 +9,8 @@ namespace C78E {
 	public:
 		enum AssetType : uint8_t {
 			None = 0,
-
 			Scene = 1,
 
-			Model,
 			Mesh,
 			Material,
 
@@ -22,8 +20,9 @@ namespace C78E {
 
 			Font,
 
+
 		};
-		static const uint8_t c_AssetTypeCount = 9;
+		static const uint8_t c_AssetTypeCount = 8;
 		static const std::vector<AssetType> getAllAssetTypes(bool includeNone = true) {
 			std::vector<AssetType> types;
 			types.reserve(c_AssetTypeCount);
@@ -34,8 +33,8 @@ namespace C78E {
 
 		struct AssetMeta {
 			AssetType type = AssetType::None;
-			FilePath fileSource = "/";
-			std::string name = "Unnamed Asset"; //TODO: centrl
+			FilePath fileSource = "";
+			std::string name = C78E_DEFAULT_ASSET_NAME;
 
 			operator bool() const { return type != AssetType::None; }
 		};
@@ -55,4 +54,10 @@ namespace C78E {
 	public:
 		AssetHandle m_AssetHandle;
 	};
+}
+
+namespace std {
+	_EXPORT_STD _NODISCARD inline string to_string(C78E::Asset::AssetType assetType) {
+		return C78E::Asset::assetTypeToString(assetType);
+	}
 }

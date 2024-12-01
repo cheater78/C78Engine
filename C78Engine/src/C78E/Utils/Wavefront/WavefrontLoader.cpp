@@ -1,4 +1,4 @@
-#include <C78ePCH.h>
+#include <C78EPCH.h>
 #include "WavefrontLoader.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -7,13 +7,13 @@
 namespace C78E {
 
     Ref<WavefrontLoader::WavefrontModel> WavefrontLoader::loadModel(FilePath file) {
-        C78_CORE_TRACE("WavefrontLoader::loadModel: Loading Wavefront Model File: {}", file.string());
+        C78E_CORE_TRACE("WavefrontLoader::loadModel: Loading Wavefront Model File: {}", file.string());
         Timer timer;
-
-        C78_CORE_ASSERT(file.extension() == ".obj", "WavefrontLoader::loadModel: cannot parse non .obj files!");
+        
+        C78E_CORE_ASSERT(file.extension() == ".obj", "WavefrontLoader::loadModel: cannot parse non .obj files!");
 
         Ref<WavefrontModel> wvfModel = createRef<WavefrontModel>();
-
+        /*
         tinyobj::ObjReaderConfig reader_config;
         // Path to material files must be in the same directory as the .stl
         //reader_config.mtl_search_path = ""; 
@@ -21,18 +21,18 @@ namespace C78E {
         tinyobj::ObjReader reader;
 
         if (!reader.ParseFromFile(file.string(), reader_config)) {
-            C78_CORE_ERROR("WavefrontLoader::loadModel:   failed to read Wavefront Model File: \n   " + reader.Error());
+            C78E_CORE_ERROR("WavefrontLoader::loadModel:   failed to read Wavefront Model File: \n   " + reader.Error());
             return nullptr;
         }
 
         if (!reader.Warning().empty()) {
-            C78_CORE_WARN("WavefrontLoader::loadModel:   Parsed File successfully, Status: Warning\n   " + reader.Warning());
+            C78E_CORE_WARN("WavefrontLoader::loadModel:   Parsed File successfully, Status: Warning\n   " + reader.Warning());
         }
         else {
-            C78_CORE_TRACE("WavefrontLoader::loadModel:   Parsed File successfully, Status: Ok");
+            C78E_CORE_TRACE("WavefrontLoader::loadModel:   Parsed File successfully, Status: Ok");
         }
 
-        C78_CORE_TRACE("WavefrontLoader::loadModel:   Reading Data:");
+        C78E_CORE_TRACE("WavefrontLoader::loadModel:   Reading Data:");
         auto& attrib = reader.GetAttrib();
         auto& shapes = reader.GetShapes();
         auto& materials = reader.GetMaterials();
@@ -42,7 +42,7 @@ namespace C78E {
             wvfModel->materialNames.emplace(mat_id, materials.at(mat_id).name);
             wvfModel->materials.emplace(mat_id, WavefrontLoader::toMaterial(materials.at(mat_id)));
         }
-        C78_CORE_TRACE("WavefrontLoader::loadModel:     Materials: {}", materials.size());
+        C78E_CORE_TRACE("WavefrontLoader::loadModel:     Materials: {}", materials.size());
         
         uint64_t meshID = 0;
         // Loop over shapes
@@ -146,15 +146,15 @@ namespace C78E {
 
             meshID++;
         }
-        C78_CORE_TRACE("WavefrontLoader::loadModel:     Models: {}", wvfModel->parts.size());
-        C78_CORE_TRACE("WavefrontLoader::loadModel:     Meshes: {}", wvfModel->meshes.size());
-
-        C78_CORE_TRACE("FontLoader::loadFont: Loading Wavefront Model Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
+        C78E_CORE_TRACE("WavefrontLoader::loadModel:     Models: {}", wvfModel->parts.size());
+        C78E_CORE_TRACE("WavefrontLoader::loadModel:     Meshes: {}", wvfModel->meshes.size());
+        */
+        C78E_CORE_TRACE("FontLoader::loadFont: Loading Wavefront Model Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
         return wvfModel;
     }
 
     Ref<WavefrontLoader::WavefrontMaterial> WavefrontLoader::loadMaterial(FilePath file) {
-        C78_CORE_TRACE("WavefrontLoader::loadMaterial: loading File: {}", file.string());
+        C78E_CORE_TRACE("WavefrontLoader::loadMaterial: loading File: {}", file.string());
         std::string matId;
         std::vector<tinyobj::material_t> materials;
         std::map<std::string, int> matMap;
@@ -164,11 +164,11 @@ namespace C78E {
         tinyobj::MaterialFileReader reader(file.parent_path().string());
         reader(matId, &materials, &matMap, &warn, &err);
 
-        if (!warn.empty()) C78_CORE_WARN("WavefrontLoader::loadMaterial: tinyobj warn:\n   {}", warn);
+        if (!warn.empty()) C78E_CORE_WARN("WavefrontLoader::loadMaterial: tinyobj warn:\n   {}", warn);
 
         if (!err.empty()) {
-            C78_CORE_ERROR("WavefrontLoader::loadMaterial: Failed to load File: {} :\n   {}", file.string(), err);
-            C78_ASSERT(false);
+            C78E_CORE_ERROR("WavefrontLoader::loadMaterial: Failed to load File: {} :\n   {}", file.string(), err);
+            C78E_ASSERT(false);
             return createRef<WavefrontMaterial>();
         }
 
@@ -176,7 +176,7 @@ namespace C78E {
         for (auto& kv : matMap) {
             material->materialNames.emplace(kv.second, kv.first);
             material->materials.emplace(kv.second, toMaterial(materials.at(kv.second)));
-            C78_CORE_TRACE("WavefrontLoader::loadMaterial:   - {}", kv.first);
+            C78E_CORE_TRACE("WavefrontLoader::loadMaterial:   - {}", kv.first);
         }
 
         return material;

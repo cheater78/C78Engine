@@ -3,7 +3,7 @@
 namespace C78Editor::GUI {
 
 	AssetManagerUI::AssetManagerUI(C78E::Ref<C78E::ProjectManager> projectManager)
-		: m_ProjectManager{ projectManager }, m_CreateAssetPanel(projectManager) {
+		: m_ProjectManager{ projectManager }, m_CreateAssetHandle(), m_CreateAssetMeta() {
 	}
 
 	AssetManagerUI::~AssetManagerUI() { }
@@ -22,7 +22,53 @@ namespace C78Editor::GUI {
 				assetManager->reloadAsset(C78E::EditorAssetManager::Default::Texture2D_White);
 			}
 
-			m_CreateAssetPanel.onImGuiRender();
+			if (auto assetManager = m_ProjectManager->getEditorAssetManager()) {
+				const C78E::FilePath assetDirectoryPath = m_ProjectManager->getActiveProject()->getAssetDirectory();
+				const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+
+				ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				float lineHeight = GImGui->Font->FontSize * 6.f + GImGui->Style.FramePadding.y * 2.0f;
+				bool open = ImGui::TreeNodeEx("##CreateAsset", treeNodeFlags, "Create Asset");
+				ImGui::PopStyleVar();
+				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 1.0f);
+				if (ImGui::Button("Defaults")) {
+					m_CreateAssetHandle = C78E::AssetHandle();
+					m_CreateAssetMeta = C78E::Asset::AssetMeta();
+					if (open)
+						ImGui::TreePop();
+					return;
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Create")) {
+					const C78E::FilePath fullAssetPath = m_ProjectManager->getActiveProject()->getAssetDirectory() / m_CreateAssetMeta.fileSource;
+					if (C78E::FileSystem::exists(fullAssetPath)) {
+						assetManager->importAsset(fullAssetPath, m_CreateAssetMeta, m_CreateAssetHandle);
+					}
+					else {
+						C78E_ERROR("AssetManagerUI::CreateAssetPanel::onImGuiRender: provided Source File does not exist!");
+					}
+				}
+
+				if (open) {
+					ImGui::Spacing();
+					C78E::GUI::drawLabeledTextInput<C78E_PROJECT_NAME_MAX_LENGTH>("AssetName", m_CreateAssetMeta.name);
+					ImGui::Spacing();
+					C78E::GUI::drawLabeledComboInput<C78E::Asset::AssetType>("AssetType", m_CreateAssetMeta.type, C78E::Asset::getAllAssetTypes(true));
+					ImGui::Spacing();
+					C78E::GUI::drawLabeledFileInput<PATH_MAX>("SourceFile", m_CreateAssetMeta.fileSource, false, C78E::FileSystem::getAssetEntryTypes(), assetDirectoryPath);
+					ImGui::Spacing();
+					std::string uuid = C78E::UUID::encodeToString(m_CreateAssetHandle);
+					C78E::GUI::drawLabeledTextInput<46>("AssetHandle", uuid);
+					if(C78E::UUID::decodesToValidUUID(uuid))
+						m_CreateAssetHandle = C78E::UUID::decodeFromString(uuid);
+					ImGui::Spacing();
+
+					ImGui::TreePop();
+				}
+			}
+			
 			ImGui::Spacing();
 			ImGui::Separator();
 
@@ -86,6 +132,7 @@ namespace C78Editor::GUI {
 			ImGui::Text("Scene: TODO");
 		}
 		break;
+		/*
 		case C78E::Asset::Model:
 		{
 			C78E::Ref<C78E::Model> model = std::static_pointer_cast<C78E::Model>(asset);
@@ -96,14 +143,17 @@ namespace C78Editor::GUI {
 			drawAssetPreview(assetManager, material, "  Material:");
 		}
 		break;
+		*/
 		case C78E::Asset::Mesh:
 		{
+			/*
 			C78E::Ref<C78E::Mesh> mesh = std::static_pointer_cast<C78E::Mesh>(asset);
 			ImGui::Text("Mesh:");
 			ImGui::Text(std::string("  Vertecies: " + std::to_string(mesh->getVertexCount())).c_str());
 			ImGui::Text(std::string("  Indecies: " + std::to_string(mesh->getIndexCount())).c_str());
 			ImGui::Text(std::string("  Color: " + std::to_string(mesh->hasVertexColor())).c_str());
 			ImGui::Text(std::string("  Texture: " + std::to_string(mesh->hasVertexTexture())).c_str());
+			*/
 		}
 		break;
 		case C78E::Asset::Material:

@@ -1,10 +1,10 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "FontLoader.h"
 
 namespace C78E {
 
 	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S, N> GenFunc>
-	static Ref<Texture2D> FontLoader::createAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs,
+	Ref<Texture2D> FontLoader::createAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs,
 		const msdf_atlas::FontGeometry& fontGeometry, uint32_t width, uint32_t height) {
 		msdf_atlas::GeneratorAttributes attributes;
 		attributes.config.overlapSupport = true;
@@ -31,19 +31,19 @@ namespace C78E {
 	}
 
 	Ref<Font> FontLoader::loadFont(FilePath fontFile) {
-		C78_CORE_TRACE("FontLoader::loadFont: Loading Font File: {}", fontFile.string());
+		C78E_CORE_TRACE("FontLoader::loadFont: Loading Font File: {}", fontFile.string());
 		Timer timer;
 		MSDFData* data = new MSDFData();
 
 		msdfgen::FreetypeHandle* ft = msdfgen::initializeFreetype();
-		C78_CORE_ASSERT(ft, "FontLoader::loadFont:   Failed to initialize FreeType!");
+		C78E_CORE_ASSERT(ft, "FontLoader::loadFont:   Failed to initialize FreeType!");
 
 		std::string fileString = fontFile.string();
 
 		// TODO: msdfgen::loadFontData loads from memory buffer which we'll need 
 		msdfgen::FontHandle* font = msdfgen::loadFont(ft, fileString.c_str());
 		if (!font) {
-			C78_CORE_ERROR("FontLoader::loadFont:   Failed to load font: {}", fileString);
+			C78E_CORE_ERROR("FontLoader::loadFont:   Failed to load font: {}", fileString);
 			return nullptr;
 		}
 
@@ -65,20 +65,20 @@ namespace C78E {
 		double fontScale = 1.0;
 		data->fontGeometry = msdf_atlas::FontGeometry(&data->glyphs);
 		int glyphsLoaded = data->fontGeometry.loadCharset(font, fontScale, charset);
-		C78_CORE_TRACE("FontLoader::loadFont:   Glyphs: {} of {}", glyphsLoaded, charset.size());
+		C78E_CORE_TRACE("FontLoader::loadFont:   Glyphs: {} of {}", glyphsLoaded, charset.size());
 
 
 		double emSize = 40.0;
-		C78_CORE_TRACE("FontLoader::loadFont:   Size: {} (hardcoded)", emSize);
+		C78E_CORE_TRACE("FontLoader::loadFont:   Size: {} (hardcoded)", emSize);
 
 		msdf_atlas::TightAtlasPacker atlasPacker;
 		// atlasPacker.setDimensionsConstraint()
 		atlasPacker.setPixelRange(2.0);
 		atlasPacker.setMiterLimit(1.0);
-		atlasPacker.setPadding(0);
+		//atlasPacker.setPadding(0);
 		atlasPacker.setScale(emSize);
 		int remaining = atlasPacker.pack(data->glyphs.data(), (int)data->glyphs.size());
-		C78_CORE_ASSERT(remaining == 0, "FontLoader::loadFont:   Failed to arrange Glyphs to an Atlas!");
+		C78E_CORE_ASSERT(remaining == 0, "FontLoader::loadFont:   Failed to arrange Glyphs to an Atlas!");
 
 		int width, height;
 		atlasPacker.getDimensions(width, height);
@@ -112,16 +112,16 @@ namespace C78E {
 		Ref<Texture2D> fontAtlas = createAndCacheAtlas<msdfgen::byte, float, 3, msdf_atlas::msdfGenerator>(
 			fontFile.filename().string(), (float)emSize, data->glyphs, data->fontGeometry, width, height
 		);
-		C78_CORE_TRACE("FontLoader::loadFont:   AtlasTexture:");
-		C78_CORE_TRACE("FontLoader::loadFont:     Width: {}", fontAtlas->getWidth());
-		C78_CORE_TRACE("FontLoader::loadFont:     Heigt: {}", fontAtlas->getHeight());
-		C78_CORE_TRACE("FontLoader::loadFont:     Heigt: {}", C78E::Image::imageFormatToString(fontAtlas->getSpecification().format));
+		C78E_CORE_TRACE("FontLoader::loadFont:   AtlasTexture:");
+		C78E_CORE_TRACE("FontLoader::loadFont:     Width: {}", fontAtlas->getWidth());
+		C78E_CORE_TRACE("FontLoader::loadFont:     Heigt: {}", fontAtlas->getHeight());
+		C78E_CORE_TRACE("FontLoader::loadFont:     Heigt: {}", C78E::Image::imageFormatToString(fontAtlas->getSpecification().format));
 
 
 		msdfgen::destroyFont(font);
 		msdfgen::deinitializeFreetype(ft);
 
-		C78_CORE_TRACE("FontLoader::loadFont: Loading Font Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
+		C78E_CORE_TRACE("FontLoader::loadFont: Loading Font Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
 		return createRef<Font>(data, fontAtlas);
 	}
 

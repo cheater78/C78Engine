@@ -1,13 +1,30 @@
 #pragma once
-#include <C78E/Core/Primitives.h>
+#include "Utils.h"
 
 //std lib
-#include <string>
+#include <iostream>
+#include <memory>
+#include <utility>
 #include <algorithm>
-#include <vector>
+#include <functional>
 
-// external Libs
-#include <glm/glm.hpp>
+#include <filesystem>
+#include <fstream>
+
+#include <limits>
+#include <cstdint>
+#include <string>
+#include <cstring>
+#include <sstream>
+#include <regex>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+
+#include <cassert>
+
+#include <semaphore>
+#include <thread>
 
 
 // std extension
@@ -15,8 +32,7 @@ namespace std {
 
 	//String
 	_EXPORT_STD _NODISCARD inline string to_string(const char* _Val) {
-		std::string ret = _Val;
-		return ret;
+		return string(_Val);
 	}
 	_EXPORT_STD _NODISCARD inline string to_string(string _Val) {
 		return _Val;
@@ -49,10 +65,9 @@ namespace std {
 		return str + " }";
 	}
 
-	_EXPORT_STD _NODISCARD inline std::vector<std::string> split(const std::string& s, char seperator)
-	{
+	template<typename T>
+	_EXPORT_STD _NODISCARD inline std::vector<std::string> split(const std::string& s, T seperator) {
 		std::vector<std::string> output;
-
 		std::string::size_type prev_pos = 0, pos = 0;
 
 		while ((pos = s.find(seperator, pos)) != std::string::npos) {
@@ -61,12 +76,15 @@ namespace std {
 		}
 
 		output.push_back(s.substr(prev_pos, pos - prev_pos)); // Last word
-
 		return output;
 	}
+	template
+	std::vector<std::string> split<char>(const std::string& s, char seperator);
+	template
+	std::vector<std::string> split<const std::string&>(const std::string& s, const std::string& seperator);
 
-	_EXPORT_STD _NODISCARD inline std::string join(const std::vector<std::string>& strs, std::string del = "", uint32_t start = 0, uint32_t count = -1)
-	{
+
+	_EXPORT_STD _NODISCARD inline std::string join(const std::vector<std::string>& strs, std::string del = "", uint32_t start = 0, uint32_t count = -1) {
 		std::string output = del;
 
 		uint32_t wordInd = 0;
@@ -111,7 +129,7 @@ namespace std {
 
 	// Filesystem
 	namespace filesystem {
-		_EXPORT_STD _NODISCARD inline string getName(string filepath) {
+		_EXPORT_STD _NODISCARD inline string getName(string filepath) { //TODO: check whether path.filename() returns folder names too
 			// Extract name from filepath
 			auto lastSlash = filepath.find_last_of("/\\");
 			lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
@@ -125,76 +143,4 @@ namespace std {
 			return filepath.substr(lastDot, filepath.size());
 		}
 	}
-
-	// Hash for Vertex
-
-	// from: https://stackoverflow.com/a/57595105
-	template <typename T, typename... Rest>
-	void hashCombine(std::size_t& seed, const T& v, const Rest&... rest) {
-		seed ^= std::hash<T>{}(v)+0x9e3779b9 + (seed << 6) + (seed >> 2);
-		(hashCombine(seed, rest), ...);
-	};
-	//~
-
-	template <>
-	struct hash<glm::vec1> {
-		size_t operator()(glm::vec1 const& vec) const {
-			size_t seed = 0;
-			hashCombine(seed, vec);
-			return seed;
-		}
-	};
-
-	template <>
-	struct hash<glm::vec2> {
-		size_t operator()(glm::vec1 const& vec) const {
-			size_t seed = 0;
-			hashCombine(seed, vec[0], vec[1]);
-			return seed;
-		}
-	};
-
-	template <>
-	struct hash<glm::vec3> {
-		size_t operator()(glm::vec1 const& vec) const {
-			size_t seed = 0;
-			hashCombine(seed, vec[0], vec[1], vec[2]);
-			return seed;
-		}
-	};
-
-	template <>
-	struct hash<glm::vec4> {
-		size_t operator()(glm::vec1 const& vec) const {
-			size_t seed = 0;
-			hashCombine(seed, vec[0], vec[1], vec[2], vec[3]);
-			return seed;
-		}
-	};
-
-	template <>
-	struct hash<C78E::Primitive::Vertex> {
-		size_t operator()(C78E::Primitive::Vertex const& vertex) const {
-			size_t seed = 0;
-			hashCombine(seed, vertex.position, vertex.normal);
-			return seed;
-		}
-	};
-	
-	
-
-	// GLM
-	_EXPORT_STD _NODISCARD inline string to_string(glm::vec1 _Val, const uint32_t& _Dec = -1) {
-		return "(" + to_string(_Val[0], _Dec) + ")";
-	}
-	_EXPORT_STD _NODISCARD inline string to_string(glm::vec2 _Val, const uint32_t& _Dec = -1) {
-		return "(" + to_string(_Val[0], _Dec) + "," + to_string(_Val[1], _Dec) + ")";
-	}
-	_EXPORT_STD _NODISCARD inline string to_string(glm::vec3 _Val, const uint32_t& _Dec = -1) {
-		return "(" + to_string(_Val[0], _Dec) + "," + to_string(_Val[1], _Dec) + "," + to_string(_Val[2], _Dec) + ")";
-	}
-	_EXPORT_STD _NODISCARD inline string to_string(glm::vec4 _Val, const uint32_t& _Dec = -1) {
-		return "(" + to_string(_Val[0], _Dec) + "," + to_string(_Val[1], _Dec) + "," + to_string(_Val[2], _Dec) + "," + to_string(_Val[3], _Dec) + ")";
-	}
-
 }

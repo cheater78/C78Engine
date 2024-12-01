@@ -22,7 +22,7 @@ namespace C78E {
 			case ShaderDataType::Bool:     return GL_BOOL;
 		}
 
-		C78_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		C78E_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -58,7 +58,7 @@ namespace C78E {
 	{
 		
 
-		C78_CORE_ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout!");
+		C78E_CORE_ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout!");
 
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->bind();
@@ -117,7 +117,7 @@ namespace C78E {
 					break;
 				}
 				default:
-					C78_CORE_ASSERT(false, "Unknown ShaderDataType!");
+					C78E_CORE_ASSERT(false, "Unknown ShaderDataType!");
 			}
 		}
 

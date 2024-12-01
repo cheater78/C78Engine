@@ -1,5 +1,6 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "CameraController.h"
+#include <C78E/Core/Input/Input.h>
 
 namespace C78E {
 	Ref<FPSCameraEntityController> CameraController::createFPS(Entity entity) {
@@ -66,11 +67,11 @@ namespace C78E {
 
 		glm::vec3 posChg = { 0.f, 0.f, 0.f };
 		if (C78E::Input::isKeyPressed(m_Keys.keyForward)) { posChg += dirForward * dtSeconds * m_Speed.speed.z; }
-		if (C78E::Input::isKeyPressed(C78E::Key::S)) { posChg -= dirForward * dtSeconds * m_Speed.speed.z; }
-		if (C78E::Input::isKeyPressed(C78E::Key::A)) { posChg += dirRight * dtSeconds * m_Speed.speed.x; }
-		if (C78E::Input::isKeyPressed(C78E::Key::D)) { posChg -= dirRight * dtSeconds * m_Speed.speed.x; }
-		if (C78E::Input::isKeyPressed(C78E::Key::Space)) { posChg += dirUp * dtSeconds * m_Speed.speed.y; }
-		if (C78E::Input::isKeyPressed(C78E::Key::LeftControl)) { posChg -= dirUp * dtSeconds * m_Speed.speed.y; }
+		if (C78E::Input::isKeyPressed(C78E::Input::Key::S)) { posChg -= dirForward * dtSeconds * m_Speed.speed.z; }
+		if (C78E::Input::isKeyPressed(C78E::Input::Key::A)) { posChg += dirRight * dtSeconds * m_Speed.speed.x; }
+		if (C78E::Input::isKeyPressed(C78E::Input::Key::D)) { posChg -= dirRight * dtSeconds * m_Speed.speed.x; }
+		if (C78E::Input::isKeyPressed(C78E::Input::Key::Space)) { posChg += dirUp * dtSeconds * m_Speed.speed.y; }
+		if (C78E::Input::isKeyPressed(C78E::Input::Key::LeftControl)) { posChg -= dirUp * dtSeconds * m_Speed.speed.y; }
 		pos += posChg;
 		
 		C78E::Input::setMousePosition(windowSize.x/2, windowSize.y/2);
@@ -103,23 +104,23 @@ namespace C78E {
 	void OrthographicCameraController::OnUpdate(Timestep dt) {
 
 
-		if (Input::isKeyPressed(Key::A))
+		if (Input::isKeyPressed(Input::Key::A))
 		{
 			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
 			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
 		}
-		else if (Input::isKeyPressed(Key::D))
+		else if (Input::isKeyPressed(Input::Key::D))
 		{
 			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
 			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
 		}
 
-		if (Input::isKeyPressed(Key::W))
+		if (Input::isKeyPressed(Input::Key::W))
 		{
 			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
 			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
 		}
-		else if (Input::isKeyPressed(Key::S))
+		else if (Input::isKeyPressed(Input::Key::S))
 		{
 			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
 			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt.getSeconds();
@@ -127,9 +128,9 @@ namespace C78E {
 
 		if (m_Rotation)
 		{
-			if (Input::isKeyPressed(Key::Q))
+			if (Input::isKeyPressed(Input::Key::Q))
 				m_CameraRotation += m_CameraRotationSpeed * dt.getSeconds();
-			if (Input::isKeyPressed(Key::E))
+			if (Input::isKeyPressed(Input::Key::E))
 				m_CameraRotation -= m_CameraRotationSpeed * dt.getSeconds();
 
 			if (m_CameraRotation > 180.0f)

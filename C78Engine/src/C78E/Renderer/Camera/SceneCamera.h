@@ -60,6 +60,14 @@ namespace C78E {
 }
 
 namespace std {
+
+	#ifndef _EXPORT_STD
+	#define _EXPORT_STD
+	#endif
+	#ifndef _NODISCARD
+	#define _NODISCARD [[nodiscard]]
+	#endif
+
 	_EXPORT_STD _NODISCARD inline string to_string(C78E::SceneCamera::ProjectionType type) {
 		switch (type) {
 		case C78E::SceneCamera::ProjectionType::Perspective: return "Perspective";

@@ -5,12 +5,16 @@ namespace C78E {
 
 	class ProjectSerializer {
 	public:
-		ProjectSerializer(Ref<Project> project);
+		static Ref<Project> importProject(const FilePath& filepath);
+		static bool exportProject(Ref<Project> project, const FilePath& filepath);
 
-		bool serializeProject(const FilePath& filepath);
-		bool deserializeProject(const FilePath& filepath);
-	private:
-		Ref<Project> m_Project;
+		//Project De-/Serialization
+		static bool importEditorProject(Ref<Project> project, const std::string& serializedEditorProject);
+		static bool importRuntimeProject(Ref<Project> project, Ref<ScopedBuffer> serializedRuntimeProject);
+
+		static bool exportEditorProject(Ref<Project> project, std::string& serializedEditorProject);
+		static bool exportRuntimeProject(Ref<Project> project, Ref<ScopedBuffer> serializedRuntimeProject);
+		
 	};
 
 }

@@ -1,7 +1,7 @@
 #include "C78EPCH.h"
 
-#ifdef C78_PLATFORM_WINDOWS
+#ifdef C78E_PLATFORM_WINDOWS
 
 // handled by GLFWInput
 
-#endif // C78_PLATFORM_WINDOWS
+#endif // C78E_PLATFORM_WINDOWS

@@ -6,7 +6,7 @@
 namespace C78E {
 
 	//TODO:
-	//	0. defualt Icons for Files
+	//	0. default Icons for Files
 	//	1. Custom Icon Loading for Images
 	//	2. Caching Custom Icons
 	//	3. FileWatcher

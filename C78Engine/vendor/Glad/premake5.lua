@@ -1,4 +1,4 @@
-project "GLAD"
+project "Glad"
 	kind "StaticLib"
 	language "C"
 	cppdialect "C++20"
@@ -17,7 +17,7 @@ project "GLAD"
 
 	includedirs
 	{
-		"."
+		"./"
 	}
 
 	filter "system:linux"

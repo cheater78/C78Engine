@@ -25,7 +25,7 @@ namespace C78Editor::GUI {
 
 		}
 		else {
-			C78_EDITOR_ERROR("EntityManagerUI::onImGuiRender: called without m_SceneManager!");
+			C78E_ERROR("EntityManagerUI::onImGuiRender: called without m_SceneManager!");
 		}
 	}
 	
@@ -35,7 +35,7 @@ namespace C78Editor::GUI {
 			m_ActiveEntity = sceneManager->getActiveScene()->getEntityByUUID(entityID);
 		}
 		else {
-			C78_EDITOR_ERROR("EntityManagerUI::selectEntity: called without m_SceneManager!");
+			C78E_ERROR("EntityManagerUI::selectEntity: called without m_SceneManager!");
 		}
 	}
 
@@ -148,7 +148,7 @@ namespace C78Editor::GUI {
 			}
 		}
 		else {
-			C78_EDITOR_ERROR("EntityManagerUI::selectAnyEntity: called without m_SceneManager!");
+			C78E_ERROR("EntityManagerUI::selectAnyEntity: called without m_SceneManager!");
 		}
 	}
 
@@ -181,7 +181,7 @@ namespace C78Editor::GUI {
 
 				char buffer[256];
 				memset(buffer, 0, sizeof(buffer));
-				strncpy_s(buffer, sizeof(buffer), tag.c_str(), sizeof(buffer));
+				std::strncpy(buffer, tag.c_str(), sizeof(buffer));
 				if (ImGui::InputText("##Tag", buffer, sizeof(buffer))) {
 					tag = std::string(buffer);
 				}
@@ -290,7 +290,7 @@ namespace C78Editor::GUI {
 						C78E::Buffer buf{ 1024 };
 						buf.clear<char>('\0');
 						const size_t displayStringSize = text.size();
-						memcpy_s(buf.data, displayStringSize, text.c_str(), displayStringSize);
+						std::memcpy(buf.data, text.c_str(), displayStringSize);
 						ImGui::InputText("DisplayText", buf.as<char>(), buf.size);
 						text = std::string(buf.as<char>());
 						buf.release();
@@ -315,11 +315,12 @@ namespace C78Editor::GUI {
 				ImGui::DragFloat("LineSpacing", &component.lineSpacing, 0.1f, 0.0f, 3.f);
 			});
 
-
+			/*
 			drawComponent<C78E::ModelComponent>("Model", entity, [this, assetManager](C78E::ModelComponent& component) {
 				TypeControl::drawFloat3("Offset", component.offset, 0.f, false, ImGui::GetContentRegionAvail().x);
 				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Model, component.model, "Model");
 			});
+			*/
 
 			drawComponent<C78E::SkyBoxComponent>("SkyBox", entity, [this, assetManager](C78E::SkyBoxComponent& component) {
 				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::CubeMap, component.skybox, "CubeMapTexture");
@@ -328,7 +329,7 @@ namespace C78Editor::GUI {
 
 		}
 		else {
-			C78_EDITOR_ERROR("EntityManagerUI::drawEntityComponentList: called without m_SceneManager!");
+			C78E_ERROR("EntityManagerUI::drawEntityComponentList: called without m_SceneManager!");
 		}
 	}
 

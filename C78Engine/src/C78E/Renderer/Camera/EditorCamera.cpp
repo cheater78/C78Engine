@@ -1,14 +1,9 @@
 #include "C78EPCH.h"
 #include "EditorCamera.h"
 
-#include "C78E/Core/Input.h"
-#include "C78E/Core/KeyCodes.h"
-#include "C78E/Core/MouseCodes.h"
-
-#include <glfw/glfw3.h>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
+#include <C78E/Core/Input/Input.h>
+#include <C78E/Core/Input/KeyCodes.h>
+#include <C78E/Core/Input/MouseCodes.h>
 
 namespace C78E {
 
@@ -54,16 +49,16 @@ namespace C78E {
 	}
 
 	void EditorCamera::onUpdate(Timestep ts) {
-		if (Input::isKeyPressed(Key::LeftAlt)) {
-			const glm::vec2& mouse{ Input::getMouseX(), Input::getMouseY() };
+		if (Input::isKeyPressed(Input::Key::LeftAlt)) {
+			glm::vec2 mouse = Input::getMousePosition();
 			glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 			m_InitialMousePosition = mouse;
 
-			if (Input::isMouseButtonPressed(Mouse::ButtonMiddle))
+			if (Input::isMouseButtonPressed(Input::Mouse::ButtonMiddle))
 				mousePan(delta);
-			else if (Input::isMouseButtonPressed(Mouse::ButtonLeft))
+			else if (Input::isMouseButtonPressed(Input::Mouse::ButtonLeft))
 				mouseRotate(delta);
-			else if (Input::isMouseButtonPressed(Mouse::ButtonRight))
+			else if (Input::isMouseButtonPressed(Input::Mouse::ButtonRight))
 				mouseZoom(delta.y);
 		}
 

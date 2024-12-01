@@ -1,4 +1,4 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "TextureImporter.h"
 
 #include <C78E/Core/Buffer.h>
@@ -8,7 +8,7 @@
 
 namespace C78E {
 
-	Ref<Texture2D> TextureImporter::importTexture2D(AssetHandle handle, const Asset::AssetMeta& meta) {
+	Ref<Texture2D> TextureImporter::importTexture2D(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle) {
 
 		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(meta.fileSource, true, 4);
 
@@ -24,14 +24,13 @@ namespace C78E {
 		}
 
 		if (spec.format == Image::ImageFormat::RGBA32F)
-			C78_CORE_ASSERT(image->isHDR, "TextureImporter::importTexture2D: Image has 16 Bytes per Pixel but was not flagged HDR!");
+			C78E_CORE_ASSERT(image->isHDR, "TextureImporter::importTexture2D: Image has 16 Bytes per Pixel but was not flagged HDR!");
 
 		return Texture2D::create(spec, image->data);
 	}
 
-	//Temp
-	Ref<Texture2D> TextureImporter::loadImageFile(FilePath file) {
-		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(file, true, 4);
+	Ref<CubeMap> TextureImporter::importCubeMap(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle) {
+		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(meta.fileSource, false, 4);
 
 		C78E::Texture2D::TextureSpecification spec;
 		spec.width = image->width;
@@ -43,10 +42,10 @@ namespace C78E {
 		case 4: spec.format = Image::ImageFormat::RGBA8; break;
 		case 16: spec.format = Image::ImageFormat::RGBA32F; break;
 		}
-
 		if (spec.format == Image::ImageFormat::RGBA32F)
-			C78_CORE_ASSERT(image->isHDR, "TextureImporter::importTexture2D: Image has 16 Bytes per Pixel but was not flagged HDR!");
+			C78E_CORE_ASSERT(image->isHDR, "TextureImporter::importTexture2D: Image has 16 Bytes per Pixel but was not flagged HDR!");
 
-		return Texture2D::create(spec, image->data);
+		return CubeMap::create(createRef<Image>(spec.width, spec.height, spec.format, image->data.as<void>()));
 	}
+	
 }

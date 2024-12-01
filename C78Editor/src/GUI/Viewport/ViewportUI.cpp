@@ -16,7 +16,7 @@ namespace C78Editor::GUI {
 		if (m_EditorCamera->onEvent(event)) return true;
 		if (camController)
 			if (camController->onEvent(event)) return true;
-		return event.Handled;
+		return event.handled;
     }
 
     void ViewportUI::onUpdate(C78E::Timestep dt) {
@@ -33,7 +33,7 @@ namespace C78Editor::GUI {
 
         m_EditorScene = C78E::Scene::copy(m_ActiveScene);
 
-        if(!m_ViewPortCamera.isValid() || C78E::Input::isKeyPressed(C78E::Key::Escape)) {
+        if(!m_ViewPortCamera.isValid() || C78E::Input::isKeyPressed(C78E::Input::Key::Escape)) {
 			m_ViewPortCamera = C78E::AssetHandle::invalid();
 			m_Renderer->beginScene(*m_EditorCamera.get(), m_EditorCamera->getViewMatrix());
 			if (camController)
@@ -92,7 +92,7 @@ namespace C78Editor::GUI {
 
 			ImGui::Image( (void*)(intptr_t)targetID, contentRegionSize, ImVec2{ 0.f, 1.f }, ImVec2{ 1.f, 0.f } );
 
-			if (ImGui::IsItemClicked() && !m_ViewPortCamera.isValid() && !C78E::Input::isKeyPressed(C78E::Key::LeftAlt)) {
+			if (ImGui::IsItemClicked() && !m_ViewPortCamera.isValid() && !C78E::Input::isKeyPressed(C78E::Input::Key::LeftAlt)) {
 				
 				const glm::vec3 position = m_EditorCamera->getPosition() - (m_EditorCamera->getDistance() * m_EditorCamera->getForwardDirection());
 				const glm::vec2 viewPortSize = glm::vec2{ m_Renderer->getTargetTexture()->getWidth(), m_Renderer->getTargetTexture()->getHeight() };

@@ -21,7 +21,7 @@ namespace C78E {
 		SceneLightUniform sceneLightUniform{};
 
 		auto ambientLights = scene->getAllEntitiesWith<AmbientLightComponent>();
-		C78_ASSERT(ambientLights.size() == 1, "Every Scene needs exactly one AmbientLight!");
+		C78E_ASSERT(ambientLights.size() == 1, "Every Scene needs exactly one AmbientLight!");
 		Entity ambientLightEntity(*ambientLights.begin(), scene.get());
 		sceneLightUniform.ambientLight = ambientLightEntity.getComponent<AmbientLightComponent>();
 

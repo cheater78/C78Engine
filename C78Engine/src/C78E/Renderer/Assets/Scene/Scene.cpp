@@ -5,9 +5,6 @@
 #include "Entity/Component/Components.h"
 #include "Entity/ScriptableEntity.h"
 
-#include <glm/glm.hpp>
-
-
 namespace C78E {
 
 	template<typename... Component>
@@ -122,15 +119,15 @@ namespace C78E {
 	}
 
 	void Scene::setPrimaryCamera(Entity camera) {
-		C78_CORE_ASSERT(camera.hasComponent<CameraComponent>(), "Primary Camera must have a CameraComponent!");
-		C78_CORE_ASSERT(camera.isPartOf(this), "Primary Camera must be part of the Scene!");
+		C78E_CORE_ASSERT(camera.hasComponent<CameraComponent>(), "Primary Camera must have a CameraComponent!");
+		C78E_CORE_ASSERT(camera.isPartOf(this), "Primary Camera must be part of the Scene!");
 		m_ActiveCam = camera.getUUID();
 	}
 
 	bool Scene::hasPrimaryCamera() { return (!m_ActiveCam) ? false : Entity(m_EntityMap.at(m_ActiveCam), this); }
 
 	Entity Scene::getPrimaryCamera() {
-		C78_CORE_ASSERT(hasPrimaryCamera(), "Scene currently does not have an Active Cam!");
+		C78E_CORE_ASSERT(hasPrimaryCamera(), "Scene currently does not have an Active Cam!");
 		return Entity(m_EntityMap.at(m_ActiveCam), this);
 	}
 
@@ -177,7 +174,7 @@ namespace C78E {
   
 	template<typename T>
 	void Scene::onComponentAdded(Entity entity, T& component) {
-		C78_CORE_WARN("Scene: onComponentAdded - missing Component, Entity: {}", entity.getTag());
+		C78E_CORE_WARN("Scene: onComponentAdded - missing Component, Entity: {}", entity.getTag());
 	}
 
 	template<>

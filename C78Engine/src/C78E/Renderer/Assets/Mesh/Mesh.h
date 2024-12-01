@@ -1,69 +1,130 @@
 #pragma once
-#include <C78E/Core/Primitives.h>
-#include <C78E/Core/Geometry.h>
 #include <C78E/Renderer/Assets/Asset/Asset.h>
 
 namespace C78E {
 
+	/*
+	* 
+	*/
 	class Mesh : public Asset {
 	public:
-		Mesh(const std::vector<Primitive::Vertex>& vertecies)
-			: m_Vertecies(vertecies), m_Indicies(), m_HasIndicies(false)
-		{ }
-		Mesh(const std::vector<Primitive::Vertex>& vertecies, const std::vector<uint32_t>& indicies)
-			: m_Vertecies(vertecies), m_Indicies(indicies), m_HasIndicies(true)
-		{ }
+		using Position = glm::vec3;
+		using Normal = glm::vec3;
+		using TextureCoordinate = glm::vec2;
+		using Color = glm::vec4;
+	
+	public:
+		using Index = size_t;
+	private:
+		struct BaseHandle {
+		public:
+			Index idx();
+			Mesh& mesh();
+		private:
+			Index index = (Index)-1;
+		};
+	public:
+		using VertexIndex = Index;
+		struct VertexHandle : public BaseHandle {
+			
+		};
+
+		using HalfedgeIndex = Index;
+		struct HalfedgeHandle : public BaseHandle {
+			
+		};
+
+		using FaceIndex = Index;
+		struct FaceHandle : public BaseHandle {
+			
+		};
+
+
+		/*
+		* Custom Properties
+		*/
+	public:
+		using PropertyIndex = size_t;
+	private:
+		template<typename T>
+		struct BasePropertyHandle {
+			PropertyIndex idx = (PropertyIndex)-1;
+		};
+	public:
+		template<typename T>
+		struct VPropertyHandle : public BasePropertyHandle<T> {
+			
+		};
+
+		template<typename T>
+		struct HPropertyHandle : public BasePropertyHandle<T> {
+			
+		};
+
+		template<typename T>
+		struct FPropertyHandle : public BasePropertyHandle<T> {
+			
+		};
+
+	public:
+		Mesh();
 		Mesh(const Mesh&) = delete;
 		~Mesh() = default;
 
-		std::vector<Geometry::Triangle> getTriangles() const {
-			std::vector<Geometry::Triangle> triangles;
+		VertexHandle addVertex(Position position);
 
-			if (m_HasIndicies) {
-				C78_CORE_ASSERT(m_Indicies.size() % 3 == 0, "Mesh::getTriangles: m_Indicies doesn't have a multiple of 3 Elements!");
+		Position& position(VertexHandle vhandle);
 
-				triangles.reserve(m_Indicies.size() / 3);
-				for (uint32_t i = 0; i < m_Indicies.size(); i += 3) {
-					triangles.push_back(Geometry::Triangle{ m_Vertecies[m_Indicies[i]], m_Vertecies[m_Indicies[i+1]], m_Vertecies[m_Indicies[i+2]] });
-				}
-			}
-			else {
-				C78_CORE_ASSERT(m_Vertecies.size() % 3 == 0, "Mesh::getTriangles: m_Vertecies doesn't have a multiple of 3 Elements!");
+		bool hasNormals();
+		Normal& normal(VertexHandle vhandle);
 
-				triangles.reserve(m_Vertecies.size() / 3);
-				for (uint32_t i = 0; i < m_Vertecies.size(); i += 3) {
-					triangles.push_back(Geometry::Triangle{ m_Vertecies[i], m_Vertecies[i + 1], m_Vertecies[i + 2] });
-				}
-			}
-			return triangles;
-		}
+		bool hasTextureCoordinates();
+		TextureCoordinate& textureCoordinate(VertexHandle vhandle);
 
-		uint32_t* getIndexData() { return m_Indicies.data(); }
-		uint32_t getIndexCount() { return static_cast<uint32_t>(m_Indicies.size()); }
+		bool hasColor();
+		Color& color(VertexHandle vhandle);
 
-		Primitive::Vertex* getVertexData() { return m_Vertecies.data(); }
-		uint32_t getVertexCount() { return static_cast<uint32_t>(m_Vertecies.size()); }
-		uint32_t getVertexByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::Vertex)); }
 
-		bool hasVertexColor() { return !m_VertexColors.empty(); }
-		Primitive::VertexColor* getVertexColorData() { return m_VertexColors.data(); }
-		void setVertexColorData(const std::vector<Primitive::VertexColor>& vertexColors) { m_VertexColors = vertexColors; }
-		uint32_t getVertexColorByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::VertexColor)); }
+		
 
-		bool hasVertexTexture() { return !m_VertexTextures.empty(); }
-		Primitive::VertexTexture* getVertexTextureData() { return m_VertexTextures.data(); }
-		void setVertexTextureData(const std::vector<Primitive::VertexTexture>& vertexTextures) { m_VertexTextures = vertexTextures; }
-		uint32_t getVertexTextureByteSize() { return static_cast<uint32_t>(getVertexCount() * sizeof(Primitive::VertexTexture)); }
+		template<typename T>
+		VPropertyHandle<T> createVertexProperty();
+
+		template<typename T>
+		HPropertyHandle<T> createHalfedgeProperty();
+
+		template<typename T>
+		FPropertyHandle<T> createFaceProperty();
+
+		template<typename T>
+		T& property(BasePropertyHandle<T> propertyHandle, Index index);
+
+
 
 	public:
 		virtual AssetType getType() const override { return Asset::AssetType::Mesh; };
 		static AssetType getClassType() { return AssetType::Mesh; };
-	public:
-		std::vector<uint32_t> m_Indicies;
-		std::vector<Primitive::Vertex> m_Vertecies;
-		std::vector<Primitive::VertexColor> m_VertexColors;
-		std::vector<Primitive::VertexTexture> m_VertexTextures;
 	private:
-		bool m_HasIndicies = false;
+		std::vector<Position> m_Positions;
+
+		using NormalIndex = size_t;
+		std::map<VertexIndex, NormalIndex> m_NormalMap;
+		std::vector<Normal> m_Normals;
+
+		using TextureCoordinateIndex = size_t;
+		std::map<VertexIndex, TextureCoordinateIndex> m_TextureCoordinateMap;
+		std::vector<TextureCoordinate> m_TextureCoordinates;
+
+		using ColorIndex = size_t;
+		std::map<VertexIndex, ColorIndex> m_ColorMap;
+		std::vector<Color> m_Colors;
+
+
+		struct PropertyContainer {
+			void* data; //base ptr to first element
+			size_t element; //byte size of the element
+			size_t size; //count of elements
+		};
+		std::vector<PropertyContainer> m_Properties;
 	};
 }

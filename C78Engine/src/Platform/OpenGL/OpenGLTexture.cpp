@@ -43,7 +43,7 @@ namespace C78E {
 	{ }
 
 	OpenGLTexture2D::OpenGLTexture2D(const Image& image) {
-		C78_CORE_ASSERT(image.isValid(), "Image must be valid!");
+		C78E_CORE_ASSERT(image.isValid(), "Image must be valid!");
 		m_Specification.width = image.getWidth();
 		m_Specification.height = image.getHeight();
 		m_Specification.format = image.getFormat();
@@ -72,7 +72,7 @@ namespace C78E {
 	}
 
 	void OpenGLTexture2D::setData(void* data, uint32_t size) {
-		C78_CORE_ASSERT(size == m_Specification.width * m_Specification.height * Image::imageFormatSize(m_Specification.format), "Data fit the Texture!");
+		C78E_CORE_ASSERT(size == m_Specification.width * m_Specification.height * Image::imageFormatSize(m_Specification.format), "Data fit the Texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Specification.width, m_Specification.height, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, data);
 		m_IsLoaded = true;
 	}
@@ -113,8 +113,8 @@ namespace C78E {
 	OpenGLCubeMap::OpenGLCubeMap(std::vector<Image>& images)
 		: m_IsLoaded(true) 
 	{
-		C78_CORE_ASSERT(images.size() == 6, "CubeMap data vector must have exactly 6 imgs!");
-		C78_CORE_ASSERT(images[0].getHeight() == images[0].getWidth(), "CubeMap Textures must be sqares!");
+		C78E_CORE_ASSERT(images.size() == 6, "CubeMap data vector must have exactly 6 imgs!");
+		C78E_CORE_ASSERT(images[0].getHeight() == images[0].getWidth(), "CubeMap Textures must be sqares!");
 		m_Specification.size = images[0].getWidth();
 		m_Specification.format = images[0].getFormat();
 
@@ -129,15 +129,15 @@ namespace C78E {
 
 		uint32_t side = 0;
 		for (auto& image : images) {
-			C78_CORE_ASSERT(image.getWidth() == m_Specification.size && image.getHeight() == m_Specification.size && image.getFormat() == m_Specification.format, "CubeMap Textures must be all the same size!");
+			C78E_CORE_ASSERT(image.getWidth() == m_Specification.size && image.getHeight() == m_Specification.size && image.getFormat() == m_Specification.format, "CubeMap Textures must be all the same size!");
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + side++, 0, toGLInternalFormat(m_Specification.format), m_Specification.size, m_Specification.size, 0, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, image.getData());
 		}
 	}
 
 	OpenGLCubeMap::OpenGLCubeMap(Ref<Image> crossCubeMap)
 		: m_IsLoaded(true) {
-		C78_CORE_ASSERT(crossCubeMap, "CubeMap data cannot be null!");
-		C78_CORE_ASSERT((uint32_t)crossCubeMap->getFormat() < 5, "Img Format not supported!");
+		C78E_CORE_ASSERT(crossCubeMap, "CubeMap data cannot be null!");
+		C78E_CORE_ASSERT((uint32_t)crossCubeMap->getFormat() < 5, "Img Format not supported!");
 		m_Specification.size = std::min<uint32_t>(crossCubeMap->getWidth() / 4, crossCubeMap->getHeight() / 3);
 		m_Specification.format = crossCubeMap->getFormat();
 
@@ -173,7 +173,7 @@ namespace C78E {
 	}
 	
 	void OpenGLCubeMap::setData(void* data, uint32_t size) {
-		C78_CORE_ASSERT(m_Specification.size * m_Specification.size * Image::imageFormatSize(m_Specification.format) * 12 != size, "Data must fit CubeMap!"); //Maybe Broky
+		C78E_CORE_ASSERT(m_Specification.size * m_Specification.size * Image::imageFormatSize(m_Specification.format) * 12 != size, "Data must fit CubeMap!"); //Maybe Broky
 		uint32_t dim = m_Specification.size;
 		Image crossCubeMap(dim, dim, m_Specification.format, data);
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0, 0, toGLInternalFormat(m_Specification.format), dim, dim, 0, toGLDataFormat(m_Specification.format), GL_UNSIGNED_BYTE, crossCubeMap.croppedCopy(2 * dim, 1 * dim, dim, dim)->getData());

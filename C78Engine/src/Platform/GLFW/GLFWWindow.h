@@ -1,5 +1,5 @@
 #pragma once
-#ifdef C78_PLATFORM_GLFW
+#ifdef C78E_PLATFORM_GLFW
 #include <C78E/Renderer/API/GraphicsContext.h>
 
 namespace C78E {
@@ -28,6 +28,9 @@ namespace C78E {
 
 		virtual MouseMode getMouseMode() const override;
 		virtual void setMouseMode(MouseMode mouseMode) override;
+
+		virtual std::string getClipBoardString() const override;
+		virtual void setClipboardString(const std::string& str) override;
 	protected:
 		virtual void init(const WindowProps& props);
 		virtual void shutdown();
@@ -40,4 +43,4 @@ namespace C78E {
 
 }
 
-#endif // C78_PLATFORM_GLFW
+#endif // C78E_PLATFORM_GLFW

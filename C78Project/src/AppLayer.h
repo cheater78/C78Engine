@@ -1,23 +1,25 @@
 #pragma once
 #include <C78E.h>
-#include <C78Elibs.h>
 
 class Applayer : public C78E::Layer {
 public:
-    Applayer(C78E::Window& window) : Layer("Applayer"), m_Window(window)
-    { }
+    Applayer(C78E::Window& window)
+        : Layer("Applayer"), m_Window(window) {
+        
+    }
 
     void onAttach() { }
 
     void onDetach() { }
 
-    void onUpdate(C78E::Timestep delta) override {
-    }
+    void onUpdate(C78E::Timestep delta) override { }
 
-    void onEvent(C78E::Event& e) override {
+    bool onEvent(C78E::Event& e) override {
         C78E::EventDispatcher dispatcher(e);
-        dispatcher.dispatch<C78E::KeyPressedEvent>(BIND_CALLBACK_FN(Applayer::onKeyPressed));
-        dispatcher.dispatch<C78E::WindowResizeEvent>(BIND_CALLBACK_FN(Applayer::onWindowResize));
+        if(dispatcher.dispatch<C78E::KeyPressedEvent>(BIND_CALLBACK_FN(Applayer::onKeyPressed))) return true;
+        if(dispatcher.dispatch<C78E::WindowResizeEvent>(BIND_CALLBACK_FN(Applayer::onWindowResize))) return true;
+
+        return false;
     }
 
     bool onKeyPressed(C78E::KeyPressedEvent e) {

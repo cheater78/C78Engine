@@ -1,6 +1,5 @@
 #pragma once
 #include <C78E.h>
-#include <C78Elibs.h>
 
 #define C78EDITOR_CONFIG_FILE "config/editor.yml"
 
@@ -11,12 +10,13 @@ namespace C78Editor {
 		static inline glm::vec<2, uint32_t> s_DefaultWindowSize = { 1920, 1080 };
 		static inline glm::vec<2, uint32_t> s_LastWindowSize = { 1920, 1080 };
 	private:
-		static inline const C78E::FilePath configFile = C78EDITOR_CONFIG_FILE;
+		static inline const C78E::FilePath configFile = C78E::FileSystem::C78RootDirectory / C78EDITOR_CONFIG_FILE;
 
 	public:
 		static void load() {
 			if (!std::filesystem::exists(configFile)) {
-				C78_EDITOR_INFO("Creating WindowConfig! (First time setup)");
+				C78E_INFO("Creating WindowConfig! (First time setup)");
+				std::filesystem::create_directories(configFile.parent_path());
 				save();
 			}
 
@@ -24,7 +24,7 @@ namespace C78Editor {
 			try {
 				data = YAML::LoadFile(configFile.string());
 			} catch (YAML::ParserException e) {
-				C78_EDITOR_ERROR("WindowConfig::load: Loading WindowConfig file: {} failed, due to: \n  {}", configFile, e.what());
+				C78E_ERROR("WindowConfig::load: Loading WindowConfig file: {} failed, due to: \n  {}", configFile, e.what());
 				save(); return; // Using Defaults
 			}
 
@@ -33,7 +33,7 @@ namespace C78Editor {
 			s_DefaultWindowSize = node["DefaultWindowSize"].as<glm::vec<2, uint32_t>>();
 			s_LastWindowSize = node["LastWindowSize"].as<glm::vec<2, uint32_t>>();
 
-			C78_EDITOR_INFO("WindowConfig loaded!");
+			C78E_INFO("WindowConfig loaded!");
 		}
 
 		static void save() {
@@ -50,9 +50,9 @@ namespace C78Editor {
 				out << YAML::EndMap; // Root
 			}
 
-			std::ofstream fout(configFile);
+			std::ofstream fout(std::filesystem::absolute(configFile));
 			fout << out.c_str();
-			C78_EDITOR_INFO("WindowConfig saved!");
+			C78E_INFO("WindowConfig saved!");
 		}
 
 	};

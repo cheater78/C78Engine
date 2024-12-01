@@ -7,7 +7,7 @@ namespace C78E {
 	using AssetRegistryEntry = std::pair<AssetHandle, Asset::AssetMeta>;
 	using AssetRegistry = std::map<AssetHandle, Asset::AssetMeta>;
 
-	class AssetManager { // abstract AssetManager
+	class AssetManager {
 	public:
 		AssetManager() = default;
 		AssetManager(const AssetManager& other) = delete;
@@ -18,13 +18,9 @@ namespace C78E {
 		template <typename T>
 		Ref<T> getAssetAs(AssetHandle assetHandle) {
 			static_assert(std::is_base_of<Asset, T>::value, "AssetManager::getAssetAs: T must be derived of Asset!");
-			C78_CORE_ASSERT(assetHandle, "AssetManager::getAssetAs: AssetHandle is null!");
+			C78E_CORE_ASSERT(assetHandle, "AssetManager::getAssetAs: AssetHandle is null!");
 			Ref<Asset> asset = getAsset(assetHandle);
-			if (T::getClassType() != asset->getType()) {
-				C78_CORE_ERROR("AssetManager::getAssetAs: Requested Type does not match the requested Asset!");
-				C78_CORE_ERROR("  no cast from {} to {}", Asset::assetTypeToString(asset->getType()), Asset::assetTypeToString(T::getClassType()));
-				C78_CORE_ASSERT(false);
-			}
+			C78E_CORE_ASSERT(T::getClassType() == asset->getType(), "AssetManager::getAssetAs: Requested Type does not match the requested Asset!\n  no cast from {} to {}", Asset::assetTypeToString(asset->getType()), Asset::assetTypeToString(T::getClassType()));
 			return std::static_pointer_cast<T>(asset);
 		}
 
@@ -35,14 +31,14 @@ namespace C78E {
 	
 	class EditorAssetManager : public AssetManager {
 	public:
-		EditorAssetManager();
+		EditorAssetManager(const FilePath& assetDirectory);
 		EditorAssetManager(const EditorAssetManager& other) = delete;
 		~EditorAssetManager() = default;
 
 		/*
 		* Retrieves loaded Assets or otherwise loads them
 		* returns a reference of the Asset
-		*/ //TODO: AsyncAssetLoading -> LoadingAssetHandle(AssetHandle real, AssetHandle fallback, bool isLoaded)
+		*/ //TODO: AsyncAssetLoading -> LoadingAssetHandle(AssetHandle real, AssetHandle fallback, bool isLoaded) OR return default asset and load async
 		virtual Ref<Asset> getAsset(AssetHandle handle) override;
 
 		/*
@@ -91,7 +87,7 @@ namespace C78E {
 		* Retrieves the Source File of an Asset given its Assethandle
 		* returns the Source File Path
 		*/
-		const FilePath& getFile(AssetHandle handle);
+		FilePath getFile(AssetHandle handle);
 
 		/*
 		* Provides access to the AssetRegistry
@@ -102,9 +98,9 @@ namespace C78E {
 		/*
 		* Serializes and Exports the AssetRegistry to a yml file
 		*/
-		void exportAssetRegistry(const FilePath& assetRegistryPath);
+		bool exportAssetRegistry(const FilePath& assetRegistryPath);
 		/*
-		* DeSerializes and Imports the AssetRegistry from a yml file
+		* Deserializes and Imports the AssetRegistry from a yml file
 		*/
 		bool importAssetRegistry(const FilePath& assetRegistryPath);
 		
@@ -126,7 +122,7 @@ namespace C78E {
 		AssetRegistry m_AssetRegistry;
 		AssetMap m_LoadedAssets;
 		AssetMap m_DefaultAssets;
-		
+		FilePath m_AssetDirectory;
 	};
 
 	class RuntimeAssetManager : public AssetManager {

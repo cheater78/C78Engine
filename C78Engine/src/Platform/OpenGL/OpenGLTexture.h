@@ -13,7 +13,7 @@ namespace C78E {
 		case Image::ImageFormat::RGBA8:		return GL_RGBA;
 		case Image::ImageFormat::RGBA32F:	return GL_RGBA;
 		case Image::ImageFormat::D24S8:		return GL_DEPTH_STENCIL_ATTACHMENT;
-		default: C78_CORE_ASSERT(false);	return 0;
+		default: C78E_CORE_ASSERT(false);	return 0;
 		}
 	}
 
@@ -26,7 +26,7 @@ namespace C78E {
 		case Image::ImageFormat::RGBA8:		return GL_RGBA8;
 		case Image::ImageFormat::RGBA32F:	return GL_RGBA32F;
 		case Image::ImageFormat::D24S8:		return GL_DEPTH24_STENCIL8;
-		default: C78_CORE_ASSERT(false);	return 0;
+		default: C78E_CORE_ASSERT(false);	return 0;
 		}
 	}
 

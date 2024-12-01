@@ -14,7 +14,6 @@
 #include <C78E/Renderer/Assets/Asset/Asset.h>
 #include <C78E/Renderer/Assets/Material/Material.h>
 #include <C78E/Renderer/Assets/Mesh/Mesh.h>
-#include <C78E/Renderer/Assets/Model/Model.h>
 #include <C78E/Renderer/Assets/Scene/Entity/Component/Components.h>
 #include <C78E/Renderer/Assets/Scene/Entity/Entity.h>
 #include <C78E/Renderer/Assets/Scene/Scene.h>
@@ -43,8 +42,6 @@ namespace C78E {
 		struct TargetConfig {
 			uint32_t width = 1;
 			uint32_t height = 1;
-			
-
 		};
 
 	public:

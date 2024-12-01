@@ -1,8 +1,6 @@
 #pragma once
 
 #include <C78E.h>
-#include <C78Egui.h>
-#include <C78Elibs.h>
 
 #define C78EDITOR_PROJECT_HISTORY_FILE "config/LatestProjects.yml"
 
@@ -19,7 +17,7 @@ namespace C78Editor {
 	public:
 		static void load() {
 			if (!std::filesystem::exists(configFile)) {
-				C78_EDITOR_INFO("Creating ProjectHistory! (First time setup)");
+				C78E_INFO("Creating ProjectHistory! (First time setup)");
 				save();
 			}
 
@@ -28,7 +26,7 @@ namespace C78Editor {
 				data = YAML::LoadFile(configFile.string());
 			}
 			catch (YAML::ParserException e) {
-				C78_EDITOR_ERROR("ProjectHistory::load: Loading ProjectHistory file: {} failed, due to: \n  {}", configFile, e.what());
+				C78E_ERROR("ProjectHistory::load: Loading ProjectHistory file: {} failed, due to: \n  {}", configFile, e.what());
 				save(); return; // Using Defaults
 			}
 
@@ -37,11 +35,11 @@ namespace C78Editor {
 			if(!node.IsSequence()) { save(); return; }
 			std::set<C78E::FilePath> projectFiles = {};
 			for (auto pathNode : node) {
-				if(C78E::FileSystem::exists(pathNode.as<std::string>()))
+				if(C78E::FileSystem::exists(pathNode.as<std::string>()) && C78E::FileSystem::extensionToEntryType(pathNode.as<std::string>()) == C78E::FileSystem::EntryType::Project)
 					projectFiles.insert(pathNode.as<std::string>());
 			}
 			projects = projectFiles;
-			C78_EDITOR_INFO("ProjectHistory loaded!");
+			C78E_INFO("ProjectHistory loaded!");
 		}
 
 		static void save() {
@@ -52,7 +50,8 @@ namespace C78Editor {
 				{
 					out << YAML::BeginSeq;// ProjectHistory
 					for (auto& path : projects) {
-						out << path.string();
+						if(C78E::FileSystem::exists(path) && C78E::FileSystem::extensionToEntryType(path) == C78E::FileSystem::EntryType::Project)
+							out << path.string();
 					}
 					out << YAML::EndSeq; // ProjectHistory
 				}
@@ -61,7 +60,7 @@ namespace C78Editor {
 
 			std::ofstream fout(configFile);
 			fout << out.c_str();
-			C78_EDITOR_INFO("ProjectHistory saved!");
+			C78E_INFO("ProjectHistory saved!");
 		}
 
 

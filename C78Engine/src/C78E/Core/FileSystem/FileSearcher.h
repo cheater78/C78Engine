@@ -28,7 +28,6 @@ namespace C78E {
 		static bool match(FilePath file, InternalSearchDirective searchDirective, bool matchCase);
 
 		static bool validateSearchDirective(const std::string& searchDirective);
-	
 	};
 
 }

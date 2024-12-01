@@ -1,15 +1,16 @@
 #pragma once
-
-#include "C78E/Core/UUID.h"
-#include "C78E/Core/Timestep.h"
-#include "C78E/Renderer/Camera/EditorCamera.h"
-
+#include <C78E/Core/UUID.h>
+#include <C78E/Core/Timestep.h>
+#include <C78E/Renderer/Camera/EditorCamera.h>
 #include <C78E/Renderer/Assets/Asset/Asset.h>
+
+#include <entt/entt.hpp>
 
 namespace C78E {
 
 	class Entity;
 	using SceneHandle = AssetHandle;
+
 	class Scene : public Asset {
 	public:
 		static Ref<Scene> copy(Ref<Scene> other);

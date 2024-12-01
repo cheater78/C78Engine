@@ -1,5 +1,5 @@
 #pragma once
-#ifdef C78_PLATFORM_LINUX
+#ifdef C78E_PLATFORM_LINUX
 #include <Platform/GLFW/GLFWWindow.h>
 #include <C78E/Renderer/API/GraphicsContext.h>
 
@@ -13,4 +13,4 @@ namespace C78E {
 
 }
 
-#endif // C78_PLATFORM_LINUX
+#endif // C78E_PLATFORM_LINUX

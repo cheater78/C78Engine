@@ -63,7 +63,7 @@ namespace C78E {
 				case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
 				case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
 			}
-			C78_CORE_ASSERT(false, "FBTextureFormatToGLFormat: no such FramebufferTextureFormat!");
+			C78E_CORE_ASSERT(false, "FBTextureFormatToGLFormat: no such FramebufferTextureFormat!");
 			return 0;
 		}
 
@@ -139,7 +139,7 @@ namespace C78E {
 		}
 
 		if (m_ColorAttachments.size() > 1) {
-			C78_CORE_ASSERT(m_ColorAttachments.size() <= 4);
+			C78E_CORE_ASSERT(m_ColorAttachments.size() <= 4);
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 			glDrawBuffers(static_cast<int>(m_ColorAttachments.size()), buffers);
 		} else if (m_ColorAttachments.empty()) {
@@ -147,7 +147,7 @@ namespace C78E {
 			glDrawBuffer(GL_NONE);
 		}
 
-		C78_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+		C78E_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
@@ -162,7 +162,7 @@ namespace C78E {
 
 	void OpenGLFramebuffer::resize(uint32_t width, uint32_t height) {
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize) {
-			C78_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
+			C78E_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
 			return;
 		}
 		m_Specification.width = width;
@@ -172,7 +172,7 @@ namespace C78E {
 	}
 
 	uint32_t OpenGLFramebuffer::readPixel(uint32_t attachmentIndex, int x, int y) {
-		C78_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+		C78E_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		uint32_t pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
@@ -180,15 +180,15 @@ namespace C78E {
 	}
 
 	void OpenGLFramebuffer::clearAttachment(uint32_t attachmentIndex, int value) {
-		C78_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
-		C78_CORE_ASSERT(false, "Implement Texture clear!");
+		C78E_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+		C78E_CORE_ASSERT(false, "Implement Texture clear!");
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
-		C78_CORE_ERROR("OpenGLFramebuffer::clearAttachment: line commented out, fix me!");
+		C78E_CORE_ERROR("OpenGLFramebuffer::clearAttachment: line commented out, fix me!");
 		//glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::FBTextureFormatToGLFormat(spec.TextureFormat), GL_INT, &value);
 	}
 
 	Ref<Texture2D> OpenGLFramebuffer::getColorAttachment(uint32_t id) {
-		C78_CORE_ASSERT(id < m_ColorAttachments.size(), "ColorAttachmentID is out of bounds!");
+		C78E_CORE_ASSERT(id < m_ColorAttachments.size(), "ColorAttachmentID is out of bounds!");
 		return m_ColorAttachments.at(id);
 	}
 

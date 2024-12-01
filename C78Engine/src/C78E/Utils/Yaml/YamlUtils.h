@@ -21,6 +21,7 @@ namespace YAML {
 		}
 
 		static bool decode(const Node& node, C78E::UUID& id) {
+			if(!C78E::UUID::decodesToUUID(node.as<std::string>())) return false;
 			id = C78E::UUID::decodeFromString(node.as<std::string>());
 			return true;
 		}

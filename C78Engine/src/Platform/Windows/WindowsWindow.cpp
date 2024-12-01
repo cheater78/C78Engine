@@ -1,5 +1,5 @@
 #include "C78EPCH.h"
-#ifdef C78_PLATFORM_WINDOWS
+#ifdef C78E_PLATFORM_WINDOWS
 #include "WindowsWindow.h"
 
 namespace C78E {
@@ -9,4 +9,4 @@ namespace C78E {
 	WindowsWindow::~WindowsWindow() { }
 }
 
-#endif // C78_PLATFORM_WINDOWS
+#endif // C78E_PLATFORM_WINDOWS

@@ -1,6 +1,6 @@
 Project:
   Name: C78Project
   StartScene: UUID::Invalid
-  AssetDirectory: C:\dev\c-cpp\C78Engine\C78Project\assets
-  AssetRegistryPath: C:\dev\c-cpp\C78Engine\C78Project\assets\AssetRegistry.ace
-  ScriptModulePath: ./scripts
+  AssetDirectory: assets
+  AssetRegistry: AssetRegistry.ace
+  ScriptModule: Scripts.bce

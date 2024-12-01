@@ -1,11 +1,5 @@
 #include "C78EPCH.h"
-#include "Platform/OpenGL/OpenGLShader.h"
-#include "C78E/Core/Timer.h"
-
-#include <fstream>
-#include <glad.h>
-
-#include <glm/gtc/type_ptr.hpp>
+#include "OpenGLShader.h"
 
 #include <shaderc/shaderc.hpp>
 #include <spirv_cross/spirv_cross.hpp>
@@ -23,7 +17,7 @@ namespace C78E {
 			if (type == "compute")
 				return GL_COMPUTE_SHADER;
 
-			C78_CORE_ASSERT(false, "Unknown shader type!");
+			C78E_CORE_ASSERT(false, "Unknown shader type!");
 			return 0;
 		}
 
@@ -33,7 +27,7 @@ namespace C78E {
 				case GL_FRAGMENT_SHADER: return shaderc_glsl_fragment_shader;
 				case GL_COMPUTE_SHADER:	 return shaderc_glsl_compute_shader;
 			}
-			C78_CORE_ASSERT(false);
+			C78E_CORE_ASSERT(false);
 			return (shaderc_shader_kind)0;
 		}
 
@@ -43,18 +37,17 @@ namespace C78E {
 				case GL_FRAGMENT_SHADER: return "GL_FRAGMENT_SHADER";
 				case GL_COMPUTE_SHADER: return "GL_COMPUTE_SHADER";
 			}
-			C78_CORE_ASSERT(false);
+			C78E_CORE_ASSERT(false);
 			return nullptr;
 		}
 
-		static const char* GetCacheDirectory() {
+		static FilePath GetCacheDirectory() {
 			// TODO: make sure the assets directory is valid
-			return "assets/cache/shader/opengl";
+			return (FileSystem::C78RootDirectory / "C78Editor/assets/cache/shader/opengl").string().c_str();
 		}
 
-		static void CreateCacheDirectoryIfNeeded()
-		{
-			std::string cacheDirectory = GetCacheDirectory();
+		static void CreateCacheDirectoryIfNeeded() {
+			FilePath cacheDirectory = GetCacheDirectory();
 			if (!std::filesystem::exists(cacheDirectory))
 				std::filesystem::create_directories(cacheDirectory);
 		}
@@ -67,7 +60,7 @@ namespace C78E {
 				case GL_FRAGMENT_SHADER:  return ".cached_opengl.frag";
 				case GL_COMPUTE_SHADER:   return ".cached_opengl.comp";
 			}
-			C78_CORE_ASSERT(false);
+			C78E_CORE_ASSERT(false);
 			return "";
 		}
 
@@ -79,7 +72,7 @@ namespace C78E {
 				case GL_FRAGMENT_SHADER:  return ".cached_vulkan.frag";
 				case GL_COMPUTE_SHADER:	  return ".cached_vulkan.comp";
 			}
-			C78_CORE_ASSERT(false);
+			C78E_CORE_ASSERT(false);
 			return "";
 		}
 
@@ -99,7 +92,7 @@ namespace C78E {
 		CompileOrGetOpenGLBinaries();
 		createProgram();
 
-		C78_CORE_WARN("Shader creation took {0} ms, from File: {1}", timer.elapsedMillis(), filepath);
+		C78E_CORE_WARN("Shader creation took {0} ms, from File: {1}", timer.elapsedMillis(), filepath);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
@@ -115,7 +108,7 @@ namespace C78E {
 		CompileOrGetOpenGLBinaries();
 		createProgram();
 
-		C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
+		C78E_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& computeSrc)
@@ -130,7 +123,7 @@ namespace C78E {
 		CompileOrGetOpenGLBinaries();
 		createProgram();
 
-		C78_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
+		C78E_CORE_WARN("Shader creation took {0} ms", timer.elapsedMillis());
 	}
 
 	OpenGLShader::~OpenGLShader() {
@@ -151,11 +144,11 @@ namespace C78E {
 			}
 			else
 			{
-				C78_CORE_ERROR("Could not read from ShaderSourceFile '{0}'", filepath);
+				C78E_CORE_ERROR("Could not read from ShaderSourceFile '{0}'", filepath);
 			}
 		}
 		else {
-			C78_CORE_ERROR("Could not open ShaderSourceFile '{0}'", filepath);
+			C78E_CORE_ERROR("Could not open ShaderSourceFile '{0}'", filepath);
 		}
 
 		return result;
@@ -170,13 +163,13 @@ namespace C78E {
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\r\n", pos); //End of shader type declaration line
-			C78_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+			C78E_CORE_ASSERT(eol != std::string::npos, "Syntax error");
 			size_t begin = pos + typeTokenLength + 1; //Start of shader type name (after "#type " keyword)
 			std::string type = source.substr(begin, eol - begin);
-			C78_CORE_ASSERT(Utils::ShaderTypeFromString(type), "Invalid shader type specified");
+			C78E_CORE_ASSERT(Utils::ShaderTypeFromString(type), "Invalid shader type specified");
 
 			size_t nextLinePos = source.find_first_not_of("\r\n", eol); //Start of shader code after shader type declaration line
-			C78_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+			C78E_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
 			pos = source.find(typeToken, nextLinePos); //Start of next shader type declaration line
 
 			shaderSources[Utils::ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
@@ -196,7 +189,7 @@ namespace C78E {
 		if (optimize)
 			options.SetOptimizationLevel(shaderc_optimization_level_performance);
 
-		std::filesystem::path cacheDirectory = Utils::GetCacheDirectory();
+		FilePath cacheDirectory = Utils::GetCacheDirectory();
 
 		auto& shaderData = m_VulkanSPIRV;
 		shaderData.clear();
@@ -221,8 +214,8 @@ namespace C78E {
 				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.string().c_str(), options);
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
-					C78_CORE_ERROR(module.GetErrorMessage());
-					C78_CORE_ASSERT(false);
+					C78E_CORE_ERROR(module.GetErrorMessage());
+					C78E_CORE_ASSERT(false);
 				}
 
 				shaderData[stage] = std::vector<uint32_t>(module.cbegin(), module.cend());
@@ -253,7 +246,7 @@ namespace C78E {
 		if (optimize)
 			options.SetOptimizationLevel(shaderc_optimization_level_performance);
 
-		std::filesystem::path cacheDirectory = Utils::GetCacheDirectory();
+		FilePath cacheDirectory = Utils::GetCacheDirectory();
 
 		shaderData.clear();
 		m_OpenGLSourceCode.clear();
@@ -282,8 +275,8 @@ namespace C78E {
 				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.string().c_str(), options);
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
-					C78_CORE_ERROR(module.GetErrorMessage());
-					C78_CORE_ASSERT(false);
+					C78E_CORE_ERROR(module.GetErrorMessage());
+					C78E_CORE_ASSERT(false);
 				}
 
 				shaderData[stage] = std::vector<uint32_t>(module.cbegin(), module.cend());
@@ -323,7 +316,7 @@ namespace C78E {
 			glGetProgramInfoLog(program, maxLength, &maxLength, infoLog.data());
 			if (infoLog.empty())
 				infoLog.push_back('!');
-			C78_CORE_ERROR("OpenGLShader::createProgram: Shader linking failed! ({0}):\n GLError: {1}", m_FilePath, infoLog.data());
+			C78E_CORE_ERROR("OpenGLShader::createProgram: Shader linking failed! ({0}):\n GLError: {1}", m_FilePath, infoLog.data());
 			
 
 			glDeleteProgram(program);
@@ -346,11 +339,11 @@ namespace C78E {
 		spirv_cross::Compiler compiler(shaderData);
 		spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
-		C78_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", Utils::GLShaderStageToString(stage), m_FilePath);
-		C78_CORE_TRACE("    {0} uniform buffers", resources.uniform_buffers.size());
-		C78_CORE_TRACE("    {0} resources", resources.sampled_images.size());
+		C78E_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", Utils::GLShaderStageToString(stage), m_FilePath);
+		C78E_CORE_TRACE("    {0} uniform buffers", resources.uniform_buffers.size());
+		C78E_CORE_TRACE("    {0} resources", resources.sampled_images.size());
 
-		C78_CORE_TRACE("Uniform buffers:");
+		C78E_CORE_TRACE("Uniform buffers:");
 		for (const auto& resource : resources.uniform_buffers)
 		{
 			const auto& bufferType = compiler.get_type(resource.base_type_id);
@@ -358,10 +351,10 @@ namespace C78E {
 			uint32_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
 			int memberCount = static_cast<int>(bufferType.member_types.size());
 
-			C78_CORE_TRACE("  {0}", resource.name);
-			C78_CORE_TRACE("    Size = {0}", bufferSize);
-			C78_CORE_TRACE("    Binding = {0}", binding);
-			C78_CORE_TRACE("    Members = {0}", memberCount);
+			C78E_CORE_TRACE("  {0}", resource.name);
+			C78E_CORE_TRACE("    Size = {0}", bufferSize);
+			C78E_CORE_TRACE("    Binding = {0}", binding);
+			C78E_CORE_TRACE("    Members = {0}", memberCount);
 		}
 	}
 

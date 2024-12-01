@@ -1,4 +1,4 @@
-#include <C78ePCH.h>
+#include <C78EPCH.h>
 #include "Image.h"
 
 namespace C78E {
@@ -33,13 +33,13 @@ namespace C78E {
 		: m_Width(width), m_Height(height), m_Format(format) {
 		size_t imagesize = getByteSize();
 		m_Data = Buffer(imagesize);
-		memcpy_s(m_Data.data, imagesize, data, imagesize);
+		std::memcpy(m_Data.data, data, imagesize);
 	}
 
 	Image::Image(const Image& copy)
 		:m_Width(copy.m_Width), m_Height(copy.m_Height), m_Format(copy.m_Format) {
 		m_Data.copy(copy.m_Data);
-		C78_CORE_ASSERT(m_Data, "Failed to copy Image!");
+		C78E_CORE_ASSERT(m_Data, "Failed to copy Image!");
 	}
 
 	Image::~Image() { }
@@ -47,8 +47,8 @@ namespace C78E {
 
 	size_t Image::getByteSize() const {
 		if ((uint32_t)m_Format <= 4) return static_cast<size_t>(m_Width * m_Height * (uint32_t)m_Format);
-		if (m_Format == ImageFormat::RGBA32F) return static_cast<size_t>(m_Width * m_Height * 4 * 4); //RGBA32F -> 4ch á 4Byte
-		C78_CORE_ASSERT("ImageFormat currently not supported!");
+		if (m_Format == ImageFormat::RGBA32F) return static_cast<size_t>(m_Width * m_Height * 4 * 4); //RGBA32F -> 4ch ï¿½ 4Byte
+		C78E_CORE_ASSERT("ImageFormat currently not supported!");
 		return 0;
 	}
 
@@ -57,9 +57,9 @@ namespace C78E {
 	* 
 	* 
 	void Image::expandLeft(Image& image) {
-		if (!isValid() || !image.isValid()) C78_CORE_ASSERT("Image is not valid!");
-		if (getHeight() != image.getHeight()) C78_CORE_ASSERT("Images have different Dimensions!");
-		if (getFormat() != image.getFormat()) C78_CORE_ASSERT("Images differ in Channels!")
+		if (!isValid() || !image.isValid()) C78E_CORE_ASSERT("Image is not valid!");
+		if (getHeight() != image.getHeight()) C78E_CORE_ASSERT("Images have different Dimensions!");
+		if (getFormat() != image.getFormat()) C78E_CORE_ASSERT("Images differ in Channels!")
 
 		size_t compositeSize = getByteSize() + image.getByteSize();
 		uint32_t compositeWidth = getWidth() + image.getWidth();
@@ -76,9 +76,9 @@ namespace C78E {
 	}
 
 	void Image::expandRight(Image& image) {
-		if (!isValid() || !image.isValid()) C78_CORE_ASSERT("Image is not valid!");
-		if (getHeight() != image.getHeight()) C78_CORE_ASSERT("Images have different Dimensions!");
-		if (getFormat() != image.getFormat()) C78_CORE_ASSERT("Images differ in Channels!")
+		if (!isValid() || !image.isValid()) C78E_CORE_ASSERT("Image is not valid!");
+		if (getHeight() != image.getHeight()) C78E_CORE_ASSERT("Images have different Dimensions!");
+		if (getFormat() != image.getFormat()) C78E_CORE_ASSERT("Images differ in Channels!")
 
 		size_t compositeSize = getByteSize() + image.getByteSize();
 		uint32_t compositeWidth = getWidth() + image.getWidth();
@@ -95,9 +95,9 @@ namespace C78E {
 	}
 
 	void Image::expandTop(Image& image) {
-		if (!isValid() || !image.isValid()) C78_CORE_ASSERT("Image is not valid!");
-		if (getWidth() != image.getWidth()) C78_CORE_ASSERT("Images have different Dimensions!");
-		if (getFormat() != image.getFormat()) C78_CORE_ASSERT("Images differ in Channels!")
+		if (!isValid() || !image.isValid()) C78E_CORE_ASSERT("Image is not valid!");
+		if (getWidth() != image.getWidth()) C78E_CORE_ASSERT("Images have different Dimensions!");
+		if (getFormat() != image.getFormat()) C78E_CORE_ASSERT("Images differ in Channels!")
 
 		size_t compositeSize = getByteSize() + image.getByteSize();
 		void* composite = malloc(compositeSize);
@@ -111,9 +111,9 @@ namespace C78E {
 	}
 
 	void Image::expandBot(Image& image) {
-		if (!isValid() || !image.isValid()) C78_CORE_ASSERT("Image is not valid!");
-		if (getWidth() != image.getWidth()) C78_CORE_ASSERT("Images have different Dimensions!");
-		if (getFormat() != image.getFormat()) C78_CORE_ASSERT("Images differ in Channels!")
+		if (!isValid() || !image.isValid()) C78E_CORE_ASSERT("Image is not valid!");
+		if (getWidth() != image.getWidth()) C78E_CORE_ASSERT("Images have different Dimensions!");
+		if (getFormat() != image.getFormat()) C78E_CORE_ASSERT("Images differ in Channels!")
 
 			size_t compositeSize = getByteSize() + image.getByteSize();
 		void* composite = malloc(compositeSize);
@@ -128,15 +128,15 @@ namespace C78E {
 	*/
 	Ref<Image> Image::croppedCopy(uint32_t ox, uint32_t oy, uint32_t dx, uint32_t dy)
 	{
-		C78_CORE_ASSERT(ox + dx <= m_Width, "Cropped Image must be in bounds!");
-		C78_CORE_ASSERT(oy + dy <= m_Height, "Cropped Image must be in bounds!");
+		C78E_CORE_ASSERT(ox + dx <= m_Width, "Cropped Image must be in bounds!");
+		C78E_CORE_ASSERT(oy + dy <= m_Height, "Cropped Image must be in bounds!");
 
 		uint32_t pxSize = ((uint32_t)m_Format < 5) ? (uint32_t)m_Format : 4;
 		size_t imagesize = static_cast<size_t>(dx * dy * pxSize);
 		void* data = malloc(imagesize);
 
 		for (uint32_t y = 0; y < dy; y++) {
-			memcpy_s((unsigned char*)data + (y * dx * pxSize), dx * pxSize, (unsigned char*)m_Data.data + (ox * pxSize) + ((oy + y) * m_Width * pxSize), dx * pxSize);
+			std::memcpy((unsigned char*)data + (y * dx * pxSize), (unsigned char*)m_Data.data + (ox * pxSize) + ((oy + y) * m_Width * pxSize), dx * pxSize);
 		}
 
 		return createRef<Image>(dx, dy, m_Format, data);
@@ -144,8 +144,8 @@ namespace C78E {
 
 	Ref<Image> Image::croppedCopy(float ox, float oy, float dx, float dy)
 	{
-		C78_CORE_ASSERT(ox + dx <= 1.f, "Cropped Image must be in bounds!");
-		C78_CORE_ASSERT(oy + dy <= 1.f, "Cropped Image must be in bounds!");
+		C78E_CORE_ASSERT(ox + dx <= 1.f, "Cropped Image must be in bounds!");
+		C78E_CORE_ASSERT(oy + dy <= 1.f, "Cropped Image must be in bounds!");
 
 		uint32_t originX = static_cast<uint32_t>(m_Width * ox);
 		uint32_t originY = static_cast<uint32_t>(m_Height * oy);

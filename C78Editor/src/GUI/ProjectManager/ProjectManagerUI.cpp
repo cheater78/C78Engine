@@ -29,7 +29,7 @@ namespace C78Editor::GUI {
 			
 			drawProjectInfo();
 
-			if(m_PCCB)
+			if(m_ProjectCreateInProgress)
 				drawCreateProject();
 
 			if (!projectManager->hasActiveProject())
@@ -49,7 +49,7 @@ namespace C78Editor::GUI {
 				startCreateProcess();
 			}
 			if (ImGui::Button("Open Project")) {
-				C78E::FilePath path = C78E::FileDialogs::openFile("C78Project (*.pce)\0*.pce\0");
+				C78E::FilePath path = C78E::FileDialogs::openFile({C78E::FileSystem::EntryType::Project}, C78E::FileSystem::C78RootDirectory, "", "C78E Open Project");
 				if (!path.empty()) {
 					projectManager->openProject(path);
 					ProjectHistory::projects.insert(path);
@@ -71,7 +71,7 @@ namespace C78Editor::GUI {
 			ImGui::End();
 		}
 		else {
-			C78_ERROR("ProjectManagerUI::drawNoProject: Called without m_ProjectManager!");
+			C78E_ERROR("ProjectManagerUI::drawNoProject: Called without m_ProjectManager!");
 			return;
 		}
 		
@@ -89,47 +89,30 @@ namespace C78Editor::GUI {
 				return;
 			}
 
+			C78E::GUI::drawLabeledTextInput<C78E_PROJECT_NAME_MAX_LENGTH>("ProjectName:", m_ProjectCreateConfig.name);
+			C78E::GUI::drawLabeledFileInput<PATH_MAX>("ProjectDirectory", m_ProjectCreateDirectory, false, {C78E::FileSystem::EntryType::Directory});
+			C78E::GUI::drawLabeledFileInput<PATH_MAX>("AssetDirectory", m_ProjectCreateConfig.assetDirectory, false, {C78E::FileSystem::EntryType::Directory});
+			C78E::GUI::drawLabeledFileInput<PATH_MAX>("AssetRegistry", m_ProjectCreateConfig.assetRegistryPath, true, {C78E::FileSystem::EntryType::AssetRegistry});
+			C78E::GUI::drawLabeledFileInput<PATH_MAX>("ScriptModule", m_ProjectCreateConfig.scriptModulePath, true, {C78E::FileSystem::EntryType::Binary});
 
-			m_PCCB->projectName.show();
-			m_PCCB->projectDirectory.show();
-			ImGui::SameLine();
-			m_PCCB->saveProjectFile.show();
-
-			m_PCCB->assetRegistry.show();
-			m_PCCB->assetDirectory.show();
-			ImGui::SameLine();
-			m_PCCB->saveAssetRegistryFile.show();
-			
-			
-			m_PCCB->scriptModulePath.show();
-
-			if (ImGui::Button("Cancel")) {
+			if (C78E::GUI::drawTextButton("Cancel")) {
 				abortCreateProcess();
 				ImGui::End();
 				return;
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("Create Project")) {
-				C78E::ProjectConfig cfg{
-					m_PCCB->getProjectName(),
-					C78E::AssetHandle::invalid(),
-					m_PCCB->getAssetDirectoryPath(),
-					m_PCCB->getAssetRegistryFilePath(),
-					m_PCCB->getScriptModulePath(),
-				};
+			if (C78E::GUI::drawTextButton("Create Project")) {
+				m_ProjectCreateConfig.normalize(m_ProjectCreateDirectory);
+				projectManager->createProject(m_ProjectCreateDirectory, m_ProjectCreateConfig);
+				projectManager->saveProject(m_ProjectCreateConfig.getProjectFilePath(m_ProjectCreateDirectory));
 
-				projectManager->createProject(cfg);
-				projectManager->saveProject(m_PCCB->getProjectFilePath());
-
-				ProjectHistory::projects.insert(m_PCCB->getProjectFilePath());
+				ProjectHistory::projects.insert(m_ProjectCreateConfig.getProjectFilePath(m_ProjectCreateDirectory));
 				ProjectHistory::save();
 			}
-			
-
 			ImGui::End();
 		}
 		else {
-			C78_ERROR("ProjectManagerUI::drawCreateProject: Called without m_ProjectManager!");
+			C78E_ERROR("ProjectManagerUI::drawCreateProject: Called without m_ProjectManager!");
 			return;
 		}
 	}
@@ -150,7 +133,7 @@ namespace C78Editor::GUI {
 					projectManager->closeProject();
 
 				if (projectManager->hasActiveProject()) {
-					C78E::ProjectConfig projConf = projectManager->getActiveProject()->getConfig();
+					C78E::Project::Config projConf = projectManager->getActiveProject()->getConfig();
 
 					ImGui::Text(("Project: " + projConf.name).c_str());
 					ImGui::Text((std::string("File: ") + ((projectManager->hasActiveProjectFile()) ? projectManager->getActiveProjectFile().string() : "No File set!")).c_str());
@@ -170,17 +153,19 @@ namespace C78Editor::GUI {
 			ImGui::End();
 		}
 		else {
-			C78_ERROR("ProjectManagerUI::drawProjectInfo: Called without m_ProjectManager!");
+			C78E_ERROR("ProjectManagerUI::drawProjectInfo: Called without m_ProjectManager!");
 			return;
 		}
 	}
 
 	void ProjectManagerUI::startCreateProcess() {
-		m_PCCB = C78E::createRef<ProjectCreateConfigBuffers>();
+		m_ProjectCreateInProgress = true;
 	}
 
 	void ProjectManagerUI::abortCreateProcess() {
-		m_PCCB = nullptr;
+		m_ProjectCreateInProgress = false;
+		m_ProjectCreateDirectory = C78E::FileSystem::C78RootDirectory;
+		m_ProjectCreateConfig = {};
 	}
 
 }

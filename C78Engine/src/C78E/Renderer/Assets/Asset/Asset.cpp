@@ -1,4 +1,4 @@
-#include "C78ePCH.h"
+#include "C78EPCH.h"
 #include "Asset.h"
 
 namespace C78E {
@@ -12,7 +12,6 @@ namespace C78E {
 		{ ".jpg", Asset::AssetType::Texture2D },
 		{ ".jpeg", Asset::AssetType::Texture2D },
 
-		{ ".obj", Asset::AssetType::Model },
 		{ ".mtl", Asset::AssetType::Material },
 
 		{ ".glsl", Asset::AssetType::Shader },
@@ -30,7 +29,7 @@ namespace C78E {
 	 */
 	Asset::AssetType Asset::fileToAssetType(const FilePath& filePath) {
 		if (c_AssetExtensionMap.find(filePath.extension()) == c_AssetExtensionMap.end()) {
-			C78_CORE_ERROR("File \"{}\" is not supported as an Asset, cannot fetch AssetType!", filePath);
+			C78E_CORE_ERROR("File \"{}\" is not supported as an Asset, cannot fetch AssetType!", filePath);
 			return Asset::AssetType::None;
 		}
 		return c_AssetExtensionMap.at(filePath.extension());
@@ -48,7 +47,6 @@ namespace C78E {
 		
 		case C78E::Asset::AssetType::Scene:			return "AssetType::Scene";
 
-		case C78E::Asset::AssetType::Model:			return "AssetType::Model";
 		case C78E::Asset::AssetType::Mesh:			return "AssetType::Mesh";
 		case C78E::Asset::AssetType::Material:		return "AssetType::Material";
 
@@ -72,7 +70,6 @@ namespace C78E {
 	Asset::AssetType Asset::assetTypeFromString(std::string str) {
 		if (str == "AssetType::Scene")		return AssetType::Scene;
 
-		if (str == "AssetType::Model")		return AssetType::Model;
 		if (str == "AssetType::Mesh")		return AssetType::Mesh;
 		if (str == "AssetType::Material")	return AssetType::Material;
 

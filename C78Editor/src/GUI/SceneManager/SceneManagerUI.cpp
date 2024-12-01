@@ -37,8 +37,8 @@ namespace C78Editor::GUI {
             char nameBuffer[64] = { 0 };
             auto& currName = assetManager->getMeta(sceneHandle).name;
             const size_t currNameSize = currName.size();
-            C78_EDITOR_ASSERT(currNameSize < 65, "");
-            memcpy_s(nameBuffer, currNameSize, assetManager->getMeta(sceneHandle).name.c_str(), currNameSize);
+            C78E_ASSERT(currNameSize < 65, "");
+            std::memcpy(nameBuffer, assetManager->getMeta(sceneHandle).name.c_str(), currNameSize);
 
             ImGui::InputText("##SceneName", nameBuffer, 64);
             currName = nameBuffer;
