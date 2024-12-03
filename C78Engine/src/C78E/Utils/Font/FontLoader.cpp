@@ -82,7 +82,7 @@ namespace C78E {
 		C78E_CORE_TRACE("FontLoader::loadFont:   Size: {}", fontSize);
 
 		msdf_atlas::TightAtlasPacker atlasPacker;
-		//atlasPacker.setDimensionsConstraint()
+		atlasPacker.setDimensionsConstraint(msdf_atlas::DimensionsConstraint::SQUARE);
 		atlasPacker.setPixelRange(2.0);
 		atlasPacker.setMiterLimit(1.0);
 		//atlasPacker.setPadding(0);
