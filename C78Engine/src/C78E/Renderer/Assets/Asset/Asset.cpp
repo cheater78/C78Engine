@@ -3,84 +3,112 @@
 
 namespace C78E {
 
-	const Asset::AssetMeta Asset::c_NullAssetMeta{};
+	const Asset::FileMap Asset::c_FileMap = {
+		{
+			{ ".sce", Asset::Type::Scene },
 
-	const std::map<FilePath, Asset::AssetType> Asset::c_AssetExtensionMap = {
-		{ ".sce", Asset::AssetType::Scene },
+			{ ".png", Asset::Type::Texture2D },
+			{ ".jpg", Asset::Type::Texture2D },
+			{ ".jpeg", Asset::Type::Texture2D },
+			{ ".png", Asset::Type::CubeMap },
+			{ ".jpg", Asset::Type::CubeMap },
+			{ ".jpeg", Asset::Type::CubeMap },
 
-		{ ".png", Asset::AssetType::Texture2D },
-		{ ".jpg", Asset::AssetType::Texture2D },
-		{ ".jpeg", Asset::AssetType::Texture2D },
+			{ ".mtl", Asset::Type::Material },
 
-		{ ".mtl", Asset::AssetType::Material },
+			{ ".glsl", Asset::Type::Shader },
+			{ ".hlsl", Asset::Type::Shader },
 
-		{ ".glsl", Asset::AssetType::Shader },
-		{ ".hlsl", Asset::AssetType::Shader },
-
-		{ ".ttf", Asset::AssetType::Font },
+			{ ".ttf", Asset::Type::Font },
+		}
 	};
 
 	/**
-	 * Determines the Asset::AssetType of an arbituary file based on its extension,
-	 * using the Asset::c_AssetExtensionMap.
+	 * Determines the Asset::Type of an arbituary file based on its extension,
+	 * using the Asset::c_FileMap.
 	 * 
 	 * \param filePath the C78E::FilePath of the file in question
-	 * \return the Asset::AssetType of the file
+	 * \return the Asset::Type of the file
 	 */
-	Asset::AssetType Asset::fileToAssetType(const FilePath& filePath) {
-		if (c_AssetExtensionMap.find(filePath.extension()) == c_AssetExtensionMap.end()) {
-			C78E_CORE_ERROR("File \"{}\" is not supported as an Asset, cannot fetch AssetType!", filePath);
-			return Asset::AssetType::None;
-		}
-		return c_AssetExtensionMap.at(filePath.extension());
+	Asset::Type Asset::Type::typeFromFile(const FilePath& filePath) {
+		return c_FileMap.getTypeFromExtension(filePath);
 	}
 
 	/**
-	 * Serializes a Asset::AssetType to a std::string.
+	 * Determines the Asset::Types of an arbituary file based on its extension,
+	 * using the Asset::c_FileMap.
 	 * 
-	 * \param type the Asset::AssetType to serialize
-	 * \return the serialized Asset::AssetType as std::string
+	 * \param filePath the C78E::FilePath of the file in question
+	 * \return a set of Asset::Types of the file
 	 */
-	std::string Asset::assetTypeToString(Asset::AssetType type) {
-		switch (type) {
-		case C78E::Asset::AssetType::None:			return "AssetType::None";
+	std::set<Asset::Type> Asset::Type::typesFromFile(const FilePath& filePath) {
+		return c_FileMap.getTypesFromExtension(filePath);
+	}
+
+	/**
+	 * Serializes a Asset::Type to a std::string.
+	 * 
+	 * \param type the Asset::Type to serialize
+	 * \return the serialized Asset::Type as std::string
+	 */
+	std::string Asset::Type::assetTypeToString(Asset::Type type) {
+		switch ((uint8_t)type) {
+		case C78E::Asset::Type::None:		return "Asset::Type::None";
+		case C78E::Asset::Type::Scene:		return "Asset::Type::Scene";
+		case C78E::Asset::Type::Mesh:		return "Asset::Type::Mesh";
+		case C78E::Asset::Type::Material:	return "Asset::Type::Material";
+		case C78E::Asset::Type::Shader:		return "Asset::Type::Shader";
+		case C78E::Asset::Type::Texture2D:	return "Asset::Type::Texture2D";
+		case C78E::Asset::Type::CubeMap:	return "Asset::Type::CubeMap";
+		case C78E::Asset::Type::Font:		return "Asset::Type::Font";
+
+		default: return "Asset::Type::None";
+		}
+	}
+
+	/**
+	 * Deserializes a std::string to Asset::Type.
+	 * 
+	 * \param str the string containing the serialized Asset::Type
+	 * \return the deserialized Asset::Type
+	 */
+	Asset::Type Asset::Type::assetTypeFromString(const std::string& typeString) {
+		const std::string prefix = "Asset::Type::";
+		if(typeString.substr(0, prefix.size()) != prefix) return Type::None;
+		const std::string suffix = typeString.substr(prefix.size());
+
+		if (suffix == "Scene")		return Type::Scene;
+		if (suffix == "Mesh")		return Type::Mesh;
+		if (suffix == "Material")	return Type::Material;
+		if (suffix == "Shader")		return Type::Shader;
+		if (suffix == "Texture2D")	return Type::Texture2D;
+		if (suffix == "CubeMap")	return Type::CubeMap;
+		if (suffix == "Font")		return Type::Font;
+
+		return Type::None;
+	}
+
+
+	std::set<Asset::Type> Asset::FileMap::getTypesFromExtension(const FilePath& file) const {
+		if(!file.has_extension()) return { Type::None };
+		const std::string extension = file.extension().string();
+
+		std::set<Asset::Type> types = { };
+		for(auto& [ext, type] : extensionMap)
+			if(ext == extension)
+				types.insert(type);
 		
-		case C78E::Asset::AssetType::Scene:			return "AssetType::Scene";
-
-		case C78E::Asset::AssetType::Mesh:			return "AssetType::Mesh";
-		case C78E::Asset::AssetType::Material:		return "AssetType::Material";
-
-		case C78E::Asset::AssetType::Shader:		return "AssetType::Shader";
-
-		case C78E::Asset::AssetType::Texture2D:		return "AssetType::Texture2D";
-		case C78E::Asset::AssetType::CubeMap:		return "AssetType::CubeMap";
-
-		case C78E::Asset::AssetType::Font:		return "AssetType::Font";
-
-		default: return "AssetType::None";
-		}
+		return ((types.size()) ? types : std::set<Asset::Type>{ Type::None });
 	}
 
-	/**
-	 * Deserializes a std::string to Asset::AssetType.
-	 * 
-	 * \param str the string containing the serialized Asset::AssetType
-	 * \return the deserialized Asset::AssetType
-	 */
-	Asset::AssetType Asset::assetTypeFromString(std::string str) {
-		if (str == "AssetType::Scene")		return AssetType::Scene;
+	Asset::Type Asset::FileMap::getTypeFromExtension(const FilePath& file) const {
+		if(!file.has_extension()) return Type::None;
+		const std::string extension = file.extension().string();
 
-		if (str == "AssetType::Mesh")		return AssetType::Mesh;
-		if (str == "AssetType::Material")	return AssetType::Material;
-
-		if (str == "AssetType::Shader")		return AssetType::Shader;
-
-		if (str == "AssetType::Texture2D")	return AssetType::Texture2D;
-		if (str == "AssetType::CubeMap")	return AssetType::CubeMap;
-
-		if (str == "AssetType::Font")	return AssetType::Font;
-
-		return AssetType::None;
+		for(auto& [ext, type] : extensionMap)
+			if(ext == extension)
+				return type;
+		
+		return Type::None;
 	}
-
 }

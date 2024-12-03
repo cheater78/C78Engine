@@ -69,8 +69,8 @@ namespace C78E {
 		Material(const Material&) = default;
 		~Material() = default;
 	public:
-		virtual AssetType getType() const override { return Asset::AssetType::Material; };
-		static AssetType getClassType() { return AssetType::Material; };
+		virtual Type getType() const override { return Asset::Type::Material; };
+		static Type getClassType() { return Type::Material; };
 	public:
 		AssetHandle m_Shader;
 		uint32_t m_IlluminationModel;

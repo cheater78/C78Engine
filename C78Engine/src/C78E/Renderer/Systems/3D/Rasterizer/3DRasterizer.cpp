@@ -1,7 +1,7 @@
 #include "C78EPCH.h"
 #include "3DRasterizer.h"
 
-#include <C78E/Renderer/Assets/Font/MSDFData.h>
+#include <C78E/Utils/Font/FontUtils.h>
 
 namespace C78E {
 	uint32_t Rasterizer3D::s_MaxTextureSlots = 0;

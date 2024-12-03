@@ -29,7 +29,10 @@ project "C78Project"
 		"%{IncludeDir.VulkanSDK}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.tinobj}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.msdfgen}",
+		"%{IncludeDir.freetype}",
+		"%{IncludeDir.msdf_atlas_gen}"
 	}
 
 	links

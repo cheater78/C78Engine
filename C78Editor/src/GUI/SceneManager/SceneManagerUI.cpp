@@ -35,10 +35,10 @@ namespace C78Editor::GUI {
         if (sceneManager->hasActiveScene()) {
             C78E::SceneHandle sceneHandle = sceneManager->getActiveSceneHandle();
             char nameBuffer[64] = { 0 };
-            auto& currName = assetManager->getMeta(sceneHandle).name;
+            auto& currName = assetManager->getMeta(sceneHandle)->name;
             const size_t currNameSize = currName.size();
             C78E_ASSERT(currNameSize < 65, "");
-            std::memcpy(nameBuffer, assetManager->getMeta(sceneHandle).name.c_str(), currNameSize);
+            std::memcpy(nameBuffer, assetManager->getMeta(sceneHandle)->name.c_str(), currNameSize);
 
             ImGui::InputText("##SceneName", nameBuffer, 64);
             currName = nameBuffer;
@@ -53,10 +53,10 @@ namespace C78Editor::GUI {
 
         for (C78E::AssetRegistryEntry entry : assetRegistry) {
             C78E::AssetHandle handle = entry.first;
-            C78E::Asset::AssetMeta meta = entry.second;
+            C78E::Ref<C78E::Asset::Meta> meta = entry.second;
 
-            if (meta.type == C78E::Asset::AssetType::Scene) {
-                std::string infoLine = meta.name + "##(" + std::to_string(handle) + ")";
+            if (meta->type == C78E::Asset::Type::Scene) {
+                std::string infoLine = meta->name + "##(" + std::to_string(handle) + ")";
                 if (ImGui::Button(infoLine.c_str())) {
                     sceneManager->setActiveSceneHandle(handle);
                 }

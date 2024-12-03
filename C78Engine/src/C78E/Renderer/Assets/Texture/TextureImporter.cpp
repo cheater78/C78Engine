@@ -8,9 +8,9 @@
 
 namespace C78E {
 
-	Ref<Texture2D> TextureImporter::importTexture2D(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle) {
+	Ref<Texture2D> TextureImporter::importTexture2D(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
 
-		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(meta.fileSource, true, 4);
+		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(assetDirectory / meta->fileSource, true, 4);
 
 		C78E::Texture2D::TextureSpecification spec;
 		spec.width = image->width;
@@ -29,8 +29,8 @@ namespace C78E {
 		return Texture2D::create(spec, image->data);
 	}
 
-	Ref<CubeMap> TextureImporter::importCubeMap(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle) {
-		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(meta.fileSource, false, 4);
+	Ref<CubeMap> TextureImporter::importCubeMap(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
+		Ref<ImageLoader::ImageData> image = ImageLoader::loadImage(assetDirectory / meta->fileSource, false, 4);
 
 		C78E::Texture2D::TextureSpecification spec;
 		spec.width = image->width;

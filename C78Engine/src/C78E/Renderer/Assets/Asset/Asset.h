@@ -7,57 +7,72 @@ namespace C78E {
 	
 	class Asset {
 	public:
-		enum AssetType : uint8_t {
-			None = 0,
-			Scene = 1,
+		class Type {
+		public:
+			enum : uint8_t {
+				None = 0,
+				Scene,
 
-			Mesh,
-			Material,
+				Mesh,
+				Material,
 
-			Shader,
-			Texture2D,
-			CubeMap,
+				Shader,
+				Texture2D,
+				CubeMap,
 
-			Font,
+				Font,
+				TYPE_SIZE
+			};
+			Type() : m_Type{0} { }
+			Type(uint8_t type) : m_Type(type) { }
+			Type(const Type& other) = default;
+			~Type() = default;
 
+			bool operator==(const Type& other) const { return this->m_Type == other.m_Type; }
+			bool operator==(uint8_t other) const { return this->m_Type == other; }
+			bool operator!=(const Type& other) const { return this->m_Type != other.m_Type; }
+			bool operator!=(uint8_t other) const { return this->m_Type != other; }
+			bool operator<(const Type& other) const { return this->m_Type < other.m_Type; }
+			bool operator<(uint8_t other) const { return this->m_Type < other; }
+			operator uint8_t() const { return m_Type; }
+			operator bool() const { return m_Type; }
 
+			static Type typeFromFile(const FilePath& filePath);
+			static std::set<Type> typesFromFile(const FilePath& filePath);
+			static std::string assetTypeToString(Type type);
+			static Type assetTypeFromString(const std::string& typeString);
+		private:
+			uint8_t m_Type;
 		};
-		static const uint8_t c_AssetTypeCount = 8;
-		static const std::vector<AssetType> getAllAssetTypes(bool includeNone = true) {
-			std::vector<AssetType> types;
-			types.reserve(c_AssetTypeCount);
-			for (uint8_t i = (includeNone) ? 0 : 1; i < c_AssetTypeCount; i++)
-				types.emplace(types.begin() + i, static_cast<AssetType>(i));
-			return types;
-		}
 
-		struct AssetMeta {
-			AssetType type = AssetType::None;
+		struct Meta {
+			Type type = Type::None;
 			FilePath fileSource = "";
 			std::string name = C78E_DEFAULT_ASSET_NAME;
 
-			operator bool() const { return type != AssetType::None; }
+			operator bool() const { return type != Type::None; }
 		};
+	public:
+		AssetHandle& handle() { return m_AssetHandle; }
 
 	public:
-		static AssetType fileToAssetType(const FilePath& filePath);
-		static std::string assetTypeToString(AssetType type);
-		static AssetType assetTypeFromString(std::string str);
-
-	public:
-		static const std::map<FilePath, AssetType> c_AssetExtensionMap;
-		static const AssetMeta c_NullAssetMeta;
-
-	public:
-		virtual AssetType getType() const { return AssetType::None; };
-		static AssetType getClassType() { return AssetType::None; };
-	public:
+		virtual Type getType() const { return Type::None; };
+		static Type getClassType() { return Type::None; };
+	private:
 		AssetHandle m_AssetHandle;
+
+		static const struct FileMap {
+			std::set<std::pair<std::string, Type>> extensionMap; // manage file extensions more centralized at some point (native supported ext)
+
+			std::set<Type> getTypesFromExtension(const FilePath& file) const;
+			Type getTypeFromExtension(const FilePath& file) const;
+
+		} c_FileMap;
 	};
 }
 
 namespace std {
-	_EXPORT_STD _NODISCARD inline string to_string(C78E::Asset::AssetType assetType) {
-		return C78E::Asset::assetTypeToString(assetType);
+	_EXPORT_STD _NODISCARD inline string to_string(C78E::Asset::Type assetType) {
+		return C78E::Asset::Type::assetTypeToString(assetType);
 	}
 }

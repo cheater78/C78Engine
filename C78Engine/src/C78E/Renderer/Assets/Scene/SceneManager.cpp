@@ -14,15 +14,15 @@ namespace C78E {
 	}
 
 	/*
-	* Creates a new Scene, assigns the chosen name to the AssetMeta, generates a Path for Serialization, sets it as ActiveScene and returns it
+	* Creates a new Scene, assigns the chosen name to the Meta, generates a Path for Serialization, sets it as ActiveScene and returns it
 	*/
 	Ref<Scene> SceneManager::createScene(const std::string& name, bool allowFileOverride) {
 		C78E_CORE_VALIDATE(m_ProjectManager->hasActiveProject(), return nullptr, "SceneManager::createScene: No active Project!")
 		Ref<Scene> scene = C78E::createRef<C78E::Scene>();
-		C78E::Asset::AssetMeta meta;
-		meta.name = name;
-		meta.fileSource = FileSystem::getRelativePathTo(getNewAvailableSceneFile(scene, name, allowFileOverride), m_ProjectManager->getActiveProject()->getAssetDirectory());
-		meta.type = C78E::Asset::AssetType::Scene;
+		Ref<Asset::Meta> meta;
+		meta->name = name;
+		meta->fileSource = FileSystem::getRelativePathTo(getNewAvailableSceneFile(scene, name, allowFileOverride), m_ProjectManager->getActiveProject()->getAssetDirectory());
+		meta->type = C78E::Asset::Type::Scene;
 		m_ActiveScene = m_ProjectManager->getEditorAssetManager()->addAsset(meta, scene);
 		return m_ProjectManager->getEditorAssetManager()->getAssetAs<Scene>(m_ActiveScene);
 	}
@@ -37,12 +37,12 @@ namespace C78E {
 			sceneHandle = m_ActiveScene;
 		C78E_CORE_VALIDATE(assetManager->isValid(sceneHandle), return false, "SceneManager::saveScene: SceneHandle is not associated with a Scene! SceneHandle: {}", sceneHandle);
 		
-		Asset::AssetMeta& meta = assetManager->getMeta(sceneHandle);
-		C78E_CORE_VALIDATE(!(sceneFile.empty() && meta.fileSource.empty()), return false, "SceneManager::saveScene: AssetMeta FileSource and sceneFile empty, atleast one must be set!")
+		Ref<Asset::Meta> meta = assetManager->getMeta(sceneHandle);
+		C78E_CORE_VALIDATE(!(sceneFile.empty() && meta->fileSource.empty()), return false, "SceneManager::saveScene: Meta FileSource and sceneFile empty, atleast one must be set!")
 		if(!sceneFile.empty() && overrideMetaSource)
-			meta.fileSource = sceneFile;
+			meta->fileSource = sceneFile;
 
-		return SceneSerializer::exportScene(assetManager->getAssetAs<Scene>(sceneHandle), m_ProjectManager->getActiveProject()->getAssetDirectory() / FilePath((sceneFile.empty()) ? meta.fileSource : sceneFile));
+		return SceneSerializer::exportScene(assetManager->getAssetAs<Scene>(sceneHandle), m_ProjectManager->getActiveProject()->getAssetDirectory() / FilePath((sceneFile.empty()) ? meta->fileSource : sceneFile));
 	}
 
 	/*

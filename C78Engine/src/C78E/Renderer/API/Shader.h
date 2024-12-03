@@ -24,7 +24,7 @@ namespace C78E {
 		static Ref<Shader> create(const std::string& name, const std::string& computeSrc);
 
 
-		virtual Asset::AssetType getType() const override { return Asset::AssetType::Shader; }
-		static AssetType getClassType() { return AssetType::Shader; };
+		virtual Asset::Type getType() const override { return Asset::Type::Shader; }
+		static Type getClassType() { return Type::Shader; };
 	};
 }

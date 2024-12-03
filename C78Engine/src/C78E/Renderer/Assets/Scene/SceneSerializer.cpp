@@ -3,8 +3,8 @@
 
 namespace C78E {
 
-	Ref<Scene> SceneImporter::importScene(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle) {
-		return SceneSerializer::importScene(handle, assetDirectory / meta.fileSource);
+	Ref<Scene> SceneImporter::importScene(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
+		return SceneSerializer::importScene(handle, assetDirectory / meta->fileSource);
 	}
 
 	Ref<Scene> SceneSerializer::importScene(AssetHandle handle, const FilePath& filepath) {
@@ -15,7 +15,7 @@ namespace C78E {
 		
 		FileSystem::EntryType fileType = FileSystem::extensionToEntryType(filepath);
 		Ref<Scene> scene = createRef<Scene>();
-		scene->m_AssetHandle = handle;
+		scene->handle() = handle;
 		if(fileType == FileSystem::EntryType::Scene) {
 			std::string serializedScene = FileSystem::readFileText(filepath);
 			C78E_CORE_VALIDATE(!serializedScene.empty(), return nullptr, "SceneSerializer::importScene: Reading Text Scene failed!");

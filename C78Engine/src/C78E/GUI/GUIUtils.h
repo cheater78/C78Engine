@@ -41,7 +41,8 @@ namespace C78E::GUI {
 	}
 
 	template<std::size_t bufferSize>
-	static void drawLabeledFileInput(const std::string& label, std::string& input, bool save, const std::vector<FileSystem::EntryType>& filter, const FilePath& filePickerBasePath = FileSystem::C78RootDirectory) {
+	static bool drawLabeledFileInput(const std::string& label, std::string& input, bool save, const std::vector<FileSystem::EntryType>& filter, const FilePath& filePickerBasePath = FileSystem::C78RootDirectory) {
+		bool dialog = false;
 		ImGui::PushID(label.c_str());
 		drawLabeledTextInput<bufferSize>(label, input);
 		ImGui::SameLine();
@@ -51,14 +52,17 @@ namespace C78E::GUI {
 			else
 				input = FileDialogs::openFile(filter, filePickerBasePath, input, label);
 			input = FileSystem::getRelativePathTo(input, filePickerBasePath);
+			dialog = true;
 		}
 		ImGui::PopID();
+		return dialog;
 	}
 	template<std::size_t bufferSize>
-	static void drawLabeledFileInput(const std::string& label, FilePath& input, bool save, const std::vector<FileSystem::EntryType>& filter, const FilePath& filePickerBasePath = FileSystem::C78RootDirectory) {
+	static bool drawLabeledFileInput(const std::string& label, FilePath& input, bool save, const std::vector<FileSystem::EntryType>& filter, const FilePath& filePickerBasePath = FileSystem::C78RootDirectory) {
 		std::string inputStr = input;
-		drawLabeledFileInput<bufferSize>(label, inputStr, save, filter, filePickerBasePath);
+		bool dialog = drawLabeledFileInput<bufferSize>(label, inputStr, save, filter, filePickerBasePath);
 		input = inputStr;
+		return dialog;
 	}
 
 	template<typename T>

@@ -48,8 +48,8 @@ namespace C78E {
 
 		virtual bool operator==(const Texture& other) const = 0;
 	public:
-		virtual AssetType getType() const override { return Asset::AssetType::None; };
-		static AssetType getClassType() { return AssetType::None; };
+		virtual Type getType() const override { return Asset::Type::None; };
+		static Type getClassType() { return Type::None; };
 	public:
 		// virtual
 	private:
@@ -76,8 +76,8 @@ namespace C78E {
 		virtual uint32_t getHeight() const = 0;
 		virtual const TextureSpecification& getSpecification() const = 0;
 
-		virtual AssetType getType() const override { return Asset::AssetType::Texture2D; };
-		static AssetType getClassType() { return AssetType::Texture2D; };
+		virtual Type getType() const override { return Asset::Type::Texture2D; };
+		static Type getClassType() { return Type::Texture2D; };
 	};
 
 	class CubeMap : public Texture {
@@ -93,9 +93,9 @@ namespace C78E {
 		virtual uint32_t getSize() const = 0;
 		virtual const CubeMap::TextureSpecification& getSpecification() const = 0;
 
-		virtual AssetType getType() const override { return Asset::AssetType::CubeMap; };
+		virtual Type getType() const override { return Asset::Type::CubeMap; };
 
-		static AssetType getClassType() { return AssetType::CubeMap; };
+		static Type getClassType() { return Type::CubeMap; };
 	};
 
 }

@@ -13,21 +13,18 @@ namespace C78E {
 	const AssetImporter::AssetImport::AssetImportFunctionMap AssetImporter::AssetImport::assetImportFunctions = AssetImporter::AssetImport::createAssetImportFunctionMap();
 	AssetImporter::AssetImport::AssetImportFunctionMap AssetImporter::AssetImport::createAssetImportFunctionMap() {
 		AssetImportFunctionMap map;
-		map[Asset::AssetType::Scene] = SceneImporter::importScene;
-		map[Asset::AssetType::Shader] = ShaderImporter::importShader;
-		map[Asset::AssetType::Texture2D] = TextureImporter::importTexture2D;
-		map[Asset::AssetType::CubeMap] = TextureImporter::importCubeMap;
-		map[Asset::AssetType::Font] = FontImporter::importFont;
+		map[Asset::Type::Scene] = SceneImporter::importScene;
+		map[Asset::Type::Shader] = ShaderImporter::importShader;
+		map[Asset::Type::Texture2D] = TextureImporter::importTexture2D;
+		map[Asset::Type::CubeMap] = TextureImporter::importCubeMap;
+		map[Asset::Type::Font] = FontImporter::importFont;
 		return map;
 	}
 	
 
-	Ref<Asset> AssetImporter::importAsset(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle) {
-		if (!AssetImporter::AssetImport::assetImportFunctions.contains(meta.type)) {
-			C78E_CORE_ERROR("No AssetLoader exists for Type: {}", Asset::assetTypeToString(meta.type));
-			return nullptr;
-		}
-		return AssetImporter::AssetImport::assetImportFunctions.at(meta.type)(assetDirectory, meta, handle);
+	Ref<Asset> AssetImporter::importAsset(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
+		C78E_CORE_VALIDATE(AssetImporter::AssetImport::assetImportFunctions.contains(meta->type), return nullptr, "No AssetLoader exists for Type: {}", Asset::Type::assetTypeToString(meta->type));
+		return AssetImporter::AssetImport::assetImportFunctions.at(meta->type)(assetDirectory, meta, handle);
 	}
 	
 }

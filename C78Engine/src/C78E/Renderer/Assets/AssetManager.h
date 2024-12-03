@@ -4,8 +4,8 @@
 namespace C78E {
 	
 	using AssetMap = std::map<AssetHandle, Ref<Asset>>;
-	using AssetRegistryEntry = std::pair<AssetHandle, Asset::AssetMeta>;
-	using AssetRegistry = std::map<AssetHandle, Asset::AssetMeta>;
+	using AssetRegistryEntry = std::pair<AssetHandle, Ref<Asset::Meta>>;
+	using AssetRegistry = std::map<AssetHandle, Ref<Asset::Meta>>;
 
 	class AssetManager {
 	public:
@@ -20,13 +20,13 @@ namespace C78E {
 			static_assert(std::is_base_of<Asset, T>::value, "AssetManager::getAssetAs: T must be derived of Asset!");
 			C78E_CORE_ASSERT(assetHandle, "AssetManager::getAssetAs: AssetHandle is null!");
 			Ref<Asset> asset = getAsset(assetHandle);
-			C78E_CORE_ASSERT(T::getClassType() == asset->getType(), "AssetManager::getAssetAs: Requested Type does not match the requested Asset!\n  no cast from {} to {}", Asset::assetTypeToString(asset->getType()), Asset::assetTypeToString(T::getClassType()));
+			C78E_CORE_ASSERT(T::getClassType() == asset->getType(), "AssetManager::getAssetAs: Requested Type does not match the requested Asset!\n  no cast from {} to {}", Asset::Type::assetTypeToString(asset->getType()), Asset::Type::assetTypeToString(T::getClassType()));
 			return std::static_pointer_cast<T>(asset);
 		}
 
 		virtual bool isValid(AssetHandle handle) const = 0;
 		virtual bool isLoaded(AssetHandle handle) const = 0;
-		virtual Asset::AssetType getType(AssetHandle handle) const = 0;
+		virtual Asset::Type getType(AssetHandle handle) const = 0;
 	};
 	
 	class EditorAssetManager : public AssetManager {
@@ -52,21 +52,21 @@ namespace C78E {
 		*/
 		virtual bool isLoaded(AssetHandle handle) const override;
 		/*
-		* Retrieves the AssetType of the Asset associated with the given AssetHandle
-		* return the AssetType
+		* Retrieves the Type of the Asset associated with the given AssetHandle
+		* return the Type
 		*/
-		virtual Asset::AssetType getType(AssetHandle handle) const override;
+		virtual Asset::Type getType(AssetHandle handle) const override;
 
 		/* *Memory Only Assets*
 		* Creates an Asset of a specified Asset, does not load the Asset, does not save the Registry
 		* returns the AssetHandle of the created Asset
 		*/
-		AssetHandle addAsset(Asset::AssetMeta meta, Ref<Asset> asset);
+		AssetHandle addAsset(Ref<Asset::Meta> meta, Ref<Asset> asset);
 		/*
 		* Creates an Asset of a specified Asset source file, does not load the Asset, does not save the Registry
 		* returns the AssetHandle of the created Asset
 		*/
-		AssetHandle importAsset(const FilePath& filepath, Asset::AssetMeta meta = Asset::c_NullAssetMeta, AssetHandle handle = AssetHandle::invalid());
+		AssetHandle importAsset(const FilePath& filepath, Ref<Asset::Meta> meta = nullptr, AssetHandle handle = AssetHandle::invalid());
 
 		/*
 		* Removes an Asset by AssetHandle from the Loaded Assets and AssetRegistry
@@ -82,7 +82,15 @@ namespace C78E {
 		* Retrieves the Asset Meta of an Asset given its Assethandle
 		* returns the Asset Meta
 		*/
-		Asset::AssetMeta& getMeta(AssetHandle handle);
+		Ref<Asset::Meta> getMeta(AssetHandle handle);
+
+		/*
+		* Retrieves the Asset Meta of an Asset given its Assethandle
+		* returns the Asset Meta
+		*/
+		template<typename T>
+		Ref<T> getMetaAs(AssetHandle handle);
+
 		/*
 		* Retrieves the Source File of an Asset given its Assethandle
 		* returns the Source File Path

@@ -56,16 +56,16 @@ namespace C78E {
 		AssetRegistry assetRegistry = editorAssetManager->getAssetRegistry();
 		for (C78E::AssetRegistryEntry entry : assetRegistry) {
 			AssetHandle handle = entry.first;
-			Asset::AssetMeta meta = entry.second;
+			Ref<Asset::Meta> meta = entry.second;
 
-			if(!editorAssetManager->isValid(handle) || meta.type == Asset::AssetType::None) {
-				C78E_CORE_WARN("Project::load: Asset '{}' of Type {} from File {} is invalid!", meta.name, Asset::assetTypeToString(meta.type), meta.fileSource.string());
+			if(!editorAssetManager->isValid(handle) || meta->type == Asset::Type::None) {
+				C78E_CORE_WARN("Project::load: Asset '{}' of Type {} from File {} is invalid!", meta->name, Asset::Type::assetTypeToString(meta->type), meta->fileSource.string());
 				editorAssetManager->removeAsset(handle, false); // AssetRegistry Entry corrupted -> remove, but not from Disk
 			} else if(!editorAssetManager->isLoaded(handle)) {
 				editorAssetManager->getAsset(handle);
-				C78E_CORE_INFO("Project::load: Asset '{}' of Type {} from File {} was loaded!", meta.name, Asset::assetTypeToString(meta.type), meta.fileSource.string());
+				C78E_CORE_INFO("Project::load: Asset '{}' of Type {} from File {} was loaded!", meta->name, Asset::Type::assetTypeToString(meta->type), meta->fileSource.string());
 			} else {
-				C78E_CORE_TRACE("Project::load: Asset '{}' of Type {} from File {} already loaded!", meta.name, Asset::assetTypeToString(meta.type), meta.fileSource.string());
+				C78E_CORE_TRACE("Project::load: Asset '{}' of Type {} from File {} already loaded!", meta->name, Asset::Type::assetTypeToString(meta->type), meta->fileSource.string());
 			}
 		}
 		return project;
@@ -94,12 +94,12 @@ namespace C78E {
 
 		for (C78E::AssetRegistryEntry entry : assetRegistry) {
 			AssetHandle handle = entry.first;
-			Asset::AssetMeta meta = entry.second;
+			Ref<Asset::Meta> meta = entry.second;
 
 			// Scenes
-			if (meta.type == C78E::Asset::AssetType::Scene) {
-				C78E_CORE_VALIDATE(SceneSerializer::exportScene(assetManager->getAssetAs<Scene>(handle), FileSystem::normalizePath(project->getAssetDirectory() / meta.fileSource)), continue, "Project::save: Failed to serialize Scene!\n    File: {}", FileSystem::normalizePath(project->getAssetDirectory() / meta.fileSource));
-				C78E_CORE_INFO("Saved Scene: '{}' to {}", meta.name, meta.fileSource);
+			if (meta->type == C78E::Asset::Type::Scene) {
+				C78E_CORE_VALIDATE(SceneSerializer::exportScene(assetManager->getAssetAs<Scene>(handle), FileSystem::normalizePath(project->getAssetDirectory() / meta->fileSource)), continue, "Project::save: Failed to serialize Scene!\n    File: {}", FileSystem::normalizePath(project->getAssetDirectory() / meta->fileSource));
+				C78E_CORE_INFO("Saved Scene: '{}' to {}", meta->name, meta->fileSource);
 			}
 		}
 		return true;

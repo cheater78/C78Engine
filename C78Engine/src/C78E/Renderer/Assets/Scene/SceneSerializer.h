@@ -9,7 +9,7 @@ namespace C78E {
 
 	class SceneImporter {
 	public:
-		static Ref<Scene> importScene(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle);
+		static Ref<Scene> importScene(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle);
 	};
 
 	class SceneSerializer {

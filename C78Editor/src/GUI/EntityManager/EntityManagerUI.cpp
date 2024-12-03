@@ -53,10 +53,10 @@ namespace C78Editor::GUI {
 
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-			auto& meta = sceneManager->getProjectManager()->getActiveProject()->getEditorAssetManager()->getMeta(sceneManager->getActiveSceneHandle());
+			auto meta = sceneManager->getProjectManager()->getActiveProject()->getEditorAssetManager()->getMeta(sceneManager->getActiveSceneHandle());
 
-			std::string sceneName = meta.name;
-			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)scene->m_AssetHandle, flags | ImGuiTreeNodeFlags_DefaultOpen, sceneName.c_str());
+			std::string sceneName = meta->name;
+			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)scene->handle(), flags | ImGuiTreeNodeFlags_DefaultOpen, sceneName.c_str());
 
 			if (opened) {
 				scene->forEachEntity([&](auto entityID)
@@ -267,7 +267,7 @@ namespace C78Editor::GUI {
 
 			drawComponent<C78E::SpriteRendererComponent>("Sprite", entity, [this, assetManager](C78E::SpriteRendererComponent& component) {
 				ImGui::ColorEdit4("Color", &component.color[0], ImGuiColorEditFlags_NoInputs);
-				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, component.texture, "Texture");
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, component.texture, "Texture");
 				ImGui::DragFloat("Tiling", &component.tilingFactor, .1f, .001f, 100.f);
 			});
 
@@ -309,7 +309,7 @@ namespace C78Editor::GUI {
 					}
 					component.textString = text;
 				}
-				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Font, component.fontAsset, "Font");
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::Font, component.fontAsset, "Font");
 				ImGui::ColorEdit4("Color", &component.color[0], ImGuiColorEditFlags_NoInputs);
 				ImGui::DragFloat("Kerning", &component.kerning, 0.1f, 0.0f, 3.f);
 				ImGui::DragFloat("LineSpacing", &component.lineSpacing, 0.1f, 0.0f, 3.f);
@@ -318,12 +318,12 @@ namespace C78Editor::GUI {
 			/*
 			drawComponent<C78E::ModelComponent>("Model", entity, [this, assetManager](C78E::ModelComponent& component) {
 				TypeControl::drawFloat3("Offset", component.offset, 0.f, false, ImGui::GetContentRegionAvail().x);
-				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Model, component.model, "Model");
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::Model, component.model, "Model");
 			});
 			*/
 
 			drawComponent<C78E::SkyBoxComponent>("SkyBox", entity, [this, assetManager](C78E::SkyBoxComponent& component) {
-				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::AssetType::CubeMap, component.skybox, "CubeMapTexture");
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::CubeMap, component.skybox, "CubeMapTexture");
 			});
 
 

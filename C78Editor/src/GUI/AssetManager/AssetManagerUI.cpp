@@ -3,7 +3,7 @@
 namespace C78Editor::GUI {
 
 	AssetManagerUI::AssetManagerUI(C78E::Ref<C78E::ProjectManager> projectManager)
-		: m_ProjectManager{ projectManager }, m_CreateAssetHandle(), m_CreateAssetMeta() {
+		: m_ProjectManager{ projectManager }, m_CreateAssetHandle(), m_CreateAssetMeta(C78E::createRef<C78E::Asset::Meta>()) {
 	}
 
 	AssetManagerUI::~AssetManagerUI() { }
@@ -17,10 +17,7 @@ namespace C78Editor::GUI {
 
 			ImGui::Begin("Asset Manager");
 
-			if (ImGui::Button("Reload Default Assets")) {
-				// Reload any reloads all
-				assetManager->reloadAsset(C78E::EditorAssetManager::Default::Texture2D_White);
-			}
+			
 
 			if (auto assetManager = m_ProjectManager->getEditorAssetManager()) {
 				const C78E::FilePath assetDirectoryPath = m_ProjectManager->getActiveProject()->getAssetDirectory();
@@ -35,14 +32,14 @@ namespace C78Editor::GUI {
 				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 1.0f);
 				if (ImGui::Button("Defaults")) {
 					m_CreateAssetHandle = C78E::AssetHandle();
-					m_CreateAssetMeta = C78E::Asset::AssetMeta();
+					m_CreateAssetMeta = C78E::createRef<C78E::Asset::Meta>();
 					if (open)
 						ImGui::TreePop();
 					return;
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Create")) {
-					const C78E::FilePath fullAssetPath = m_ProjectManager->getActiveProject()->getAssetDirectory() / m_CreateAssetMeta.fileSource;
+					const C78E::FilePath fullAssetPath = m_ProjectManager->getActiveProject()->getAssetDirectory() / m_CreateAssetMeta->fileSource;
 					if (C78E::FileSystem::exists(fullAssetPath)) {
 						assetManager->importAsset(fullAssetPath, m_CreateAssetMeta, m_CreateAssetHandle);
 					}
@@ -53,11 +50,17 @@ namespace C78Editor::GUI {
 
 				if (open) {
 					ImGui::Spacing();
-					C78E::GUI::drawLabeledTextInput<C78E_PROJECT_NAME_MAX_LENGTH>("AssetName", m_CreateAssetMeta.name);
+					C78E::GUI::drawLabeledTextInput<C78E_PROJECT_NAME_MAX_LENGTH>("AssetName", m_CreateAssetMeta->name);
 					ImGui::Spacing();
-					C78E::GUI::drawLabeledComboInput<C78E::Asset::AssetType>("AssetType", m_CreateAssetMeta.type, C78E::Asset::getAllAssetTypes(true));
+					C78E::GUI::drawLabeledComboInput<C78E::Asset::Type>("Type", m_CreateAssetMeta->type, {0, 1, 2, 3, 4, 5, 6, 7});
 					ImGui::Spacing();
-					C78E::GUI::drawLabeledFileInput<PATH_MAX>("SourceFile", m_CreateAssetMeta.fileSource, false, C78E::FileSystem::getAssetEntryTypes(), assetDirectoryPath);
+					if(C78E::GUI::drawLabeledFileInput<PATH_MAX>("SourceFile", m_CreateAssetMeta->fileSource, false, C78E::FileSystem::getAssetEntryTypes(), assetDirectoryPath)) {
+						if(m_CreateAssetMeta->fileSource.has_filename()) {
+							C78E::FilePath filename = m_CreateAssetMeta->fileSource.filename();
+							m_CreateAssetMeta->name = filename.string().substr(0, filename.string().size() - ((filename.has_extension()) ? filename.extension().string().size() : 0));
+						}
+						m_CreateAssetMeta->type = C78E::Asset::Type::typeFromFile(m_CreateAssetMeta->fileSource);
+					}
 					ImGui::Spacing();
 					std::string uuid = C78E::UUID::encodeToString(m_CreateAssetHandle);
 					C78E::GUI::drawLabeledTextInput<46>("AssetHandle", uuid);
@@ -71,7 +74,10 @@ namespace C78Editor::GUI {
 			
 			ImGui::Spacing();
 			ImGui::Separator();
-
+			if (ImGui::Button("Reload Default Assets")) {
+				// Reload any reloads all
+				assetManager->reloadAsset(C78E::EditorAssetManager::Default::Texture2D_White);
+			}
 
 			if (ImGui::BeginTable("##AssetList", 2, ImGuiTableFlags_NoBordersInBodyUntilResize)) {
 
@@ -79,18 +85,18 @@ namespace C78Editor::GUI {
 					ImGui::TableNextColumn();
 
 					C78E::AssetHandle handle = entry.first;
-					C78E::Asset::AssetMeta meta = entry.second;
-					ImGui::SeparatorText((C78E::AssetHandle::encodeToString(handle) + ", " + meta.name).c_str());
+					C78E::Ref<C78E::Asset::Meta> meta = entry.second;
+					ImGui::SeparatorText((C78E::AssetHandle::encodeToString(handle) + ", " + meta->name).c_str());
 					ImGui::Spacing();
-					ImGui::Text(meta.name.c_str()); ImGui::SameLine(); ImGui::Text(C78E::Asset::assetTypeToString(meta.type).c_str());
-					ImGui::Text(meta.fileSource.string().c_str());
+					ImGui::Text(meta->name.c_str()); ImGui::SameLine(); ImGui::Text(C78E::Asset::Type::assetTypeToString(meta->type).c_str());
+					ImGui::Text(meta->fileSource.string().c_str());
 					ImGui::Text(std::to_string(handle).c_str());
 					ImGui::Spacing();
 					ImGui::Separator();
 
 					ImGui::TableNextColumn();
 					if (auto asset = assetManager->getAsset(handle)) {
-						drawAssetPreview(assetManager, asset, meta.name);
+						drawAssetPreview(assetManager, asset, meta->name);
 					} else {
 						ImGui::Text("Failed to load Asset!");
 					}
@@ -105,7 +111,7 @@ namespace C78Editor::GUI {
 		}
 	}
 
-	void AssetManagerUI::drawAssetEditPreview(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label) {
+	void AssetManagerUI::drawAssetEditPreview(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Asset::Type type, C78E::AssetHandle& handle, const std::string& label) {
 		// edit -> call drawAssetEdit()
 		AssetManagerUI::drawAssetEdit(assetManager, type, handle, label);
 		// show asset overwiew
@@ -120,20 +126,20 @@ namespace C78Editor::GUI {
 	}
 
 	void AssetManagerUI::drawAssetPreview(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Ref<C78E::Asset> asset, const std::string& label) {
-		switch (asset->getType())
+		switch ((uint8_t)asset->getType())
 		{
-		case C78E::Asset::None: 
+		case C78E::Asset::Type::None: 
 		{
 			ImGui::Text("Asset Type invalid!");
 		}
 		break;
-		case C78E::Asset::Scene:
+		case C78E::Asset::Type::Scene:
 		{
 			ImGui::Text("Scene: TODO");
 		}
 		break;
 		/*
-		case C78E::Asset::Model:
+		case C78E::Asset::Type::Model:
 		{
 			C78E::Ref<C78E::Model> model = std::static_pointer_cast<C78E::Model>(asset);
 			C78E::Ref<C78E::Mesh> mesh = model->mesh();
@@ -144,7 +150,7 @@ namespace C78Editor::GUI {
 		}
 		break;
 		*/
-		case C78E::Asset::Mesh:
+		case C78E::Asset::Type::Mesh:
 		{
 			/*
 			C78E::Ref<C78E::Mesh> mesh = std::static_pointer_cast<C78E::Mesh>(asset);
@@ -156,28 +162,28 @@ namespace C78Editor::GUI {
 			*/
 		}
 		break;
-		case C78E::Asset::Material:
+		case C78E::Asset::Type::Material:
 		{
 			C78E::Ref<C78E::Material> material = std::static_pointer_cast<C78E::Material>(asset);
 			ImGui::Text("Material:");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Shader, material->m_Shader, "Shader");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Shader, material->m_Shader, "Shader");
 			ImGui::Text("  Textures:");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.ambient, "Ambient");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.diffuse, "Diffuse");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.specular, "Specular");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.specularHighlight, "SpecularHighlight");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.bump, "Bump");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.displacement, "Displacement");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.alpha, "Alpha");
-			drawAssetEditPreview(assetManager, C78E::Asset::AssetType::Texture2D, material->m_MaterialTextures.reflection, "Reflection");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.ambient, "Ambient");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.diffuse, "Diffuse");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.specular, "Specular");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.specularHighlight, "SpecularHighlight");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.bump, "Bump");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.displacement, "Displacement");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.alpha, "Alpha");
+			drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, material->m_MaterialTextures.reflection, "Reflection");
 		}
 		break;
-		case C78E::Asset::Shader:
+		case C78E::Asset::Type::Shader:
 		{
 			ImGui::Text("Shader: TODO");
 		}
 		break;
-		case C78E::Asset::Texture2D:
+		case C78E::Asset::Type::Texture2D:
 		{
 			C78E::Ref<C78E::Texture2D> texture = std::static_pointer_cast<C78E::Texture2D>(asset);
 
@@ -197,12 +203,12 @@ namespace C78Editor::GUI {
 			ImGui::Image(C78E::GUI::TextureHandle(texture->getRendererID()), screenSize, ImVec2{ 0.f,1.f }, ImVec2{ 1.f,0.f });
 		}
 		break;
-		case C78E::Asset::CubeMap:
+		case C78E::Asset::Type::CubeMap:
 		{
 			ImGui::Text("CubeMap: TODO");
 		}
 		break;
-		case C78E::Asset::Font:
+		case C78E::Asset::Type::Font:
 		{
 			C78E::Ref<C78E::Font> font = std::static_pointer_cast<C78E::Font>(asset);
 			C78E::Ref<C78E::Texture2D> atlas = font->getAtlasTexture();
@@ -228,7 +234,7 @@ namespace C78Editor::GUI {
 
 	}
 
-	void AssetManagerUI::drawAssetEdit(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Asset::AssetType type, C78E::AssetHandle& handle, const std::string& label) {
+	void AssetManagerUI::drawAssetEdit(C78E::Ref<C78E::EditorAssetManager> assetManager, C78E::Asset::Type type, C78E::AssetHandle& handle, const std::string& label) {
 		ImGui::PushID(label.c_str());
 		if (!label.empty()) {
 			ImGui::SeparatorText(label.c_str());
@@ -244,11 +250,11 @@ namespace C78Editor::GUI {
 		comboEntries.push_back(none);
 
 		for (auto& [entryHandle, entryMeta] : assetManager->getAssetRegistry())
-			if (entryMeta.type == type) {
+			if (entryMeta->type == type) {
 				if (entryHandle == handle)
 					selected = static_cast<int>(comboEntries.size());
-				assetofSameType[entryMeta.name] = entryHandle;
-				comboEntries.push_back(entryMeta.name.c_str());
+				assetofSameType[entryMeta->name] = entryHandle;
+				comboEntries.push_back(entryMeta->name.c_str());
 			}
 
 		ImGui::Combo("##AssetEditSelect", &selected, comboEntries.data(), static_cast<int>(comboEntries.size()));
@@ -256,7 +262,7 @@ namespace C78Editor::GUI {
 		handle = assetofSameType[comboEntries.at(selected)];
 
 		ImGui::Text(("AssetHandle: " + C78E::AssetHandle::encodeToString(handle)).c_str());
-		ImGui::Text(("AssetType: " + C78E::Asset::assetTypeToString(type)).c_str());
+		ImGui::Text(("Type: " + C78E::Asset::Type::assetTypeToString(type)).c_str());
 
 		ImGui::Separator();
 		ImGui::PopID();

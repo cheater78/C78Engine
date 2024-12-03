@@ -68,6 +68,7 @@
 #include <C78E/Utils/Yaml/YamlUtils.h>
 #include <C78E/Utils/ImGui/ImGuiUtils.h>
 #include <entt/entt.hpp>
+#include <C78E/Utils/Font/FontUtils.h>
 
 #ifdef C78E_ENTRYPOINT
 #include "C78E/Core/EntryPoint.h"

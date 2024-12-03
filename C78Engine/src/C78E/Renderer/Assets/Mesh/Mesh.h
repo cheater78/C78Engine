@@ -102,8 +102,8 @@ namespace C78E {
 
 
 	public:
-		virtual AssetType getType() const override { return Asset::AssetType::Mesh; };
-		static AssetType getClassType() { return AssetType::Mesh; };
+		virtual Type getType() const override { return Asset::Type::Mesh; };
+		static Type getClassType() { return Type::Mesh; };
 	private:
 		std::vector<Position> m_Positions;
 

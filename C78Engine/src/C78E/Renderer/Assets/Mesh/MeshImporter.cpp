@@ -5,7 +5,7 @@
 
 namespace C78E {
 
-	Ref<Mesh> MeshImporter::importMesh(const FilePath& assetDirectory, const Asset::AssetMeta& meta, AssetHandle handle) {
+	Ref<Mesh> MeshImporter::importMesh(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
 		C78E_ASSERT(false, "Impl!");
 		return Ref<Mesh>();
 	}

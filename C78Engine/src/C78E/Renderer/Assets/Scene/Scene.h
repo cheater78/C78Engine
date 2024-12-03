@@ -56,8 +56,8 @@ namespace C78E {
 		void forEachEntity(Func func);
 
 	public:
-		virtual AssetType getType() const override { return Asset::AssetType::Scene; };
-		static AssetType getClassType() { return AssetType::Scene; };
+		virtual Type getType() const override { return Asset::Type::Scene; };
+		static Type getClassType() { return Type::Scene; };
 	private:
 		template<typename T>
 		void onComponentAdded(Entity entity, T& component);

@@ -1,9 +1,12 @@
 #pragma once
 
-#include <vector>
-
 #undef INFINITE
+#define MSDFGEN_USE_LIBPNG
 #include "msdf-atlas-gen.h"
+#include "FontGeometry.h"
+#include "GlyphGeometry.h"
+
+#include <vector>
 
 namespace C78E {
 
