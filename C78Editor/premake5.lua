@@ -53,6 +53,9 @@ project "C78Editor"
 	
 	filter "system:windows"
 		systemversion "latest"
+		buildoptions {
+			"/Zc:preprocessor"
+		}
 
 		defines{
 			"C78E_PLATFORM_WINDOWS"

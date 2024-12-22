@@ -48,10 +48,10 @@ namespace C78E::GUI {
 		ImGui::SameLine();
 		if(drawTextButton("...")) {
 			if(save)
-				input = FileDialogs::saveFile(filter, filePickerBasePath, input, label);
+				input = FileDialogs::saveFile(filter, filePickerBasePath, input, label).string();
 			else
-				input = FileDialogs::openFile(filter, filePickerBasePath, input, label);
-			input = FileSystem::getRelativePathTo(input, filePickerBasePath);
+				input = FileDialogs::openFile(filter, filePickerBasePath, input, label).string();
+			input = FileSystem::getRelativePathTo(input, filePickerBasePath).string();
 			dialog = true;
 		}
 		ImGui::PopID();
@@ -59,7 +59,7 @@ namespace C78E::GUI {
 	}
 	template<std::size_t bufferSize>
 	static bool drawLabeledFileInput(const std::string& label, FilePath& input, bool save, const std::vector<FileSystem::EntryType>& filter, const FilePath& filePickerBasePath = FileSystem::C78RootDirectory) {
-		std::string inputStr = input;
+		std::string inputStr = input.string();
 		bool dialog = drawLabeledFileInput<bufferSize>(label, inputStr, save, filter, filePickerBasePath);
 		input = inputStr;
 		return dialog;

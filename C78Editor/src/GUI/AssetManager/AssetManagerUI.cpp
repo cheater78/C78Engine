@@ -54,7 +54,7 @@ namespace C78Editor::GUI {
 					ImGui::Spacing();
 					C78E::GUI::drawLabeledComboInput<C78E::Asset::Type>("Type", m_CreateAssetMeta->type, {0, 1, 2, 3, 4, 5, 6, 7});
 					ImGui::Spacing();
-					if(C78E::GUI::drawLabeledFileInput<PATH_MAX>("SourceFile", m_CreateAssetMeta->fileSource, false, C78E::FileSystem::getAssetEntryTypes(), assetDirectoryPath)) {
+					if(C78E::GUI::drawLabeledFileInput<C78E_PATH_MAX>("SourceFile", m_CreateAssetMeta->fileSource, false, C78E::FileSystem::getAssetEntryTypes(), assetDirectoryPath)) {
 						if(m_CreateAssetMeta->fileSource.has_filename()) {
 							C78E::FilePath filename = m_CreateAssetMeta->fileSource.filename();
 							m_CreateAssetMeta->name = filename.string().substr(0, filename.string().size() - ((filename.has_extension()) ? filename.extension().string().size() : 0));

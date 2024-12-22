@@ -130,7 +130,7 @@ namespace C78E {
 				out << YAML::BeginMap;
 				out << YAML::Key << "Handle" << YAML::Value << handle;
 				out << YAML::Key << "Name" << YAML::Value << meta->name;
-				out << YAML::Key << "FilePath" << YAML::Value << getFile(handle);
+				out << YAML::Key << "FilePath" << YAML::Value << getFile(handle).string();
 				out << YAML::Key << "Type" << YAML::Value << Asset::Type::assetTypeToString(meta->type);
 
 				//Asset type dependend Meta

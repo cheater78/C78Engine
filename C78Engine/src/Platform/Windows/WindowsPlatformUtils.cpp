@@ -8,65 +8,87 @@
 #include <shlobj.h>
 
 namespace C78E {
+	/*
+	* creates  a file dialog
+	* returns the output as string
+	* hint: can't save directories!
+	*/
+	std::string winFileDialog(const FileDialogs::Filter& filter, FilePath baseDirectory, FilePath defaultFile, const std::string& dialogTitle, bool save, bool multiple) {
+		OPENFILENAMEA ofn;
+
+		CHAR szFile[C78E_PATH_MAX] = { 0 };
+		if(!defaultFile.empty()) {
+			C78E_CORE_VALIDATE(defaultFile.string().length() < C78E_PATH_MAX, return {}, "FileDialogs::openFile: baseFile is longer than {} chars!", C78E_PATH_MAX);
+			memcpy_s(szFile, defaultFile.string().length(), defaultFile.string().c_str(), defaultFile.string().length());
+		}
+
+		CHAR currentDir[C78E_PATH_MAX] = { 0 };
+		if(!baseDirectory.empty()) {
+			C78E_CORE_VALIDATE(baseDirectory.string().length() < C78E_PATH_MAX, return {}, "FileDialogs::openFile: baseDir is longer than {} chars!", C78E_PATH_MAX);
+			memcpy_s(currentDir, baseDirectory.string().length(), baseDirectory.string().c_str(), baseDirectory.string().length());
+		}
+
+		ZeroMemory(&ofn, sizeof(OPENFILENAME));
+		ofn.lStructSize = sizeof(OPENFILENAME);
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		if (baseDirectory.empty() && GetCurrentDirectoryA(256, currentDir))
+			ofn.lpstrInitialDir = currentDir;
+
+
+		if(!dialogTitle.empty())
+			ofn.lpstrTitle = dialogTitle.c_str();
+		if(!filter.empty()) {
+			std::string winFilter = "All Files\0*.*\0";
+			for(FileSystem::EntryType type : filter)
+				if (type == FileSystem::EntryType::Directory) {
+					winFilter += "";
+					break;
+				}
+				else {
+					winFilter +=  FileSystem::stringFromEntryType(type) + "\0" + std::join(FileSystem::extensionsFromEntryType(type), ";") + "\0";
+				}
+			winFilter += "\0";
+			ofn.lpstrFilter = winFilter.c_str();
+			ofn.nFilterIndex = 1;
+		}
+
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		if (multiple)
+			ofn.Flags |= OFN_ALLOWMULTISELECT;
+
+		std::string out;
+		if(save && GetSaveFileNameA(&ofn) == TRUE || !save && GetOpenFileNameA(&ofn) == TRUE)
+			out = { ofn.lpstrFile };
+
+		if (out.empty())
+			return ((defaultFile.is_relative()) ? baseDirectory / defaultFile : defaultFile).string();
+		if (out.back() == '\n')
+			out.back() = '\0';
+		return out;
+	}
+
+	FilePath FileDialogs::openFile(const Filter& filter, C78E::FilePath baseDirectory, C78E::FilePath defaultFile, const std::string& dialogTitle) {
+		return winFileDialog(filter, baseDirectory, defaultFile, dialogTitle, false, false);
+	}
+
+	std::vector<FilePath> FileDialogs::openFiles(const Filter& filter, C78E::FilePath baseDirectory, C78E::FilePath defaultFile, const std::string& dialogTitle) {
+		std::string out = winFileDialog(filter, baseDirectory, defaultFile, dialogTitle, false, true);
+		auto frags = std::split(out, " ");
+		std::vector<FilePath> paths;
+		paths.reserve(frags.size());
+		for (auto& frag : frags)
+			paths.emplace_back(frag);
+		return paths;
+	}
+
+	FilePath FileDialogs::saveFile(const Filter& filter, C78E::FilePath baseDirectory, C78E::FilePath defaultFile, const std::string& dialogTitle) {
+		return winFileDialog(filter, baseDirectory, defaultFile, dialogTitle, true, false);
+	}
 
 	float Time::getTime() {
 		return	static_cast<float>(glfwGetTime());
-	}
-
-	C78E::FilePath FileDialogs::openFile(const char* filter, C78E::FilePath baseDir, C78E::FilePath baseFile) {
-		OPENFILENAMEA ofn;
-		CHAR szFile[260] = { 0 };
-		C78E_CORE_ASSERT(baseFile.string().length() < 260, "FileDialogs::openFile: baseFile is longer than 260 chars!");
-		memcpy_s(szFile, baseFile.string().length(), baseFile.string().c_str(), baseFile.string().length());
-		CHAR currentDir[256] = { 0 };
-		C78E_CORE_ASSERT(baseDir.string().length() < 256, "FileDialogs::openFile: baseDir is longer than 256 chars!");
-		memcpy_s(currentDir, baseDir.string().length(), baseDir.string().c_str(), baseDir.string().length());
-		ZeroMemory(&ofn, sizeof(OPENFILENAME));
-		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
-		ofn.lpstrFile = szFile;
-		ofn.nMaxFile = sizeof(szFile);
-		if (baseDir.empty() && GetCurrentDirectoryA(256, currentDir))
-			ofn.lpstrInitialDir = currentDir;
-		ofn.lpstrFilter = filter;
-		ofn.nFilterIndex = 1;
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-
-		if (GetOpenFileNameA(&ofn) == TRUE)
-			return ofn.lpstrFile;
-
-		return std::string();
-
-	}
-
-	C78E::FilePath FileDialogs::saveFile(const char* filter, C78E::FilePath baseDir, C78E::FilePath baseFile) {
-		OPENFILENAMEA ofn;
-		CHAR szFile[260] = { 0 };
-		if (baseFile.is_relative()) baseFile = std::filesystem::absolute(baseFile);
-		C78E_CORE_ASSERT(baseFile.string().length() < 260, "FileDialogs::saveFile: baseFile is longer than 260 chars!");
-		memcpy_s(szFile, baseFile.string().length(), baseFile.string().c_str(), baseFile.string().length());
-		CHAR currentDir[256] = { 0 };
-		if (baseDir.is_relative()) baseDir = std::filesystem::absolute(baseDir);
-		C78E_CORE_ASSERT(baseDir.string().length() < 256, "FileDialogs::saveFile: baseDir is longer than 256 chars!");
-		memcpy_s(currentDir, baseDir.string().length(), baseDir.string().c_str(), baseDir.string().length());
-		ZeroMemory(&ofn, sizeof(OPENFILENAME));
-		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
-		ofn.lpstrFile = szFile;
-		ofn.nMaxFile = sizeof(szFile);
-		if (baseDir.empty() && GetCurrentDirectoryA(256, currentDir))
-			ofn.lpstrInitialDir = currentDir;
-		ofn.lpstrFilter = filter;
-		ofn.nFilterIndex = 1;
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
-
-		// Sets the default extension by extracting it from the filter
-		ofn.lpstrDefExt = strchr(filter, '\0') + 1;
-
-		if (GetSaveFileNameA(&ofn) == TRUE)
-			return ofn.lpstrFile;
-
-		return std::string();
 	}
 
 	System::Monitor System::getPrimaryMonitor() {

@@ -112,7 +112,7 @@ namespace C78E {
 		char* s = m_InputBuffer;
 		if (s[0])
 			onExecute(s);
-		strcpy(s, "");
+		std::strcpy(s, "");
 	}
 
 	void Console::onExecute(const char* cmd) {
