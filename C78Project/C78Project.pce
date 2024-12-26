@@ -1,6 +1,0 @@
-Project:
-  Name: C78Project
-  StartScene: UUID::77BE:A088:5A9C:AF5D:C584:E903:3345:A789
-  AssetDirectory: assets
-  AssetRegistry: AssetRegistry.ace
-  ScriptModule: Scripts.bce

@@ -57,7 +57,7 @@ project "C78Engine"
 		pchsource "src/C78EPCH.cpp"
 
 
-	filter "system:windows"
+	filter "system:Windows"
 		systemversion "latest"
 		buildoptions {
 			"/Zc:preprocessor"
@@ -73,7 +73,7 @@ project "C78Engine"
 			"opengl32.lib"
 		}
 		
-	filter "system:linux"
+	filter "system:Linux"
 		systemversion "latest"
 
 		defines{

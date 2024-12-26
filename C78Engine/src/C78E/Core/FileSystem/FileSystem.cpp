@@ -4,7 +4,11 @@
 namespace C78E {
 
 	FilePath initC78ERootDirectory() {
+#ifdef C78E_PLATFORM_WINDOWS
+		return std::filesystem::current_path().parent_path();
+#elif defined C78E_PLATFORM_LINUX
 		return std::filesystem::current_path();
+#endif
 	}
 
 	const FilePath FileSystem::C78RootDirectory = initC78ERootDirectory();

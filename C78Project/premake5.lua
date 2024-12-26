@@ -52,7 +52,7 @@ project "C78Project"
 		"YAML_CPP_STATIC_DEFINE"
 	}
 
-	filter "system:windows"
+	filter "system:Windows"
 		systemversion "latest"
 		buildoptions {
 			"/Zc:preprocessor"
@@ -62,7 +62,7 @@ project "C78Project"
 			"C78E_PLATFORM_WINDOWS"
 		}
 		
-	filter "system:linux"
+	filter "system:Linux"
 		systemversion "latest"
 
 		defines{

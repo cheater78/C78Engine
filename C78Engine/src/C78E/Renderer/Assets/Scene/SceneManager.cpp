@@ -18,8 +18,8 @@ namespace C78E {
 	*/
 	Ref<Scene> SceneManager::createScene(const std::string& name, bool allowFileOverride) {
 		C78E_CORE_VALIDATE(m_ProjectManager->hasActiveProject(), return nullptr, "SceneManager::createScene: No active Project!")
-		Ref<Scene> scene = C78E::createRef<C78E::Scene>();
-		Ref<Asset::Meta> meta;
+		Ref<Scene> scene = C78E::createRef<Scene>();
+		Ref<Asset::Meta> meta = C78E::createRef<Asset::Meta>();
 		meta->name = name;
 		meta->fileSource = FileSystem::getRelativePathTo(getNewAvailableSceneFile(scene, name, allowFileOverride), m_ProjectManager->getActiveProject()->getAssetDirectory());
 		meta->type = C78E::Asset::Type::Scene;

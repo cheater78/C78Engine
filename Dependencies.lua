@@ -17,21 +17,19 @@ IncludeDir["msdfgen"] =	"%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdfgen
 IncludeDir["freetype"] =	"%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdfgen/freetype/include"
 IncludeDir["msdf_atlas_gen"] =	"%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdf-atlas-gen"
 
-filter "system:windows"
-    IncludeDir["VulkanSDK"] = 	"%{VULKAN_SDK}/Include"
+if os.host() == "windows" then
+	IncludeDir["VulkanSDK"] = 	"%{VULKAN_SDK}/Include"
     IncludeDir["shaderc"] = 	"%{VULKAN_SDK}/Include/shaderc"
     IncludeDir["SPIRV_Cross"] = "%{VULKAN_SDK}/Include/spirv_cross"
-
-filter "system:linux"
-    IncludeDir["VulkanSDK"] = 	"%{VULKAN_SDK}/include"
+elseif os.host() == "linux" then
+	IncludeDir["VulkanSDK"] = 	"%{VULKAN_SDK}/include"
     IncludeDir["shaderc"] = 	"%{VULKAN_SDK}/include/shaderc"
     IncludeDir["SPIRV_Cross"] = "%{VULKAN_SDK}/include/spirv_cross"
-
-
+end
 
 -- Static Libs
 Library = {}
-filter "system:windows"
+if os.host() == "windows" then
     Library["Vulkan"] = "%{VULKAN_SDK}/Lib/vulkan-1.lib"
     --TODO: VKLayerUtils does not exist any more!, check if needed -> update
 
@@ -50,7 +48,7 @@ filter "system:windows"
     Library["WinVersion"] = "Version.lib"
     Library["BCrypt"] = "Bcrypt.lib"
 
-filter "system:linux"
+elseif os.host() == "linux" then
     Library["Vulkan"] = "%{VULKAN_SDK}/lib/vulkan"
     --TODO: VKLayerUtils does not exist any more!, check if needed -> update
 
@@ -62,5 +60,4 @@ filter "system:linux"
     Library["ShaderC_Release"] = "%{VULKAN_SDK}/lib/shaderc_shared"
     Library["SPIRV_Cross_Release"] = "%{VULKAN_SDK}/lib/spirv-cross-core"
     Library["SPIRV_Cross_GLSL_Release"] = "%{VULKAN_SDK}/lib/spirv-cross-glsl"
-
-
+end

@@ -19,37 +19,78 @@ namespace C78E {
 		using FaceIndex = Index;
 		struct FaceHandle;
 
+
+		using NormalIndex = size_t;
+		using ColorIndex = size_t;
+		using TextureCoordinateIndex = size_t;
+
 	public:
 
 		template<typename T>
-		class HandleIterator {
+		class MeshIterator {
 		protected:
-			HandleIterator(Mesh* mesh, const std::vector<Index>& elements, std::function<T(Mesh&, Index)> at) : m_Mesh{mesh}, m_Indecies{elements}, m_At{at} { }
-			HandleIterator(const HandleIterator<T>& other) : m_Mesh{ other.m_Mesh }, m_Indecies{ other.m_Indecies }, m_Current{other.m_Current} { }
-			~HandleIterator() {}
+			MeshIterator(Mesh& mesh, const std::vector<Index>& elements, std::function<T(Mesh&, Index)> at) : m_Mesh{ mesh }, m_Indecies{ elements }, m_At{ at } { reset(); }
+			MeshIterator(const MeshIterator<T>& other) : m_Mesh{ other.m_Mesh }, m_Indecies{ other.m_Indecies }, m_Current{other.m_Current}, m_At{ other.m_At } { }
 		public:
-			HandleIterator<T>& operator=(const HandleIterator<T>& rawIterator) = default;
+			~MeshIterator() {}
+			MeshIterator<T>& operator=(const MeshIterator<T>& rawIterator) = default;
 
 			operator bool() const { return m_Current == (size_t) - 1; }
 
-			bool operator==(const HandleIterator<T>& rawIterator) const { return m_Mesh == rawIterator.m_Mesh && m_Indecies == rawIterator.m_Indecies && m_Current == rawIterator.m_Current; }
-			bool operator!=(const HandleIterator<T>& rawIterator) const { return !(*this == rawIterator); }
+			bool operator==(const MeshIterator<T>& rawIterator) const { return m_Mesh == rawIterator.m_Mesh && m_Indecies == rawIterator.m_Indecies && m_Current == rawIterator.m_Current; }
+			bool operator!=(const MeshIterator<T>& rawIterator) const { return !(*this == rawIterator); }
 
-			HandleIterator<T>& operator+=(const size_t& movement) { m_Current = (m_Current + 1 < m_Indecies.size()) m_Current + 1 : -1; return *this; }
-			HandleIterator<T>& operator-=(const size_t& movement) { m_Current = (m_Current > 0) m_Current - 1 : -1; return *this; }
-			HandleIterator<T>& operator++() { *this += 1; return *this; }
-			HandleIterator<T>& operator--() { *this -= 1; return *this; }
-			HandleIterator<T>  operator++(int) { auto temp(*this); *this += 1; return temp; }
-			HandleIterator<T>  operator--(int) { auto temp(*this); *this -= 1; return temp; }
-			HandleIterator<T>  operator+(const size_t& movement) { auto temp(*this); temp += movement; return temp; }
-			HandleIterator<T>  operator-(const size_t& movement) { auto temp(*this); temp -= movement; return temp; }
+			MeshIterator<T>& operator+=(const size_t& movement) { m_Current = (m_Current + 1 < m_Indecies.size()) ? (m_Current + 1) : -1; return *this; }
+			MeshIterator<T>& operator-=(const size_t& movement) { m_Current = (m_Current > 0) ? (m_Current - 1) : -1; return *this; }
+			MeshIterator<T>& operator++() { *this += 1; return *this; }
+			MeshIterator<T>& operator--() { *this -= 1; return *this; }
+			MeshIterator<T>  operator++(int) { auto temp(*this); *this += 1; return temp; }
+			MeshIterator<T>  operator--(int) { auto temp(*this); *this -= 1; return temp; }
+			MeshIterator<T>  operator+(const size_t& movement) { auto temp(*this); temp += movement; return temp; }
+			MeshIterator<T>  operator-(const size_t& movement) { auto temp(*this); temp -= movement; return temp; }
 
-			size_t operator-(const HandleIterator<T>& other) { return (m_Current != -1 && other.m_Current != -1 && m_Current >= other.m_Current) ? m_Current - other.m_Current : 0; }
+			size_t operator-(const MeshIterator<T>& other) { return (m_Current != -1 && other.m_Current != -1 && m_Current >= other.m_Current) ? m_Current - other.m_Current : 0; }
 
-			T operator*() { C78E_CORE_ASSERT(m_Current != -1, "Mesh::HandleIterator: operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies.at(m_Current)); }
-			const T operator*() const { C78E_CORE_ASSERT(m_Current != -1, "Mesh::HandleIterator: const operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies.at(m_Current)); }
-			T operator->() { return *this; }	
-			
+			T operator*() { C78E_CORE_ASSERT(m_Current != -1, "Mesh::MeshIterator: operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies.at(m_Current)); }
+			const T operator*() const { C78E_CORE_ASSERT(m_Current != -1, "Mesh::MeshIterator: const operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies.at(m_Current)); }
+			T operator->() { return *this; }
+
+			void reset() { m_Current = 0; }
+			size_t count() const { return m_Indecies.size(); }
+
+			MeshIterator find(const T& obj) const {
+				MeshIterator it = *this;
+				for(reset(); it; it++)
+					if(*it = obj)
+						return it;
+				it->m_Current = -1;
+				return it;
+			}
+
+			MeshIterator unionIter(const MeshIterator& other) const {
+				std::vector<Index> indecies = m_Indecies;
+				for(Index idx : other.m_Indecies)
+					if(std::find(m_Indecies.begin(), m_Indecies.end(), idx) == m_Indecies.end())
+						indecies.emplace_back(idx);
+				return MeshIterator(m_Mesh, indecies, m_At);
+			}
+
+			MeshIterator intersectionIter(const MeshIterator& other) const {
+				std::vector<Index> indecies = std::vector<Index>();
+				for(Index idx : other.m_Indecies)
+					if(std::find(m_Indecies.begin(), m_Indecies.end(), idx) != m_Indecies.end())
+						indecies.emplace_back(idx);
+				return MeshIterator(m_Mesh, indecies, m_At);
+			}
+
+			MeshIterator differenceIter(const MeshIterator& other) const {
+				std::vector<Index> indecies = std::vector<Index>();
+				for(Index idx : m_Indecies)
+					if(std::find(other.m_Indecies.begin(), other.m_Indecies.end(), idx) == other.m_Indecies.end())
+						indecies.emplace_back(idx);
+				return MeshIterator(m_Mesh, indecies, m_At);
+			}
+
 		protected:
 			Mesh& m_Mesh;
 			std::vector<Index> m_Indecies;
@@ -57,37 +98,55 @@ namespace C78E {
 			std::function<T(Mesh&, Index)> m_At;
 		};
 
-		class VertexIterator : public HandleIterator<VertexHandle> {
-		public:
+		class VertexIterator : public MeshIterator<VertexHandle> {
+		protected:
 			static VertexHandle access(Mesh& mesh, VertexIndex index) { return VertexHandle(mesh, index); }
 		public:
-			VertexIterator(Mesh* mesh, const std::vector<Index>& elements) : HandleIterator<VertexHandle>(mesh, elements, access) {}
+			VertexIterator(Mesh& mesh, const std::vector<Index>& elements) : MeshIterator<VertexHandle>(mesh, elements, access) {}
 		};
 
-		class HalfedgeIterator : public HandleIterator<HalfedgeHandle> {
-		public:
+		class HalfedgeIterator : public MeshIterator<HalfedgeHandle> {
+		protected:
 			static HalfedgeHandle access(Mesh& mesh, HalfedgeIndex index) { return HalfedgeHandle(mesh, index); }
 		public:
-			HalfedgeIterator(Mesh* mesh, const std::vector<Index>& elements) : HandleIterator<HalfedgeHandle>(mesh, elements, access) {}
+			HalfedgeIterator(Mesh& mesh, const std::vector<Index>& elements) : MeshIterator<HalfedgeHandle>(mesh, elements, access) {}
 		};
 
-		class FaceIterator : public HandleIterator<FaceHandle> {
-		public:
+		class FaceIterator : public MeshIterator<FaceHandle> {
+		protected:
 			static FaceHandle access(Mesh& mesh, FaceIndex index) { return FaceHandle(mesh, index); }
 		public:
-			FaceIterator(Mesh* mesh, const std::vector<Index>& elements) : HandleIterator<FaceHandle>(mesh, elements, access) {}
+			FaceIterator(Mesh& mesh, const std::vector<Index>& elements) : MeshIterator<FaceHandle>(mesh, elements, access) {}
 		};
 
-		
-
-		template<typename T>
-		class StorageIterator : private std::iterator<std::bidirectional_iterator_tag, T> {
+		class PositionIterator : public MeshIterator<Position> {
+		protected:
+			static Position access(Mesh& mesh, VertexIndex index) { return mesh.m_Positions[index]; }
 		public:
-
-		private:
-			std::vector<T>& m_Data;
-
+			PositionIterator(Mesh& mesh, const std::vector<Index>& elements) : MeshIterator<Position>(mesh, elements, access) {}
 		};
+
+		class NormalIterator : public MeshIterator<Normal> {
+		protected:
+			static Normal access(Mesh& mesh, NormalIndex index) { return mesh.m_Normals[index]; }
+		public:
+			NormalIterator(Mesh& mesh, const std::vector<Index>& elements) : MeshIterator<Normal>(mesh, elements, access) {}
+		};
+
+		class ColorIterator : public MeshIterator<Color> {
+		protected:
+			static Color access(Mesh& mesh, ColorIndex index) { return mesh.m_Colors[index]; }
+		public:
+			ColorIterator(Mesh& mesh, const std::vector<Index>& elements) : MeshIterator<Color>(mesh, elements, access) {}
+		};
+
+		class TextureCoordinateIterator : public MeshIterator<TextureCoordinate> {
+		protected:
+			static TextureCoordinate access(Mesh& mesh, TextureCoordinateIndex index) { return mesh.m_TextureCoordinates[index]; }
+		public:
+			TextureCoordinateIterator(Mesh& mesh, const std::vector<Index>& elements) : MeshIterator<TextureCoordinate>(mesh, elements, access) {}
+		};
+
 
 	private: // Mesh Topology
 		struct BaseHandle {
@@ -111,7 +170,7 @@ namespace C78E {
 			~VertexHandle() = default;
 
 			VertexIndex idx() const { return m_Index; }
-			virtual bool valid() const override { return BaseHandle::valid() && m_Index < m_Mesh.m_Positions.size(); }
+			virtual bool valid() const override;
 
 			Position& position();
 			HalfedgeHandle halfedge();
@@ -128,7 +187,7 @@ namespace C78E {
 			~HalfedgeHandle() = default;
 
 			HalfedgeIndex idx() const { return m_Index; }
-			virtual bool valid() const override { return BaseHandle::valid() && m_Index < m_Mesh.m_Halfedges.size(); }
+			virtual bool valid() const override;
 
 			VertexHandle from();
 			VertexHandle to();
@@ -147,8 +206,9 @@ namespace C78E {
 			~FaceHandle() = default;
 
 			FaceIndex idx() const { return m_Index; }
-			virtual bool valid() const override { return BaseHandle::valid() && m_Index < m_Mesh.m_FaceCount; }
+			virtual bool valid() const override;
 
+			VertexHandle vertex();
 			HalfedgeHandle halfedge();
 
 			VertexIterator vertecies();
@@ -205,6 +265,27 @@ namespace C78E {
 		Mesh(const Mesh&) = delete;
 		~Mesh() = default;
 
+		// Meshdata
+		Position& position(VertexIndex vIndex);
+		PositionIterator positions();
+
+		bool hasNormals() const;
+		Normal& normal(VertexIndex vIndex);
+		NormalIterator normals();
+
+		bool hasColor() const;
+		Color& color(VertexIndex vIndex);
+		ColorIterator colors();
+
+		bool hasTextureCoordinates() const;
+		TextureCoordinate& textureCoordinate(VertexIndex vIndex);
+		TextureCoordinateIterator textureCoordinates();
+
+		bool positionExists(Position position) const;
+		bool normalExists(Normal normal) const;
+		bool colorExists(Color color) const;
+		bool textureCoordinateExists(TextureCoordinate textureCoordinate) const;
+		
 		// Mesh Topology
 		VertexHandle addVertex(Position position, Normal normal = {}, Color color = {}, TextureCoordinate textureCoordinate = {});
 		HalfedgeHandle addHalfedge(VertexHandle from, VertexHandle to);
@@ -213,30 +294,27 @@ namespace C78E {
 		VertexHandle vertex(VertexIndex vIndex);
 		HalfedgeHandle halfedge(HalfedgeIndex hIndex);
 		FaceHandle face(FaceIndex fIndex);
+		
+		bool vertexHasHalfedge(VertexIndex v) const;
+		bool vertexHasFace(VertexIndex v) const;
+		VertexIterator vertecies();
+		VertexIterator vertecies(VertexIndex v);
 
-		// Meshdata
-		Position& position(VertexIndex vIndex);
-		VertexIterator positions();
+		bool halfedgeVerteciesExist(VertexHandle from, VertexHandle to) const;
+		bool halfedgeHasFace(HalfedgeIndex index) const;
+		FaceHandle halfedgeFace(HalfedgeIndex he);
+		HalfedgeHandle halfedgeOpposite(HalfedgeIndex he);
+		HalfedgeIterator halfedges();
+		const HalfedgeIterator halfedges() const;
+		HalfedgeIterator halfedges(VertexIndex v, bool outgoing = true);
 
-		bool hasNormals();
-		Normal& normal(VertexIndex vIndex);
-		VertexIterator normals();
-
-		bool hasColor();
-		Color& color(VertexIndex vIndex);
-		VertexIterator colors();
-
-		bool hasTextureCoordinates();
-		TextureCoordinate& textureCoordinate(VertexIndex vIndex);
-		VertexIterator textureCoordinates();
-
-		bool positionExists(Position position);
-		bool normalExists(Normal normal);
-		bool colorExists(Color color);
-		bool textureCoordinateExists(TextureCoordinate textureCoordinate);
-		bool halfedgeVerteciesExist(VertexHandle from, VertexHandle to);
-		bool FaceVerteciesExist(VertexHandle vh0, VertexHandle vh1, VertexHandle vh2);
-		bool FaceHalfedgesExist(HalfedgeHandle he0, HalfedgeHandle he1, HalfedgeHandle he2);
+		bool faceVerteciesExist(VertexHandle vh0, VertexHandle vh1, VertexHandle vh2) const;
+		bool faceHalfedgesExist(HalfedgeHandle he0, HalfedgeHandle he1, HalfedgeHandle he2) const;
+		HalfedgeIterator faceHalfedges(FaceIndex f, bool cw = true);
+		FaceIterator faces();
+		const FaceIterator faces() const;
+		FaceIterator faces(VertexIndex v);
+		const FaceIterator faces(VertexIndex v) const;
 
 		// Custom Meshdata
 		template<typename T>
@@ -258,15 +336,12 @@ namespace C78E {
 		// Meshdata
 		std::vector<Position> m_Positions;
 
-		using NormalIndex = size_t;
 		std::map<VertexIndex, NormalIndex> m_NormalMap;
 		std::vector<Normal> m_Normals;
 
-		using ColorIndex = size_t;
 		std::map<VertexIndex, ColorIndex> m_ColorMap;
 		std::vector<Color> m_Colors;
 
-		using TextureCoordinateIndex = size_t;
 		std::map<VertexIndex, TextureCoordinateIndex> m_TextureCoordinateMap;
 		std::vector<TextureCoordinate> m_TextureCoordinates;
 
@@ -316,23 +391,47 @@ namespace C78E {
 
 			*/
 		public:
+			using Halfedge = std::pair<VertexIndex, VertexIndex>;
+			struct Face {
+				Halfedge he0;
+				Halfedge he1;
+				Halfedge he2;
+			};
+
 			Topology() = delete;
-			Topology(Mesh* mesh);
+			Topology(Mesh& mesh);
 			Topology(const Topology& other) = delete;
 			~Topology() = default;
 
-			HalfedgeIndex addHalfedge(VertexIndex v0, VertexIndex v1);
+			HalfedgeIndex addHalfedge(VertexIndex from, VertexIndex to);
 			FaceIndex addFace(HalfedgeIndex he0, HalfedgeIndex he1, HalfedgeIndex he2);
 
+			bool vertexHasHalfedge(VertexIndex v) const;
+			bool vertexHasFace(VertexIndex v) const;
+
+			const Halfedge& halfedge(HalfedgeIndex index) const;
+			bool halfedgeHasFace(HalfedgeIndex index) const;
+			bool halfedgeIsBoundary(HalfedgeIndex index) const;
+			HalfedgeIndex halfedgeOpposite(HalfedgeIndex index) const;
+			FaceIndex halfedgeFaceIndex(HalfedgeIndex he) const;
 			HalfedgeIterator halfedges();
+			const HalfedgeIterator halfedges() const;
+			HalfedgeIterator halfedges(VertexIndex v, bool outgoing = true);
+
+			const Face& face(FaceIndex index) const;
+			HalfedgeIterator faceHalfedges(FaceIndex f, bool cw = true);
 			FaceIterator faces();
+			const FaceIterator faces() const;
+			FaceIterator faces(VertexIndex v);
+			const FaceIterator faces(VertexIndex v) const;
 
 		private:
-			size_t vertexCount() const { return m_Mesh->m_Positions.size(); }
+			size_t vertexCount() const { return m_Mesh.m_Positions.size(); }
+			size_t faceHalfedgeCount() const { return m_FaceCount * 3; }
 		private:
-			Mesh* m_Mesh;
-			std::vector<std::pair<VertexIndex, VertexIndex>> m_Halfedges;
-			size_t m_FaceCount = 0;
+			Mesh& m_Mesh;
+			std::vector<Halfedge> m_Halfedges;
+			size_t m_FaceCount = 0; // last Faces' HalfEdge is at FC*3 - 1
 		};
 
 		Topology m_Topology;
