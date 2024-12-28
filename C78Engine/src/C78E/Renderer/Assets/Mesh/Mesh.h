@@ -6,8 +6,8 @@ namespace C78E {
 	class Mesh : public Asset {
 	public:
 		using Index = size_t;
-		using Position = glm::vec3;
-		using Normal = glm::vec3;
+		using Position = glm::vec4;
+		using Normal = glm::vec4;
 		using TextureCoordinate = glm::vec2;
 		using Color = glm::vec4;
 
@@ -20,9 +20,10 @@ namespace C78E {
 		struct FaceHandle;
 
 
-		using NormalIndex = size_t;
-		using ColorIndex = size_t;
-		using TextureCoordinateIndex = size_t;
+		using PositionIndex = VertexIndex;
+		using NormalIndex = Index;
+		using ColorIndex = Index;
+		using TextureCoordinateIndex = Index;
 
 	public:
 
@@ -51,11 +52,12 @@ namespace C78E {
 
 			size_t operator-(const MeshIterator<T>& other) { return (m_Current != -1 && other.m_Current != -1 && m_Current >= other.m_Current) ? m_Current - other.m_Current : 0; }
 
-			T operator*() { C78E_CORE_ASSERT(m_Current != -1, "Mesh::MeshIterator: operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies.at(m_Current)); }
-			const T operator*() const { C78E_CORE_ASSERT(m_Current != -1, "Mesh::MeshIterator: const operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies.at(m_Current)); }
-			T operator->() { return *this; }
+			T get() { C78E_CORE_ASSERT(m_Current != -1, "Mesh::MeshIterator: operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies[m_Current]); }
+			const T get() const { C78E_CORE_ASSERT(m_Current != -1, "Mesh::MeshIterator: operator*() cant be called on end!"); return m_At(m_Mesh, m_Indecies.at(m_Current)); }
+			T operator*() { return get(); }
+			const T operator*() const { return get(); }
 
-			void reset() { m_Current = 0; }
+			void reset() { m_Current = (bool)m_Indecies.size() - (int64_t)1; }
 			size_t count() const { return m_Indecies.size(); }
 
 			MeshIterator find(const T& obj) const {
@@ -192,8 +194,8 @@ namespace C78E {
 			VertexHandle from();
 			VertexHandle to();
 
-			HalfedgeHandle next();
 			HalfedgeHandle prev();
+			HalfedgeHandle next();
 			HalfedgeHandle opp();
 
 			FaceHandle face();
@@ -237,7 +239,7 @@ namespace C78E {
 			VPropertyHandle(Mesh& mesh, PropertyIndex propertyIndex) : BasePropertyHandle<T>(mesh, propertyIndex) { }
 			~VPropertyHandle() = default;
 		public:
-			T& propValue(VertexIndex index);
+			T& propValue(VertexIndex vertexIndex);
 		};
 
 		template<typename T>
@@ -247,7 +249,7 @@ namespace C78E {
 			HPropertyHandle(Mesh& mesh, PropertyIndex propertyIndex) : BasePropertyHandle<T>(mesh, propertyIndex) { }
 			~HPropertyHandle() = default;
 		public:
-			T& propValue(HalfedgeIndex index);
+			T& propValue(HalfedgeIndex halfedgeIndex);
 		};
 
 		template<typename T>
@@ -257,7 +259,7 @@ namespace C78E {
 			FPropertyHandle(Mesh& mesh, PropertyIndex propertyIndex) : BasePropertyHandle<T>(mesh, propertyIndex) { }
 			~FPropertyHandle() = default;
 		public:
-			T& propValue(FaceIndex index);
+			T& propValue(FaceIndex faceIndex);
 		};
 
 	public:
@@ -265,84 +267,110 @@ namespace C78E {
 		Mesh(const Mesh&) = delete;
 		~Mesh() = default;
 
+		void clear();
+
 		// Meshdata
-		Position& position(VertexIndex vIndex);
-		PositionIterator positions();
-
 		bool hasNormals() const;
-		Normal& normal(VertexIndex vIndex);
-		NormalIterator normals();
-
-		bool hasColor() const;
-		Color& color(VertexIndex vIndex);
-		ColorIterator colors();
-
+		bool hasColors() const;
 		bool hasTextureCoordinates() const;
-		TextureCoordinate& textureCoordinate(VertexIndex vIndex);
-		TextureCoordinateIterator textureCoordinates();
+		bool hasMappedNormals() const;
+		bool hasMappedColors() const;
+		bool hasMappedTextureCoordinates() const;
+
+		bool validVertexIndex(VertexIndex vertexIndex) const;
+		bool validHalfedgeIndex(HalfedgeIndex halfedgeIndex) const;
+		bool validFaceIndex(FaceIndex faceIndex) const;
+
+		size_t vertexCount() const;
+		size_t halfedgeCount() const;
+		size_t faceHalfedgeCount() const;
+		size_t faceCount() const;
 
 		bool positionExists(Position position) const;
 		bool normalExists(Normal normal) const;
 		bool colorExists(Color color) const;
 		bool textureCoordinateExists(TextureCoordinate textureCoordinate) const;
 		
-		// Mesh Topology
-		VertexHandle addVertex(Position position, Normal normal = {}, Color color = {}, TextureCoordinate textureCoordinate = {});
-		HalfedgeHandle addHalfedge(VertexHandle from, VertexHandle to);
-		FaceHandle addFace(VertexHandle vh0, VertexHandle vh1, VertexHandle vh2);
+		PositionIndex addPosition(const Position& position);
+		Position& position(VertexIndex vertexIndex);
+		PositionIterator positions();
 
-		VertexHandle vertex(VertexIndex vIndex);
-		HalfedgeHandle halfedge(HalfedgeIndex hIndex);
-		FaceHandle face(FaceIndex fIndex);
+		NormalIndex addNormal(const Normal& normal);
+		NormalIndex& normalIndex(HalfedgeIndex halfedgeIndex);
+		Normal& normal(HalfedgeIndex halfedgeIndex);
+		Normal& normal(VertexIndex vertexIndex, FaceIndex faceIndex);
+		NormalIterator normals();
+
+		ColorIndex addColor(const Color& color);
+		ColorIndex& colorIndex(HalfedgeIndex halfedgeIndex);
+		Color& color(HalfedgeIndex halfedgeIndex);
+		Color& color(VertexIndex vertexIndex, FaceIndex faceIndex);
+		ColorIterator colors();
+
+		TextureCoordinateIndex addTextureCoordinate(const TextureCoordinate& textureCoordinate);
+		TextureCoordinateIndex& textureCoordinateIndex(HalfedgeIndex halfedgeIndex);
+		TextureCoordinate& textureCoordinate(HalfedgeIndex halfedgeIndex);
+		TextureCoordinate& textureCoordinate(VertexIndex vertexIndex, FaceIndex faceIndex);
+		TextureCoordinateIterator textureCoordinates();
+
 		
-		bool vertexHasHalfedge(VertexIndex v) const;
-		bool vertexHasFace(VertexIndex v) const;
+		// Mesh Topology Vertex
+		VertexIndex addVertex(const Position& position);
+		bool vertexHasHalfedge(VertexIndex vertexIndex) const;
+		bool vertexHasFace(VertexIndex vertexIndex) const;
+		VertexIndex vertexIndex(const Position& position) const;
+		VertexHandle vertex(VertexIndex vertexIndex);
+		VertexIterator vertexOneRing(VertexIndex vertexIndex);
+		HalfedgeIterator vertexHalfedges(VertexIndex v, bool outgoing = true);
 		VertexIterator vertecies();
-		VertexIterator vertecies(VertexIndex v);
+		FaceIterator vertexFaces(VertexIndex vertexIndex);
 
-		bool halfedgeVerteciesExist(VertexHandle from, VertexHandle to) const;
+		// Mesh Topology Halfedge
+		HalfedgeIndex addHalfedge(VertexIndex from, VertexIndex to);
 		bool halfedgeHasFace(HalfedgeIndex index) const;
-		FaceHandle halfedgeFace(HalfedgeIndex he);
-		HalfedgeHandle halfedgeOpposite(HalfedgeIndex he);
+		bool halfedgeIsBoundary(HalfedgeIndex index) const;
+		HalfedgeIndex halfedgeIndex(VertexIndex vertexFrom, VertexIndex vertexTo) const;
+		HalfedgeIndex halfedgeOppositeIndex(HalfedgeIndex index) const;
+		FaceIndex halfedgeFaceIndex(HalfedgeIndex halfedgeIndex) const;
+		HalfedgeHandle halfedge(HalfedgeIndex halfedgeIndex);
 		HalfedgeIterator halfedges();
-		const HalfedgeIterator halfedges() const;
-		HalfedgeIterator halfedges(VertexIndex v, bool outgoing = true);
+		HalfedgeIterator halfedgeIncoming(HalfedgeIndex halfedgeIndex, bool includeOpposite = false);
+		HalfedgeIterator halfedgeOutgoing(HalfedgeIndex halfedgeIndex, bool includeOpposite = false);
+		HalfedgeIndex halfedgePrevHalfedgeIndex(HalfedgeIndex halfedgeIndex, bool includeOpposite = false);
+		HalfedgeIndex halfedgeNextHalfedgeIndex(HalfedgeIndex halfedgeIndex, bool includeOpposite = false);
 
-		bool faceVerteciesExist(VertexHandle vh0, VertexHandle vh1, VertexHandle vh2) const;
+		// Mesh Topology Face
+		FaceIndex addFace(HalfedgeIndex he0, HalfedgeIndex he1, HalfedgeIndex he2);
+		FaceIndex addFace(const std::vector<HalfedgeIndex>& halfedges);
 		bool faceHalfedgesExist(HalfedgeHandle he0, HalfedgeHandle he1, HalfedgeHandle he2) const;
-		HalfedgeIterator faceHalfedges(FaceIndex f, bool cw = true);
+		HalfedgeIndex faceHalfedgeIndex(FaceIndex faceIndex, VertexIndex vertexIndex) const;
+		HalfedgeIndex faceNextHalfedgeIndex(HalfedgeIndex halfedgeIndex);
+		HalfedgeIndex facePrevHalfedgeIndex(HalfedgeIndex halfedgeIndex);
+		FaceHandle face(FaceIndex faceIndex);
+		VertexIterator faceVertecies(FaceIndex faceIndex);
+		HalfedgeIterator faceHalfedges(FaceIndex faceIndex, bool cw = true);
 		FaceIterator faces();
-		const FaceIterator faces() const;
-		FaceIterator faces(VertexIndex v);
-		const FaceIterator faces(VertexIndex v) const;
+		FaceIterator faceNeighbors(FaceIndex faceIndex);
 
+		
 		// Custom Meshdata
 		template<typename T>
 		VPropertyHandle<T> createVertexProperty(const T& initialValue = T());
-
 		template<typename T>
 		HPropertyHandle<T> createHalfedgeProperty(const T& initialValue = T());
-
 		template<typename T>
 		FPropertyHandle<T> createFaceProperty(const T& initialValue = T());
-
 		template<typename T>
 		T& property(BasePropertyHandle<T> propertyHandle, Index index);
-
+		
 	public:
 		virtual Type getType() const override { return Asset::Type::Mesh; };
 		static Type getClassType() { return Type::Mesh; };
 	private:
 		// Meshdata
 		std::vector<Position> m_Positions;
-
-		std::map<VertexIndex, NormalIndex> m_NormalMap;
 		std::vector<Normal> m_Normals;
-
-		std::map<VertexIndex, ColorIndex> m_ColorMap;
 		std::vector<Color> m_Colors;
-
-		std::map<VertexIndex, TextureCoordinateIndex> m_TextureCoordinateMap;
 		std::vector<TextureCoordinate> m_TextureCoordinates;
 
 		// Custom Meshdata
@@ -370,70 +398,13 @@ namespace C78E {
 		std::vector<PropertyContainer> m_Properties;
 
 		// Mesh Topology
-		class Topology {
-			/*
-			Implicit Topology
+		using Halfedge = std::pair<VertexIndex, VertexIndex>;
+		using Face = std::vector<Halfedge>;
 
-			he0 \
-			he1  | Triangle/Face 0
-			he2 /
-
-			he3
-			he4
-			he5
-
-			...
-			heN-1 <- (m_FaceCount * 3 - 1)
-
-			heN <- faceless edge
-			heN+1
-			...
-
-			*/
-		public:
-			using Halfedge = std::pair<VertexIndex, VertexIndex>;
-			struct Face {
-				Halfedge he0;
-				Halfedge he1;
-				Halfedge he2;
-			};
-
-			Topology() = delete;
-			Topology(Mesh& mesh);
-			Topology(const Topology& other) = delete;
-			~Topology() = default;
-
-			HalfedgeIndex addHalfedge(VertexIndex from, VertexIndex to);
-			FaceIndex addFace(HalfedgeIndex he0, HalfedgeIndex he1, HalfedgeIndex he2);
-
-			bool vertexHasHalfedge(VertexIndex v) const;
-			bool vertexHasFace(VertexIndex v) const;
-
-			const Halfedge& halfedge(HalfedgeIndex index) const;
-			bool halfedgeHasFace(HalfedgeIndex index) const;
-			bool halfedgeIsBoundary(HalfedgeIndex index) const;
-			HalfedgeIndex halfedgeOpposite(HalfedgeIndex index) const;
-			FaceIndex halfedgeFaceIndex(HalfedgeIndex he) const;
-			HalfedgeIterator halfedges();
-			const HalfedgeIterator halfedges() const;
-			HalfedgeIterator halfedges(VertexIndex v, bool outgoing = true);
-
-			const Face& face(FaceIndex index) const;
-			HalfedgeIterator faceHalfedges(FaceIndex f, bool cw = true);
-			FaceIterator faces();
-			const FaceIterator faces() const;
-			FaceIterator faces(VertexIndex v);
-			const FaceIterator faces(VertexIndex v) const;
-
-		private:
-			size_t vertexCount() const { return m_Mesh.m_Positions.size(); }
-			size_t faceHalfedgeCount() const { return m_FaceCount * 3; }
-		private:
-			Mesh& m_Mesh;
-			std::vector<Halfedge> m_Halfedges;
-			size_t m_FaceCount = 0; // last Faces' HalfEdge is at FC*3 - 1
-		};
-
-		Topology m_Topology;
+		std::vector<Halfedge> m_Halfedges;
+		std::map<HalfedgeIndex, FaceIndex> m_Faces;
+		std::map<HalfedgeIndex, NormalIndex> m_MappedNormals;
+		std::map<HalfedgeIndex, ColorIndex> m_MappedColors;
+		std::map<HalfedgeIndex, TextureCoordinateIndex> m_MappedTextureCoordinates;
 	};
 }

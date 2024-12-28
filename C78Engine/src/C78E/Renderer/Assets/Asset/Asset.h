@@ -52,6 +52,8 @@ namespace C78E {
 
 			operator bool() const { return type != Type::None; }
 		};
+
+		using Group = std::map<Ref<Asset>, Ref<Asset::Meta>>;
 	public:
 		AssetHandle& handle() { return m_AssetHandle; }
 
