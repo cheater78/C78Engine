@@ -17,8 +17,7 @@ namespace C78E {
 				Material,
 
 				Shader,
-				Texture2D,
-				CubeMap,
+				Texture,
 
 				Font,
 				TYPE_SIZE
@@ -47,13 +46,17 @@ namespace C78E {
 
 		struct Meta {
 			Type type = Type::None;
-			FilePath fileSource = "";
 			std::string name = C78E_DEFAULT_ASSET_NAME;
+			FilePath fileSource = ""; // relative to an AssetDirectory
+			std::string inFileIdentifier = "";  // identifier of the Asset inside the source file(one source file can easily contain multiple Assets)
 
 			operator bool() const { return type != Type::None; }
 		};
 
-		using Group = std::map<Ref<Asset>, Ref<Asset::Meta>>;
+		class Group : public std::map<Ref<Asset>, Ref<Asset::Meta>> {
+		public:
+			bool merge(const Group& other);
+		};
 	public:
 		AssetHandle& handle() { return m_AssetHandle; }
 
@@ -71,6 +74,36 @@ namespace C78E {
 
 		} c_FileMap;
 	};
+
+	class AssetSerializer {
+	public:
+		
+
+	};
+
+	class AssetImporter {
+	public:
+		AssetImporter(const FilePath& assetDirectory);
+		~AssetImporter();
+
+		Ref<Asset::Group> import(Ref<Asset::Group> assets);
+
+		
+	private:
+		struct AssetImport {
+		public:
+			using AssetImportFunction = std::function<Ref<Asset::Group>(const FilePath&, Ref<Asset::Meta>, AssetHandle)>;
+			using AssetImportFunctionMap = std::map<Asset::Type, AssetImportFunction>;
+			static const AssetImportFunctionMap assetImportFunctions;
+
+			static AssetImportFunctionMap createAssetImportFunctionMap();
+		};
+
+		Ref<Asset::Group> importAsset(AssetHandle handle, Ref<Asset::Meta> meta);
+
+		const FilePath m_AssetDirectory;
+	};
+
 }
 
 namespace std {

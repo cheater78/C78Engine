@@ -9,6 +9,16 @@ namespace C78E {
 	*/
 	class Image {
 	public:
+		enum class Channel : uint8_t {
+			None = 0,
+			R = 1,
+			G = 2,
+			B = 3,
+			A = 4,
+			L = 5,
+			M = 6,
+			Z = 7,
+		};
 		enum class ImageFormat : uint32_t {
 			None = 0,
 			R8 = 1,

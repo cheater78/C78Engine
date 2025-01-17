@@ -46,16 +46,20 @@ namespace C78E {
 			}
 		}
 
-		Ref<Asset> asset = AssetImporter::importAsset(m_AssetDirectory, meta, handle);
-		if (asset) {
-			asset->handle() = handle;
-			m_LoadedAssets[handle] = asset;
-			m_AssetRegistry[handle] = meta;
-			//TODO: if autosave... then here -> EditorAssetManager do
-			return asset->handle();
+		Ref<Asset::Group> assets = AssetImporter::importAsset(m_AssetDirectory, meta, handle);
+		AssetHandle assetHandle = AssetHandle::invalid();
+		for (auto [asset, meta] : *assets) {
+			if (asset) {
+				asset->handle() = handle;
+				m_LoadedAssets[handle] = asset;
+				m_AssetRegistry[handle] = meta;
+				//TODO: if autosave... then here -> EditorAssetManager do
+				if (!assetHandle.isValid())
+					assetHandle = handle;
+			}
 		}
-		C78E_CORE_ERROR("EditorAssetManager::importAsset: '{}' failed to import!", filepath.string());
-		return AssetHandle::invalid();
+		C78E_CORE_SOFT_VALIDATE(assetHandle, "EditorAssetManager::importAsset: '{}' failed to import!", filepath.string());
+		return assetHandle;
 	}
 
 	bool EditorAssetManager::removeAsset(AssetHandle handle, bool fromDisk) {
@@ -83,7 +87,10 @@ namespace C78E {
 		if (!isLoaded(handle)) {
 			return getAsset(handle) != nullptr;
 		}
-		m_LoadedAssets[handle] = AssetImporter::importAsset(m_AssetDirectory, meta, handle);
+		for (auto [asset, assetMeta] : *AssetImporter::importAsset(m_AssetDirectory, meta, handle)) {
+			m_LoadedAssets[asset->handle()] = asset;
+			*meta = *assetMeta;
+		}
 		return m_LoadedAssets[handle] != nullptr;
 	}
 
@@ -111,12 +118,18 @@ namespace C78E {
 		
 		if (isLoaded(handle)) return m_LoadedAssets.at(handle);
 		
-		Ref<Asset> asset;
-		asset = AssetImporter::importAsset(m_AssetDirectory, getMeta(handle), handle); //TODO: return Default, start loading async
-		C78E_CORE_VALIDATE(asset, return nullptr, "EditorAssetManager::getAsset - loading Asset failed!");
-		asset->handle() = handle;
-		m_LoadedAssets[handle] = asset;
-		return asset;
+		Ref<Asset::Group> assets = AssetImporter::importAsset(m_AssetDirectory, getMeta(handle), handle);
+		Ref<Asset> mainAsset;
+		for (auto [asset, meta] : *assets) {
+			if (asset) {
+				asset->handle() = handle;
+				m_LoadedAssets[handle] = asset;
+				if (!mainAsset)
+					mainAsset = asset;
+			}
+		}
+		C78E_CORE_SOFT_VALIDATE(mainAsset, "EditorAssetManager::getAsset - loading Asset failed!");
+		return mainAsset;
 	}
 
 	bool EditorAssetManager::exportAssetRegistry(const FilePath& assetRegistryPath) {
@@ -145,9 +158,7 @@ namespace C78E {
 					break;
 				case Asset::Type::Shader:
 					break;
-				case Asset::Type::Texture2D:
-					break;
-				case Asset::Type::CubeMap:
+				case Asset::Type::Texture:
 					break;
 				case Asset::Type::Font:
 					Ref<Font::Meta> fontMeta = std::static_pointer_cast<Font::Meta>(meta);
@@ -203,10 +214,7 @@ namespace C78E {
 				case Asset::Type::Shader:
 					m_AssetRegistry[handle] = createRef<Asset::Meta>();
 					break;
-				case Asset::Type::Texture2D:
-					m_AssetRegistry[handle] = createRef<Asset::Meta>();
-					break;
-				case Asset::Type::CubeMap:
+				case Asset::Type::Texture:
 					m_AssetRegistry[handle] = createRef<Asset::Meta>();
 					break;
 				case Asset::Type::Font:

@@ -3,20 +3,16 @@
 
 #include <C78E/Project/Project.h>
 
-#include <C78E/Utils/Wavefront/WavefrontLoader.h>
+#include <C78E/Utils/Wavefront/WavefrontSerializer.h>
 
 namespace C78E {
 
-	Ref<Material> MaterialLoader::importMaterial(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
+	Ref<Asset::Group> MaterialLoader::importMaterial(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
 		FilePath ext = meta->fileSource.extension();
 
-		//if (ext == ".mtl") return WavefrontLoader::loadMaterial(assetDirectory / meta.fileSource);
+		if (ext == C78E_FILE_EXT_WAFEFRONT_MATERIAL) return WavefrontSerializer::importWavefront(assetDirectory / meta->fileSource);
 		
-		return Ref<Material>();
-	}
-
-	Ref<Material> MaterialLoader::loadWavefrontMaterial(const FilePath& path, const std::string& name) {
-		return Ref<Material>();
+		return Ref<Asset::Group>();
 	}
 
 }

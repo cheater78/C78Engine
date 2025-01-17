@@ -2,8 +2,10 @@
 #include "ShaderImporter.h"
 
 namespace C78E {
-	Ref<Shader> ShaderImporter::importShader(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
-		return Shader::create(assetDirectory / meta->fileSource);
+	Ref<Asset::Group> ShaderImporter::importShader(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
+		Ref<Asset::Group> assets = createRef<Asset::Group>();
+		assets->emplace(Shader::create(assetDirectory / meta->fileSource), meta);
+		return assets;
 	}
 }
 

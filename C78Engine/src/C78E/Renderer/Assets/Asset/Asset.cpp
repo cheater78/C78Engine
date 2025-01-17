@@ -1,25 +1,28 @@
 #include "C78EPCH.h"
 #include "Asset.h"
 
+#include <C78E/Renderer/Assets/Texture/TextureImporter.h>
+#include <C78E/Renderer/Assets/Scene/SceneSerializer.h>
+#include <C78E/Renderer/Assets/Shader/ShaderImporter.h>
+#include <C78E/Renderer/Assets/Mesh/MeshImporter.h>
+#include <C78E/Renderer/Assets/Font/FontImporter.h>
+
 namespace C78E {
 
 	const Asset::FileMap Asset::c_FileMap = {
 		{
-			{ ".sce", Asset::Type::Scene },
+			{ C78E_FILE_EXT_SCENE, Asset::Type::Scene },
 
-			{ ".png", Asset::Type::Texture2D },
-			{ ".jpg", Asset::Type::Texture2D },
-			{ ".jpeg", Asset::Type::Texture2D },
-			{ ".png", Asset::Type::CubeMap },
-			{ ".jpg", Asset::Type::CubeMap },
-			{ ".jpeg", Asset::Type::CubeMap },
+			{ C78E_FILE_EXT_IMAGE_PNG, Asset::Type::Texture },
+			{ C78E_FILE_EXT_IMAGE_JPG, Asset::Type::Texture },
+			{ C78E_FILE_EXT_IMAGE_JPEG, Asset::Type::Texture },
 
-			{ ".mtl", Asset::Type::Material },
+			{ C78E_FILE_EXT_WAFEFRONT_MATERIAL, Asset::Type::Material },
 
-			{ ".glsl", Asset::Type::Shader },
-			{ ".hlsl", Asset::Type::Shader },
+			{ C78E_FILE_EXT_SHADER_GLSL, Asset::Type::Shader },
+			{ C78E_FILE_EXT_SHADER_HLSL, Asset::Type::Shader },
 
-			{ ".ttf", Asset::Type::Font },
+			{ C78E_FILE_EXT_FONT_TTF, Asset::Type::Font },
 		}
 	};
 
@@ -58,8 +61,7 @@ namespace C78E {
 		case C78E::Asset::Type::Mesh:		return "Asset::Type::Mesh";
 		case C78E::Asset::Type::Material:	return "Asset::Type::Material";
 		case C78E::Asset::Type::Shader:		return "Asset::Type::Shader";
-		case C78E::Asset::Type::Texture2D:	return "Asset::Type::Texture2D";
-		case C78E::Asset::Type::CubeMap:	return "Asset::Type::CubeMap";
+		case C78E::Asset::Type::Texture:	return "Asset::Type::Texture";
 		case C78E::Asset::Type::Font:		return "Asset::Type::Font";
 
 		default: return "Asset::Type::None";
@@ -81,8 +83,7 @@ namespace C78E {
 		if (suffix == "Mesh")		return Type::Mesh;
 		if (suffix == "Material")	return Type::Material;
 		if (suffix == "Shader")		return Type::Shader;
-		if (suffix == "Texture2D")	return Type::Texture2D;
-		if (suffix == "CubeMap")	return Type::CubeMap;
+		if (suffix == "Texture")	return Type::Texture;
 		if (suffix == "Font")		return Type::Font;
 
 		return Type::None;
@@ -111,4 +112,46 @@ namespace C78E {
 		
 		return Type::None;
 	}
+
+	bool Asset::Group::merge(const Group& other) {
+		bool disjunct = true;
+		for (auto [asset, meta] : other) {
+			auto it = find(asset);
+			if (it != end())
+				disjunct = false;
+			else emplace(asset, meta);
+		}
+	}
+
+	const AssetImporter::AssetImport::AssetImportFunctionMap AssetImporter::AssetImport::assetImportFunctions = AssetImporter::AssetImport::createAssetImportFunctionMap();
+	AssetImporter::AssetImport::AssetImportFunctionMap AssetImporter::AssetImport::createAssetImportFunctionMap() {
+		AssetImportFunctionMap map;
+		map[Asset::Type::Scene] = SceneImporter::importScene;
+		map[Asset::Type::Mesh] = MeshImporter::importMesh;
+		map[Asset::Type::Shader] = ShaderImporter::importShader;
+		map[Asset::Type::Texture] = TextureImporter::importTexture2D;
+		map[Asset::Type::Font] = FontImporter::importFont;
+		return map;
+	}
+
+
+	inline AssetImporter::AssetImporter(const FilePath& assetDirectory)
+		: m_AssetDirectory(assetDirectory) {
+	}
+
+	AssetImporter::~AssetImporter() { }
+
+	Ref<Asset::Group> AssetImporter::import(Ref<Asset::Group> assets) {
+		C78E_CORE_VALIDATE(assets, return nullptr, "AssetImporter::import: assets is null!");
+		for (auto& [asset, meta] : *assets) {
+
+		}
+		return assets;
+	}
+
+	Ref<Asset::Group> AssetImporter::importAsset(AssetHandle handle, Ref<Asset::Meta> meta) {
+		C78E_CORE_VALIDATE(AssetImporter::AssetImport::assetImportFunctions.contains(meta->type), return nullptr, "No AssetLoader exists for Type: {}", Asset::Type::assetTypeToString(meta->type));
+		return AssetImporter::AssetImport::assetImportFunctions.at(meta->type)(m_AssetDirectory, meta, handle);
+	}
+
 }

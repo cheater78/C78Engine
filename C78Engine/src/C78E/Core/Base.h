@@ -1,5 +1,6 @@
 #pragma once
 #include <C78E/Core/FileSystem/NativeFileExtensions.h>
+#include <C78E/Core/FileSystem/SupportedFileExtensions.h>
 
 #define C78E_VERSION_MAJOR 0
 #define C78E_VERSION_MINOR 1

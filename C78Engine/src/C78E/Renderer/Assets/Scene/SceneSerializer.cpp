@@ -3,8 +3,10 @@
 
 namespace C78E {
 
-	Ref<Scene> SceneImporter::importScene(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
-		return SceneSerializer::importScene(handle, assetDirectory / meta->fileSource);
+	Ref<Asset::Group> SceneImporter::importScene(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle) {
+		Ref<Asset::Group> assets = createRef<Asset::Group>();
+		assets->emplace(std::static_pointer_cast<Asset>(SceneSerializer::importScene(handle, assetDirectory / meta->fileSource)), meta);
+		return assets;
 	}
 
 	Ref<Scene> SceneSerializer::importScene(AssetHandle handle, const FilePath& filepath) {

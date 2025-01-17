@@ -10,10 +10,7 @@ namespace C78E {
 	class MaterialLoader {
 	public:
 		// AssetMetadata filepath is relative to project asset directory
-		static Ref<Material> importMaterial(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle);
-		
-	private:
-		static Ref<Material> loadWavefrontMaterial(const FilePath& path, const std::string& name);
+		static Ref<Asset::Group> importMaterial(const FilePath& assetDirectory, Ref<Asset::Meta> meta, AssetHandle handle);
 	};
 
 }

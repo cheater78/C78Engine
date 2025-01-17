@@ -67,9 +67,9 @@ namespace std {
 		return str + " }";
 	}
 
-	template<typename T>
-	_EXPORT_STD _NODISCARD inline std::vector<std::string> split(const std::string& s, T seperator) {
-		std::vector<std::string> output;
+	template<typename T, typename S>
+	_EXPORT_STD _NODISCARD std::vector<T> split(const T& s, S seperator) {
+		std::vector<T> output;
 		std::string::size_type prev_pos = 0, pos = 0;
 
 		while ((pos = s.find(seperator, pos)) != std::string::npos) {
@@ -81,9 +81,14 @@ namespace std {
 		return output;
 	}
 	template
-	std::vector<std::string> split<char>(const std::string& s, char seperator);
+	std::vector<std::string> split<std::string, char>(const std::string& s, char seperator);
 	template
-	std::vector<std::string> split<const std::string&>(const std::string& s, const std::string& seperator);
+	std::vector<std::string> split<std::string, const std::string&>(const std::string& s, const std::string& seperator);
+	template
+	std::vector<std::string_view> split<std::string_view, char>(const std::string_view& s, char seperator);
+	template
+	std::vector<std::string_view> split<std::string_view, const std::string&>(const std::string_view& s, const std::string& seperator);
+
 
 
 	_EXPORT_STD _NODISCARD inline std::string join(const std::vector<std::string>& strs, std::string del = "", uint32_t start = 0, uint32_t count = -1) {
@@ -127,6 +132,23 @@ namespace std {
 		}
 	}
 
+	//source: https://stackoverflow.com/a/447307
+	_EXPORT_STD _NODISCARD inline bool isFloat(const std::string& str) {
+		std::istringstream iss(str);
+		float f;
+		iss >> std::noskipws >> f; // noskipws considers leading whitespace invalid
+		// Check the entire string was consumed and if either failbit or badbit is set
+		return iss.eof() && !iss.fail();
+	}
+	//~
+
+	//source: https://stackoverflow.com/a/4654718
+	_EXPORT_STD _NODISCARD inline bool isNumerical(const std::string& s) {
+		std::string::const_iterator it = s.begin();
+		while (it != s.end() && std::isdigit(*it)) ++it;
+		return !s.empty() && it == s.end();
+	}
+	//~
 	
 
 	// Filesystem

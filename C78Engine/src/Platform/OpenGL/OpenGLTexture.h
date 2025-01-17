@@ -32,13 +32,13 @@ namespace C78E {
 
 	class OpenGLTexture2D : public Texture2D {
 	public:
-		OpenGLTexture2D(const Texture2D::TextureSpecification& specification);
-		OpenGLTexture2D(const Texture2D::TextureSpecification& specification, const Buffer& data);
+		OpenGLTexture2D(const Texture2D::Option& specification);
+		OpenGLTexture2D(const Texture2D::Option& specification, const Buffer& data);
 		OpenGLTexture2D(const Image& image);
 		OpenGLTexture2D(const OpenGLTexture2D&) = default; // Maybe needed!
 		virtual ~OpenGLTexture2D();
 
-		OpenGLTexture2D(const Texture2D::TextureSpecification& specification, uint32_t rendererID); // Do Not Use
+		OpenGLTexture2D(const Texture2D::Option& specification, uint32_t rendererID); // Do Not Use
 
 		virtual uint32_t getWidth() const override { return m_Specification.width;  }
 		virtual uint32_t getHeight() const override { return m_Specification.height; }
@@ -49,14 +49,14 @@ namespace C78E {
 		virtual void bindImage(uint32_t binding = 0) const override;
 
 		virtual bool isLoaded() const override { return m_IsLoaded; }
-		virtual const Texture2D::TextureSpecification& getSpecification() const override { return m_Specification; }
+		virtual const Texture2D::Option& getSpecification() const override { return m_Specification; }
 
 		virtual bool operator==(const Texture& other) const override { return m_RendererID == other.getRendererID(); }
 	private:
 		
 	private:
 		uint32_t m_RendererID;
-		Texture2D::TextureSpecification m_Specification;
+		Texture2D::Option m_Specification;
 
 		bool m_IsLoaded = false;
 
@@ -65,7 +65,7 @@ namespace C78E {
 
 	class OpenGLCubeMap : public CubeMap {
 	public:
-		OpenGLCubeMap(CubeMap::TextureSpecification& specification);
+		OpenGLCubeMap(CubeMap::Option& specification);
 		OpenGLCubeMap(std::vector<Image>& images);
 		OpenGLCubeMap(Ref<Image> crossCubeMap);
 		~OpenGLCubeMap();
@@ -77,12 +77,12 @@ namespace C78E {
 		virtual void bind(uint32_t slot = 0) const override;
 
 		virtual bool isLoaded() const override { return m_IsLoaded; };
-		const CubeMap::TextureSpecification& getSpecification() const override { return m_Specification; };
+		const CubeMap::Option& getSpecification() const override { return m_Specification; };
 
 		bool operator==(const Texture& other) const override { return m_RendererID == other.getRendererID(); }
 	private:
 		uint32_t m_RendererID = 0;
-		CubeMap::TextureSpecification m_Specification;
+		CubeMap::Option m_Specification;
 
 		bool m_IsLoaded = false;
 	};
