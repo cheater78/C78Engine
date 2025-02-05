@@ -1,7 +1,7 @@
 #pragma once
-#include <C78E/Renderer/Assets/Scene/Scene.h>
-#include <C78E/Renderer/Assets/Asset/Asset.h>
-#include <C78E/Renderer/Assets/AssetManager.h>
+#include <C78E/Asset/Scene/Scene.h>
+#include <C78E/Asset/Asset.h>
+#include <C78E/Asset/AssetManager.h>
 
 namespace C78E {
 

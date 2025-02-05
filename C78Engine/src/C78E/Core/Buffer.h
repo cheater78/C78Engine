@@ -1,48 +1,58 @@
 #pragma once
-
-#include <stdint.h>
-#include <cstring>
+#include <C78E/Utils/StdUtils.h>
+#include <C78E/Core/Log/SmartLog.h>
 
 namespace C78E {
 
-	// Non-owning raw buffer
+	/**
+	 * @brief Non owning Buffer, used for temporary data storage
+	 * don't forget to release the buffer after usage
+	 */
 	struct Buffer {
 	public:
-		uint8_t* data = nullptr;
-		size_t size = 0;
-
+		/**
+		 * @brief Copies the data of the given Buffer to a new Buffer,
+		 * both Buffers need to be released separately after usage
+		 * @param other 
+		 * @return 
+		 */
+		static bool copy(Buffer& from, Buffer& to);
+	public:
+		/**
+		 * @brief Creates an empty Buffer, fields and allocations need to be handled manually
+		 */
 		Buffer() = default;
+		/**
+		 * @brief Creates a Buffer with the given size, 
+		 * @param size 
+		 */
+		Buffer(size_t _size);
+		Buffer(size_t _size, const void* _data);
+		Buffer(const Buffer&) = delete;
+		~Buffer();
 
-		Buffer(size_t size) {
-			allocate(size);
-		}
+		void allocate(size_t _size);
+		void release();
 
-		Buffer(const Buffer&) = default;
-
-		static Buffer copy(Buffer other) {
-			Buffer result(other.size);
-			memcpy(result.data, other.data, other.size);
-			return result;
-		}
-
-		void allocate(size_t _size) {
-			release();
-
-			data = new uint8_t[_size];
-			size = _size;
-		}
-
-		void release() {
-			delete[] data;
-			data = nullptr;
-			size = 0;
-		}
-
+		/**
+		 * @brief 
+		 * 
+		 * [Important Note] Template functions must be defined in the header file -> Instatiation must be included (cant be linked bc non existing)
+		 * @tparam T 
+		 * @return 
+		 */
 		template<typename T>
 		T* as() const {
 			return (T*)data;
 		}
 		
+		/**
+		 * @brief 
+		 * 
+		 * [Important Note] Template functions must be defined in the header file -> Instatiation must be included (cant be linked bc non existing)
+		 * @tparam T 
+		 * @param value 
+		 */
 		template<typename T>
 		void clear(const T& value) {
 			C78E_CORE_ASSERT(size % sizeof(T) == 0, "Buffer::clear: Buffers size({}bytes) is not a multiple of the given Types size({}bytes)!", size, sizeof(T));
@@ -50,6 +60,14 @@ namespace C78E {
 				*elem = value;
 		}
 
+		/**
+		 * @brief 
+		 * 
+		 * [Important Note] Template functions must be defined in the header file -> Instatiation must be included (cant be linked bc non existing)
+		 * @tparam T 
+		 * @param index 
+		 * @return 
+		 */
 		template<typename T>
 		T& at(size_t index) {
 			C78E_CORE_ASSERT(size % sizeof(T) == 0, "Buffer::at: Buffers size({}bytes) is not a multiple of the given Types size({}bytes)!", size, sizeof(T));
@@ -61,36 +79,56 @@ namespace C78E {
 			return (bool)data;
 		}
 
+	public:
+		uint8_t* data = nullptr;
+		size_t size = 0;
 	};
 
 	struct ScopedBuffer {
 	public:
-		ScopedBuffer(size_t size)
-			: m_Buffer(size)
-		{ }
+		ScopedBuffer(size_t size);
 
-		ScopedBuffer(ScopedBuffer& other)
-			: m_Buffer{other.size()} {
-			memcpy(m_Buffer.data, other.data(), other.size());
-		};
+		ScopedBuffer(size_t size, const void* data);
 
-		~ScopedBuffer() {
-			m_Buffer.release();
-		}
+		ScopedBuffer(ScopedBuffer& other);
 
-		uint8_t* data() { return m_Buffer.data; }
-		size_t size() const { return m_Buffer.size; }
+		~ScopedBuffer();
 
+		uint8_t* data();
+		size_t size() const;
+
+		/**
+		 * @brief 
+		 * 
+		 * [Important Note] Template functions must be defined in the header file -> Instatiation must be included (cant be linked bc non existing)
+		 * @tparam T 
+		 * @return 
+		 */
 		template<typename T>
 		T* as() const {
 			return m_Buffer.as<T>();
 		}
 		
+		/**
+		 * @brief 
+		 * 
+		 * [Important Note] Template functions must be defined in the header file -> Instatiation must be included (cant be linked bc non existing)
+		 * @tparam T 
+		 * @param value 
+		 */
 		template<typename T>
 		void clear(const T& value) {
 			m_Buffer.clear<T>(value);
 		}
 
+		/**
+		 * @brief 
+		 * 
+		 * [Important Note] Template functions must be defined in the header file -> Instatiation must be included (cant be linked bc non existing)
+		 * @tparam T 
+		 * @param index 
+		 * @return 
+		 */
 		template<typename T>
 		T& at(size_t index) {
 			return m_Buffer.at<T>(index);

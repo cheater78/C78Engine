@@ -33,6 +33,7 @@ project "C78Engine"
 		"%{IncludeDir.msdfgen}",
 		"%{IncludeDir.freetype}",
 		"%{IncludeDir.msdf_atlas_gen}",
+		"%{IncludeDir.tinygltf}",
 	}
 	
 	links

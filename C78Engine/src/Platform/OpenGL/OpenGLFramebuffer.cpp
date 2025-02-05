@@ -105,22 +105,27 @@ namespace C78E {
 				Utils::createTextures(multisample, &rID, 1);
 				
 				switch (m_ColorAttachmentSpecifications[i].TextureFormat) {
-					case FramebufferTextureFormat::RGBA8:
-						{
-							Texture2D::TextureSpecification spec{ m_Specification.width, m_Specification.height, Image::ImageFormat::RGBA8, false };
-							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
-							Utils::bindTexture(multisample, rID);
-							Utils::attachColorTexture(rID, m_Specification.samples, GL_RGBA8, GL_RGBA, m_Specification.width, m_Specification.height, static_cast<int>(i));
-						}
-						break;
-					case FramebufferTextureFormat::RED_INTEGER:
-						{
-							Texture2D::TextureSpecification spec{ m_Specification.width, m_Specification.height, Image::ImageFormat::R32, false };
-							m_ColorAttachments.push_back(Texture2D::create(spec, rID));
-							Utils::bindTexture(multisample, rID);
-							Utils::attachColorTexture(rID, m_Specification.samples, GL_R32I, GL_RED_INTEGER, m_Specification.width, m_Specification.height, static_cast<int>(i));
-						}
-						break;
+				case FramebufferTextureFormat::RGBA8: {
+					Texture2D::Specification spec;
+					spec.width = m_Specification.width;
+					spec.height = m_Specification.height;
+					spec.format = Image::ImageFormat::RGBA8;
+
+					Utils::bindTexture(multisample, rID);
+					Utils::attachColorTexture(rID, m_Specification.samples, GL_RGBA8, GL_RGBA, m_Specification.width, m_Specification.height, static_cast<int>(i));
+					m_ColorAttachments.push_back(Texture2D::create(TextureHandle(rID), spec));
+				}
+				break;
+				case FramebufferTextureFormat::RED_INTEGER: {
+					Texture2D::Specification spec;
+					spec.width = m_Specification.width;
+					spec.height = m_Specification.height;
+					spec.format = Image::ImageFormat::R32;
+					Utils::bindTexture(multisample, rID);
+					Utils::attachColorTexture(rID, m_Specification.samples, GL_R32I, GL_RED_INTEGER, m_Specification.width, m_Specification.height, static_cast<int>(i));
+					m_ColorAttachments.push_back(Texture2D::create(TextureHandle(rID), spec));
+				}
+				break;
 				}
 			}
 		}
@@ -128,8 +133,12 @@ namespace C78E {
 		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None) {
 			uint32_t rID = 0;
 			Utils::createTextures(multisample, &rID, 1);
-			Texture2D::TextureSpecification spec{ m_Specification.width, m_Specification.height, Image::ImageFormat::D24S8 };
-			m_DepthAttachment = Texture2D::create(spec, rID);
+			Texture2D::Specification spec;
+			spec.width = m_Specification.width;
+			spec.height = m_Specification.height;
+			spec.format = Image::ImageFormat::D24S8;
+
+			m_DepthAttachment = Texture2D::create(TextureHandle(rID), spec);
 			Utils::bindTexture(multisample, rID);
 			switch (m_DepthAttachmentSpecification.TextureFormat) {
 				case FramebufferTextureFormat::DEPTH24STENCIL8:

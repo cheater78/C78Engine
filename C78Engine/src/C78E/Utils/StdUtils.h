@@ -17,6 +17,7 @@
 #include <cstring>
 #include <sstream>
 #include <regex>
+#include <tuple>
 #include <vector>
 #include <map>
 #include <set>
@@ -28,6 +29,8 @@
 #include <semaphore>
 #include <thread>
 
+#include <chrono>
+#include <random>
 
 // std extension
 namespace std {

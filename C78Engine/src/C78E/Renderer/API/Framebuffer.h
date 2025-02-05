@@ -50,7 +50,7 @@ namespace C78E {
 
 		virtual void clearAttachment(uint32_t attachmentIndex, int value) = 0;
 
-		virtual const FramebufferSpecification& getSpecification() const = 0;
+		virtual const FramebufferSpecification& getOption() const = 0;
 
 		virtual Ref<Texture2D> getColorAttachment(uint32_t id) = 0;
 

@@ -36,8 +36,4 @@ namespace C78Editor::GUI {
 		C78E::Entity m_ActiveEntity;
 	};
 	
-	
-
-	
-
 }

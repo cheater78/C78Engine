@@ -1,6 +1,8 @@
 #pragma once
 #include "NativeFileExtensions.h"
-#include "C78E/Core/Buffer.h"
+#include <C78E/Core/Core.h>
+#include <C78E/Core/Buffer.h>
+#include <C78E/Core/Log/SmartLog.h>
 
 namespace C78E {
 

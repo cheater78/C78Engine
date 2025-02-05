@@ -16,6 +16,7 @@ IncludeDir["yaml_cpp"] = 	"%{wks.location}/C78Engine/vendor/yaml-cpp/include"
 IncludeDir["msdfgen"] =	"%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdfgen"
 IncludeDir["freetype"] =	"%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdfgen/freetype/include"
 IncludeDir["msdf_atlas_gen"] =	"%{wks.location}/C78Engine/vendor/msdf-atlas-gen/msdf-atlas-gen"
+IncludeDir["tinygltf"] =	"%{wks.location}/C78Engine/vendor/tinygltf"
 
 if os.host() == "windows" then
 	IncludeDir["VulkanSDK"] = 	"%{VULKAN_SDK}/Include"

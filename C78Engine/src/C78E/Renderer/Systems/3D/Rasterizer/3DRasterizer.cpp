@@ -1,7 +1,7 @@
 #include "C78EPCH.h"
 #include "3DRasterizer.h"
 
-#include <C78E/Utils/Font/FontUtils.h>
+#include <C78E/Utils/MSDFAtlasGen/MSDFUtils.h>
 
 namespace C78E {
 	uint32_t Rasterizer3D::s_MaxTextureSlots = 0;
@@ -12,12 +12,6 @@ namespace C78E {
 		EntityModelUniform entityUniform{ transformComponent.getTransform(), transformComponent.normalMat() };
 		Ref<UniformBuffer> entityUniformBuffer = C78E::UniformBuffer::create(sizeof(EntityModelUniform), binding);
 		entityUniformBuffer->setData(&entityUniform, sizeof(EntityModelUniform));
-		return entityUniformBuffer;
-	}
-
-	Ref<UniformBuffer> getMaterialUBO(Ref<Material> material, uint32_t binding = 0) {
-		Ref<UniformBuffer> entityUniformBuffer = C78E::UniformBuffer::create(sizeof(MaterialUniform), binding);
-		entityUniformBuffer->setData(&material->m_MaterialProperties, sizeof(MaterialUniform));
 		return entityUniformBuffer;
 	}
 
@@ -151,7 +145,6 @@ namespace C78E {
 
 			m_CurrentScene->addCamUBOToCurrentRenderPass(); // Camera UBO
 			pass.uniformBuffers.push_back(getEntityUBO(entity, 1)); // Entity UBO
-
 
 			double x = 0.0;
 			double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
@@ -358,7 +351,7 @@ namespace C78E {
 
 			{
 				auto& textureSlots = pass.textureSlots;
-				Material::MaterialTextures& matProps = model->material()->m_MaterialTextures;
+				Material::Textures& matProps = model->material()->m_MaterialTextures;
 
 				const std::vector<AssetHandle> textures = {
 					matProps.ambient,

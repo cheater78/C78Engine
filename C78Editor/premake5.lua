@@ -31,7 +31,8 @@ project "C78Editor"
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.msdfgen}",
 		"%{IncludeDir.freetype}",
-		"%{IncludeDir.msdf_atlas_gen}"
+		"%{IncludeDir.msdf_atlas_gen}",
+		"%{IncludeDir.tinygltf}",
 	}
 
 	links

@@ -32,7 +32,8 @@ project "C78Project"
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.msdfgen}",
 		"%{IncludeDir.freetype}",
-		"%{IncludeDir.msdf_atlas_gen}"
+		"%{IncludeDir.msdf_atlas_gen}",
+		"%{IncludeDir.tinygltf}",
 	}
 
 	links

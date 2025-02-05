@@ -18,8 +18,7 @@ namespace C78Editor::GUI {
 	private:
 		C78E::Ref<C78E::ProjectManager> m_ProjectManager;
 
-		C78E::Ref<C78E::Asset::Meta> m_CreateAssetMeta = nullptr;
-		C78E::UUID m_CreateAssetHandle;
+		C78E::Ref<C78E::EditorAssetManager::AssetDescriptor> m_CreateAssetDescriptor = nullptr;
 	};
 
 }

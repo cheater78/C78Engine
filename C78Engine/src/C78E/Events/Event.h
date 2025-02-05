@@ -65,7 +65,9 @@ namespace C78E {
 
 namespace std {
 
-	_EXPORT_STD _NODISCARD string to_string(C78E::Event& e);
+	_EXPORT_STD _NODISCARD inline string to_string(C78E::Event& e) {
+		return e.toString();
+	}
 
 }
 

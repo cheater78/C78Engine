@@ -1,9 +1,6 @@
 #include "C78EPCH.h"
 #include "UUID.h"
 
-#include <random>
-#include <unordered_map>
-
 namespace C78E {
 
 	static const std::regex uuid_regex{ "UUID::([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4}):([[:xdigit:]]{4})" };

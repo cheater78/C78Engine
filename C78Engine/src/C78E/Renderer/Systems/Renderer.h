@@ -10,15 +10,15 @@
 #include <C78E/Renderer/API/UniformBuffer.h>
 #include <C78E/Renderer/API/VertexArray.h>
 
-#include <C78E/Renderer/Assets/AssetManager.h>
-#include <C78E/Renderer/Assets/Asset/Asset.h>
-#include <C78E/Renderer/Assets/Material/Material.h>
-#include <C78E/Renderer/Assets/Mesh/Mesh.h>
-#include <C78E/Renderer/Assets/Scene/Entity/Component/Components.h>
-#include <C78E/Renderer/Assets/Scene/Entity/Entity.h>
-#include <C78E/Renderer/Assets/Scene/Scene.h>
+#include <C78E/Asset/AssetManager.h>
+#include <C78E/Asset/Asset.h>
+#include <C78E/Asset/Material/Material.h>
+#include <C78E/Asset/Mesh/Mesh.h>
+#include <C78E/Asset/Scene/Entity/Component/Components.h>
+#include <C78E/Asset/Scene/Entity/Entity.h>
+#include <C78E/Asset/Scene/Scene.h>
 
-#include <C78E/Renderer/Assets/Scene/Entity/Component/Uniform.h>
+#include <C78E/Asset/Scene/Entity/Component/Uniform.h>
 
 namespace C78E {
 

@@ -35,6 +35,9 @@ namespace C78E { }
 //LIB::IMGUI
 #include <C78E/Utils/ImGui/ImGuiUtils.h>
 
+//LIB::YAML
+#include <C78E/Utils/Yaml/YamlUtils.h>
+
 //C78E::CORE
 #include <C78E/Core/Base.h>
 #include <C78E/Core/Core.h>

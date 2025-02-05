@@ -90,7 +90,7 @@ namespace C78Editor::GUI {
 			}
 
 			C78E::GUI::drawLabeledTextInput<C78E_PROJECT_NAME_MAX_LENGTH>("ProjectName:", m_ProjectCreateConfig.name);
-			C78E::GUI::drawLabeledFileInput<C78E_PATH_MAX>("ProjectDirectory", m_ProjectCreateDirectory, false, {C78E::FileSystem::EntryType::Directory});
+			C78E::GUI::drawLabeledFileInput<C78E_PATH_MAX>("ProjectDirectory", m_ProjectCreateDirectory, false, {C78E::FileSystem::EntryType::Project});
 			C78E::GUI::drawLabeledFileInput<C78E_PATH_MAX>("AssetDirectory", m_ProjectCreateConfig.assetDirectory, false, {C78E::FileSystem::EntryType::Directory});
 			C78E::GUI::drawLabeledFileInput<C78E_PATH_MAX>("AssetRegistry", m_ProjectCreateConfig.assetRegistryPath, true, {C78E::FileSystem::EntryType::AssetRegistry});
 			C78E::GUI::drawLabeledFileInput<C78E_PATH_MAX>("ScriptModule", m_ProjectCreateConfig.scriptModulePath, true, {C78E::FileSystem::EntryType::Binary});

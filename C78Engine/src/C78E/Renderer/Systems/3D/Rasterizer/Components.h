@@ -173,7 +173,7 @@ namespace C78E {
 
 				Asset<Shader> shader = model.get().m_Material.get().getShader();
 				Asset<Material> material = model.get().m_Material;
-				Material::MaterialTextures materialTextures = model.get().m_Material.get().getTextures();
+				Material::Textures materialTextures = model.get().m_Material.get().getTextures();
 				Asset<Mesh> mesh = model.get().m_Mesh;
 
 				Ref<VertexBuffer> vertexBuffer = VertexBuffer::create((float*)mesh.get().m_Vertecies.data(), static_cast<uint32_t>(mesh.get().m_Vertecies.size() * sizeof(Vertex)));
@@ -211,8 +211,8 @@ namespace C78E {
 					textures.push_back(AssetManager::getTexture2D(materialTextures.bump));
 
 
-				Ref<UniformBuffer> materialUniform = C78E::UniformBuffer::create(sizeof(Material::MaterialProperties));
-				materialUniform->setData(&material.get().getProperties(), sizeof(Material::MaterialProperties));
+				Ref<UniformBuffer> materialUniform = C78E::UniformBuffer::create(sizeof(Material::Properties));
+				materialUniform->setData(&material.get().getProperties(), sizeof(Material::Properties));
 
 				EntityModelUniform trans{ entity.getComponent<TransformComponent>().getTransform(),
 										entity.getComponent<TransformComponent>().normalMat() };

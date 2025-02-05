@@ -19,7 +19,7 @@ namespace C78E {
 
 	const bool Renderer::invalidateTarget() { return true; }//
 	Ref<Texture2D> Renderer::getTargetTexture() {
-		if(m_TargetFrame && m_TargetFrame->getSpecification().attachments.attachments.size())
+		if(m_TargetFrame && m_TargetFrame->getOption().attachments.attachments.size())
 			return m_TargetFrame->getColorAttachment(0);
 		return nullptr;
 	}

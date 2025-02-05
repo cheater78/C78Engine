@@ -5,12 +5,12 @@
 #include <C78E/Renderer/Camera/EditorCamera.h>
 #include <C78E/Renderer/Camera/OrthographicCamera.h>
 
+#include <C78E/Asset/Scene/Entity/Component/Components.h>
+#include <C78E/Asset/Scene/Entity/Entity.h>
+#include <C78E/Asset/Scene/Scene.h>
 
-#include <C78E/Renderer/Assets/Scene/Entity/Entity.h>
-
-#include "C78E/Events/ApplicationEvent.h"
-#include "C78E/Events/MouseEvent.h"
-
+#include <C78E/Events/ApplicationEvent.h>
+#include <C78E/Events/MouseEvent.h>
 
 namespace C78E {
 

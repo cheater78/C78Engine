@@ -9,9 +9,9 @@
 namespace C78E {
 
 	/*
-	* Loads an Image from Disk into a ImageLoader::ImageData Transfer Object
+	* Loads an Image from Disk
 	*/
-	Ref<ImageLoader::ImageData> ImageLoader::loadImage(FilePath file, bool flipVert, uint32_t desiredChannels) {
+	Ref<Image> ImageLoader::loadImage(FilePath file, bool flipVert, uint32_t desiredChannels) {
 		if (isCompatibleSTBI(file))
 			return loadImageSTBI(file, flipVert, desiredChannels);
 		else {
@@ -32,33 +32,25 @@ namespace C78E {
 	/*
 	* Loads an Image from Disk using STBI
 	*/
-	Ref<ImageLoader::ImageData> ImageLoader::loadImageSTBI(FilePath file, bool flipVert, uint32_t desiredBytesPerPixel) {
+	Ref<Image> ImageLoader::loadImageSTBI(FilePath file, bool flipVert, uint32_t desiredBytesPerPixel) {
 		C78E_CORE_TRACE("ImageLoader::loadImageSTBI: Loading Image File: {}", file.string());
 		Timer timer{};
-		Ref<ImageLoader::ImageData> image = createRef<ImageLoader::ImageData>();
 		int width, height, bytesPerPixel;
 
 		if(flipVert) stbi_set_flip_vertically_on_load(1);
 		else stbi_set_flip_vertically_on_load(0);
 
-		image->data.data = stbi_load(file.string().c_str(), &width, &height, &bytesPerPixel, static_cast<int>(desiredBytesPerPixel));
+		void* data = stbi_load(file.string().c_str(), &width, &height, &bytesPerPixel, static_cast<int>(desiredBytesPerPixel));
 
-		if (image->data.data) {
-			image->data.size = width * height * bytesPerPixel;
-			image->width = width;
-			image->height = height;
-			image->bytesPerPixel = desiredBytesPerPixel;
-			image->nativeBytesPerPixel = bytesPerPixel;
+		if (data) {
+			C78E_CORE_VALIDATE(bytesPerPixel < 6, return nullptr, "ImageLoader::loadImageSTBI: Failed to load Image File: {}, Format undetectable!", file.string());
+			Image::ImageFormat format = (bytesPerPixel < 5) ? (uint8_t)bytesPerPixel : Image::ImageFormat::RGBA32F;
+			Ref<Image> image = createRef<Image>(width, height, format, data);
 
-			image->isHDR = stbi_is_hdr(file.string().c_str());
-
-
-			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    Size:          {}", std::to_string(image->data.size));
-			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    Width:         {}", std::to_string(image->width));
-			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    Height:        {}", std::to_string(image->height));
-			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    BytesPerPixel: {}", std::to_string(image->bytesPerPixel));
-			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    NativeBytesPP: {}", std::to_string(image->nativeBytesPerPixel));
-			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    HDR:           {}", std::to_string(image->isHDR));
+			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    Size:          {}B", std::to_string(image->getByteSize()));
+			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    Width:         {}", std::to_string(image->getWidth()));
+			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    Height:        {}", std::to_string(image->getHeight()));
+			C78E_CORE_TRACE("ImageLoader::loadImageSTBI:    Format:		   {}", std::to_string(image->getFormat()));
 			C78E_CORE_TRACE("ImageLoader::loadImageSTBI: Loading Image Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
 
 			return image;

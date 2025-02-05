@@ -10,19 +10,15 @@
 [submodule "C78Engine/vendor/stb"]
 	path = C78Engine/vendor/stb
 	url = https://github.com/nothings/stb
-
 [submodule "vendor/premake"]
 	path = vendor/premake
 	url = https://github.com/premake/premake-core
-
 [submodule "C78Engine/vendor/entt"]
 	path = C78Engine/vendor/entt
 	url = https://github.com/cheater78/entt.git
-
 [submodule "C78Engine/vendor/GLFW"]
 	path = C78Engine/vendor/GLFW
 	url = https://github.com/cheater78/glfw.git
-
 [submodule "C78Engine/vendor/imgui"]
 	path = C78Engine/vendor/imgui
 	url = https://github.com/cheater78/ImGui.git

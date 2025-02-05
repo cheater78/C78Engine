@@ -23,7 +23,7 @@ namespace C78Editor::GUI {
         }
         C78E::Ref<C78E::Project> project = projectManager->getActiveProject();
         C78E::Ref<C78E::EditorAssetManager> assetManager = project->getEditorAssetManager();
-        C78E::AssetRegistry assetRegistry = assetManager->getAssetRegistry();
+        C78E::EditorAssetManager::AssetRegistry assetRegistry = assetManager->getAssetRegistry();
 
 
         
@@ -51,9 +51,9 @@ namespace C78Editor::GUI {
         }
 
 
-        for (C78E::AssetRegistryEntry entry : assetRegistry) {
+        for (C78E::EditorAssetManager::AssetRegistryEntry entry : assetRegistry) {
             C78E::AssetHandle handle = entry.first;
-            C78E::Ref<C78E::Asset::Meta> meta = entry.second;
+            C78E::Ref<C78E::EditorAssetManager::Meta> meta = entry.second;
 
             if (meta->type == C78E::Asset::Type::Scene) {
                 std::string infoLine = meta->name + "##(" + std::to_string(handle) + ")";

@@ -2,15 +2,17 @@
 #include "Project.h"
 
 #include <C78E/Project/ProjectSerializer.h>
-#include <C78E/Renderer/Assets/Scene/SceneSerializer.h>
-#include <C78E/Renderer/Assets/Scene/Scene.h>
+#include <C78E/Asset/Scene/SceneManager.h>
 
 namespace C78E {
 
 	void Project::Config::normalize(const FilePath& projectDirectoryPath) {
-		assetDirectory = FileSystem::normalizePath(FileSystem::getRelativePathTo(assetDirectory, projectDirectoryPath));
-		assetRegistryPath = FileSystem::normalizePath(FileSystem::getRelativePathTo(assetRegistryPath, projectDirectoryPath / assetDirectory));
-		scriptModulePath = FileSystem::normalizePath(FileSystem::getRelativePathTo(scriptModulePath, projectDirectoryPath / assetDirectory));
+		if(assetDirectory.is_absolute())
+			assetDirectory = FileSystem::normalizePath(FileSystem::getRelativePathTo(assetDirectory, projectDirectoryPath));
+		if (assetDirectory.is_absolute())
+			assetRegistryPath = FileSystem::normalizePath(FileSystem::getRelativePathTo(assetRegistryPath, projectDirectoryPath / assetDirectory));
+		if (assetDirectory.is_absolute())
+			scriptModulePath = FileSystem::normalizePath(FileSystem::getRelativePathTo(scriptModulePath, projectDirectoryPath / assetDirectory));
 	}
 
 	/*
@@ -53,10 +55,10 @@ namespace C78E {
 		editorAssetManager->importAssetRegistry(project->getAssetRegistryPath());
 
 		//Loading Assets
-		AssetRegistry assetRegistry = editorAssetManager->getAssetRegistry();
-		for (C78E::AssetRegistryEntry entry : assetRegistry) {
+		EditorAssetManager::AssetRegistry assetRegistry = editorAssetManager->getAssetRegistry();
+		for (EditorAssetManager::AssetRegistryEntry entry : assetRegistry) {
 			AssetHandle handle = entry.first;
-			Ref<Asset::Meta> meta = entry.second;
+			Ref<EditorAssetManager::Meta> meta = entry.second;
 
 			if(!editorAssetManager->isValid(handle) || meta->type == Asset::Type::None) {
 				C78E_CORE_WARN("Project::load: Asset '{}' of Type {} from File {} is invalid!", meta->name, Asset::Type::assetTypeToString(meta->type), meta->fileSource.string());
@@ -88,13 +90,13 @@ namespace C78E {
 		C78E_CORE_VALIDATE(ProjectSerializer::exportProject(project, projectFile), return false, "Project::save: Failed to serialize Project!\n    File: {}", projectFile);
 
 		//Export Assets
-		Ref<C78E::EditorAssetManager> assetManager = project->getEditorAssetManager();
-		const AssetRegistry& assetRegistry = assetManager->getAssetRegistry();
+		Ref<EditorAssetManager> assetManager = project->getEditorAssetManager();
+		const EditorAssetManager::AssetRegistry& assetRegistry = assetManager->getAssetRegistry();
 		assetManager->exportAssetRegistry(project->getAssetRegistryPath());
 
-		for (C78E::AssetRegistryEntry entry : assetRegistry) {
+		for (EditorAssetManager::AssetRegistryEntry entry : assetRegistry) {
 			AssetHandle handle = entry.first;
-			Ref<Asset::Meta> meta = entry.second;
+			Ref<EditorAssetManager::Meta> meta = entry.second;
 
 			// Scenes
 			if (meta->type == C78E::Asset::Type::Scene) {

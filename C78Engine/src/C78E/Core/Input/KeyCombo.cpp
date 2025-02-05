@@ -71,7 +71,7 @@ namespace C78E::Input {
 
 namespace std {
 
-    _EXPORT_STD _NODISCARD string to_string(C78E::Input::KeyCombo keyCombo) {
+    _EXPORT_STD _NODISCARD inline string to_string(C78E::Input::KeyCombo keyCombo) {
 		return C78E::Input::KeyCombo::keyComboToString(keyCombo);
 	}
 

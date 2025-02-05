@@ -267,7 +267,7 @@ namespace C78Editor::GUI {
 
 			drawComponent<C78E::SpriteRendererComponent>("Sprite", entity, [this, assetManager](C78E::SpriteRendererComponent& component) {
 				ImGui::ColorEdit4("Color", &component.color[0], ImGuiColorEditFlags_NoInputs);
-				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture2D, component.texture, "Texture");
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture, component.texture, "Texture");
 				ImGui::DragFloat("Tiling", &component.tilingFactor, .1f, .001f, 100.f);
 			});
 
@@ -323,7 +323,7 @@ namespace C78Editor::GUI {
 			*/
 
 			drawComponent<C78E::SkyBoxComponent>("SkyBox", entity, [this, assetManager](C78E::SkyBoxComponent& component) {
-				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::CubeMap, component.skybox, "CubeMapTexture");
+				AssetManagerUI::drawAssetEditPreview(assetManager, C78E::Asset::Type::Texture, component.skybox, "CubeMapTexture");
 			});
 
 

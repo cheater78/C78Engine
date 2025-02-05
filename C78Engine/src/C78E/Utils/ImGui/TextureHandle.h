@@ -1,20 +1,26 @@
 #pragma once
-#include <imgui.h>
-#include <cstdint>
 
-namespace C78E::GUI {
+namespace C78E {
 
-	class TextureHandle {
+	struct TextureHandle {
 	public:
-		TextureHandle(uint32_t handle) : m_RendererID(static_cast<size_t>(handle)) {}
-		TextureHandle(ImTextureID handle) : m_RendererID((size_t)handle) {}
-		TextureHandle(const TextureHandle& other) : m_RendererID(other.m_RendererID) {}
-		~TextureHandle() = default;
-		
-		operator uint32_t() const { return static_cast<uint32_t>(m_RendererID); }
-		operator ImTextureID() const { return (ImTextureID)m_RendererID; }
+		TextureHandle(uint32_t handle);
+		TextureHandle(ImTextureID handle);
+		TextureHandle(const TextureHandle& other);
+		~TextureHandle();
+
+		// Cast operators
+		operator uint32_t() const;
+		operator ImTextureID() const;
+
+		// Assignment operators
+		TextureHandle& operator=(uint32_t handle);
+		TextureHandle& operator=(ImTextureID handle);
+
+		bool operator==(const TextureHandle& other) const;
+
 	private:
-		size_t m_RendererID = 0;
+		uint32_t m_RendererID = 0;
 	};
 
 }

@@ -20,7 +20,7 @@ namespace C78E {
 
 		Ref<Texture2D> getColorAttachment(uint32_t id) override;
 
-		virtual const FramebufferSpecification& getSpecification() const override { return m_Specification; }
+		virtual const FramebufferSpecification& getOption() const override { return m_Specification; }
 	private:
 		uint32_t m_RendererID = 0;
 		FramebufferSpecification m_Specification;
