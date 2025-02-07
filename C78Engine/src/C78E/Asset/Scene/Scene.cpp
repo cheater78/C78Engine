@@ -214,10 +214,6 @@ namespace C78E {
 	}
 
 	template<>
-	void Scene::onComponentAdded<MeshComponent>(Entity entity, MeshComponent& component) {
-	}
-
-	template<>
 	void Scene::onComponentAdded<AmbientLightComponent>(Entity entity, AmbientLightComponent& component) {
 	}
 

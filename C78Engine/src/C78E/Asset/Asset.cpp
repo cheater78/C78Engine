@@ -11,6 +11,7 @@ namespace C78E {
 			{ C78E_FILE_EXT_IMAGE_JPG, Asset::Type::Texture },
 			{ C78E_FILE_EXT_IMAGE_JPEG, Asset::Type::Texture },
 
+			{ C78E_FILE_EXT_WAFEFRONT_MODEL, Asset::Type::Model },
 			{ C78E_FILE_EXT_WAFEFRONT_MATERIAL, Asset::Type::Material },
 
 			{ C78E_FILE_EXT_SHADER_GLSL, Asset::Type::Shader },

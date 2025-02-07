@@ -53,6 +53,10 @@ namespace C78E {
 		layer->onAttach();
 	}
 
+	void Application::close() {
+		m_Running = false;
+	}
+
 
 	void Application::onEvent(Event& e) {
 		EventDispatcher dispatcher(e);
@@ -71,7 +75,7 @@ namespace C78E {
 	}
 
 
-	void Application::onCMDClose(std::string cmd) { m_Running = false; }
+	void Application::onCMDClose(std::string cmd) { close(); }
 }
 
 

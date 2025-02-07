@@ -23,7 +23,7 @@ namespace C78E {
 			WavefrontMeshMeta(WavefrontMeshMeta&& other) noexcept = default;
 			WavefrontMeshMeta& operator=(const WavefrontMeshMeta& other) = default;
 			WavefrontMeshMeta& operator=(WavefrontMeshMeta&& other) noexcept = default;
-			virtual ~WavefrontMeshMeta() = default;
+			virtual ~WavefrontMeshMeta() override = default;
 			
 			int wavefrontShapeID = -2; // the Wvf Shape id this Mesh is part of(is suffiecient as Mesh Identifier, if there is only one Material for this Shape)
 			int wavefrontMaterialID = -2; // the Wvf Material id belonging to the Mesh, < 0 for no Material
@@ -48,7 +48,7 @@ namespace C78E {
 
 	public:
 		WavefrontMeshImporter(const FilePath& assetDirectory);
-		virtual ~WavefrontMeshImporter();
+		virtual ~WavefrontMeshImporter() override;
 
 		/**
 		 * @brief Imports Meshes and linked Materials and Textures from a specified AssetDescriptorMap, containing (opt.) existing MetaData, but atleast a sourceFile
@@ -81,7 +81,7 @@ namespace C78E {
 			WavefrontMaterialMeta(WavefrontMaterialMeta&& other) noexcept = default;
 			WavefrontMaterialMeta& operator=(const WavefrontMaterialMeta& other) = default;
 			WavefrontMaterialMeta& operator=(WavefrontMaterialMeta&& other) noexcept = default;
-			virtual ~WavefrontMaterialMeta() = default;
+			virtual ~WavefrontMaterialMeta() override = default;
 
 			std::string wavefrontName; // Name of the Material specified in the Wvf Material file, used to id the Material inside the Wvf Material file
 			std::map<AssetHandle, std::string> dependecies; //Materials existing TextureHandles, for sourcFiles
@@ -105,7 +105,7 @@ namespace C78E {
 
 	public:
 		WavefrontMaterialImporter(const FilePath& assetDirectory);
-		virtual ~WavefrontMaterialImporter();
+		virtual ~WavefrontMaterialImporter() override;
 
 		/**
 		 * @brief Imports Materials and linked Textures from a specified AssetDescriptorMap, containing (opt.) existing MetaData, but atleast a sourceFile

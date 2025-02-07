@@ -59,7 +59,22 @@ namespace C78Editor {
             { // Menu Bar
                 ImGui::BeginMainMenuBar();
 
-                m_ProjectManagerUI->onImGuiMainMenuBar();
+				static const std::string& fileMenuLabel = "File";
+                if (ImGui::BeginMenu(fileMenuLabel.c_str())) {
+                    m_ProjectManagerUI->onImGuiMainMenuBar(fileMenuLabel);
+
+					if (ImGui::MenuItem("Exit")) {
+						C78E::Application::get().close();
+					}
+                    ImGui::EndMenu();
+                }
+
+                if (ImGui::BeginMenu("Edit")) {
+                    
+					ImGui::MenuItem("NothingYet!", nullptr, nullptr, false);
+
+                    ImGui::EndMenu();
+                }
 
                 if (ImGui::BeginMenu("Window")) {
                     auto& window = C78E::Application::get().getWindow();
@@ -67,23 +82,34 @@ namespace C78Editor {
                     if (ImGui::BeginMenu("Mode")) {
                         {
                             bool b = mode == C78E::Window::WindowMode::Windowed;
-                            ImGui::MenuItem("Windowed", (b) ? "" : "F11", &b, false);
+                            ImGui::MenuItem("Windowed", (b) ? "" : "F11", &b, mode != C78E::Window::WindowMode::Windowed);
                             if (b && mode != C78E::Window::WindowMode::Windowed) {
                                 window.setWindowMode(C78E::Window::WindowMode::Windowed);
                             }
                         }
                         {
                             bool b = mode == C78E::Window::WindowMode::FullScreen;
-                            ImGui::MenuItem("FullScreen", (b) ? "" : "F11", &b, false);
+                            ImGui::MenuItem("FullScreen", (b) ? "" : "F11", &b, mode != C78E::Window::WindowMode::FullScreen);
                             if (b && mode != C78E::Window::WindowMode::FullScreen) {
                                 window.setWindowMode(C78E::Window::WindowMode::FullScreen);
                             }
                         }
                         {
                             bool b = mode == C78E::Window::WindowMode::BorderlessWindow;
-                            ImGui::MenuItem("BorderlessWindow", "", &b, false);
+                            ImGui::MenuItem("BorderlessWindow", "", &b, mode != C78E::Window::WindowMode::BorderlessWindow);
                             if (b && mode != C78E::Window::WindowMode::BorderlessWindow) {
                                 window.setWindowMode(C78E::Window::WindowMode::BorderlessWindow);
+                            }
+                        }
+                        ImGui::EndMenu();
+                    }
+                    if (ImGui::BeginMenu("Resolution")) {
+                        C78E::Window& window = C78E::Application::get().getWindow();
+                        const glm::ivec2 curr{ window.getWidth(), window.getHeight() };
+                        size_t currType = std::distance(C78E::Window::Resolution::resolutions().begin(), std::find(C78E::Window::Resolution::resolutions().begin(), C78E::Window::Resolution::resolutions().end(), curr));
+                        for (auto res : C78E::Window::Resolution::resolutionTypes()) {
+                            if (ImGui::MenuItem(C78E::Window::Resolution::resolutionToString((C78E::Window::Resolution)res).substr(12).c_str(), nullptr, nullptr, currType != res)) {
+                                window.setResolution(res);
                             }
                         }
                         ImGui::EndMenu();

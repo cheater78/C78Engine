@@ -13,6 +13,7 @@ namespace C78E {
 			// if one Constructor is defined we need all Args too
 			Config(std::string configName = C78E_DEFAULT_PROJECT_NAME, AssetHandle configStartScene = AssetHandle::invalid(), FilePath configAssetDirectory = C78E_ASSETLOCATION, FilePath configAssetRegistryPath = C78E_ASSETLOCATION_REGISTRY, FilePath configScriptModulePath = C78E_ASSETLOCATION_SCRIPTMODULE)
 				: name(configName), startScene(configStartScene), assetDirectory(configAssetDirectory), assetRegistryPath(configAssetRegistryPath), scriptModulePath(configScriptModulePath) {}
+			~Config() = default;
 		public:
 			std::string name = C78E_DEFAULT_PROJECT_NAME;
 			AssetHandle startScene = AssetHandle::invalid();

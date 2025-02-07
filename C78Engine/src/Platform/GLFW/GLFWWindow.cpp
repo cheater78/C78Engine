@@ -165,17 +165,48 @@ namespace C78E {
 
 	uint32_t GLFWWindow::getWidth() const { return m_Data.width; }
 	uint32_t GLFWWindow::getHeight() const { return m_Data.height; }
+
+	void GLFWWindow::setResolution(const Resolution& resolution) {
+		C78E_CORE_VALIDATE(m_Data.windowMode != WindowMode::BorderlessWindow, return, "GLFWWindow::setResolution: called in BorderlessWindow mode!");
+		glm::ivec2 origin = { 0, 0 };
+		glfwGetWindowFrameSize(m_Window, &origin.x, &origin.y, nullptr, nullptr);
+		if (!origin.x && !origin.y)
+			origin = { 64, 64 };
+		GLFWmonitor* monitor = (m_Data.windowMode == WindowMode::Windowed) ? nullptr : glfwGetPrimaryMonitor();
+		glm::ivec2 res = Resolution::resolution(resolution);
+		m_Data.width = res.x;
+		m_Data.height = res.y;
+		glfwSetWindowMonitor(m_Window, monitor, origin.x, origin.y, res.x, res.y, (m_Data.refreshMode < 2) ? GLFW_DONT_CARE : m_Data.refreshMode);
+	}
+
 	void* GLFWWindow::getNativeWindow() const { return m_Window; }
 	Window::WindowProps GLFWWindow::getWindowProperties() const { return m_Data; }
 	void GLFWWindow::setEventCallback(const EventCallbackFn& callback) { m_Data.eventCallback = callback; }
-
-	/* TODO: reset Window and replace -> ImGui must be reinited */
+	
 	void GLFWWindow::setWindowMode(WindowMode windowMode) {
+		if (m_Data.windowMode == windowMode)
+			return;
 		m_Data.windowMode = windowMode;
-		//shutdown();
-		//init(m_Data);
-		//WindowResizeEvent event(m_Data.width, m_Data.height);
-		//m_Data.eventCallback(event);
+		GLFWmonitor* monitor = nullptr;
+		switch (m_Data.windowMode) {
+		case WindowMode::Windowed:
+			monitor = nullptr;
+			break;
+		case WindowMode::FullScreen:
+			monitor = glfwGetPrimaryMonitor();
+			break;
+		case WindowMode::BorderlessWindow:
+			monitor = glfwGetPrimaryMonitor();
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+			m_Data.width = mode->width;
+			m_Data.height = mode->height;
+			break;
+		}
+		glfwSetWindowMonitor(m_Window, monitor, 0, 0, m_Data.width, m_Data.height, (m_Data.refreshMode < 2) ? GLFW_DONT_CARE : m_Data.refreshMode);
 	}
 
 	Window::WindowMode GLFWWindow::getWindowMode() const {

@@ -26,6 +26,8 @@ namespace C78E {
 		void pushLayer(Ref<Layer> layer);
 		void pushOverlay(Ref<Layer> layer);
 
+		void close();
+
 		Window& getWindow() { return *m_Window.get(); }
 	protected:
 		Ref<ImGuiLayer> getImGuiLayer() { return m_ImGuiLayer; }

@@ -9,7 +9,7 @@ namespace C78Editor::GUI {
 		ProjectManagerUI(C78E::Ref<C78E::ProjectManager> projectManager);
 		~ProjectManagerUI();
 
-		virtual void onImGuiMainMenuBar();
+		virtual void onImGuiMainMenuBar(const std::string& menuLabel);
 		virtual void onImGuiRender();
 
 	private:
@@ -19,6 +19,8 @@ namespace C78Editor::GUI {
 
 		void startCreateProcess();
 		void abortCreateProcess();
+
+		void onOpenProject(C78E::Ref<C78E::ProjectManager> projectManager);
 
 	private:
 		C78E::WRef<C78E::ProjectManager> m_ProjectManager;

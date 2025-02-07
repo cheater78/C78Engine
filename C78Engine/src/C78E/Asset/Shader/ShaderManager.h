@@ -12,7 +12,7 @@ namespace C78E {
 			ShaderMeta(ShaderMeta&& other) noexcept = default;
 			ShaderMeta& operator=(const ShaderMeta& other) = default;
 			ShaderMeta& operator=(ShaderMeta&& other) noexcept = default;
-			virtual ~ShaderMeta() = default;
+			virtual ~ShaderMeta() override = default;
 
 			
 			static void serialize(EditorAssetManager::AssetDescriptor assetDescriptor, YAML::Emitter& appendTo);
@@ -20,7 +20,7 @@ namespace C78E {
 		};
 	public:
 		ShaderImporter(const FilePath& assetDirectory);
-		virtual ~ShaderImporter();
+		virtual ~ShaderImporter() override;
 
 		virtual Ref<EditorAssetManager::ImportedAssetGroup> import(Ref<EditorAssetManager::AssetDescriptorMap> importDescriptorMap) override;
 		static bool compatible(const FilePath& assetFile);

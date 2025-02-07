@@ -3,7 +3,7 @@
 
 namespace C78E {
 
-    Ref<Mesh> Mesh::createMesh() { return Ref<Mesh>(); }
+    Ref<Mesh> Mesh::createMesh() { return createRef<Mesh>(); }
 
     // Mesh VertexHandle
     bool Mesh::VertexHandle::valid() const { return BaseHandle::valid() && m_Mesh.validVertexIndex(m_Index); }

@@ -21,7 +21,38 @@ namespace C78Editor::GUI {
 
 	ProjectManagerUI::~ProjectManagerUI() { ProjectHistory::save(); }
 
-	void ProjectManagerUI::onImGuiMainMenuBar() {
+	void ProjectManagerUI::onImGuiMainMenuBar(const std::string& menuLabel) {
+		C78E::Ref<C78E::ProjectManager> projectManager = m_ProjectManager.lock();
+		if (!projectManager)
+			return;
+
+		if (menuLabel == "File") {
+
+			if (ImGui::MenuItem("Create Project"))
+				startCreateProcess();
+
+			if (ImGui::MenuItem("Open Project"))
+				onOpenProject(projectManager);
+
+			if (ImGui::BeginMenu("Open Recent..")) {
+
+				for (auto& path : ProjectHistory::projects) {
+					const size_t maxLen = 20;
+					const std::string& pathstr = path.string();
+					const bool isTooLong = pathstr.size() > maxLen;
+					const std::string& label = pathstr.substr((!isTooLong) ? 0 : pathstr.size() - maxLen);
+					if (ImGui::MenuItem((((isTooLong) ? ".." : "") + label).c_str())) {
+						projectManager->openProject(path);
+					}
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::MenuItem("Close Project", 0, nullptr, projectManager->hasActiveProject())) {
+				projectManager->closeProject();
+			}
+		}
 	}
 
 	void ProjectManagerUI::onImGuiRender() {
@@ -43,19 +74,11 @@ namespace C78Editor::GUI {
 			imGuiPlaceNextWinmain();
 			ImGui::Begin("Project Manager");
 
-			
-
 			if (ImGui::Button("Create Project")) {
 				startCreateProcess();
 			}
-			if (ImGui::Button("Open Project")) {
-				C78E::FilePath path = C78E::FileDialogs::openFile({C78E::FileSystem::EntryType::Project}, C78E::FileSystem::C78RootDirectory, "", "C78E Open Project");
-				if (!path.empty()) {
-					projectManager->openProject(path);
-					ProjectHistory::projects.insert(path);
-					ProjectHistory::save();
-				}
-			}
+			if (ImGui::Button("Open Project"))
+				onOpenProject(projectManager);
 
 			if (ProjectHistory::projects.size()) {
 				for (auto& path : ProjectHistory::projects) {
@@ -166,6 +189,15 @@ namespace C78Editor::GUI {
 		m_ProjectCreateInProgress = false;
 		m_ProjectCreateDirectory = C78E::FileSystem::C78RootDirectory;
 		m_ProjectCreateConfig = {};
+	}
+
+	void ProjectManagerUI::onOpenProject(C78E::Ref<C78E::ProjectManager> projectManager) {
+		C78E::FilePath path = C78E::FileDialogs::openFile({ C78E::FileSystem::EntryType::Project }, C78E::FileSystem::C78RootDirectory, "", "C78E Open Project");
+		if (!path.empty() && C78E::FileSystem::extensionToEntryType(path) == C78E::FileSystem::Project) {
+			projectManager->openProject(path);
+			ProjectHistory::projects.insert(path);
+			ProjectHistory::save();
+		}
 	}
 
 }

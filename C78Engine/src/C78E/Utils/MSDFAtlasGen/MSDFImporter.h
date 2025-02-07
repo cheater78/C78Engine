@@ -11,7 +11,7 @@ namespace C78E {
 			MSDFMeta(MSDFMeta&& other) noexcept = default;
 			MSDFMeta& operator=(const MSDFMeta& other) = default;
 			MSDFMeta& operator=(MSDFMeta&& other) noexcept = default;
-			virtual ~MSDFMeta() = default;
+			virtual ~MSDFMeta() override = default;
 
 
 			static void serialize(EditorAssetManager::AssetDescriptor assetDescriptor, YAML::Emitter& appendTo);
@@ -19,7 +19,7 @@ namespace C78E {
 		};
 	public:
 		MSDFImporter(const FilePath& assetDirectory);
-		virtual ~MSDFImporter();
+		virtual ~MSDFImporter() override;
 
 		virtual Ref<EditorAssetManager::ImportedAssetGroup> import(Ref<EditorAssetManager::AssetDescriptorMap> importDescriptorMap) override;
 		static bool compatible(const FilePath& assetFile);

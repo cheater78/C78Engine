@@ -66,6 +66,32 @@ namespace C78E::GUI {
 	}
 
 	template<typename T>
+	static T drawLabeledComboEnumInput(const std::string& label, T& value, size_t maxEnumValue) {
+		ImGui::PushID(label.c_str());
+		ImGui::Text(label.c_str());
+		ImGui::SameLine();
+
+		std::vector<std::string> labelStrings;
+		std::vector<const char*> labelStringsPtrs;
+		labelStrings.reserve(maxEnumValue);
+		labelStringsPtrs.reserve(maxEnumValue);
+		int index = -1;
+		for (size_t entry = 0; entry < maxEnumValue; entry++) {
+			labelStrings.push_back(std::to_string((T)entry));
+			labelStringsPtrs.push_back(labelStrings.back().c_str());
+			if (value == entry)
+				index = labelStringsPtrs.size() - 1;
+		}
+
+		ImGui::Combo("", &index, labelStringsPtrs.data(), labelStringsPtrs.size());
+
+		ImGui::PopID();
+		if (index > -1 && index < maxEnumValue)
+			value = (T)index;
+		return value;
+	}
+
+	template<typename T>
 	static T drawLabeledComboInput(const std::string& label, T& value, const std::vector<T>& entries) {
 		ImGui::PushID(label.c_str());
 		ImGui::Text(label.c_str());

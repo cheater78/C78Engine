@@ -12,14 +12,14 @@ namespace C78E {
 			MeshMeta(MeshMeta&& other) noexcept = default;
 			MeshMeta& operator=(const MeshMeta& other) = default;
 			MeshMeta& operator=(MeshMeta&& other) noexcept = default;
-			virtual ~MeshMeta() = default;
+			virtual ~MeshMeta() override = default;
 
 			static void serialize(EditorAssetManager::AssetDescriptor assetDescriptor, YAML::Emitter& appendTo);
 			static void deserialize(const YAML::Node& serializedMeta, Ref<EditorAssetManager::AssetDescriptor>& appendTo);
 		};
 	public:
 		MeshImporter(const FilePath& assetDirectory);
-		virtual ~MeshImporter();
+		virtual ~MeshImporter() override;
 
 		virtual Ref<EditorAssetManager::ImportedAssetGroup> import(Ref<EditorAssetManager::AssetDescriptorMap> importDescriptorMap) override;
 		static bool compatible(const FilePath& assetFile);

@@ -12,14 +12,14 @@ namespace C78E {
 			MaterialMeta(MaterialMeta&& other) noexcept = default;
 			MaterialMeta& operator=(const MaterialMeta& other) = default;
 			MaterialMeta& operator=(MaterialMeta&& other) noexcept = default;
-			virtual ~MaterialMeta() = default;
+			virtual ~MaterialMeta() override = default;
 
 			static void serialize(EditorAssetManager::AssetDescriptor assetDescriptor, YAML::Emitter& appendTo);
 			static void deserialize(const YAML::Node& serializedMeta, Ref<EditorAssetManager::AssetDescriptor>& appendTo);
 		};
 	public:
 		MaterialImporter(const FilePath& assetDirectory);
-		virtual ~MaterialImporter();
+		virtual ~MaterialImporter() override;
 
 		virtual Ref<EditorAssetManager::ImportedAssetGroup> import(Ref<EditorAssetManager::AssetDescriptorMap> importDescriptorMap) override;
 		static bool compatible(const FilePath& assetFile);

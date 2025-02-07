@@ -34,7 +34,7 @@ namespace C78E {
 		C78E_CORE_VALIDATE(!sourceFile.empty(), return nullptr, "MeshImporter::import: verifyMapSourceFile failed!");
 
 		if (WavefrontMaterialImporter::compatible(sourceFile))
-			return dynamic_cast<WavefrontMaterialImporter*>(this)->import(importDescriptorMap);
+			return WavefrontMaterialImporter(m_AssetDirectory).import(importDescriptorMap);
 
 		return nullptr;
 	}

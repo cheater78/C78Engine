@@ -12,7 +12,7 @@ namespace C78E {
 			TextureMeta(TextureMeta&& other) noexcept = default;
 			TextureMeta& operator=(const TextureMeta& other) = default;
 			TextureMeta& operator=(TextureMeta&& other) noexcept = default;
-			virtual ~TextureMeta() = default;
+			virtual ~TextureMeta() override = default;
 
 			Texture::Type textureType;
 			Ref<Texture::Specification> specification;
@@ -23,7 +23,7 @@ namespace C78E {
 		};
 	public:
 		TextureImporter(const FilePath& assetDirectory);
-		virtual ~TextureImporter();
+		virtual ~TextureImporter() override;
 
 		virtual Ref<EditorAssetManager::ImportedAssetGroup> import(Ref<EditorAssetManager::AssetDescriptorMap> importDescriptorMap) override;
 		static bool compatible(const FilePath& assetFile);

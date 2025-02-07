@@ -13,6 +13,7 @@ namespace C78E {
 
 		virtual uint32_t getWidth() const override;
 		virtual uint32_t getHeight() const override;
+		virtual void setResolution(const Resolution& resolution) override;
 
 		virtual void* getNativeWindow() const override;
 		virtual WindowProps getWindowProperties() const override;
@@ -39,6 +40,11 @@ namespace C78E {
 		GLFWwindow* m_Window;
 		Scope<GraphicsContext> m_Context;
 		MouseMode m_MouseMode = MouseMode::Normal;
+
+		struct SavedWindowData {
+			int width, height;
+			int x, y;
+		} m_SavedData;
 	};
 
 }

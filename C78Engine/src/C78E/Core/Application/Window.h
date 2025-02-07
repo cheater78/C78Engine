@@ -28,6 +28,59 @@ namespace C78E {
 			Disabled = 2
 		};
 
+		struct Resolution {
+			enum Type : uint8_t {
+				nHD,
+				VGA,
+				SVGA,
+				XGA,
+				WXGA,
+				WXGAe,
+				SXGA,
+				HD,
+				HDe,
+				WXGAp,
+				HDp,
+				UXGA,
+				WSXGAp,
+				FHD,
+				WUXGA,
+				QWXGA,
+				QXGA,
+				UWFHD,
+				QHD,
+				WQXGA,
+				UWQHD,
+				UHD_4K,
+				UHD_5K,
+				DUHD,
+				UHD_8K
+			};
+			Resolution() : m_Resolution{ HD } {}
+			Resolution(uint8_t type) : m_Resolution(type) {}
+			Resolution(const Resolution& other) = default;
+			~Resolution() = default;
+
+			bool operator==(const Resolution& other) const { return this->m_Resolution == other.m_Resolution; }
+			bool operator==(uint8_t other) const { return this->m_Resolution == other; }
+			bool operator!=(const Resolution& other) const { return this->m_Resolution != other.m_Resolution; }
+			bool operator!=(uint8_t other) const { return this->m_Resolution != other; }
+			bool operator<(const Resolution& other) const { return this->m_Resolution < other.m_Resolution; }
+			bool operator<(uint8_t other) const { return this->m_Resolution < other; }
+			operator uint8_t() const { return m_Resolution; }
+
+			static glm::ivec2 resolution(Resolution resolution);
+			static std::string resolutionToString(const Resolution& resolution);
+			static Resolution resolutionFromString(const std::string& resolutionString);
+
+			static const std::array<glm::ivec2, 25>& resolutions();
+			static const std::array<uint8_t, 25>& resolutionTypes();
+
+		private:
+			static const std::array<glm::ivec2, 25> s_Resolutions;
+			uint8_t m_Resolution;
+		};
+
 		struct WindowProps {
 			std::string title;
 			uint32_t width;
@@ -56,6 +109,7 @@ namespace C78E {
 
 		virtual uint32_t getWidth() const = 0;
 		virtual uint32_t getHeight() const = 0;
+		virtual void setResolution(const Resolution& resolution) = 0;
 
 		virtual void* getNativeWindow() const = 0;
 		virtual WindowProps getWindowProperties() const = 0;

@@ -49,7 +49,7 @@ namespace C78E {
 			SceneMeta(SceneMeta&& other) noexcept = default;
 			SceneMeta& operator=(const SceneMeta& other) = default;
 			SceneMeta& operator=(SceneMeta&& other) noexcept = default;
-			virtual ~SceneMeta() = default;
+			virtual ~SceneMeta() override = default;
 
 			// Scene can have all attributes inside its file, no need for specialization
 			static void serialize(EditorAssetManager::AssetDescriptor assetDescriptor, YAML::Emitter& appendTo);
@@ -57,7 +57,7 @@ namespace C78E {
 		};
 	public:
 		SceneImporter(const FilePath& assetDirectory);
-		virtual ~SceneImporter();
+		virtual ~SceneImporter() override;
 
 		virtual Ref<EditorAssetManager::ImportedAssetGroup> import(Ref<EditorAssetManager::AssetDescriptorMap> importDescriptorMap) override;
 		static bool compatible(const FilePath& assetFile);

@@ -13,6 +13,7 @@ namespace C78E {
 				None = 0,
 				Scene,
 
+				Model,
 				Mesh,
 				Material,
 
@@ -52,6 +53,8 @@ namespace C78E {
 			} c_FileMap;
 		};
 	public:
+		virtual ~Asset() = default;
+
 		AssetHandle& handle() { return m_AssetHandle; }
 		const AssetHandle& handle() const { return m_AssetHandle; }
 

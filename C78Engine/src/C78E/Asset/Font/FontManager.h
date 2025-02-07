@@ -12,7 +12,7 @@ namespace C78E {
 			FontMeta(FontMeta&& other) noexcept = default;
 			FontMeta& operator=(const FontMeta& other) = default;
 			FontMeta& operator=(FontMeta&& other) noexcept = default;
-			virtual ~FontMeta() = default;
+			virtual ~FontMeta() override = default;
 
 			size_t fontSize = 64; // Character Pixel Size
 
@@ -21,7 +21,7 @@ namespace C78E {
 		};
 	public:
 		FontImporter(const FilePath& assetDirectory);
-		virtual ~FontImporter();
+		virtual ~FontImporter() override;
 
 		virtual Ref<EditorAssetManager::ImportedAssetGroup> import(Ref<EditorAssetManager::AssetDescriptorMap> importDescriptorMap) override;
 		static bool compatible(const FilePath& assetFile);

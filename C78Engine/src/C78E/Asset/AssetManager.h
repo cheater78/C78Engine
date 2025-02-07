@@ -75,7 +75,7 @@ namespace C78E {
 	public:
 		RuntimeAssetManager() = default;
 		RuntimeAssetManager(const RuntimeAssetManager& other) = delete;
-		virtual ~RuntimeAssetManager() = default;
+		virtual ~RuntimeAssetManager() override = default;
 
 		//TODO: loadAssets -> Assetpack.file(keep full Header in mem) -> Project -> current Scene -> all
 	private:
@@ -174,7 +174,7 @@ namespace C78E {
 		 */
 		EditorAssetManager(const FilePath& assetDirectory);
 		EditorAssetManager(const EditorAssetManager& other) = delete;
-		virtual ~EditorAssetManager() = default;
+		virtual ~EditorAssetManager() override = default;
 
 		/**
 		 * @brief Retrieves loaded assets or otherwise loads them, given their handle.

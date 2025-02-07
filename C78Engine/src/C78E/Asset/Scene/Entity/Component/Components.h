@@ -2,6 +2,7 @@
 #include <C78E/Core/UUID.h>
 #include <C78E/Renderer/Camera/SceneCamera.h>
 #include <C78E/Asset/Asset.h>
+#include <C78E/Asset/Model/Model.h>
 
 #include "Uniform.h"
 
@@ -73,7 +74,6 @@ namespace C78E {
 	 * (optional)
 	 */
 	struct ModelComponent {
-		glm::vec3 offset = { 0.f, 0.f, 0.f };
 		AssetHandle model;
 	};
 
@@ -90,18 +90,6 @@ namespace C78E {
 	typedef Light::DirectLight DirectLightComponent;
 	typedef Light::PointLight PointLightComponent;
 	typedef Light::SpotLight SpotLightComponent;
-
-	struct MeshComponent {
-		AssetHandle mesh;
-	};
-
-	struct MaterialComponent {
-		AssetHandle material;
-	};
-
-	struct TextureComponent {
-		std::vector<AssetHandle> textures;
-	};
 
 	struct SpriteRendererComponent {
 		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
@@ -158,9 +146,6 @@ namespace C78E {
 		PointLightComponent,
 		SpotLightComponent,
 		ModelComponent,
-		MeshComponent,
-		MaterialComponent,
-		TextureComponent,
 		SkyBoxComponent,
 		SpriteRendererComponent,
 		CircleRendererComponent,

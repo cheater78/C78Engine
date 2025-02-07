@@ -7,7 +7,7 @@
 
 namespace C78E {
 
-    static bool readObjFile(tinyobj::ObjReader& reader, FilePath sourceFile, bool triangulate = false, FilePath relMaterialPath = "./");
+    static bool readObjFile(tinyobj::ObjReader& reader, FilePath sourceFile, bool triangulate = false, FilePath relMaterialPath = "");
     static bool readMtlFile(tinyobj::ObjReader& reader, FilePath absoluteSourceFile);
 
     static std::vector<FilePath> extractAllMtlLibFiles(const FilePath& absoluteObjFilePath);
@@ -89,7 +89,10 @@ namespace C78E {
         FilePath sourceFile = verifyMapSourceFile(importDescriptorMap);
         C78E_CORE_VALIDATE(!sourceFile.empty(), return nullptr, "MeshImporter::import: verifyMapSourceFile failed!");
         const FilePath absoluteSourceFilePath = m_AssetDirectory / sourceFile;
-        
+
+		Timer timer;
+        C78E_CORE_TRACE("WavefrontMeshImporter::import: Loading Obj File: {}", sourceFile.string());
+
         tinyobj::ObjReader reader;
         // Read in the sourceFile
         C78E_CORE_VALIDATE(
@@ -99,12 +102,24 @@ namespace C78E {
             absoluteSourceFilePath
         );
 
+        C78E_CORE_TRACE("WavefrontMeshImporter::import:    Shapes: {}", reader.GetShapes().size());
+        C78E_CORE_TRACE("WavefrontMeshImporter::import:    Materials: {}", reader.GetMaterials().size());
+
         // Import Meshes
         Ref<EditorAssetManager::ImportedAssetGroup> importedAssets = extractMeshes(reader, sourceFile, importDescriptorMap);
+        C78E_CORE_TRACE("WavefrontMeshImporter::import:    Meshes imported: {}", importedAssets->size());
+
         // Import Materials
-        for (FilePath relativeMtlFile : extractAllMtlLibFiles(absoluteSourceFilePath))
-            importedAssets->merge(*extractMaterials(reader, m_AssetDirectory / ((sourceFile.has_parent_path()) ? sourceFile.parent_path() / relativeMtlFile : relativeMtlFile), importDescriptorMap, m_AssetDirectory));
-        
+		const auto mtlFiles = extractAllMtlLibFiles(absoluteSourceFilePath);
+        C78E_CORE_TRACE("WavefrontMeshImporter::import:    Material files: {}", mtlFiles.size());
+        for (FilePath relativeMtlFile : mtlFiles) {
+            C78E_CORE_TRACE("WavefrontMeshImporter::import:        File: {}", relativeMtlFile.string());
+            Ref<EditorAssetManager::ImportedAssetGroup> importerdMaterialFileAssets = extractMaterials(reader, m_AssetDirectory / ((sourceFile.has_parent_path()) ? sourceFile.parent_path() / relativeMtlFile : relativeMtlFile), importDescriptorMap, m_AssetDirectory);
+            C78E_CORE_TRACE("WavefrontMeshImporter::import:        Materials: {}", importerdMaterialFileAssets->size());
+            if(importerdMaterialFileAssets && !importerdMaterialFileAssets->empty())
+                importedAssets->merge(*importerdMaterialFileAssets);
+        }
+        C78E_CORE_TRACE("WavefrontMeshImporter::import: WavefrontImport done! (Took: {} ms, {} Assets loaded)", timer.elapsedMillis(), importedAssets->size());
         return importedAssets;
     }
 
@@ -264,9 +279,14 @@ namespace C78E {
      * @param relMaterialPath relative Path to the Wavefront Material Files
      * @return whether the operation was successful
      */
-    static bool readObjFile(tinyobj::ObjReader& reader, FilePath absoluteSourceFile, bool triangulate, FilePath relMaterialPath) {
+    static bool readObjFile(tinyobj::ObjReader& reader, FilePath absoluteSourceFile, bool triangulate, FilePath absoluteMaterialPath) {
+		C78E_CORE_VALIDATE(absoluteSourceFile.is_absolute(), return false, "WavefrontImporter: Obj File is not absolute: {}", absoluteSourceFile.string());
+		C78E_CORE_VALIDATE(FileSystem::exists(absoluteSourceFile), return false, "WavefrontImporter: Obj File does not exist: {}", absoluteSourceFile.string());
+        C78E_CORE_VALIDATE(absoluteMaterialPath.empty() || absoluteMaterialPath.is_absolute(), return false, "WavefrontImporter: Mtl Directory is not absolute: {}", absoluteMaterialPath.string());
+        C78E_CORE_VALIDATE(absoluteMaterialPath.empty() || FileSystem::isDirectory(absoluteMaterialPath), return false, "WavefrontImporter: absoluteMaterialPath is not a Directory: {}", absoluteMaterialPath.string());
+
         tinyobj::ObjReaderConfig reader_config;
-        reader_config.mtl_search_path = relMaterialPath.string();
+        reader_config.mtl_search_path = absoluteMaterialPath.string();
         reader_config.triangulate = triangulate;
         reader_config.vertex_color = fileHasColorData(absoluteSourceFile); // determine wheter there is actual color data, so tinyObj wont make up defaults (which for some reason can be white..)
 
@@ -816,7 +836,7 @@ namespace C78E {
             isStringDefined(material.emissive_texname) ||
             isStringDefined(material.normal_texname);
 
-        C78E_CORE_VALIDATE(basicMaterialParamDefined != pbrMaterialParamDefined, return Material::Type::Material, "");
+        C78E_CORE_VALIDATE(basicMaterialParamDefined != pbrMaterialParamDefined, return Material::Type::BasicMaterial, "WavefrontImporter::getMaterialType: Material and PBR defined!");
         return (basicMaterialParamDefined) ? Material::Type::BasicMaterial : Material::Type::PBRMaterial;
     }
 
@@ -902,6 +922,9 @@ namespace C78E {
 
             // Material Textures
             for (const auto& [textureName, textureOption] : requiredTextures) {
+                if (textureName.empty())
+                    continue;
+
                 Ref<TextureImporter::TextureMeta> textureMeta = createRef<TextureImporter::TextureMeta>();
                 AssetHandle handle = getMaterialTextureHandle(textureName, *materialMeta);
                 if (!handle)
@@ -927,7 +950,9 @@ namespace C78E {
                 EditorAssetManager::AssetDescriptor textureDescriptor{ handle, textureMeta };
                 materialTextureDescriptors->insert(textureDescriptor);
             }
-            importedAssets->merge(*TextureImporter(assetDirectory).import(materialTextureDescriptors)); // add loaded Textures
+            Ref<EditorAssetManager::ImportedAssetGroup> importedTextures = TextureImporter(assetDirectory).import(materialTextureDescriptors);
+            if (importedTextures && !importedTextures->empty())
+                importedAssets->merge(*importedTextures); // add loaded Textures
 
             switch (type) {
             case C78E::Material::Type::Material:

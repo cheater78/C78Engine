@@ -28,7 +28,7 @@ namespace C78E {
 		project->m_AssetManager = (assetManager) ? assetManager : createRef<EditorAssetManager>(project->getAssetDirectory());
 		C78E_CORE_VALIDATE(!project->m_Config.name.empty(), return nullptr, "Project::create: Project can't be created with an empty Name!");
 		C78E_CORE_VALIDATE(!project->m_Config.assetRegistryPath.empty(), return nullptr, "Project::create: Project can't be created with an empty AssetRegistry FilePath!");
-		// TODO: check existing load existing
+		// TODO: check existing, load existing
 		return project;
 	}
 
