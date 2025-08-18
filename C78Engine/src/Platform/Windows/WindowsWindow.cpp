@@ -3,8 +3,8 @@
 #include "WindowsWindow.h"
 
 namespace C78E {
-	WindowsWindow::WindowsWindow(const WindowProps& props)
-		: GLFWWindow(props) { }
+	WindowsWindow::WindowsWindow(const WindowProperties& properties, EventCallbackFunction eventCallbackFunction)
+		: GLFWWindow(properties, eventCallbackFunction) { }
 
 	WindowsWindow::~WindowsWindow() { }
 }

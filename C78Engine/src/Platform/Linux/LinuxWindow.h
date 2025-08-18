@@ -7,7 +7,7 @@ namespace C78E {
 
 	class LinuxWindow : public GLFWWindow {
 	public:
-		LinuxWindow(const WindowProps& props);
+		LinuxWindow(const WindowProperties& properties);
 		virtual ~LinuxWindow();
 	};
 

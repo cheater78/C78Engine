@@ -1,50 +1,52 @@
 #pragma once
 #ifdef C78E_PLATFORM_GLFW
-#include <C78E/Renderer/API/GraphicsContext.h>
+
+#include <C78E/Core/Window/Window.h>
 
 namespace C78E {
 
 	class GLFWWindow : public Window {
 	public:
-		GLFWWindow(const WindowProps& props);
+		GLFWWindow(const WindowProperties& properties = {}, EventCallbackFunction eventCallbackFunction = nullptr);
 		virtual ~GLFWWindow();
 
-		virtual void onUpdate() override;
+		virtual void onUpdate(Timestep delta) override; // opt. Update for Winwow, Layers are handled separately
+		virtual void onEvent(Event& e) override; // opt. Events for Winwow, Events are dispatched to Layers separately
+		virtual void onDebugRender() override; // opt. Debug for Winwow, Layers Debug Content is handled separately
 
+		// Window attributes
 		virtual uint32_t getWidth() const override;
 		virtual uint32_t getHeight() const override;
-		virtual void setResolution(const Resolution& resolution) override;
+		virtual uvec2 getSize() const override;
+		virtual void setSize(const uvec2& size) override;
 
 		virtual void* getNativeWindow() const override;
-		virtual WindowProps getWindowProperties() const override;
-
-		virtual void setEventCallback(const EventCallbackFn& callback) override;
+		virtual WindowProperties getWindowProperties() const override;
 
 		virtual void setWindowMode(WindowMode windowMode) override;
 		virtual WindowMode getWindowMode() const override;
 
-		virtual void setRefreshMode(RefreshMode refreshMode) override;
-		virtual RefreshMode getRefreshMode() const override;
-		virtual bool isRefreshMode(RefreshMode refreshMode) const override;
+		virtual void setRefreshMode(WindowRefreshMode refreshMode) override;
+		virtual WindowRefreshMode getRefreshMode() const override;
+		virtual bool isRefreshMode(WindowRefreshMode refreshMode) const override;
 
-		virtual MouseMode getMouseMode() const override;
-		virtual void setMouseMode(MouseMode mouseMode) override;
+		virtual WindowMouseCursorMode getMouseMode() const override;
+		virtual void setMouseMode(WindowMouseCursorMode mouseMode) override;
 
 		virtual std::string getClipBoardString() const override;
 		virtual void setClipboardString(const std::string& str) override;
-	protected:
-		virtual void init(const WindowProps& props);
-		virtual void shutdown();
-	protected:
-		WindowData m_Data;
-		GLFWwindow* m_Window;
-		Scope<GraphicsContext> m_Context;
-		MouseMode m_MouseMode = MouseMode::Normal;
 
-		struct SavedWindowData {
-			int width, height;
-			int x, y;
-		} m_SavedData;
+		virtual void setTitle(const std::string& title) override;
+		virtual std::string getTitle() const override;
+
+		// Window Input
+		virtual bool isKeyPressed(Input::KeyCode key) override;
+		virtual bool isMousePressed(Input::MouseCode mouseButton) override;
+		virtual ivec2 getMousePositionFromWindowOriginInPixels()override; // pixels [0,size]
+		virtual void setMousePositionFromWindowOriginInPixels(const ivec2& position) override; // pixels [0,size]
+
+	protected:
+		GLFWwindow* m_GLFWwindow;
 	};
 
 }

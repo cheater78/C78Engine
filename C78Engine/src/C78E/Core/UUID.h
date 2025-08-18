@@ -5,6 +5,7 @@ namespace C78E {
 	class UUID {
 	public:
 		UUID();
+		UUID(uint64_t upper, uint64_t lower);
 		UUID(const UUID&) = default;
 
 		bool isValid() const { return (bool)*this; }
@@ -43,4 +44,30 @@ namespace std {
 	_EXPORT_STD _NODISCARD inline string to_string(C78E::UUID uuid) {
 		return C78E::UUID::encodeToString(uuid);
 	}
+}
+
+#include <C78E/Utils/YamlUtils.h>
+namespace YAML {
+
+	// UUID
+	inline Emitter& operator<<(Emitter& out, const C78E::UUID& id) {
+		out << C78E::UUID::encodeToString(id);
+		return out;
+	}
+	template <>
+	struct convert<C78E::UUID> {
+		static Node encode(const C78E::UUID& id) {
+			Node node;
+			node.push_back(C78E::UUID::encodeToString(id));
+			return node;
+		}
+
+		static bool decode(const Node& node, C78E::UUID& id) {
+			if(!C78E::UUID::decodesToUUID(node.as<std::string>())) return false;
+			id = C78E::UUID::decodeFromString(node.as<std::string>());
+			return true;
+		}
+
+	};
+
 }

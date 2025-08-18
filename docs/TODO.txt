@@ -1,0 +1,3 @@
+
+KeyCombo - Support for Mouse
+	- abstract Key and MouseButton to one InputThingy

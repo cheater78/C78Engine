@@ -1,5 +1,4 @@
-#include <C78E/Core/Application/Window.h>
-#include <C78E/Renderer/API/RendererAPI.h>
+#include <C78E/Core/Window/Window.h>
 
 #include <imgui.h>
 #include <imgui_internal.h>

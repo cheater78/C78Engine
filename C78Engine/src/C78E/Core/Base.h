@@ -2,16 +2,22 @@
 #include <C78E/Core/FileSystem/NativeFileExtensions.h>
 #include <C78E/Core/FileSystem/SupportedFileExtensions.h>
 
+// C78Engine
+
+#define C78E_TITLE "C78Engine"
 #define C78E_VERSION_MAJOR 0
 #define C78E_VERSION_MINOR 1
 #define C78E_VERSION_PATCH 0
 #define C78E_VERSION_NUMBER ( ((C78E_VERSION_MAJOR * 1000) + C78E_VERSION_MINOR) * 1000 + C78E_VERSION_PATCH )
 #define C78E_VERSION_STRING ( "v" C78E_STRINGIFY_MACRO(C78E_VERSION_MAJOR) "." C78E_STRINGIFY_MACRO(C78E_VERSION_MINOR) "." C78E_STRINGIFY_MACRO(C78E_VERSION_PATCH))
 
-// Default Names
-#define C78E_ENGINE_TITLE "C78Engine"
-#define C78E_WINDOW_DEFAULT_NAME "C78E Window"
+// C78E Application Defaults
+#define C78E_APP_DEFAULT_NAME "C78E Application"
+#define C78E_APP_DEFAULT_VERSION_NUMBER C78E_VERSION_NUMBER
+#define C78E_APP_DEFAULT_VERSION_STRING C78E_VERSION_STRING
+#define C78E_APP_WINDOW_DEFAULT_Title "C78E Window"
 
+// C78E Editor Defaults -> TODO: ?
 #define C78E_DEFAULT_PROJECT_NAME "C78Project"
 #define C78E_DEFAULT_ASSET_NAME "C78Asset"
 #define C78E_DEFAULT_SCENE_NAME "C78Scene"
@@ -42,7 +48,7 @@
 #define C78E_PROJECT_NAME_MAX_LENGTH 128
 
 
-//C78Engine native HotKeys
+//C78Engine native HotKeys -> TODO: Move to something like Default Keys
 #define C78E_HOTKEY_CONSOLE Input::KeyCombo{ { Input::Key::LeftAlt, Input::Key::F1 } }
 //#define C78E_HOTKEY_SCREENSHOT Input::KeyCombo{ { Input::Key::LeftAlt, Input::Key::F2 } }
 //#define C78E_HOTKEY_DEBUGOVERLAY Input::KeyCombo{ { Input::Key::LeftAlt, Input::Key::F3 } }

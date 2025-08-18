@@ -1,7 +1,7 @@
 #pragma once
 #include "NativeFileExtensions.h"
 #include <C78E/Core/Core.h>
-#include <C78E/Core/Buffer.h>
+#include <C78E/Core/Buffer/Buffer.h>
 #include <C78E/Core/Log/SmartLog.h>
 
 namespace C78E {
@@ -52,6 +52,12 @@ namespace C78E {
 		static FilePath getRelativePathTo(const FilePath& path, const FilePath& baseDirectory = FileSystem::C78RootDirectory);
 		static FilePath normalizePath(const FilePath& path);
 
+		/**
+		 * @brief Retrieves a the filename of a file without the extension
+		 * @param path FilePath to the file
+		 * @return the string of the plain filename
+		 */
+		static std::string getFileName(const FilePath& path);
 
 		// File I/O
 		static std::string readFileText(const FilePath& filepath);

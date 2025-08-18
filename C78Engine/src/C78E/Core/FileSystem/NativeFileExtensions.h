@@ -38,3 +38,12 @@
 // .xce
 // .yce
 // .zce
+
+
+// Shader Files - Name Fragments
+#define C78E_FILE_EXT_FRAG_SHADER_VERTEX ".vert" 
+#define C78E_FILE_EXT_FRAG_SHADER_TESSELATION ".tess"
+#define C78E_FILE_EXT_FRAG_SHADER_TESSEVALUATION ".tese"
+#define C78E_FILE_EXT_FRAG_SHADER_GEOMETRY ".geom"
+#define C78E_FILE_EXT_FRAG_SHADER_FRAGMENT ".frag"
+#define C78E_FILE_EXT_FRAG_SHADER_COMPUTE ".comp"

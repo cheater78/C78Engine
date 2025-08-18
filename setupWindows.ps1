@@ -24,7 +24,7 @@ if (-not (Test-Path "$premake_bin")) {
 	git submodule update --init --recursive
 	Write-Host "Compiling Premake..."
 	Set-Location "$c78e_path\vendor\premake"
-	nmake -f Bootstrap.mak windows
+	.\Bootstrap.bat
 	Set-Location "$c78e_path"
 	#check again
 	if (-not (Test-Path "$premake_bin")) {

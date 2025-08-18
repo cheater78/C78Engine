@@ -1,5 +1,5 @@
 #pragma once
-#include <C78E/Events/KeyEvent.h>
+#include <C78E/Core/Events/KeyEvent.h>
 
 namespace C78E::Input {
 

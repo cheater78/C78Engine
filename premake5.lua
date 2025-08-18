@@ -1,6 +1,6 @@
 workspace "C78Engine"
 	architecture "x64"
-	startproject "C78Editor"
+	startproject "C78ESandbox"
 
 	configurations
 	{
@@ -20,5 +20,4 @@ workspace "C78Engine"
 	include "C78Engine/vendor/msdf-atlas-gen/msdfgen"
 
 	include "C78Engine"
-	include "C78Editor"
-	include "C78Project"
+	include "C78ESandbox"

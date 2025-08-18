@@ -1,8 +1,6 @@
 #include "C78EPCH.h"
 #include "KeyCombo.h"
 
-#include <C78E/Core/Input/Input.h>
-
 namespace C78E::Input {
 
 	void KeyCombo::pushKey(KeyCode keyCode) { m_KeyCombo.push_back(keyCode); }
@@ -28,7 +26,7 @@ namespace C78E::Input {
 		if(!size) return false;
 		if(e.getKeyCode() != m_KeyCombo.back()) return false;
 		for (size_t i = 0; i < size - 1; i++)
-			if(!Input::isKeyPressed(m_KeyCombo[size - 1 - i]))
+			if(!e.getWindow().isKeyPressed(m_KeyCombo[size - 1 - i]))
 				return false;
 		return true;
 	}

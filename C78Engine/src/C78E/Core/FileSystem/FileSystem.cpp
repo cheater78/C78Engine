@@ -120,6 +120,15 @@ namespace C78E {
 		return std::filesystem::weakly_canonical(path);
 	}
 
+	std::string FileSystem::getFileName(const FilePath& path) {
+		C78E_CORE_VALIDATE(isFile(path), return "", "FileSystem::getFileName: called with path not being a File!");
+		const FilePath filename = path.filename();
+		if (!filename.has_extension())
+			return filename.string();
+		else
+			return filename.string().substr(0, filename.string().size() - filename.extension().string().size());
+	}
+
 
 
 
@@ -193,15 +202,17 @@ namespace C78E {
 
 		{ C78E_FILE_EXT_BINARY, EntryType::Binary },
 
-		{ ".png", EntryType::Image },
-		{ ".jpg", EntryType::Image },
-		{ ".jpeg", EntryType::Image },
+		{ C78E_FILE_EXT_IMAGE_PNG, EntryType::Image },
+		{ C78E_FILE_EXT_IMAGE_JPG, EntryType::Image },
+		{ C78E_FILE_EXT_IMAGE_JPEG, EntryType::Image },
 
-		{ ".obj", EntryType::Model },
-		{ ".mtl", EntryType::Material },
+		{ C78E_FILE_EXT_WAFEFRONT_MODEL, EntryType::Model },
+		{ C78E_FILE_EXT_WAFEFRONT_MATERIAL, EntryType::Material },
 
-		{ ".glsl", EntryType::Shader },
-		{ ".ttf", EntryType::Font },
+		{ C78E_FILE_EXT_SHADER_GLSL, EntryType::Shader },
+		{ C78E_FILE_EXT_SHADER_HLSL, EntryType::Shader },
+
+		{ C78E_FILE_EXT_FONT_TTF, EntryType::Font },
 		
 		{ "", EntryType::Misc },
 	};

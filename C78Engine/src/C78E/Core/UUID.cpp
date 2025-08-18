@@ -16,6 +16,11 @@ namespace C78E {
 		m_UUID[1] = s_UniformDistribution(s_EngineU);
 	}
 
+	UUID::UUID(uint64_t upper, uint64_t lower) {
+		m_UUID[0] = lower;
+		m_UUID[1] = upper;
+	}
+
 	bool UUID::decodesToUUID(const std::string& str) {
 		if (str == uuid_invalid) return true;
 		else return decodesToValidUUID(str);

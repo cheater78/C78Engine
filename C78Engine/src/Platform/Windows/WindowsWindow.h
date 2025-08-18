@@ -7,7 +7,7 @@ namespace C78E {
 
 	class WindowsWindow : public GLFWWindow {
 	public:
-		WindowsWindow(const WindowProps& props);
+		WindowsWindow(const WindowProperties& properties, EventCallbackFunction eventCallbackFunction = nullptr);
 		virtual ~WindowsWindow();
 	};
 

@@ -1,49 +1,46 @@
 #pragma once
 #include <C78E/Core/Core.h>
 #include <C78E/Core/Timer.h>
-#include <C78E/Core/Application/Window.h>
-#include <C78E/Core/Application/LayerStack.h>
-#include <C78E/Core/Application/ImGuiLayer.h>
-#include <C78E/Core/Console.h>
-#include <C78E/Events/Event.h>
-#include <C78E/Events/ApplicationEvent.h>
-
+#include <C78E/Core/Window/Window.h>
+#include <C78E/Core/Events/Event.h>
 
 namespace C78E {
 
+	/**
+	 * @brief The main Application class, that manages the application lifecycle, windows, and events.
+	 * This class is responsible for initializing the application, creating windows, handling events,
+	 * and running the main loop. Singleton, there can be multiple windows, but only one Application instance.
+	 */
 	class Application {
-	private:
-		static Application* s_App; //Application Singelton
 	public:
+		static bool exists() { return s_App; }
 		static Application& get() { return *s_App; }
-	public:
-		Application(const Window::WindowProps& windowProperties = Window::WindowProps());
+	public: // Application Interface
+		Application();
 		virtual ~Application();
 
-		void run();
-		void onEvent(Event& e);
+		// Application Info -> no changing at Runtime, override for own custom app info
+		virtual const char* getApplicationName() const { return C78E_APP_DEFAULT_NAME; }
+		virtual uint32_t getApplicationVersion() const { return C78E_APP_DEFAULT_VERSION_NUMBER; }
 
-		void pushLayer(Ref<Layer> layer);
-		void pushOverlay(Ref<Layer> layer);
+		// Optional Event handling method, can be overridden by derived classes
+		virtual void onEvent(Event& e) {}
 
-		void close();
-
-		Window& getWindow() { return *m_Window.get(); }
-	protected:
-		Ref<ImGuiLayer> getImGuiLayer() { return m_ImGuiLayer; }
+	public:
+		void run(); // Main loop, runs the application until it is closed
+		void close(); // Close the application
+	public:
+		Window& createWindow(const WindowProperties& props = {});
 	private:
-		Scope<Window> m_Window; //multiple Windows?
+		void applicationEventCallbackFunction(Event& e);
+	private:
 		bool m_Running = true;
-
 		Scope<Timer> m_RunTime;
-		LayerStack m_LayerStack;
-		Ref<ImGuiLayer> m_ImGuiLayer;
-		Ref<Console> m_Console;
+		std::vector<Scope<Window>> m_Windows; // desktop windows
+		std::vector<Scope<Window>> m_WindowCreateQueue; // windows to be created
 
-		bool onWindowCloseEvent(WindowCloseEvent& event);
-
-		//Commands
-		void onCMDClose(std::string cmd);
+	private:
+		static Application* s_App; //Application Singelton
 	};
 	
 	Application* createApplication();

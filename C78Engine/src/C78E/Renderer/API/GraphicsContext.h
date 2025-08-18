@@ -1,15 +1,19 @@
 #pragma once
+#include <C78E/Core/Window/Window.h>
 
-namespace C78E {
+namespace C78E::Renderer {
 
+	//TODO: just a dummy rn
 	class GraphicsContext {
 	public:
-		virtual ~GraphicsContext() = default;
+		static Scope<GraphicsContext> create(Window& window) {
+			return Scope<GraphicsContext>();
+		}
 
-		virtual void init() = 0;
-		virtual void swapBuffers() = 0;
+	public:
+		GraphicsContext() = default;
+		~GraphicsContext() = default;
 
-		static Scope<GraphicsContext> create(Window& window);
+
 	};
-
 }

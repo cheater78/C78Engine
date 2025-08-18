@@ -16,7 +16,8 @@
 // Bit Map
 #define BIT(x) (1<<x)
 
-#define BIND_CALLBACK_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define C78E_BIND_OBJECT_METHOD(object, method) std::bind(&method, object, std::placeholders::_1)
+#define C78E_BIND_THIS_METHOD(method) std::bind(&method, this, std::placeholders::_1)
 
 #define C78E_EXPAND_MACRO(x) x
 #define C78E_EXPANDALL_MACRO(...) __VA_ARGS__
@@ -38,12 +39,22 @@ namespace C78E {
 	constexpr Ref<T> createRef(Args&& ... args) {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
-
+	
 	template<typename T>
 	using WRef = std::weak_ptr<T>;
 	template<typename T, typename ... Args>
 	constexpr WRef<T> createWRef(Args&& ... args) {
 		return std::weak_ptr<T>(std::forward<Args>(args)...);
 	}
+
+	template<typename T>
+	concept Primitive = std::is_fundamental_v<T>;
+
+	template<typename T>
+	concept ShallowType = std::is_trivially_copyable_v<T>;
+
+	template<typename T>
+	concept FullySizedType = (sizeof(T) > 0);
+
 
 }
