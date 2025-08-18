@@ -29,7 +29,7 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
-[Ll]og/
+# [Ll]og/ # there is one in Core
 [Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory
@@ -401,7 +401,6 @@ FodyWeavers.xsd
 # Directories
 bin/
 bin-int/
-C78E-cppcheck-build-dir/
 
 */assets/*
 
