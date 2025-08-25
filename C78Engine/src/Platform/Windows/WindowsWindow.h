@@ -1,7 +1,7 @@
 #pragma once
 #ifdef C78E_PLATFORM_WINDOWS
 #include <Platform/GLFW/GLFWWindow.h>
-#include <C78E/Renderer/API/GraphicsContext.h>
+#include <C78E/Graphics/API/GraphicsContext.h>
 
 namespace C78E {
 

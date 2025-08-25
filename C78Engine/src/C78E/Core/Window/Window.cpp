@@ -5,7 +5,7 @@
 #include <Platform/Linux/LinuxWindow.h>
 
 #include <C78E/Core/Events/WindowEvent.h>
-#include <C78E/Renderer/API/GraphicsContext.h>
+#include <C78E/Graphics/API/GraphicsContext.h>
 
 namespace C78E {
 
@@ -43,7 +43,7 @@ namespace C78E {
 	}
 
 	// Graphics
-	inline Renderer::GraphicsContext& Window::getGraphicsContext() const { return *m_Context; }
+	inline GraphicsContext& Window::getGraphicsContext() const { return *m_Context; }
 
 	/**
 	 * @brief triggers an update for the window and all its layers.

@@ -11,6 +11,7 @@ namespace C78E {
 		C78E_CORE_ASSERT(!s_App, "There can only be one Application!");
 		s_App = this;
 		m_RunTime = createScope<Timer>();
+
 	}
 
 	Application::~Application() {

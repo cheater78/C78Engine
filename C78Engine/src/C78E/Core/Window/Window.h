@@ -11,9 +11,7 @@
 
 namespace C78E {
 
-	namespace Renderer {
-		class GraphicsContext;
-	}
+	class GraphicsContext;
 
 	using WindowCount = size_t;
 	using WindowID = UUID;
@@ -39,8 +37,13 @@ namespace C78E {
 		inline bool isRunning() const;
 		inline void close();
 
+		template<typename T>
+		T* getNativeWindowAs() {
+			return (T*)getNativeWindow();
+		}
+
 		// Graphics
-		Renderer::GraphicsContext& getGraphicsContext() const;
+		GraphicsContext& getGraphicsContext() const;
 
 	public: // Window Tick/Event - called by Application(prob don't wanna call those)
 		void callUpdate(Timestep delta);
@@ -105,7 +108,7 @@ namespace C78E {
 		LayerStack m_LayerStack;
 		Ref<DebugLayer> m_DebugLayer = nullptr; // opt. Layer on top of everything, for debugging purposes
 
-		Scope<Renderer::GraphicsContext> m_Context;
+		Scope<GraphicsContext> m_Context;
 
 		//TODO: Windows should run on a separate thread
 	};

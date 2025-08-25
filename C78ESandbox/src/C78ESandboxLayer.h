@@ -36,21 +36,6 @@ public:
             m_Window.setWindowMode((m_Window.getWindowMode() == C78E::WindowMode::Windowed) ? C78E::WindowMode::FullScreen : C78E::WindowMode::Windowed);
             e.handled = true;
         }
-        if(e.getKeyCode() == C78E::Input::Key::Insert) {
-
-            static const C78E::WindowProperties propBase{
-                "C78ESandboxWindow",
-                C78E::Resolution::resolution(C78E::Resolution::FHD),
-                C78E::WindowMode::Windowed,
-                C78E::WindowRefreshMode::Unlimited,
-                C78E::WindowMouseCursorMode::Hidden //
-            };
-
-			C78E::WindowProperties props = propBase;
-			props.title += " " + std::to_string(C78E::UUID());
-            C78E::Application::get().createWindow(props);
-            e.handled = true;
-		}
     }
 
     bool onMouseButtonPressed(C78E::MouseButtonPressedEvent e) {

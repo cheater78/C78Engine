@@ -6,8 +6,8 @@
 #include <C78E/Core/Events/MouseEvent.h>
 #include <C78E/Core/Events/KeyEvent.h>
 
-#include <C78E/Renderer/API/GraphicsContext.h>
-
+#include <C78E/Graphics/API/GraphicsContext.h>
+#include <C78E/Graphics/API/GraphicsInstance.h>
 namespace C78E {
 
 	static uint8_t s_GLFWWindowCount = 0;
@@ -20,6 +20,9 @@ namespace C78E {
 		if (s_GLFWWindowCount == 0) {
 			C78E_CORE_VALIDATE(glfwInit(), return false, "createGLFWwindow: Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
+
+			// VK
+			GraphicsInstance::create(API::Vulkan);
 		}
 		//TODO: Monitor selection API
 		//int monitorCount = 0;
@@ -47,6 +50,9 @@ namespace C78E {
 			break;
 		}
 
+		// VK
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
 		*window = glfwCreateWindow((int)properties.size.x, (int)properties.size.y, properties.title.c_str(), monitor, NULL);
 		C78E_CORE_VALIDATE(window, return false, "createGLFWwindow: glfwCreateWindow failed!");
 		++s_GLFWWindowCount;
@@ -68,7 +74,7 @@ namespace C78E {
 
 		C78E_CORE_VALIDATE(createGLFWwindow(&m_GLFWwindow, m_WindowProperties), return, "GLFWWindow::GLFWWindow: Failed to create underlying GLFWwindow!");
 
-		m_Context = Renderer::GraphicsContext::create(*this);
+		m_Context = GraphicsContext::create(*this);
 
 		glfwSetWindowUserPointer(m_GLFWwindow, this);
 
@@ -250,7 +256,7 @@ namespace C78E {
 
 	void GLFWWindow::setRefreshMode(WindowRefreshMode refreshMode) {
 		m_WindowProperties.refreshMode = refreshMode;
-		glfwSwapInterval(refreshMode); // TODO: how to handle for Vulkan? since its native there
+		// glfwSwapInterval(refreshMode); // TODO: how to handle for Vulkan? since its native there
 	}
 
 	WindowRefreshMode GLFWWindow::getRefreshMode() const {
