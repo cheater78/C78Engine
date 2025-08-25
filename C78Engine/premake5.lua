@@ -66,8 +66,7 @@ project "C78Engine"
 
 		defines{
 			"C78E_PLATFORM_WINDOWS",
-			"C78E_PLATFORM_GLFW",
-			"GLFW_INCLUDE_NONE"
+			"C78E_PLATFORM_GLFW"
 		}
 		
 		links{
@@ -79,8 +78,7 @@ project "C78Engine"
 
 		defines{
 			"C78E_PLATFORM_LINUX",
-			"C78E_PLATFORM_GLFW",
-			"GLFW_INCLUDE_NONE"
+			"C78E_PLATFORM_GLFW"
 		}
 
 		links{

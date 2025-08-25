@@ -1,4 +1,7 @@
-// Platform detection using predefined macros
+
+
+
+//TODO: is this used? - premake defines platforms alr
 #ifdef _WIN32
 	/* Windows x64/x86 */
 	#ifdef _WIN64

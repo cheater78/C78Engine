@@ -161,7 +161,7 @@ namespace C78E {
 	 */
 	class ListType : public CompositeType, private std::vector<VectorType> {
 	public:
-		using ListTypeRange = MemoryRange<VectorType>;
+		using ListTypeRange = MemoryRange<const VectorType>;
 		using ListTypeIterator = ListTypeRange::Iterator;
 		using Index = size_t;
 	public:

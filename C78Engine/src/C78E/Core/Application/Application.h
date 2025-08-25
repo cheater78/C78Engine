@@ -1,17 +1,17 @@
 #pragma once
+#include <C78E/Core/Base.h>
 #include <C78E/Core/Core.h>
 #include <C78E/Core/Timer.h>
-#include <C78E/Core/Window/Window.h>
-#include <C78E/Core/Events/Event.h>
+#include <C78E/Events/Event.h>
+#include <C78E/Core/Thread.h>
+#include <C78E/Graphics/Window/WindowSystem.h>
 
 namespace C78E {
 
 	/**
-	 * @brief The main Application class, that manages the application lifecycle, windows, and events.
-	 * This class is responsible for initializing the application, creating windows, handling events,
-	 * and running the main loop. Singleton, there can be multiple windows, but only one Application instance.
+	 * @brief Application Singleton as main instance
 	 */
-	class Application {
+	class Application : public CallableThread {
 	public:
 		static bool exists() { return s_App; }
 		static Application& get() { return *s_App; }
@@ -25,24 +25,25 @@ namespace C78E {
 
 		// Optional Event handling method, can be overridden by derived classes
 		virtual void onEvent(Event& e) {}
-
+		
 	public:
 		void run(); // Main loop, runs the application until it is closed
 		void close(); // Close the application
 	public:
-		Window& createWindow(const WindowProperties& props = {});
+		WindowSystem& getWindowSystem();
 	private:
 		void applicationEventCallbackFunction(Event& e);
 	private:
 		bool m_Running = true;
-		Scope<Timer> m_RunTime;
-		std::vector<Scope<Window>> m_Windows; // desktop windows
-		std::vector<Scope<Window>> m_WindowCreateQueue; // windows to be created
-
+		Scope<Timer> m_RunTime = nullptr;
+		Scope<WindowSystem> m_WindowSystem = nullptr;
+		
 	private:
 		static Application* s_App; //Application Singelton
 	};
 	
+	using MainThread = Application;
+
 	Application* createApplication();
 
 }

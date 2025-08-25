@@ -1,86 +1,62 @@
 #include "C78EPCH.h"
 #ifdef C78E_PLATFORM_GLFW
 #include "GLFWWindow.h"
+#include "GLFWMonitor.h"
 
-#include <C78E/Core/Events/ApplicationEvent.h>
-#include <C78E/Core/Events/MouseEvent.h>
-#include <C78E/Core/Events/KeyEvent.h>
+#include <C78E/Core/Application/Events/ApplicationEvent.h>
+#include <C78E/Graphics/Window/Events/MouseEvent.h>
+#include <C78E/Graphics/Window/Events/KeyEvent.h>
 
-#include <C78E/Renderer/API/GraphicsContext.h>
+#include <C78E/Graphics/API/GraphicsContext.h>
 
 namespace C78E {
 
-	static uint8_t s_GLFWWindowCount = 0;
+	GLFWWindow::GLFWWindow(const WindowCreateInfo& createInfo)
+		: Window() {
+		C78E_CORE_INFO("Creating GLFW window");
 
-	static void GLFWErrorCallback(int error, const char* description) {
-		C78E_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
-	}
-
-	static bool createGLFWwindow(GLFWwindow** window, WindowProperties& properties) {
-		if (s_GLFWWindowCount == 0) {
-			C78E_CORE_VALIDATE(glfwInit(), return false, "createGLFWwindow: Could not initialize GLFW!");
-			glfwSetErrorCallback(GLFWErrorCallback);
-		}
-		//TODO: Monitor selection API
-		//int monitorCount = 0;
-		//GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
-		//GLFWmonitor* monitor = monitors[0];
-		//const char* name = glfwGetMonitorName(monitor);
-		GLFWmonitor* monitor = nullptr;
-
-		switch (properties.windowMode) {
-		case WindowMode::Windowed:
-			monitor = nullptr;
-			break;
-		case WindowMode::FullScreen:
-			monitor = glfwGetPrimaryMonitor();
-			break;
-		case WindowMode::BorderlessWindow:
-			monitor = glfwGetPrimaryMonitor();
-			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-			properties.size.x = mode->width;
-			properties.size.y = mode->height;
-			break;
+		Ref<GLFWMonitor> monitor = castRef<GLFWMonitor>(createInfo.monitor);
+		if (!monitor) {
+			monitor = castRef<GLFWMonitor>(Application::get().getWindowSystem().getPrimaryMonitor());
+			C78E_CORE_ASSERT(monitor, "GLFWWindow::GLFWWindow: failed to acquire a valid FullscreenMonitor!");
+			m_FullScreenMonitor = monitor;
 		}
 
-		*window = glfwCreateWindow((int)properties.size.x, (int)properties.size.y, properties.title.c_str(), monitor, NULL);
-		C78E_CORE_VALIDATE(window, return false, "createGLFWwindow: glfwCreateWindow failed!");
-		++s_GLFWWindowCount;
-		return true;
-	}
+		GLFWmonitor* nativeMonitor = nullptr; // Windowed or Borderless Monitor = none
+		WindowSize size = createInfo.size; // Windowed Size or Fullscreen Res
 
-	static void destroyGLFWwindow(GLFWwindow* window) {
-		glfwDestroyWindow(window);
-		--s_GLFWWindowCount;
-
-		if (s_GLFWWindowCount == 0) {
-			glfwTerminate();
+		if (createInfo.windowMode == WindowMode::FullScreen) { // FullScreen requires a monitor
+			nativeMonitor = (GLFWmonitor*)monitor->getNativeMonitor();
 		}
-	}
+		if (createInfo.windowMode == WindowMode::BorderlessWindow) {
+			size = monitor->getSize();
+		}
 
-	GLFWWindow::GLFWWindow(const WindowProperties& properties, EventCallbackFunction eventCallbackFunction)
-		: Window(properties, eventCallbackFunction) {
-		C78E_CORE_INFO("Creating GLFW window: {}", std::to_string(m_WindowProperties));
+		//TODO: for VK.. doesnt belong here
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-		C78E_CORE_VALIDATE(createGLFWwindow(&m_GLFWwindow, m_WindowProperties), return, "GLFWWindow::GLFWWindow: Failed to create underlying GLFWwindow!");
 
-		m_Context = Renderer::GraphicsContext::create(*this);
+		m_GLFWwindow = glfwCreateWindow(size.x, size.y, createInfo.title.c_str(), nativeMonitor, NULL);
+		C78E_CORE_VALIDATE(m_GLFWwindow, return, "GLFWWindow::GLFWWindow: glfwCreateWindow failed!");
+
+		//TODO: center Window is probably a feature for Window in general
+
+
+		m_Context = GraphicsContext::create(*this);
 
 		glfwSetWindowUserPointer(m_GLFWwindow, this);
 
-		C78E_CORE_ASSERT(m_EventCallback, "GLFWWindow::GLFWWindow: Event callback function is not set!");
+		m_EventCallback = createInfo.eventCallbackFunction;
+		if (!m_EventCallback) {
+			m_EventCallback = C78E_BIND_THIS_METHOD(GLFWWindow::callEvent);
+		}
+
+
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_GLFWwindow,
 			[](GLFWwindow* window, int width, int height) {
 				GLFWWindow& win = *(GLFWWindow*)glfwGetWindowUserPointer(window);
-				win.m_WindowProperties.size.x = static_cast<uint32_t>(width);
-				win.m_WindowProperties.size.y = static_cast<uint32_t>(height);
-
-				WindowResizeEvent event(win, win.m_WindowProperties.size);
+				WindowResizeEvent event(win, WindowSize(static_cast<uint32_t>(width), static_cast<uint32_t>(height)));
 				win.m_EventCallback(event);
 			}
 		);
@@ -158,16 +134,14 @@ namespace C78E {
 			}
 		);
 
-		setWindowProperties(properties);
 	}
 
 	GLFWWindow::~GLFWWindow() {
-		C78E_CORE_INFO("Destroying GLFW window: {}", std::to_string(m_WindowProperties));
-		destroyGLFWwindow(m_GLFWwindow);
+		C78E_CORE_INFO("Destroying GLFW window...");
+		glfwDestroyWindow(m_GLFWwindow);
 	}
 
 	void GLFWWindow::onUpdate(Timestep delta) {
-		glfwPollEvents();
 	}
 
 	void GLFWWindow::onEvent(Event& e) {
@@ -178,90 +152,128 @@ namespace C78E {
 
 	// Window attributes
 
-	uint32_t GLFWWindow::getWidth() const {
-		return m_WindowProperties.size.x;
+	WindowPosition GLFWWindow::getPosition() const {
+		WindowPosition position;
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwGetWindowPos(m_GLFWwindow, &position.x, &position.y);
+				return true;
+			}
+		);
+		return position;
 	}
-	uint32_t GLFWWindow::getHeight() const {
-		return m_WindowProperties.size.y;
+
+	void GLFWWindow::setPosition(const WindowPosition& position) {
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwSetWindowPos(m_GLFWwindow, position.x, position.y);
+				return true;
+			}
+		);
 	}
-	glm::uvec2 GLFWWindow::getSize() const {
-		return m_WindowProperties.size;
+
+	WindowSize GLFWWindow::getSize() const {
+		int x, y;
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwGetWindowSize(m_GLFWwindow, &x, &y);
+				return true;
+			}
+		);
+		return WindowSize(x, y);
 	}
-	void GLFWWindow::setSize(const uvec2& size) {
-		C78E_CORE_VALIDATE(m_WindowProperties.windowMode != WindowMode::BorderlessWindow, return, "GLFWWindow::setResolution: called in BorderlessWindow mode!");
-		glm::ivec2 origin = { 0, 0 };
-		glfwGetWindowFrameSize(m_GLFWwindow, &origin.x, &origin.y, nullptr, nullptr);
-		if (!origin.x && !origin.y)
-			origin = { 64, 64 };
-		GLFWmonitor* monitor = (m_WindowProperties.windowMode == WindowMode::Windowed) ? nullptr : glfwGetPrimaryMonitor();
-		m_WindowProperties.size = size;
-		glfwSetWindowMonitor(
-			m_GLFWwindow, 
-			monitor, 
-			origin.x, origin.y, 
-			m_WindowProperties.size.x, m_WindowProperties.size.y, 
-			(m_WindowProperties.refreshMode < 2) ? GLFW_DONT_CARE : m_WindowProperties.refreshMode
+	void GLFWWindow::setSize(const WindowSize& size) {
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwSetWindowSize(m_GLFWwindow, size.x, size.y);
+				return true;
+			}
 		);
 	}
 
 	void* GLFWWindow::getNativeWindow() const {
 		return m_GLFWwindow;
 	}
-	WindowProperties GLFWWindow::getWindowProperties() const {
-		return m_WindowProperties;
-	}
 	
 	void GLFWWindow::setWindowMode(WindowMode windowMode) {
-		if (m_WindowProperties.windowMode == windowMode)
-			return;
-		m_WindowProperties.windowMode = windowMode;
-		GLFWmonitor* monitor = nullptr;
-		switch (m_WindowProperties.windowMode) {
+		const WindowMode currentWindowMode = getWindowMode();
+		const WindowMode& targetWindowMode = windowMode;
+
+		if (currentWindowMode == targetWindowMode) {
+			return; // Nothing to do
+		}
+
+		GLFWmonitor* currentNativeMonitor = glfwGetWindowMonitor(m_GLFWwindow);
+		
+		WindowPosition targetWindowPosition = { 0, 0 };
+		WindowSize targetWindowSize;
+		GLFWmonitor* targetNativeMonitor = nullptr;
+		
+		switch (targetWindowMode) {
 		case WindowMode::Windowed:
-			monitor = nullptr;
+			if (currentWindowMode == WindowMode::FullScreen) {
+				const GLFWMonitor monitor(currentNativeMonitor);
+				targetWindowSize = monitor.getSize() / 2u;
+				targetWindowPosition = monitor.getSize() / 4u;
+				break;
+			}
+			// BorderlessWindow
+			targetWindowSize = getSize() / 2u; // half screen size
+			targetWindowPosition = getSize() / 4u; // centered
 			break;
 		case WindowMode::FullScreen:
-			monitor = glfwGetPrimaryMonitor();
+			targetNativeMonitor = (GLFWmonitor*)m_FullScreenMonitor->getNativeMonitor();
+			targetWindowSize = m_FullScreenMonitor->getSize();
 			break;
 		case WindowMode::BorderlessWindow:
-			monitor = glfwGetPrimaryMonitor();
-			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-			m_WindowProperties.size.x = mode->width;
-			m_WindowProperties.size.y = mode->height;
+			if (currentWindowMode == WindowMode::FullScreen) {
+				const GLFWMonitor monitor(currentNativeMonitor);
+				targetWindowSize = monitor.getSize();
+				break;
+			}
+			// Windowed
+			targetWindowSize = m_FullScreenMonitor->getSize();
 			break;
 		}
-		glfwSetWindowMonitor(
-			m_GLFWwindow,
-			monitor,
-			0, 0,
-			m_WindowProperties.size.x, m_WindowProperties.size.y,
-			(m_WindowProperties.refreshMode < 2) ? GLFW_DONT_CARE : m_WindowProperties.refreshMode
-		);
+
+		glfwSetWindowMonitor(m_GLFWwindow, targetNativeMonitor, targetWindowPosition.x, targetWindowPosition.y, targetWindowSize.x, targetWindowSize.y, GLFW_DONT_CARE);
 	}
 
 	WindowMode GLFWWindow::getWindowMode() const {
-		return m_WindowProperties.windowMode;
+		GLFWmonitor* glfwMonitor = glfwGetWindowMonitor(m_GLFWwindow);
+
+		if (glfwMonitor) { // glfwMonitor is set for Fullscreen only
+			return WindowMode::FullScreen;
+		}
+		const bool definetlyWindowed = static_cast<bool>(glfwGetWindowAttrib(m_GLFWwindow, GLFW_DECORATED)); // decoration for windowed only
+		if (definetlyWindowed) {
+			return WindowMode::Windowed;
+		}
+		// At this point it could be a undecorated windowed or borderless Fullscreen window
+		const WindowSize size = getSize();
+		const WindowPosition pos = getPosition();
+		const GLFWMonitor monitor(glfwMonitor);
+		const MonitorSize monitorSize = monitor.getSize();
+
+		const WindowSize borderlessSize = monitorSize; // Window spans full monitor area
+		static const WindowPosition borderlessPosition = { 0, 0 }; // Window is located at origin
+
+		const bool isBorderlessFulscreen = (size == borderlessSize && pos == borderlessPosition);
+		if (isBorderlessFulscreen) {
+			return WindowMode::BorderlessWindow;
+		}
+		return WindowMode::Windowed;
 	}
 
-
-	void GLFWWindow::setRefreshMode(WindowRefreshMode refreshMode) {
-		m_WindowProperties.refreshMode = refreshMode;
-		glfwSwapInterval(refreshMode); // TODO: how to handle for Vulkan? since its native there
-	}
-
-	WindowRefreshMode GLFWWindow::getRefreshMode() const {
-		return m_WindowProperties.refreshMode; 
-	}
-	bool GLFWWindow::isRefreshMode(WindowRefreshMode refreshMode) const {
-		return m_WindowProperties.refreshMode == refreshMode;
-	}
 
 	WindowMouseCursorMode GLFWWindow::getMouseMode() const {
-		int mode = glfwGetInputMode(m_GLFWwindow, GLFW_CURSOR);
+		int mode;
+		MainThread::get().call(
+			[&]() -> bool {
+				mode = glfwGetInputMode(m_GLFWwindow, GLFW_CURSOR);
+				return true;
+			}
+		);
 		switch (mode) {
 		case GLFW_CURSOR_NORMAL:
 			return WindowMouseCursorMode::Normal;
@@ -277,52 +289,101 @@ namespace C78E {
 	void GLFWWindow::setMouseMode(WindowMouseCursorMode mouseMode) {
 		int mode = GLFW_CURSOR_NORMAL;
 		switch (mouseMode) {
-		case C78E::WindowMouseCursorMode::Normal: mode = GLFW_CURSOR_NORMAL; break;
-		case C78E::WindowMouseCursorMode::Hidden: mode = GLFW_CURSOR_HIDDEN; break;
-		case C78E::WindowMouseCursorMode::Disabled: mode = GLFW_CURSOR_DISABLED; break;
+		case WindowMouseCursorMode::Normal: mode = GLFW_CURSOR_NORMAL; break;
+		case WindowMouseCursorMode::Hidden: mode = GLFW_CURSOR_HIDDEN; break;
+		case WindowMouseCursorMode::Disabled: mode = GLFW_CURSOR_DISABLED; break;
 		default: C78E_CORE_ASSERT("GLFWWindow::setMouseMode: Illegal Mouse Input Mode!"); break;
 		}
-		glfwSetInputMode(m_GLFWwindow, GLFW_CURSOR, mode);
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwSetInputMode(m_GLFWwindow, GLFW_CURSOR, mode);
+				return true;
+			}
+		);
 	}
 
 	std::string GLFWWindow::getClipBoardString() const {
-		return std::string(glfwGetClipboardString(m_GLFWwindow));
+		std::string str;
+		MainThread::get().call(
+			[&]() -> bool {
+				str = glfwGetClipboardString(m_GLFWwindow);
+				return true;
+			}
+		);
+		return str;
 	}
 	
 	void GLFWWindow::setClipboardString(const std::string& str) {
-		glfwSetClipboardString(m_GLFWwindow, str.c_str());
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwSetClipboardString(m_GLFWwindow, str.c_str());
+				return true;
+			}
+		);
 	}
 
 	void GLFWWindow::setTitle(const std::string& title) {
-		m_WindowProperties.title = title;
-		glfwSetWindowTitle(m_GLFWwindow, title.c_str());
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwSetWindowTitle(m_GLFWwindow, title.c_str());
+				return true;
+			}
+		);
 	}
 
 	std::string GLFWWindow::getTitle() const {
-		//m_WindowProperties.title = std::string(glfwGetWindowTitle(m_GLFWwindow));
-		return m_WindowProperties.title;
+		std::string str;
+		MainThread::get().call(
+			[&]() -> bool {
+				str = glfwGetWindowTitle(m_GLFWwindow);
+				return true;
+			}
+		);
+		return str;
 	}
 
 	// Window Input
 
 	bool GLFWWindow::isKeyPressed(const Input::KeyCode key) {
-		auto state = glfwGetKey(m_GLFWwindow, static_cast<int32_t>(key));
+		int state;
+		MainThread::get().call(
+			[&]() -> bool {
+				state = glfwGetKey(m_GLFWwindow, static_cast<int32_t>(key));
+				return true;
+			}
+		);
 		return state == GLFW_PRESS;
 	}
 
 	bool GLFWWindow::isMousePressed(const Input::MouseCode button) {
-		auto state = glfwGetMouseButton(m_GLFWwindow, static_cast<int32_t>(button));
+		int state;
+		MainThread::get().call(
+			[&]() -> bool {
+				state = glfwGetMouseButton(m_GLFWwindow, static_cast<int32_t>(button));
+				return true;
+			}
+		);
 		return state == GLFW_PRESS;
 	}
 
 	ivec2 GLFWWindow::getMousePositionFromWindowOriginInPixels() {
 		double xpos, ypos;
-		glfwGetCursorPos(m_GLFWwindow, &xpos, &ypos);
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwGetCursorPos(m_GLFWwindow, &xpos, &ypos);
+				return true;
+			}
+		);
 		return { static_cast<int>(xpos), static_cast<int>(ypos) };
 	}
 
 	void GLFWWindow::setMousePositionFromWindowOriginInPixels(const ivec2& position) {
-		glfwSetCursorPos(m_GLFWwindow, static_cast<double>(position.x), static_cast<double>(position.y));
+		MainThread::get().call(
+			[&]() -> bool {
+				glfwSetCursorPos(m_GLFWwindow, static_cast<double>(position.x), static_cast<double>(position.y));
+				return true;
+			}
+		);
 	}
 
 }

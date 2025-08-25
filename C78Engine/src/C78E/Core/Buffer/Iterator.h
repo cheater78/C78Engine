@@ -41,22 +41,48 @@ namespace C78E {
 			}
 		};
 	public:
-		MemoryRange(const T* begin, const T* end);
-		MemoryRange(const T* begin, size_t elementCount);
+		MemoryRange(T* begin, T* end)
+			: m_Begin(begin), m_ElementCount((end - begin) / sizeof(T)) {
+			C78E_CORE_ASSERT(begin && end, "MemoryRange::MemoryRange: begin or end pointer was nullptr!");
+			C78E_CORE_ASSERT((end - begin) % sizeof(T), "MemoryRange::MemoryRange: begin and end do not fit a whole number of {}", typeid(T).name());
+		}
+		MemoryRange(T* begin, size_t elementCount)
+			: m_Begin(begin), m_ElementCount(elementCount) {
+		}
 
-		virtual Iterator begin() const;
-		virtual Iterator end() const;
+		virtual Iterator begin() const {
+			return Iterator(m_Begin);
+		}
+		virtual Iterator end() const {
+			return Iterator(m_Begin + m_ElementCount * sizeof(T));
+		}
 
-		virtual ReverseIterator rend() const;
-		virtual ReverseIterator rbegin() const;
+		virtual ReverseIterator rend() const {
+			return ReverseIterator(m_Begin + m_ElementCount * sizeof(T));
+		}
+		virtual ReverseIterator rbegin() const {
+			return ReverseIterator(m_Begin);
+		}
 
-		virtual T& at(size_t index);
-		virtual const T& at(size_t index) const;
+		virtual T& at(size_t index) {
+			C78E_CORE_ASSERT(index < m_ElementCount, "MemoryRange::at: Index out of bounds!");
+			return m_Begin[index];
+		}
+		virtual const T& at(size_t index) const {
+			C78E_CORE_ASSERT(index < m_ElementCount, "MemoryRange::at: Index out of bounds!");
+			return m_Begin[index];
+		}
 
 	public:
-		size_t size() const;
-		size_t elementCount() const;
-		size_t byteSize() const;
+		size_t size() const {
+			return end() - begin();
+		}
+		size_t elementCount() const {
+			return m_ElementCount;
+		}
+		size_t byteSize() const {
+			return m_ElementCount * sizeof(T);
+		}
 
 		inline T& operator[](size_t index) {
 			return at(index);

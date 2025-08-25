@@ -2,10 +2,11 @@
 #include <C78E.h>
 
 using namespace C78E; // not great, but im lazy
+using namespace C78E; // not great, but im lazy
 
-class C78ESandboxLayer : public C78E::Layer {
+class C78ESandboxLayer : public Layer {
 public:
-    C78ESandboxLayer(C78E::Window& window)
+    C78ESandboxLayer(Window& window)
         : Layer(window, "C78ESandboxLayer") {
 
     }
@@ -26,38 +27,65 @@ public:
 
     void onEvent(C78E::Event& e) override {
         C78E::EventDispatcher dispatcher(e);
-        dispatcher.dispatch<C78E::KeyPressedEvent>(C78E_BIND_THIS_METHOD(C78ESandboxLayer::onKeyPressed));
-        dispatcher.dispatch<C78E::MouseButtonPressedEvent>(C78E_BIND_THIS_METHOD(C78ESandboxLayer::onMouseButtonPressed));
-        dispatcher.dispatch<C78E::WindowResizeEvent>(C78E_BIND_THIS_METHOD(C78ESandboxLayer::onWindowResize));
+        dispatcher.dispatch<KeyPressedEvent>(C78E_BIND_THIS_METHOD(C78ESandboxLayer::onKeyPressed));
+        dispatcher.dispatch<MouseButtonPressedEvent>(C78E_BIND_THIS_METHOD(C78ESandboxLayer::onMouseButtonPressed));
+        dispatcher.dispatch<WindowResizeEvent>(C78E_BIND_THIS_METHOD(C78ESandboxLayer::onWindowResize));
     }
 
-    void onKeyPressed(C78E::KeyPressedEvent e) {
-        if (e.getKeyCode() == C78E::Input::Key::F11) {
-            m_Window.setWindowMode((m_Window.getWindowMode() == C78E::WindowMode::Windowed) ? C78E::WindowMode::FullScreen : C78E::WindowMode::Windowed);
-            e.handled = true;
-        }
+    void onKeyPressed(KeyPressedEvent e) {
         if(e.getKeyCode() == C78E::Input::Key::Insert) {
 
-            static const C78E::WindowProperties propBase{
+            static const WindowCreateInfo propBase{
                 "C78ESandboxWindow",
-                C78E::Resolution::resolution(C78E::Resolution::FHD),
-                C78E::WindowMode::Windowed,
-                C78E::WindowRefreshMode::Unlimited,
-                C78E::WindowMouseCursorMode::Hidden //
+                Resolution::resolution(Resolution::nHD),
+                WindowMode::Windowed,
+                WindowRefreshMode::Unlimited,
+
             };
 
-			C78E::WindowProperties props = propBase;
+            WindowCreateInfo props = propBase;
 			props.title += " " + std::to_string(C78E::UUID());
-            C78E::Application::get().createWindow(props);
+            C78E::Application::get().getWindowSystem().createWindow(props);
             e.handled = true;
+            return;
 		}
+        if (e.getKeyCode() == C78E::Input::Key::Home) {
+
+            const auto& monitors = Application::get().getWindowSystem().getMonitors();
+            Ref<Monitor> monitor = monitors[0];
+            if (monitors.size() > 1) {
+                monitor = monitors[1];
+            }
+
+            static const WindowCreateInfo propBase{
+                "C78ESandboxWindow",
+                Resolution::resolution(Resolution::nHD),
+                WindowMode::BorderlessWindow,
+                WindowRefreshMode::Unlimited,
+                monitor
+            };
+
+            WindowCreateInfo props = propBase;
+            props.title += " " + std::to_string(C78E::UUID());
+            C78E::Application::get().getWindowSystem().createWindow(props);
+            e.handled = true;
+            return;
+        }
+        if (e.getKeyCode() == C78E::Input::Key::F1) {
+            m_Window.setMouseMode(WindowMouseCursorMode::Hidden);
+            return;
+        }
+        if (e.getKeyCode() == C78E::Input::Key::F2) {
+            m_Window.setMouseMode(WindowMouseCursorMode::Normal);
+            return;
+        }
     }
 
-    bool onMouseButtonPressed(C78E::MouseButtonPressedEvent e) {
+    bool onMouseButtonPressed(MouseButtonPressedEvent e) {
         return false;
     }
 
-    void onWindowResize(C78E::WindowResizeEvent e) {
+    void onWindowResize(WindowResizeEvent e) {
         //m_Window.getGraphicsContext().resize(e.getSize());
     }
 

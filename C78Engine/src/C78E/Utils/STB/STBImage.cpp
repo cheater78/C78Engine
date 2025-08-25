@@ -82,7 +82,7 @@ namespace C78E::STBImage {
 		C78E_CORE_TRACE("ImageLoader::loadImageSDR:    ByteSize:      {}B", std::to_string(image->getByteSize()));
 		C78E_CORE_TRACE("ImageLoader::loadImageSDR:    ImageSize:     {}", std::to_string(image->getSize()));
 		C78E_CORE_TRACE("ImageLoader::loadImageSDR:    Format:		  {}", std::to_string(image->getFormat()));
-		C78E_CORE_TRACE("ImageLoader::loadImageSDR: Loading Image Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
+		C78E_CORE_TRACE("ImageLoader::loadImageSDR: Loading Image Successful, Took: {} ms", std::to_string(timer.elapsedMilliSeconds()));
 
 		return image;
 	}
@@ -126,7 +126,7 @@ namespace C78E::STBImage {
 		C78E_CORE_TRACE("ImageLoader::loadImageHDR:    ByteSize:      {}B", std::to_string(image->getByteSize()));
 		C78E_CORE_TRACE("ImageLoader::loadImageHDR:    ImageSize:     {}", std::to_string(image->getSize()));
 		C78E_CORE_TRACE("ImageLoader::loadImageHDR:    Format:		  {}", std::to_string(image->getFormat()));
-		C78E_CORE_TRACE("ImageLoader::loadImageHDR: Loading Image Successful, Took: {} ms", std::to_string(timer.elapsedMillis()));
+		C78E_CORE_TRACE("ImageLoader::loadImageHDR: Loading Image Successful, Took: {} ms", std::to_string(timer.elapsedMilliSeconds()));
 
 		return image;
 	}

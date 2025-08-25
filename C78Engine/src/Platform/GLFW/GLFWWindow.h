@@ -1,13 +1,13 @@
 #pragma once
 #ifdef C78E_PLATFORM_GLFW
 
-#include <C78E/Core/Window/Window.h>
+#include <C78E/Graphics/Window/Window.h>
 
 namespace C78E {
 
 	class GLFWWindow : public Window {
 	public:
-		GLFWWindow(const WindowProperties& properties = {}, EventCallbackFunction eventCallbackFunction = nullptr);
+		GLFWWindow(const WindowCreateInfo& createInfo);
 		virtual ~GLFWWindow();
 
 		virtual void onUpdate(Timestep delta) override; // opt. Update for Winwow, Layers are handled separately
@@ -15,20 +15,16 @@ namespace C78E {
 		virtual void onDebugRender() override; // opt. Debug for Winwow, Layers Debug Content is handled separately
 
 		// Window attributes
-		virtual uint32_t getWidth() const override;
-		virtual uint32_t getHeight() const override;
-		virtual uvec2 getSize() const override;
-		virtual void setSize(const uvec2& size) override;
+		virtual WindowPosition getPosition() const override;
+		virtual void setPosition(const WindowPosition& position) override;
+
+		virtual WindowSize getSize() const override;
+		virtual void setSize(const WindowSize& size) override;
 
 		virtual void* getNativeWindow() const override;
-		virtual WindowProperties getWindowProperties() const override;
 
 		virtual void setWindowMode(WindowMode windowMode) override;
 		virtual WindowMode getWindowMode() const override;
-
-		virtual void setRefreshMode(WindowRefreshMode refreshMode) override;
-		virtual WindowRefreshMode getRefreshMode() const override;
-		virtual bool isRefreshMode(WindowRefreshMode refreshMode) const override;
 
 		virtual WindowMouseCursorMode getMouseMode() const override;
 		virtual void setMouseMode(WindowMouseCursorMode mouseMode) override;
@@ -47,6 +43,7 @@ namespace C78E {
 
 	protected:
 		GLFWwindow* m_GLFWwindow;
+		EventCallbackFunction m_EventCallback;
 	};
 
 }

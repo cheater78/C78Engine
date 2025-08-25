@@ -1,4 +1,4 @@
-#include <C78E/Core/Window/Window.h>
+#include <C78E/Graphics/Window/Window.h>
 
 #include <imgui.h>
 #include <imgui_internal.h>

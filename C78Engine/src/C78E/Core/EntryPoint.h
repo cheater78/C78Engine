@@ -24,10 +24,10 @@ extern C78E::Application* C78E::createApplication();
 //			std::string api = arg.substr(arg.find('=') + 1);
 //			if(api == "OpenGL") {
 //				C78E_CORE_INFO("Using OpenGL RenderAPI");
-//				C78E::Renderer::GraphicsInstance::create(C78E::Renderer::API::OpenGL);
+//				C78E::GraphicsInstance::create(C78E::API::OpenGL);
 //			} else if(api == "Vulkan") {
 //				C78E_CORE_INFO("Using Vulkan RenderAPI");
-//				C78E::Renderer::GraphicsInstance::create(C78E::Renderer::API::Vulkan);
+//				C78E::GraphicsInstance::create(C78E::API::Vulkan);
 //			} else {
 //				C78E_CORE_ERROR("Unknown RenderAPI: {}", api);
 //				exit(1);

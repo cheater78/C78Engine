@@ -5,18 +5,20 @@
 
 #include "C78ESandboxLayer.h"
 
-static const C78E::WindowProperties appWindowProperties{
+using namespace C78E; // not great, but im lazy
+using namespace C78E; // not great, but im lazy
+
+static const WindowCreateInfo appWindowProperties{
 	"C78ESandbox",
-	C78E::Resolution::resolution(C78E::Resolution::FHD),
-	C78E::WindowMode::Windowed,
-	C78E::WindowRefreshMode::Vsync,
-	C78E::WindowMouseCursorMode::Normal
+	Resolution::resolution(Resolution::FHD),
+	WindowMode::Windowed,
+	WindowRefreshMode::Vsync
 };
 
 class C78App : public C78E::Application {
 public:
 	C78App() : C78E::Application() {
-		C78E::Window& window1 = createWindow(appWindowProperties);
+		Window& window1 = getWindowSystem().createWindow(appWindowProperties);
 		window1.pushLayer(C78E::createRef<C78ESandboxLayer>(window1));
 
 	}

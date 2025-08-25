@@ -22,20 +22,17 @@
 #include <C78E/Core/Buffer/Buffer.h>
 #include <C78E/Core/Random.h>
 #include <C78E/Core/Application/Application.h>
-
-#include <C78E/Core/Events/ApplicationEvent.h>
-#include <C78E/Core/Events/KeyEvent.h>
-#include <C78E/Core/Events/MouseEvent.h>
-#include <C78E/Core/Events/WindowEvent.h>
+#include <C78E/Core/Application/Events/ApplicationEvent.h>
+#include <C78E/Graphics/Window/Events/KeyEvent.h>
+#include <C78E/Graphics/Window/Events/MouseEvent.h>
+#include <C78E/Graphics/Window/Events/WindowEvent.h>
 
 #include <C78E/Core/FileSystem/FileSystem.h>
 
+// Graphics
+#include <C78E/Graphics/API/GraphicsInstance.h>
+#include <C78E/Graphics/API/GraphicsContext.h>
 
-// Renderer API
-
-
-
-//TODO: GPU Assets
 
 // Physics
 

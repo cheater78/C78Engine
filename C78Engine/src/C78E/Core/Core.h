@@ -19,6 +19,11 @@
 #define C78E_BIND_OBJECT_METHOD(object, method) std::bind(&method, object, std::placeholders::_1)
 #define C78E_BIND_THIS_METHOD(method) std::bind(&method, this, std::placeholders::_1)
 
+#define C78E_BIND_THIS_METHOD_AS_IS(method)								\
+[this](auto&&... args) -> decltype(auto) {								\
+	return method(std::forward<decltype(args)>(args)...);				\
+}																		\
+
 #define C78E_EXPAND_MACRO(x) x
 #define C78E_EXPANDALL_MACRO(...) __VA_ARGS__
 #define C78E_STRINGIFY_MACRO(x) #x

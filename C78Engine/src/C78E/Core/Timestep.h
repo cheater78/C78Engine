@@ -4,14 +4,16 @@ namespace C78E {
 
 	class Timestep {
 	public:
-		Timestep(float timeSeconds = 0.0f)
-			: m_Time(timeSeconds)
-		{ }
+		Timestep(double timeSeconds = 0.0f)
+			: m_Time(timeSeconds) {
+		}
 
-		float getSeconds() const { return m_Time; }
-		float getMilliSeconds() const { return m_Time * 1000.0f; }
+		double getSeconds() const { return m_Time; }
+		double getMilliSeconds() const { return m_Time * 1000.0; }
+		double getMicroSeconds() const { return m_Time * 1000000.0; }
+		double getNanoSeconds() const { return m_Time * 1000000000.0; }
 	private:
-		float m_Time; // time in Seconds
+		double m_Time; // time in Seconds
 	};
 
 }
