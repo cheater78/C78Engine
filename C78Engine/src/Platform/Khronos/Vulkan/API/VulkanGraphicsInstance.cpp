@@ -11,6 +11,10 @@ namespace C78E {
         // Add more extensions here if needed
         VK_KHR_SURFACE_EXTENSION_NAME,
     };
+    static const std::array<const char*, 1> c_RequiredDeviceExtensions = {
+        // Add more extensions here if needed
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+    };
     static const std::array<const char*, 3> c_RTExtensions = {
         // Add more extensions here if needed
         VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
@@ -57,6 +61,13 @@ namespace C78E {
 
         // Add more extensions here if needed by a Platform
 
+        return extensions;
+    }
+    static std::vector<const char*> getRequiredDeviceExtensionNames() {
+        std::vector<const char*> extensions;
+        for (const char* extension : c_RequiredDeviceExtensions) {
+            extensions.emplace_back(extension);
+        }
         return extensions;
     }
     static std::vector<const char*> getRequiredLayerNames() {
@@ -250,7 +261,7 @@ namespace C78E {
     }
 
     Ref<VulkanDevice> VulkanGraphicsInstance::pickDevice(VkSurfaceKHR surface) {
-        return VulkanDeviceManager::pickDevice(surface, {} /*getRequiredExtensionNames()*/);
+        return VulkanDeviceManager::pickDevice(surface, getRequiredDeviceExtensionNames());
     }
 
 }

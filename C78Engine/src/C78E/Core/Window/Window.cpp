@@ -70,7 +70,9 @@ namespace C78E {
 
 		onUpdate(delta);
 		if(m_Context) {
-			//m_Context->swapBuffers();
+			if (Ref<SwapChain> swapChain = m_Context->getSwapChain()) {
+				swapChain->nextFrame();
+			}
 		}
 	}
 
@@ -121,7 +123,6 @@ namespace C78E {
 		setTitle(properties.title);
 		setSize(properties.size);
 		setWindowMode(properties.windowMode);
-		setRefreshMode(properties.refreshMode);
 		setMouseMode(properties.mouseMode);
 	}
 

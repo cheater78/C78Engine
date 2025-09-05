@@ -1,6 +1,6 @@
 #pragma once
 #include <C78E/Core/Application/Application.h>
-//#include <C78E/Renderer/API/GraphicsInstance.h>
+//#include <C78E/Graphics/API/GraphicsInstance.h>
 
 extern C78E::Application* C78E::createApplication();
 

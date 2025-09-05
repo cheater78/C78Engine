@@ -2,6 +2,7 @@
 
 namespace C78E {
 
+	using ImagePosition = uvec2;
 	using ImageSize = uvec2;
 
 	class ImageFormat {
@@ -54,6 +55,13 @@ namespace C78E {
 
 	private:
 		ImagePixelLayout m_ImagePixelLayout = None;
+	};
+
+
+	enum class ColorSpace {
+		sRGB,
+		sRGBLinear,
+
 	};
 
 }

@@ -50,16 +50,16 @@ namespace C78E {
 		C78E_CORE_INFO("VulkanPhysicalDevice::~VulkanPhysicalDevice: Destroying Vulkan device...");
     }
 
-    inline VkPhysicalDevice VulkanPhysicalDevice::getVkPhysicalDevice() const {
+    VkPhysicalDevice VulkanPhysicalDevice::getVkPhysicalDevice() const {
         return m_VkPhysicalDevice;
     }
-    inline VkPhysicalDeviceProperties VulkanPhysicalDevice::getPhysicalDeviceProperties() const {
+    VkPhysicalDeviceProperties VulkanPhysicalDevice::getPhysicalDeviceProperties() const {
         return m_PhysicalDeviceProperties;
     }
-    inline VkPhysicalDeviceFeatures VulkanPhysicalDevice::getPhysicalDeviceFeatures() const {
+    VkPhysicalDeviceFeatures VulkanPhysicalDevice::getPhysicalDeviceFeatures() const {
         return m_PhysicalDeviceFeatures;
     }
-    inline const std::vector<VkQueueFamilyProperties>& VulkanPhysicalDevice::getQueueFamilyProperties() const {
+    const std::vector<VkQueueFamilyProperties>& VulkanPhysicalDevice::getQueueFamilyProperties() const {
         return m_QueueFamilyProperties;
     }
     
@@ -81,12 +81,12 @@ namespace C78E {
     }
 
 
-    inline bool VulkanPhysicalDevice::supportsUniversalPresent(const VkSurfaceKHR presentSurface) {
+    bool VulkanPhysicalDevice::supportsUniversalPresent(const VkSurfaceKHR presentSurface) {
         fetchQueueFamilies(presentSurface);
         return m_UniversialFamily.queueFamilyIndex != -1 && m_UniversialFamily.supportsPresent;
     }
 
-    inline bool VulkanPhysicalDevice::supportsDedicatedQueues() const {
+    bool VulkanPhysicalDevice::supportsDedicatedQueues() const {
         return m_ComputeFamily.queueFamilyIndex != -1 && m_TransferFamily.queueFamilyIndex != -1;
     }
 
@@ -246,7 +246,7 @@ namespace C78E {
         }
     }
 
-    inline VkDevice VulkanDevice::getVkDevice() {
+    VkDevice VulkanDevice::getVkDevice() {
         return m_VkDevice;
     }
     bool VulkanDevice::waitIdle() const {

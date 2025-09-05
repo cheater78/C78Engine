@@ -206,7 +206,7 @@ namespace C78E {
 			monitor, 
 			origin.x, origin.y, 
 			m_WindowProperties.size.x, m_WindowProperties.size.y, 
-			(m_WindowProperties.refreshMode < 2) ? GLFW_DONT_CARE : m_WindowProperties.refreshMode
+			GLFW_DONT_CARE
 		);
 	}
 
@@ -245,25 +245,12 @@ namespace C78E {
 			monitor,
 			0, 0,
 			m_WindowProperties.size.x, m_WindowProperties.size.y,
-			(m_WindowProperties.refreshMode < 2) ? GLFW_DONT_CARE : m_WindowProperties.refreshMode
+			GLFW_DONT_CARE
 		);
 	}
 
 	WindowMode GLFWWindow::getWindowMode() const {
 		return m_WindowProperties.windowMode;
-	}
-
-
-	void GLFWWindow::setRefreshMode(WindowRefreshMode refreshMode) {
-		m_WindowProperties.refreshMode = refreshMode;
-		// glfwSwapInterval(refreshMode); // TODO: how to handle for Vulkan? since its native there
-	}
-
-	WindowRefreshMode GLFWWindow::getRefreshMode() const {
-		return m_WindowProperties.refreshMode; 
-	}
-	bool GLFWWindow::isRefreshMode(WindowRefreshMode refreshMode) const {
-		return m_WindowProperties.refreshMode == refreshMode;
 	}
 
 	WindowMouseCursorMode GLFWWindow::getMouseMode() const {

@@ -8,6 +8,10 @@ namespace C78E {
 	 */
 	class DataType {
 	public:
+		DataType() = default;
+		DataType(const DataType&) = default;
+		DataType(DataType&&) = default;
+		DataType& operator=(const DataType&) = default;
 		virtual ~DataType() = default;
 		
 		virtual size_t size() const = 0;
@@ -39,6 +43,9 @@ namespace C78E {
 		};
 	public:
 		PrimitiveType(Type type);
+		PrimitiveType(const PrimitiveType&) = default;
+		PrimitiveType(PrimitiveType&&) = default;
+		PrimitiveType& operator=(const PrimitiveType&) = default;
 		virtual ~PrimitiveType() = default;
 
 		virtual size_t size() const override;
@@ -83,6 +90,9 @@ namespace C78E {
 		static inline VectorType Mat4F();
 	public:
 		VectorType(PrimitiveType::Type type, size_t count = 1);
+		VectorType(const VectorType&) = default;
+		VectorType(VectorType&&) = default;
+		VectorType& operator=(const VectorType&) = default;
 		virtual ~VectorType() = default;
 
 		virtual size_t size() const override;
@@ -112,6 +122,7 @@ namespace C78E {
 			: std::array<VectorType, N>{ std::forward<Args>(args)... } {
 			C78E_CORE_STATIC_ASSERT(sizeof...(args) == N, "StructType: Number of arguments must match the size of the struct.");
 		}
+
 		virtual ~StructType() = default;
 
 		virtual size_t size() const override {
@@ -154,38 +165,89 @@ namespace C78E {
 			return elements().end();
 		}
 	};
-
 	/**
-	 * @brief ListType is a CompositeType that represents a collection of ArrayTypes.
-	 * It can be used to represent any Type that consists of multiple ArrayTypes.
+	 * @brief ListType is a CompositeType that represents a collection of VectorTypes.
+	 * It can be used to represent any Type that consists of multiple VectorTypes.
 	 */
-	class ListType : public CompositeType, private std::vector<VectorType> {
+	template<typename T>
+	requires std::is_convertible_v<T, VectorType>
+	class ExtListType : public CompositeType, private std::vector<T> {
 	public:
-		using ListTypeRange = MemoryRange<VectorType>;
+		using ListTypeRange = MemoryRange<T>;
 		using ListTypeIterator = ListTypeRange::Iterator;
 		using Index = size_t;
 	public:
+		ExtListType() = default;
 		template<typename... Args>
-		ListType(Args&&... args)
-			: std::vector<VectorType>{ std::forward<Args>(args)... } {
+		ExtListType(Args&&... args)
+			: std::vector<T>{ std::forward<Args>(args)... } {
 		}
-		virtual ~ListType() = default;
+		virtual ~ExtListType() = default;
 
-		virtual size_t size() const override;
-		virtual size_t alignment() const override;
+		virtual size_t size() const override {
+			size_t size = 0;
+			for (const T& elem : elements()) {
+				size += elem.size();
+			}
+			return size;
+		}
+		virtual size_t alignment() const override {
+			size_t alignment = 0;
+			for (const T& elem : elements()) {
+				alignment += elem.alignment();
+			}
+			return naturalAligmentOf(alignment);
+		}
 
-		virtual inline size_t elementSize(Index elementIndex) const override;
-		virtual inline size_t elementAlignment(Index elementIndex) const override;
-		virtual inline size_t elementCount() const override;
+		virtual inline size_t elementSize(Index elementIndex) const override {
+			C78E_CORE_VALIDATE(elementIndex < std::vector<T>::size(), "ExtListType::fieldSize: elementIndex out of bounds.");
+			return (*this)[elementIndex].size();
+		}
+		virtual inline size_t elementAlignment(Index elementIndex) const override {
+			C78E_CORE_VALIDATE(elementIndex < std::vector<T>::size(), "ExtListType::fieldAlignment: elementIndex out of bounds.");
+			return (*this)[elementIndex].alignment();
+		}
+		virtual inline size_t elementCount() const override {
+			return std::vector<T>::size();
+		}
 
-		ListTypeRange elements();
-		const ListTypeRange elements() const;
-		ListTypeIterator begin();
-		ListTypeIterator end();
+		ListTypeRange elements() {
+			return ListTypeRange(std::vector<T>::data(), std::vector<T>::size());
+		}
+		const ListTypeRange elements() const {
+			return ListTypeRange(std::vector<T>::data(), std::vector<T>::size());
+		}
+		ListTypeIterator begin() {
+			return elements().begin();
+		}
+		ListTypeIterator end() {
+			return elements().end();
+		}
+		const ListTypeIterator begin() const {
+			return elements().begin();
+		}
+		const ListTypeIterator end() const {
+			return elements().end();
+		}
 
-		VectorType& pushField(const VectorType& element);
+		T& pushField(const T& element) {
+			std::vector<T>::push_back(element);
+			return std::vector<T>::back();
+		}
+
+		template<typename O, typename = std::enable_if_t<std::is_same_v<T, VectorType>>>
+		ExtListType& operator=(const ExtListType<O>& other) {
+			std::vector<VectorType>::clear();
+			std::vector<VectorType>::reserve(other.elementCount());
+			for (const O& elem : other) {
+				std::vector<VectorType>::emplace_back(static_cast<VectorType>(elem));
+			}
+			return *this;
+		}
 
 	};
+	using ListType = ExtListType<VectorType>;
+
 
 	//TODO: GenericType that is a Composite of Composites, therefor can represent any DataType. (if needed)
 

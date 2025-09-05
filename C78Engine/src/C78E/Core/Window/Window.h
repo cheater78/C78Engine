@@ -67,10 +67,6 @@ namespace C78E {
 		virtual void setWindowMode(WindowMode windowMode) = 0;
 		virtual WindowMode getWindowMode() const = 0;
 
-		virtual void setRefreshMode(WindowRefreshMode refreshMode) = 0;
-		virtual WindowRefreshMode getRefreshMode() const = 0;
-		virtual bool isRefreshMode(WindowRefreshMode refreshMode) const = 0;
-
 		virtual WindowMouseCursorMode getMouseMode() const = 0;
 		virtual void setMouseMode(WindowMouseCursorMode mouseMode) = 0;
 

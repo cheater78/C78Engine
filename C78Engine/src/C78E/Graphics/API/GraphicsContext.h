@@ -1,11 +1,13 @@
 #pragma once
-//#include <C78E/Renderer/API/SwapChain/SwapChain.h>
-//#include <C78E/Renderer/API/Command/CommandBuffer.h>
+#include <C78E/Graphics/API/SwapChain/SwapChain.h>
+#include <C78E/Graphics/API/Command/CommandBuffer.h>
 
-//#include <C78E/Renderer/API/Buffer/VertexBuffer.h>
-//#include <C78E/Renderer/API/Buffer/IndexBuffer.h>
-//#include <C78E/Renderer/API/Buffer/UniformBuffer.h>
-//#include <C78E/Renderer/API/Buffer/StorageBuffer.h>
+//#include <C78E/Graphics/API/Buffer/VertexBuffer.h>
+//#include <C78E/Graphics/API/Buffer/IndexBuffer.h>
+//#include <C78E/Graphics/API/Buffer/UniformBuffer.h>
+//#include <C78E/Graphics/API/Buffer/StorageBuffer.h>
+
+#include <C78E/Graphics/API/Program/ShaderManager.h>
 
 namespace C78E {
 
@@ -18,7 +20,7 @@ namespace C78E {
 		GraphicsContext(Window& window);
 		virtual ~GraphicsContext() = default;
 
-		//virtual Ref<CommandBuffer> createCommandBuffer() = 0;
+		virtual Ref<CommandBuffer> createCommandBuffer() = 0;
 		//virtual bool submit(Ref<CommandBuffer> commandBuffer) = 0;
 		//
 		//virtual Ref<VertexBuffer> createVertexBuffer() = 0;
@@ -26,9 +28,21 @@ namespace C78E {
 		//virtual Ref<UniformBuffer> createUniformBuffer() = 0;
 		//virtual Ref<StorageBuffer> createStorageBuffer() = 0;
 		//
-		//virtual void resize(ImageSize size) = 0;
-		virtual void aquireNextSwapChainImage() = 0;
 		
+
+		// SwapChain
+
+		Ref<SwapChain> createSwapChain(const SwapChainConfig& swapChainConfig);
+		Ref<SwapChain> getSwapChain() const;
+		
+		// Shader Manager
+		Ref<ShaderManager> createShaderManager(const FilePath& cacheDirectory) {
+			return m_ShaderManager = createRef<ShaderManager>(*this, cacheDirectory);
+		}
+		Ref<ShaderManager> getShaderManager() {
+			return m_ShaderManager;
+		}
+
 	public:
 
 		template <typename T>
@@ -42,8 +56,8 @@ namespace C78E {
 
 	protected:
 		Window& m_Window;
-		//Ref<SwapChain> m_SwapChain = nullptr;
-
+		Ref<SwapChain> m_SwapChain = nullptr;
+		Ref<ShaderManager> m_ShaderManager = nullptr;
 	};
 
 }

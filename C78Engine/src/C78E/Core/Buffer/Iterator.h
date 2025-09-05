@@ -2,6 +2,12 @@
 
 namespace C78E {
 
+	template <typename T>
+	concept Iterable = requires(T t) {
+		{ std::begin(t) } -> std::input_or_output_iterator; // must have std::begin
+		{ std::end(t) }   -> std::sentinel_for<decltype(std::begin(t))>; // must have std::end
+	};
+
 	template<typename T>
 	struct MemoryRange {
 	public:

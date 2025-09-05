@@ -3,8 +3,5 @@
 
 namespace C78E {
 
-	struct BufferLayout {
-		//TODO: some intermediate between DataTypes and VertexBufferLayout
-	};
 
 }

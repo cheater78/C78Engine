@@ -4,6 +4,9 @@
 using namespace C78E; // not great, but im lazy
 
 class C78ESandboxLayer : public C78E::Layer {
+
+private:
+    struct SwapChainCommand;
 public:
     C78ESandboxLayer(C78E::Window& window)
         : Layer(window, "C78ESandboxLayer") {
@@ -12,6 +15,63 @@ public:
 	virtual ~C78ESandboxLayer() = default;
 
     void onAttach() {
+
+        const FilePath shaderCache = FileSystem::C78EngineDirectory / "assets/cache/shaders/";
+
+        GraphicsContext& ctx = m_Window.getGraphicsContext();
+        Ref<ShaderManager> shaderManager = ctx.createShaderManager(shaderCache);
+
+        const FilePath vkTestShader = FileSystem::C78EngineDirectory / "assets/shaders/vkTestShader.glsl";
+
+        LoadedFileShaders shaders = shaderManager->loadShaderFromSourceFile(vkTestShader);
+
+        SwapChainConfig swapChainConfig;
+        swapChainConfig.bufferCount = SwapChainBufferCount::TripleBuffer;
+        swapChainConfig.refreshMode = RefreshMode::Vsync;
+		swapChainConfig.swapChainColorAttachmentIndex = 0;
+
+		FrameBufferSpecification fbSpec;
+        fbSpec.hasDepthAttachment = false;
+		fbSpec.swapChainColorAttachmentIndex = 0; // TODO: speced twice, bad
+		fbSpec.samples = 1;
+		fbSpec.size = m_Window.getSize();
+
+        FrameBufferAttachmentSpecification fbAttachSpec{ ImageFormat::RGBA8 };
+        fbSpec.colorAttachmentSpecifications = { fbAttachSpec };
+
+        swapChainConfig.swapChainElementFrameBufferSpec = fbSpec;
+
+		m_SwapChain = ctx.createSwapChain(swapChainConfig);
+
+		m_RenderPass = RenderPass::create(ctx);
+
+        m_SwapChain->getConfig().swapChainElementFrameBufferSpec.size;
+
+		m_PipelineConfig = createRef<GraphicsPipelineConfig>();
+		m_PipelineLayout = createRef<GraphicsPipelineLayout>();
+
+		GraphicsPipelineTarget gpt;
+		// TODO: Viewports/Scissors
+
+
+		m_Pipeline = GraphicsPipeline::create(ctx, m_PipelineLayout, m_PipelineConfig, gpt);
+
+        for (uint32_t i = 0; i < m_SwapChain->frameCount(); i++) {
+            SwapChainCommand cmd;
+            cmd.commandBuffer = ctx.createCommandBuffer();
+			cmd.frameBuffer = m_SwapChain->createSwapChainFrameBuffer(i, m_RenderPass);
+
+            cmd.commandBuffer->beginRecording();
+            cmd.commandBuffer->beginRenderPass(m_RenderPass, cmd.frameBuffer);
+
+            cmd.commandBuffer->bindPipeline(m_Pipeline);
+
+			// TODO: draw calls
+
+			cmd.commandBuffer->endRenderPass();
+			cmd.commandBuffer->endRecording();
+        }
+
         C78E_INFO("C78ESandboxLayer attached!");
     }
 
@@ -69,5 +129,19 @@ private:
 	}
 
 private:
+	Ref<SwapChain> m_SwapChain;
+    
+    Ref<RenderPass> m_RenderPass;
 
+	Ref<GraphicsPipelineLayout> m_PipelineLayout;
+	Ref<GraphicsPipelineConfig> m_PipelineConfig;
+	Ref<GraphicsPipeline> m_Pipeline;
+
+    struct SwapChainCommand {
+        Ref<CommandBuffer> commandBuffer;
+        Ref<FrameBuffer> frameBuffer;
+	};
+
+	std::vector<SwapChainCommand> m_SwapChainCommands;
+    
 };

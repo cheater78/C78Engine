@@ -11,12 +11,6 @@ namespace C78E {
 		BorderlessWindow
 	};
 
-	enum WindowRefreshMode : int {
-		Unlimited = 0,
-		Vsync = 1,
-		//TODO: Gsync / FreeSync
-	};
-
 	enum WindowMouseCursorMode {
 		Normal = 0,
 		Hidden = 1,
@@ -80,7 +74,6 @@ namespace C78E {
 		std::string title = "C78Engine Window";
 		uvec2 size = Resolution::resolution(Resolution::FHD);
 		WindowMode windowMode = WindowMode::Windowed;
-		WindowRefreshMode refreshMode = WindowRefreshMode::Vsync;
 		WindowMouseCursorMode mouseMode = WindowMouseCursorMode::Normal;
 	};
 
@@ -93,15 +86,6 @@ namespace std {
 		case C78E::WindowMode::Windowed: return "Windowed";
 		case C78E::WindowMode::FullScreen: return "FullScreen";
 		case C78E::WindowMode::BorderlessWindow: return "BorderlessWindow";
-		default: return "Unknown";
-		}
-	}
-
-	_EXPORT_STD _NODISCARD inline string to_string(const C78E::WindowRefreshMode& mode) {
-		switch (mode) {
-		case C78E::WindowRefreshMode::Unlimited: return "Unlimited";
-		case C78E::WindowRefreshMode::Vsync: return "Vsync";
-			//case C78E::WindowRefreshMode::Gsync: return "Gsync";
 		default: return "Unknown";
 		}
 	}
@@ -123,7 +107,6 @@ namespace std {
 		return "WindowProperties(title: " + props.title + 
 			", size: " + to_string(props.size) +
 			", windowMode: " + to_string(props.windowMode) +
-			", refreshMode: " + to_string(props.refreshMode) +
 			", mouseMode: " + to_string(props.mouseMode) + ")";
 	}
 

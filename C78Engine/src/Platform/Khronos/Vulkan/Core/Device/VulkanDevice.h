@@ -24,6 +24,7 @@ namespace C78E {
         bool supportsUniversalPresent(const VkSurfaceKHR presentSurface = VK_NULL_HANDLE);
         bool supportsDedicatedQueues() const;
         bool supportsRayTracing() const;
+        
 	protected:
         void fetchQueueFamilies(const VkSurfaceKHR presentSurface = VK_NULL_HANDLE);
     private:
@@ -56,6 +57,9 @@ namespace C78E {
 
         bool waitIdle() const;
 
+        uint32_t getUniversalQueueFamilyIndex() const {
+            return m_UniversialFamily.queueFamilyIndex;
+        }
     private:
         bool buildDeviceQueueCreateInfos(std::vector<VkDeviceQueueCreateInfo>& deviceQueueCreateInfos);
         bool createDeviceQueues();

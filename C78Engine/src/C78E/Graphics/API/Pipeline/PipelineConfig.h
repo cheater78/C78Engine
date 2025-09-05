@@ -1,0 +1,83 @@
+#pragma once
+
+#include "PipelineType.h"
+
+namespace C78E {
+
+	enum class PrimitiveTopology {
+		Points,
+		Lines,
+		LineStrip,
+		Triangles,
+		TriangleStrip,
+		TriangleFan,
+		LinesAdjacency,
+		LineStripAdjacency,
+		TrianglesAdjacency,
+		TriangleStripAdjacency,
+		Patches
+	};
+
+	enum class DepthFunction {
+		Never = 0,
+		Less,
+		Equal,
+		LessOrEqual,
+		Greater,
+		NotEqual,
+		GreaterOrEqual,
+		ALWAYS
+	};
+
+	enum class Multisample {
+		None = 0, Off = None, X1 = None,
+		X2,
+		X4,
+		X8,
+		X16,
+		X32,
+		X64
+	};
+
+	struct PipelineConfig {
+	public:
+		virtual ~PipelineConfig() = default;
+
+		virtual PipelineType getType() const = 0;
+	};
+
+	struct GraphicsPipelineConfig : public PipelineConfig {
+	public:
+		virtual ~GraphicsPipelineConfig() = default;
+
+		virtual PipelineType getType() const override final { return PipelineType::Graphics; }
+	public:
+		PrimitiveTopology primitiveTopology = PrimitiveTopology::Triangles;
+		bool primitiveStripRestart = false; // for strip topologies only
+
+		bool testDepthBuffer = true;
+		bool writeDepthBuffer = true;
+		DepthFunction depthFunction = DepthFunction::Less;
+		Multisample multisample = Multisample::None;
+
+		bool backfaceCulling = true;
+		bool frontFaceCulling = false;
+
+		float lineWidth = 2.f;
+		uint32_t patchControlPoints = 3; // for tessellation only
+	};
+
+	struct ComputePipelineConfig : public PipelineConfig {
+	public:
+		virtual ~ComputePipelineConfig() = default;
+
+		virtual PipelineType getType() const override final { return PipelineType::Compute; }
+	};
+
+	struct RayTracingPipelineConfig : public PipelineConfig {
+	public:
+		virtual ~RayTracingPipelineConfig() = default;
+
+		virtual PipelineType getType() const override final { return PipelineType::RayTracing; }
+	};
+}

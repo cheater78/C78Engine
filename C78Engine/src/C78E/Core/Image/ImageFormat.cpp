@@ -142,27 +142,27 @@ namespace C78E {
 	ImageFormat::~ImageFormat() {
 	}
 
-	inline size_t ImageFormat::getElementCount() const {
+	size_t ImageFormat::getElementCount() const {
 		return imageFormatElementCount(m_ImagePixelLayout);
 	}
 
-	inline size_t ImageFormat::getBitsPerElement() const {
+	size_t ImageFormat::getBitsPerElement() const {
 		return imageFormatBitsPerElement(m_ImagePixelLayout);
 	}
 
-	inline size_t ImageFormat::getByteSize() const {
+	size_t ImageFormat::getByteSize() const {
 		return imageFormatByteSize(m_ImagePixelLayout);
 	}
 
-	inline ImageFormat::ImagePixelLayout ImageFormat::format() const {
+	ImageFormat::ImagePixelLayout ImageFormat::format() const {
 		return m_ImagePixelLayout;
 	}
 
-	inline bool ImageFormat::operator==(const ImageFormat& other) const {
+	bool ImageFormat::operator==(const ImageFormat& other) const {
 		return format() == other.format();
 	}
 
-	inline bool ImageFormat::operator!=(const ImageFormat& other) const {
+	bool ImageFormat::operator!=(const ImageFormat& other) const {
 		return !operator==(other);
 	}
 

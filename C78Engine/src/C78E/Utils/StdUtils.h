@@ -182,6 +182,35 @@ namespace std {
 		}
 	}
 
+	const std::array<const char*, 4> c_LineEndings = {
+		"\r\n",
+		"\n\r",
+		"\n",
+		"\r",
+	};
+
+	size_t str_find_first_line_ending(std::string_view str) {
+		size_t bestFound = std::string::npos;
+		for (const char* pattern : c_LineEndings) {
+			size_t currentFound = str.find_first_of(pattern);
+			if (currentFound < bestFound) {
+				bestFound = currentFound;
+			}
+		}
+		return bestFound;
+	}
+
+	size_t str_find_first_not_line_ending(std::string_view str) {
+		size_t bestFound = std::string::npos;
+		for (const char* pattern : c_LineEndings) {
+			size_t currentFound = str.find_first_not_of(pattern);
+			if (currentFound > bestFound) {
+				bestFound = currentFound;
+			}
+		}
+		return bestFound;
+	}
+
 	//source: https://stackoverflow.com/a/447307
 	_EXPORT_STD _NODISCARD inline bool isFloat(const string& str) {
 		istringstream iss(str);

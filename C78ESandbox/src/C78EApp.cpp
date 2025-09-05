@@ -9,7 +9,6 @@ static const C78E::WindowProperties appWindowProperties{
 	"C78ESandbox",
 	C78E::Resolution::resolution(C78E::Resolution::FHD),
 	C78E::WindowMode::Windowed,
-	C78E::WindowRefreshMode::Vsync,
 	C78E::WindowMouseCursorMode::Normal
 };
 
@@ -18,7 +17,6 @@ public:
 	C78App() : C78E::Application() {
 		C78E::Window& window1 = createWindow(appWindowProperties);
 		window1.pushLayer(C78E::createRef<C78ESandboxLayer>(window1));
-
 	}
 
 	C78App(const C78App&) = delete;
