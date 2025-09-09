@@ -1,0 +1,20 @@
+{
+	"nodes":[
+		{"id":"92ddcee29aacce2e","type":"text","text":"glm","x":-700,"y":580,"width":250,"height":60},
+		{"id":"04dde6125b500ab4","type":"text","text":"Core/GLM","x":-700,"y":160,"width":250,"height":60},
+		{"id":"b04bd4d7d4adaaa2","type":"text","text":"StdUtils","x":-520,"y":480,"width":250,"height":60},
+		{"id":"8ab1f12330afe4f0","type":"text","text":"YAML","x":-260,"y":480,"width":250,"height":60},
+		{"id":"804c8dcc689d9cde","x":-700,"y":-600,"width":250,"height":60,"type":"text","text":"Core/Matrix"},
+		{"id":"6fced3627b3cc3e4","x":-360,"y":-590,"width":250,"height":60,"type":"text","text":"Scalar"},
+		{"id":"7f43ebb34b28560b","x":-12,"y":-590,"width":250,"height":60,"type":"text","text":"TransformMatrix"},
+		{"id":"b0debd2b5e82ff56","x":-691,"y":-507,"width":250,"height":60,"type":"text","text":"Core/CoordinateSystem"},
+		{"id":"3535953066452147","x":-8,"y":-434,"width":250,"height":60,"type":"text","text":"Core/Vector"},
+		{"id":"b060a479c32d3458","x":-700,"y":-160,"width":250,"height":60,"type":"text","text":"Core/Dimension"}
+	],
+	"edges":[
+		{"id":"f04b9fc2343c652e","fromNode":"04dde6125b500ab4","fromSide":"bottom","toNode":"92ddcee29aacce2e","toSide":"top"},
+		{"id":"3883673fe37b83d0","fromNode":"04dde6125b500ab4","fromSide":"bottom","toNode":"b04bd4d7d4adaaa2","toSide":"top"},
+		{"id":"a9666b03b974c600","fromNode":"04dde6125b500ab4","fromSide":"bottom","toNode":"8ab1f12330afe4f0","toSide":"top"},
+		{"id":"92b7b7cae3ecbbac","fromNode":"b060a479c32d3458","fromSide":"bottom","toNode":"04dde6125b500ab4","toSide":"top"}
+	]
+}

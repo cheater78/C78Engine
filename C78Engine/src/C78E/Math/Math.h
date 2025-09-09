@@ -1,8 +1,14 @@
 #pragma once
-//inlcudes Yaml
 //includes std
 //includes glm
-#include "Core/Core.h"
+//inlcudes Yaml
+#include "Core/GLM.h"
+#include "Core/Scalar.h"
+#include "Core/Dimension.h"
+#include "Core/Vector.h"
+#include "Core/Matrix.h"
+#include "Core/TransformMatrix.h"
+#include "Core/CoordinateSystem.h"
 #include "Geometry/Geometry.h"
 #include "Transform/Transform.h"
 

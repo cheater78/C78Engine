@@ -61,7 +61,7 @@ namespace C78E {
 		}
 
 		VertexLayout& pushAttribute(const Attribute& attribute) {
-			pushField(attribute);
+			return pushField(attribute);
 		}
 
 	};

@@ -30,17 +30,25 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then # linux
 
     # test premake
     if [ -x "$(command -v premake)" ]; then
-        run_premake="premake gmake2"
+        echo "==== Creating project files($OSTYPE, $run_compiler) ===="
+        premake gmake2
+        premake5 compdb gmake2
     else
 		if ! [ -x "$parent_path/vendor/premake/bin/release/premake5" ]; then
             echo "premake not found! updating submodules"
             git submodule update --init --recursive
             echo "compiling premake"
             cd "$parent_path/vendor/premake/"
-            make -f Bootstrap.mak linux      # Linux and similar Posix systems
+            make -f Bootstrap.mak linux MODULES=compdb     # Linux and similar Posix systems
             cd "$parent_path"
         fi
-        run_premake="$parent_path/vendor/premake/bin/release/premake5 gmake2"
+
+        echo "==== Creating project files($OSTYPE, $run_compiler) ===="
+        $parent_path/vendor/premake/bin/release/premake5 gmake2
+        $parent_path/vendor/premake/bin/release/premake5 compdb gmake2
+
+        echo "==== Compiling started($OSTYPE,$run_compiler) ===="
+        $run_compiler
     fi
     
 elif [[ "$OSTYPE" == "darwin"* ]]; then # Mac OSX
@@ -63,9 +71,3 @@ else
     echo "Failed to detect your platform! ('$OSTYPE' is not supported!)"
     exit 1
 fi
-
-echo "==== Creating project files($OSTYPE, $run_compiler) ===="
-$run_premake
-
-echo "==== Compiling started($OSTYPE,$run_compiler) ===="
-$run_compiler

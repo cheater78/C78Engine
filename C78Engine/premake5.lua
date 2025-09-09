@@ -19,6 +19,7 @@ project "C78Engine"
 	includedirs
 	{
 		"src/",
+		"C78Engine/src",
 		"../C78Engine/src",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",

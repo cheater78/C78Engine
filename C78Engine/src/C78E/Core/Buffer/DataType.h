@@ -235,7 +235,7 @@ namespace C78E {
 			return std::vector<T>::back();
 		}
 
-		template<typename O, typename = std::enable_if_t<std::is_same_v<T, VectorType>>>
+		template<typename O, std::enable_if_t<std::is_same<T, VectorType>::value, bool> = true>
 		ExtListType& operator=(const ExtListType<O>& other) {
 			std::vector<VectorType>::clear();
 			std::vector<VectorType>::reserve(other.elementCount());

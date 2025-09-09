@@ -92,8 +92,7 @@ namespace C78E::Math {
 		matd getProjection() const override {
 			return refitMatrix<dim + 1>(m_ProjectionMatrix) * m_DimensionReduction;
 		}
-
-		template<Dimension dim>
+		
 		Frustum<dim> getViewFrustumWith(const mat<dim + 1>& viewMatrix) const {
 			return Frustum<dim>(getProjection(), viewMatrix);
 		}

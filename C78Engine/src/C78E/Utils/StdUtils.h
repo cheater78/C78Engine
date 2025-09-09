@@ -162,12 +162,12 @@ namespace std {
 	// string compare with caseSensitivity
 	template<typename charT>
 	struct nonCaseSensitiveEqual {
-		nonCaseSensitiveEqual(const locale& loc) : locale(loc) {}
+		nonCaseSensitiveEqual(const locale& loc) : m_Locale(loc) {}
 		bool operator()(charT ch1, charT ch2) {
-			return toupper(ch1, locale) == toupper(ch2, locale);
+			return toupper(ch1, m_Locale) == toupper(ch2, m_Locale);
 		}
 	private:
-		const locale& locale;
+		const locale& m_Locale;
 	};
 
 	template<typename T>

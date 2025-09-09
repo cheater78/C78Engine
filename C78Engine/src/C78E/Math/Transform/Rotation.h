@@ -270,7 +270,7 @@ namespace std {
     template<::C78E::Math::Dimension dim>
     struct hash<::C78E::Math::Rotation<dim>> {
         size_t operator()(const ::C78E::Math::Rotation<dim>& rot) const {
-            return hash<::C78E::Math::Rotation<dim>::matd>()(rot.toMat());
+            return hash<typename ::C78E::Math::Rotation<dim>::matd>()(rot.toMat());
         }
     };
 

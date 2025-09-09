@@ -860,7 +860,7 @@ namespace std {
 	template<C78E::Math::Dimension dim>
 	struct hash<C78E::Math::Point<dim>> {
 		size_t operator()(const C78E::Math::Point<dim>& point) const {
-			return hash<C78E::Math::Point<dim>::CoordVec>()(point.getHomogeneousCoordinate());
+			return hash<typename ::C78E::Math::Point<dim>::CoordVec>()(point.getHomogeneousCoordinate());
 		}
 	};
 
@@ -873,7 +873,7 @@ namespace std {
 	template<C78E::Math::Dimension dim>
 	struct hash<C78E::Math::Vector<dim>> {
 		size_t operator()(const C78E::Math::Vector<dim>& vector) const {
-			return hash<C78E::Math::Vector<dim>::CoordVec>()(vector.getHomogeneousCoordinate());
+			return hash<typename ::C78E::Math::Vector<dim>::CoordVec>()(vector.getHomogeneousCoordinate());
 		}
 	};
 

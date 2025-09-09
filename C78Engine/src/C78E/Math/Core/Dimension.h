@@ -1,6 +1,5 @@
 #pragma once
 #include "GLM.h"
-#include <C78E/Utils/StdUtils.h>
 
 namespace C78E::Math {
 

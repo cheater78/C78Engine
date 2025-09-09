@@ -1,0 +1,180 @@
+{
+  "main": {
+    "id": "4c4678b985f54de8",
+    "type": "split",
+    "children": [
+      {
+        "id": "8f9ca225dc535528",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "040aa62d8a4d3698",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "C78E-Math.canvas",
+                "viewState": {
+                  "x": 82.85599398366746,
+                  "y": 85.9251357931696,
+                  "zoom": -0.7000000000000002
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "C78E-Math"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "820464176bac5cfd",
+    "type": "split",
+    "children": [
+      {
+        "id": "c2a628663c8c7888",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fdc9104c2e19e000",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "c52851886a11a7f7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "471744e32946a26f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1c3c9214ed13e064",
+    "type": "split",
+    "children": [
+      {
+        "id": "15c3bd17192acf27",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d06c0bb860c0645a",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "C78E-Math.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for C78E-Math"
+            }
+          },
+          {
+            "id": "d43c5e09c8bf6647",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "C78E-Math.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from C78E-Math"
+            }
+          },
+          {
+            "id": "0a965f3c2892fe37",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "1f85bd9fea242b7e",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "C78E-Math.canvas",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of C78E-Math"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "040aa62d8a4d3698",
+  "lastOpenFiles": [
+    "Welcome.md",
+    "C78E-Math.canvas"
+  ]
+}
