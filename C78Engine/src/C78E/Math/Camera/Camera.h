@@ -1,6 +1,6 @@
 #pragma once
-#include <C78E/Math/Core/Core.h>
-#include <C78E/Math/Geometry/Geometry.h>
+#include <C78E/Math/Core/CoordinateSystem.h>
+#include <C78E/Math/Geometry/Frustum.h>
 
 namespace C78E::Math {
 

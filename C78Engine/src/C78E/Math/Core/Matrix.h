@@ -1,6 +1,5 @@
 #pragma once
-#include "Dimension.h"
-#include "Scalar.h"
+#include "Vector.h"
 
 namespace C78E::Math {
 	
@@ -195,7 +194,7 @@ namespace std {
 
 	template<::C78E::Math::Dimension dim>
 	requires (dim > 0)
-	_EXPORT_STD _NODISCARD inline string to_string(const ::C78E::Math::mat<dim>& matrix, size_t& decimals = -1, bool asColVecs = true) {
+	_EXPORT_STD _NODISCARD inline string to_string(const ::C78E::Math::mat<dim>& matrix, const size_t& decimals = -1, bool asColVecs = true) {
 		string out;
 		out.reserve(3 + log10(dim) + 2 + (dim * (2 + (dim * (1 + 1 + decimals)) + 2)) + 2);
 		

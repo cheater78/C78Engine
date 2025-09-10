@@ -13,27 +13,27 @@ namespace C78E::Math {
 	struct Line {
 	public:
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
 	public:
 		Line() = default;
-		Line(const Vector& direction, const Point& support = Point(0.f)) : m_Direction(direction.normalize()), m_Support(support) { }
-		Line(const Point& support1, const Point& support2) : m_Support(support1), m_Direction((support2 - support1).normalize()) { }
+		Line(const VectorD& direction, const PointD& support = PointD(0.f)) : m_Direction(direction.normalize()), m_Support(support) { }
+		Line(const PointD& support1, const PointD& support2) : m_Support(support1), m_Direction((support2 - support1).normalize()) { }
 		Line(Line&) = default;
 		Line(const Line&) = default;
 		~Line() = default;
 
-		inline void setSupport(Point support) {
+		inline void setSupport(PointD support) {
 			m_Support = support;
 		}
-		inline void setDirection(Vector direction) {
+		inline void setDirection(VectorD direction) {
 			m_Direction = direction.normalize();
 		}
 
-		inline Point getSupport() const {
+		inline PointD getSupport() const {
 			return m_Support;
 		}
-		inline Vector getDirection() const {
+		inline VectorD getDirection() const {
 			return m_Direction;
 		}
 		
@@ -58,8 +58,8 @@ namespace C78E::Math {
 			return true;
 		}
 	private:
-		Point m_Support = Point(0.f);
-		Vector m_Direction = Vector(0.f);
+		PointD m_Support = PointD(0.f);
+		VectorD m_Direction = VectorD(0.f);
 	};
 
 	/**

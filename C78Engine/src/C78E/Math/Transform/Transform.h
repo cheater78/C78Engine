@@ -1,6 +1,5 @@
 #pragma once
-#include <C78E/Math/Core/Core.h>
-#include <C78E/Math/Geometry/Geometry.h>
+#include <C78E/Math/Geometry/Point.h>
 #include "Rotation.h"
 
 namespace C78E::Math {
@@ -10,14 +9,14 @@ namespace C78E::Math {
 	struct Transform {
 	public:
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using Rotation = Rotation<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using RotationD = Rotation<dim>;
 	public:
-		Transform(const Point& translation = Point(0.f), const Rotation& rotation = Rotation(), const Vector& scale = Vector(1.f))
+		Transform(const PointD& translation = PointD(0.f), const RotationD& rotation = RotationD(), const VectorD& scale = VectorD(1.f))
 			: m_Translation(translation), m_Rotation(rotation), m_Scale(scale), m_MatrixCacheValid(false) { }
 		Transform(const matd& transform) {
-			m_Translation = Point(transform[dim]);
+			m_Translation = PointD(transform[dim]);
 			
 			for(Dimension i = 0; i < dim; ++i) {
 				m_Scale[i] = glm::length(collapseVectorOnce(transform[i]));
@@ -27,7 +26,7 @@ namespace C78E::Math {
 			for(Dimension i = 0; i < dim; ++i) {
 				rotationMatrix[i] /= m_Scale[i];
 			}
-			m_Rotation = Rotation(rotationMatrix);
+			m_Rotation = RotationD(rotationMatrix);
 			//skew and projection are left out
 		}
 		Transform(Transform&) = default;
@@ -36,36 +35,36 @@ namespace C78E::Math {
 		template<Dimension otherDim>
 		requires (otherDim != dim && otherDim >= 2)
 		Transform(const Transform<otherDim>& other) {
-			m_Translation = Point(refitVector<otherDim, dim>(other.getTranslation().getPosition()));
-			m_Rotation = Rotation(other.getRotation().toMat()); // allows for consistent conversion across Dimensions
-			m_Scale = Vector(refitVector<otherDim, dim>(other.getScale().getDirection()));
+			m_Translation = PointD(refitVector<otherDim, dim>(other.getTranslation().getPosition()));
+			m_Rotation = RotationD(other.getRotation().toMat()); // allows for consistent conversion across Dimensions
+			m_Scale = VectorD(refitVector<otherDim, dim>(other.getScale().getDirection()));
 			m_MatrixCacheValid = false;
 		}
 		~Transform() = default;
 
-		const Point& getTranslation() const {
+		const PointD& getTranslation() const {
 			return m_Translation;
 		}
-		const Rotation& getRotation() const {
+		const RotationD& getRotation() const {
 			return m_Rotation;
 		}
-		const Vector& getScale() const {
+		const VectorD& getScale() const {
 			return m_Scale;
 		}
 
-		void setTranslation(const Point& translation) {
+		void setTranslation(const PointD& translation) {
 			if(m_Translation != translation) {
 				m_MatrixCacheValid = false;
 				m_Translation = translation;
 			}
 		}
-		void setRotation(const Rotation& rotation) {
+		void setRotation(const RotationD& rotation) {
 			if(m_Rotation != rotation) {
 				m_MatrixCacheValid = false;
 				m_Rotation = rotation;
 			}
 		}
-		void setScale(const Point& scale) {
+		void setScale(const PointD& scale) {
 			if(m_Scale != scale) {
 				m_MatrixCacheValid = false;
 				m_Scale = scale;
@@ -92,7 +91,7 @@ namespace C78E::Math {
 		}
 
 		bool isIdentity() const {
-			return m_Translation == Point(0.f) && m_Rotation == Rotation(0.f) && m_Scale == Vector(1.f);
+			return m_Translation == PointD(0.f) && m_Rotation == RotationD(0.f) && m_Scale == VectorD(1.f);
 		}
 
 		bool operator==(const Transform& other) const {
@@ -116,9 +115,9 @@ namespace C78E::Math {
 			m_MatrixCacheValid = true;
 		}
 	protected:
-		Point m_Translation = Point(0.f);
-		Rotation m_Rotation = Rotation(0.f);
-		Vector m_Scale = Vector(1.f);
+		PointD m_Translation = PointD(0.f);
+		RotationD m_Rotation = RotationD(0.f);
+		VectorD m_Scale = VectorD(1.f);
 
 		bool m_MatrixCacheValid = false;
 		matd m_TransformMatrix = matd(1.f);

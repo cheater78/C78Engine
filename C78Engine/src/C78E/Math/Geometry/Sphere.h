@@ -1,5 +1,4 @@
 #pragma once
-#include <C78E/Math/Math.h>
 #include "AABB.h"
 
 namespace C78E::Math {
@@ -12,35 +11,35 @@ namespace C78E::Math {
 	struct Sphere {
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using AABB = AABB<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using AABBD = AABB<dim>;
 	public:
-		static Sphere getUnitSphere() { return Sphere(Point(0.f), Vector(1.f)); }
+		static Sphere getUnitSphere() { return Sphere(PointD(0.f), VectorD(1.f)); }
 	public:
 		Sphere() = default;
-		Sphere(Point center, scalar radius) : m_Center(center), m_Radius(Vector(radius)) { }
-		Sphere(Point center, Vector radius = Vector()) : m_Center(center), m_Radius(radius) { }
+		Sphere(PointD center, scalar radius) : m_Center(center), m_Radius(VectorD(radius)) { }
+		Sphere(PointD center, VectorD radius = VectorD()) : m_Center(center), m_Radius(radius) { }
 		Sphere(Sphere&) = default;
 		Sphere(const Sphere&) = default;
 		~Sphere() = default;
 
-		void setCenter(const Point& center) {
+		void setCenter(const PointD& center) {
 			m_Center = center;
 		}
-		void setRadius(const Vector& radius) {
+		void setRadius(const VectorD& radius) {
 			m_Radius = radius;
 		}
 
-		Point getCenter() const {
+		PointD getCenter() const {
 			return m_Center;
 		}
-		Vector getRadius() const {
+		VectorD getRadius() const {
 			return m_Radius;
 		}
 
-		AABB getBoundingBox() const {
-			return AABB(m_Center - m_Radius, m_Center + m_Radius);
+		AABBD getBoundingBox() const {
+			return AABBD(m_Center - m_Radius, m_Center + m_Radius);
 		}
 
 		bool isPerfectSphere() const {
@@ -62,8 +61,8 @@ namespace C78E::Math {
 			return m_Center == other.m_Center && m_Radius == other.m_Radius;
 		}
 	protected:
-		Point m_Center = vecd(0.f);
-		Vector m_Radius = 0.f;
+		PointD m_Center = vecd(0.f);
+		VectorD m_Radius = 0.f;
 	};
 
 	/**

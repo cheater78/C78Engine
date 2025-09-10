@@ -1,5 +1,4 @@
 #pragma once
-#include <C78E/Math/Core/Core.h>
 #include "AABB.h"
 
 namespace C78E::Math {
@@ -13,45 +12,45 @@ namespace C78E::Math {
 	struct Tetrahedon {
 	public:
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
 		static constexpr PointsCount s_Count = 4;
-		using Points = Points<dim, s_Count>;
-		using Triangle = Triangle<dim>;
-		using Triangles = Triangles<dim, 4>;
-		using AABB = AABB<dim>;	
+		using PointsD = Points<dim, s_Count>;
+		using TriangleD = Triangle<dim>;
+		using TrianglesD = Triangles<dim, 4>;
+		using AABBD = AABB<dim>;	
 	private:
-		static const Points s_UnitTetrahedonPoints = {
+		static const PointsD s_UnitTetrahedonPoints = {
 			glm::vec3(-.5f, -.5f * (std::sqrt(3.f) / std::sqrt(5.f)), -.5f * (std::sqrt(3.f) / std::sqrt(5.f))),
 			glm::vec3(+.5f, -.5f * (std::sqrt(3.f) / std::sqrt(5.f)), -.5f * (std::sqrt(3.f) / std::sqrt(5.f))),
 			glm::vec3(0.0f, -.5f * (std::sqrt(3.f) / std::sqrt(5.f)), +.5f * (std::sqrt(3.f) / std::sqrt(5.f))),
 			glm::vec3(0.0f, +.5f * (std::sqrt(3.f) / std::sqrt(5.f)), 0.0f)
 		};
 	public:
-		static const Points& getUnitTetrahedonPoints() {
+		static const PointsD& getUnitTetrahedonPoints() {
 			return s_UnitTetrahedonPoints;
 		};
 	public:
 		Tetrahedon() = default;
-		Tetrahedon(const Point& p1, const Point& p2, const Point& p3, const Point& p4) : m_Points{ p1, p2, p3, p4 } { }
-		Tetrahedon(const Point& p1, const Vector& v1, const Vector& v2, const Vector& v3) : m_Points{ p1, p1 + v1, p1 + v2, p1 + v3 } { }
-		Tetrahedon(const Points& points) : m_Points(points) { }
+		Tetrahedon(const PointD& p1, const PointD& p2, const PointD& p3, const PointD& p4) : m_Points{ p1, p2, p3, p4 } { }
+		Tetrahedon(const PointD& p1, const VectorD& v1, const VectorD& v2, const VectorD& v3) : m_Points{ p1, p1 + v1, p1 + v2, p1 + v3 } { }
+		Tetrahedon(const PointsD& points) : m_Points(points) { }
 		Tetrahedon(const Tetrahedon&) = default;
 		~Tetrahedon() = default;
 
-		inline const Points& getPoints() const {
+		inline const PointsD& getPoints() const {
 			return m_Points;
 		}
-		inline void setPoints(const Points& points) {
+		inline void setPoints(const PointsD& points) {
 			m_Points = points;
 		}
 
-		const Triangles getTriangles() const {
-			return Triangles{ Triangle(m_Points[0], m_Points[1], m_Points[2]), Triangle(m_Points[0], m_Points[2], m_Points[3]), Triangle(m_Points[0], m_Points[3], m_Points[1]), Triangle(m_Points[1], m_Points[2], m_Points[3]) };
+		const TrianglesD getTriangles() const {
+			return TrianglesD{ TriangleD(m_Points[0], m_Points[1], m_Points[2]), TriangleD(m_Points[0], m_Points[2], m_Points[3]), TriangleD(m_Points[0], m_Points[3], m_Points[1]), TriangleD(m_Points[1], m_Points[2], m_Points[3]) };
 		}
 
-		AABB getBoundingBox() const {
-			return AABB{ m_Points[0], m_Points[1], m_Points[2], m_Points[3] };
+		AABBD getBoundingBox() const {
+			return AABBD{ m_Points[0], m_Points[1], m_Points[2], m_Points[3] };
 		}
 
 		scalar getArea() const {
@@ -69,15 +68,15 @@ namespace C78E::Math {
 		}
 
 		inline bool isDegenerate() const {
-			const Vector a = m_Points[1] - m_Points[0];
-			const Vector b = m_Points[2] - m_Points[0];
-			const Vector c = m_Points[3] - m_Points[0];
+			const VectorD a = m_Points[1] - m_Points[0];
+			const VectorD b = m_Points[2] - m_Points[0];
+			const VectorD c = m_Points[3] - m_Points[0];
 			return a.isNullVector() || b.isNullVector() || c.isNullVector() ||
 				a.isParallel(b) || a.isParallel(c) || b.isParallel(c);
 		}
 
 	protected:
-		Points m_Points = getUnitTetrahedonPoints();
+		PointsD m_Points = getUnitTetrahedonPoints();
 	};
 
 	/**

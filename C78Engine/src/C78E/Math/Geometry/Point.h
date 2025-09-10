@@ -1,6 +1,5 @@
 #pragma once
-#include <C78E/Core/Log/SmartLog.h>
-#include <C78E/Math/Core/Core.h>
+#include <C78E/Math/Core/TransformMatrix.h>
 
 namespace C78E::Math {
 
@@ -14,14 +13,14 @@ namespace C78E::Math {
 	struct HomogeneousCoordinate {
 	public:
 		using vecd = vec<dim>;
-		using CoordVec = vec<dim + 1>;
+		using vech = vec<dim + 1>;
 	protected:
 		struct Separate {
 			vecd coordinate = vecd(0.f);
 			scalar scale;
 		};
 	public:
-		HomogeneousCoordinate() : m_C{ CoordVec(0.f) } { }
+		HomogeneousCoordinate() : m_C{ vech(0.f) } { }
 		HomogeneousCoordinate(std::initializer_list<scalar> list, scalar scale = 0.f) { // scale can be inside of initializer list, but does not have to
 			C78E_CORE_ASSERT(list.size() == dim + 1 || list.size() == dim, "HomogeneousCoordinate: initializer list does not fit the Dimension");
 			auto it = list.begin();
@@ -40,16 +39,16 @@ namespace C78E::Math {
 				m_C.separate.scale = scale;
 			}
 		}
-		HomogeneousCoordinate(CoordVec homogeneousCoordinate) : m_C{ homogeneousCoordinate } { }
+		HomogeneousCoordinate(vech homogeneousCoordinate) : m_C{ homogeneousCoordinate } { }
 		HomogeneousCoordinate(vecd coordinate, scalar scale) : m_C{ coordinate, scale } { }
 		HomogeneousCoordinate(HomogeneousCoordinate&) = default;
 		HomogeneousCoordinate(const HomogeneousCoordinate&) = default;
 		~HomogeneousCoordinate() = default;
 
-		inline void setHomogeneousCoordinate(const CoordVec& coord) {
+		inline void setHomogeneousCoordinate(const vech& coord) {
 			m_C.coordinate = coord;
 		}
-		inline const CoordVec& getHomogeneousCoordinate() const {
+		inline const vech& getHomogeneousCoordinate() const {
 			return m_C.coordinate;
 		}
 
@@ -75,11 +74,11 @@ namespace C78E::Math {
 		union CoordinateStorage {
 		public:
 			Separate separate;
-			CoordVec coordinate;
+			vech coordinate;
 
 			CoordinateStorage() : coordinate(0.f) { }
 			CoordinateStorage(const CoordinateStorage& other) : coordinate(other.coordinate) { }
-			CoordinateStorage(CoordVec homogeneousCoordinate) : coordinate(homogeneousCoordinate) { }
+			CoordinateStorage(vech homogeneousCoordinate) : coordinate(homogeneousCoordinate) { }
 			CoordinateStorage(vecd coordinate, scalar scale) : separate{ coordinate, scale } { }
 			~CoordinateStorage() { }
 		} m_C;

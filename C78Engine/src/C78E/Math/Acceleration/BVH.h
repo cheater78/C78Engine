@@ -1,7 +1,4 @@
 #pragma once
-#include <C78E/Core/Log/SmartLog.h>
-#include <C78E/Math/Core/Core.h>
-#include <C78E/Math/Geometry/Geometry.h>
 
 namespace C78E::Math {
 	/*

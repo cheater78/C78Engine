@@ -12,38 +12,38 @@ namespace C78E::Math {
 	struct Triangle {
 	public:
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
 		static constexpr PointsCount s_Count = 3;
-		using Points = Points<dim, s_Count>;
-		using Line = Line<dim>;
-		using Lines = Lines<dim, s_Count>;
+		using PointsD = Points<dim, s_Count>;
+		using LineD = Line<dim>;
+		using LinesD = Lines<dim, s_Count>;
 	private:
-		static const Points s_UnitTrianglePoints = {
+		static const PointsD s_UnitTrianglePoints = {
 			glm::vec2(-.5f, -.25f * std::sqrt(5.f)),
 			glm::vec2(+.5f, -.25f * std::sqrt(5.f)),
 			glm::vec2(0.0f, +.25f * std::sqrt(5.f))
 		};
 	public:
-		static const Points& getUnitTrianglePoints() {
+		static const PointsD& getUnitTrianglePoints() {
 			return s_UnitTrianglePoints;
 		};
 	public:
 		Triangle() = default;
-		Triangle(const Point& p1, const Point& p2, const Point& p3) : m_Points{ p1, p2, p3 } { }
-		Triangle(const Point& p1, const Vector& v1, const Vector& v2) : m_Points{ p1, p1 + v1, p1 + v2 } { }
-		Triangle(const Points& points) : m_Points(points) { }
+		Triangle(const PointD& p1, const PointD& p2, const PointD& p3) : m_Points{ p1, p2, p3 } { }
+		Triangle(const PointD& p1, const VectorD& v1, const VectorD& v2) : m_Points{ p1, p1 + v1, p1 + v2 } { }
+		Triangle(const PointsD& points) : m_Points(points) { }
 		~Triangle() = default;
 
-		inline const Points& getPoints() const {
+		inline const PointsD& getPoints() const {
 			return m_Points;
 		}
-		inline void setPoints(const Points& points) {
+		inline void setPoints(const PointsD& points) {
 			m_Points = points;
 		}
 
-		inline const Lines getLines() const {
-			return Lines{ Line(m_Points[0], m_Points[1]), Line(m_Points[1], m_Points[2]), Line(m_Points[2], m_Points[0]) };
+		inline const LinesD getLines() const {
+			return LinesD{ LineD(m_Points[0], m_Points[1]), LineD(m_Points[1], m_Points[2]), LineD(m_Points[2], m_Points[0]) };
 		}
 
 		scalar getArea() const {
@@ -63,7 +63,7 @@ namespace C78E::Math {
 			return !(*this == other);
 		}
 	protected:
-		Points m_Points = getUnitTrianglePoints();
+		PointsD m_Points = getUnitTrianglePoints();
 	};
 
 	/**

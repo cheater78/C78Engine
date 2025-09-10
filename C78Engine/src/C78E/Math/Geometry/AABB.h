@@ -11,23 +11,23 @@ namespace C78E::Math {
 	struct AABB {
 	public:
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		template<PointsCount counts>
-		using Points = Points<dim, counts>;
-		template<VectorsCount counts>
-		using Vectors = Vectors<dim, counts>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		template<PointsCount count>
+		using PointsD = Points<dim, count>;
+		template<VectorsCount count>
+		using VectorsD = Vectors<dim, count>;
 	public:
 		AABB() = default;
-		AABB(const Point& min) : m_Min(min), m_Max(min) { } // AABB with same min and max
-		AABB(const Point& c0, const Point& c1) : m_Min(min<dim>(c0, c1)), m_Max(max<dim>(c0, c1)) { }
-		AABB(const std::initializer_list<Point>& points) : m_Min(+scalar_limit::infinity()), m_Max(-scalar_limit::infinity()) {
+		AABB(const PointD& min) : m_Min(min), m_Max(min) { } // AABB with same min and max
+		AABB(const PointD& c0, const PointD& c1) : m_Min(min<dim>(c0, c1)), m_Max(max<dim>(c0, c1)) { }
+		AABB(const std::initializer_list<PointD>& points) : m_Min(+scalar_limit::infinity()), m_Max(-scalar_limit::infinity()) {
 			C78E_CORE_ASSERT(points.size() > 1, "AABB: initializer list size must be atleast 2!");
 			for(const auto& point : points) {
 				growToInclude(point);
 			}
 		}
-		AABB(const Points<1 << dim>& points) : m_Min(+scalar_limit::infinity()), m_Max(-scalar_limit::infinity()) {
+		AABB(const PointsD<1 << dim>& points) : m_Min(+scalar_limit::infinity()), m_Max(-scalar_limit::infinity()) {
 			for(PointsCount i = 0; i < (1 << dim); i++) {
 				growToInclude(points[i]);
 			}
@@ -37,11 +37,11 @@ namespace C78E::Math {
 		~AABB() = default;
 
 		void reset() {
-			m_Min = Point(+scalar_limit::infinity());
-			m_Max = Point(-scalar_limit::infinity());
+			m_Min = PointD(+scalar_limit::infinity());
+			m_Max = PointD(-scalar_limit::infinity());
 		}
 
-		void growToInclude(Point point) {
+		void growToInclude(PointD point) {
 			m_Min = Math::min<dim>(m_Min, point);
 			m_Max = Math::max<dim>(m_Max, point);
 		}
@@ -49,36 +49,36 @@ namespace C78E::Math {
 			m_Min = glm::min(m_Min, box.getMin());
 			m_Max = glm::max(m_Max, box.getMax());
 		}
-		void growToInlude(const Points<1 << dim>& points) {
+		void growToInlude(const PointsD<1 << dim>& points) {
 			for(PointsCount i = 0; i < (1 << dim); i++) {
 				growToInclude(points[i]);
 			}
 		}
 
-		Point getMin() const {
+		PointD getMin() const {
 			return m_Min;
 		}
-		Point getMax() const {
+		PointD getMax() const {
 			return m_Max;
 		}
 
-		Point getCenter() const {
-			return Point(((vecd)m_Min + (vecd)m_Max) * 0.5f);
+		PointD getCenter() const {
+			return PointD(((vecd)m_Min + (vecd)m_Max) * 0.5f);
 		}
-		Vector getSize() const {
+		VectorD getSize() const {
 			return (m_Max - m_Min).abs();
 		}
-		Vector getHalfExtent() const {
+		VectorD getHalfExtent() const {
 			return getSize() * 0.5f;
 		}
 
-		Points<1 << dim> getPoints() const {
+		PointsD<1 << dim> getPoints() const {
 			constexpr size_t vertexCount = 1 << dim; // 2^dim vertices
 			const vecd boxExtent = getHalfExtent();
 
-			Points<vertexCount> vertices;
+			PointsD<vertexCount> vertices;
 			for(int i = 0; i < vertexCount; i++) { // construct 2^dim vertices
-				vertices[i] = Point(0.f); // clear vertex to 0.f
+				vertices[i] = PointD(0.f); // clear vertex to 0.f
 				for(int j = 0; j < dim; j++) { // i represents all permutations in its bits
 					vertices[i][j] = (i & (1 << j)) ? +boxExtent[j] : -boxExtent[j]; // bit i[dim] ? pos extent : neg extent
 				}
@@ -86,10 +86,10 @@ namespace C78E::Math {
 			return vertices;
 		}
 
-		Vectors<dim> getNormals() const {
-			Vectors<dim> normals;
+		VectorsD<dim> getNormals() const {
+			VectorsD<dim> normals;
 			for(int i = 0; i < dim; i++) { // construct dim normals
-				normals[i] = Vector(); // clear normal to 0.f
+				normals[i] = VectorD(); // clear normal to 0.f
 				normals[i][i] = 1.f; // one normal for each dim
 			}
 			return normals;
@@ -101,8 +101,8 @@ namespace C78E::Math {
 
 
 	protected:
-		Point m_Min = Point(+scalar_limit::infinity());
-		Point m_Max = Point(-scalar_limit::infinity());
+		PointD m_Min = PointD(+scalar_limit::infinity());
+		PointD m_Max = PointD(-scalar_limit::infinity());
 	};
 
 	/**

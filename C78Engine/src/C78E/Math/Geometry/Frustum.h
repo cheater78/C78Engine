@@ -1,5 +1,4 @@
 #pragma once
-#include <C78E/Math/Core/Core.h>
 #include "Plane.h"
 
 namespace C78E::Math {
@@ -13,7 +12,7 @@ namespace C78E::Math {
     public:
 		using vecd = vec<dim>; // a Vector in a dim dimensional space has dim rows and 1 column
         using matd = mat<dim + 1>; // a Transform Matrix in a dim dimensional space has dim rows and colums for scale, rotation,.. and 1 for translation
-		using Vector = Vector<dim>; // a Vector in a dim dimensional space has dim rows and 1 column
+		using VectorD = Vector<dim>; // a Vector in a dim dimensional space has dim rows and 1 column
         using FrustumPlane = Plane<dim>; // Frustum planes are of the same Dimension -> normal vector of dim and a scalar distance
 		using FrustumPlaneVector = vec<dim + 1>; // every FrustumPlane is defined by a normal vector of dim and a scalar distance
         using FrustumDimensionPlanes = std::pair<Plane<dim>, Plane<dim>>; // every Dimension is constrained by 2 Planes

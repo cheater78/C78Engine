@@ -1,6 +1,5 @@
 ﻿#pragma once
-#include <C78E/Math/Core/Core.h>
-#include <C78E/Math/Geometry/Geometry.h>
+#include <C78E/Math/Core/TransformMatrix.h>
 
 namespace C78E::Math {
 
@@ -254,16 +253,16 @@ namespace std {
 
     //Rotation 
     template<::C78E::Math::Dimension dim>
-    _EXPORT_STD _NODISCARD inline std::string to_string(const ::C78E::Math::Rotation<dim>& rot, size_t& decimals = -1) {
+    _EXPORT_STD _NODISCARD inline std::string to_string(const ::C78E::Math::Rotation<dim>& rot, const size_t& decimals = -1) {
         return to_string(rot.toMat(), decimals);
     }
 
     template<>
-    _EXPORT_STD _NODISCARD inline std::string to_string(const ::C78E::Math::Rotation2& rot, size_t& decimals) {
+    _EXPORT_STD _NODISCARD inline std::string to_string(const ::C78E::Math::Rotation2& rot, const size_t& decimals) {
         return to_string(rot.toEulerAngles(), decimals);
     }
     template<>
-    _EXPORT_STD _NODISCARD inline std::string to_string(const ::C78E::Math::Rotation3& rot, size_t& decimals) {
+    _EXPORT_STD _NODISCARD inline std::string to_string(const ::C78E::Math::Rotation3& rot, const size_t& decimals) {
         return to_string(rot.getQuat(), decimals);
     }
 

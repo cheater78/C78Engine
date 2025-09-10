@@ -1,5 +1,4 @@
 #pragma once
-#include "Point.h"
 #include "Line.h"
 
 namespace C78E::Math {
@@ -13,19 +12,19 @@ namespace C78E::Math {
 	public:
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
 		using HC = HomogeneousCoordinate<dim>;
 	public:
 		Plane() = default;
-		Plane(Vector normal, scalar distance = 0.f) : HC(normal.getDirection(), distance) { normalize(); }
-		Plane(Point support) : HC(support.getOriginVector().normalize().getDirection(), support.getOriginVector().length()) { normalize(); }
+		Plane(VectorD normal, scalar distance = 0.f) : HC(normal.getDirection(), distance) { normalize(); }
+		Plane(PointD support) : HC(support.getOriginVector().normalize().getDirection(), support.getOriginVector().length()) { normalize(); }
 		Plane(std::initializer_list<scalar> list) : HC(list, 0.f) { } //TODO: is that right?
 		Plane(Plane&) = default;
 		Plane(const Plane&) = default;
 		~Plane() = default;
 
-		inline void setNormal(const Vector& normal) {
+		inline void setNormal(const VectorD& normal) {
 			HC::setCoordinate(normal.getDirection());
 			normalize();
 		}
@@ -33,23 +32,23 @@ namespace C78E::Math {
 			HC::setScale(distance);
 		}
 
-		inline Vector getNormal() const {
+		inline VectorD getNormal() const {
 			return HC::getCoordinate();
 		}
 		inline scalar getDistance() const {
 			return HC::getScale();
 		}
 
-		inline void setSupport(const Point& support) {
+		inline void setSupport(const PointD& support) {
 			setNormal(glm::normalize(support.getPosition()));
 			setDistance(glm::length(support.getPosition()));
 		}
-		inline Point getSupport() const {
-			return Point(getNormal() * getDistance());
+		inline PointD getSupport() const {
+			return PointD(getNormal() * getDistance());
 		}
 
 		inline bool isDegenerate() const {
-			return getNormal() == Vector();
+			return getNormal() == VectorD();
 		}
 		inline operator bool() const {
 			return !isDegenerate();

@@ -12,46 +12,46 @@ namespace C78E::Math {
 	struct Quad {
 	public:
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
 		static constexpr PointsCount s_Count = 4;
-		using Points = Points<dim, s_Count>;
-		using Line = Line<dim>;
-		using Lines = Lines<dim, 4>;
-		using Triangle = Triangle<dim>;
-		using Triangles = Triangles<dim, 2>;
+		using PointsD = Points<dim, s_Count>;
+		using LineD = Line<dim>;
+		using LinesD = Lines<dim, 4>;
+		using TriangleD = Triangle<dim>;
+		using TrianglesD = Triangles<dim, 2>;
 	private:
-		inline static const Points s_UnitQuadPoints{
+		inline static const PointsD s_UnitQuadPoints{
 			glm::vec2(-.5f, -.5f),
 			glm::vec2(+.5f, -.5f),
 			glm::vec2(+.5f, +.5f),
 			glm::vec2(-.5f, +.5f)
 		};
 	public:
-		static const Points& getUnitQuadPoints() {
+		static const PointsD& getUnitQuadPoints() {
 			return s_UnitQuadPoints;
 		};
 	public:
 		Quad() = default;
-		Quad(const Point& p1, const Point& p2, const Point& p3, const Point& p4) : m_Points{ p1, p2, p3, p4 } { }
-		Quad(const Point& p1, const Vector& v1, const Vector& v2, const Vector& v3) : m_Points{ p1, p1 + v1, p1 + v2, p1 + v3 } { }
-		Quad(const Points& points) : m_Points(points) { }
+		Quad(const PointD& p1, const PointD& p2, const PointD& p3, const PointD& p4) : m_Points{ p1, p2, p3, p4 } { }
+		Quad(const PointD& p1, const VectorD& v1, const VectorD& v2, const VectorD& v3) : m_Points{ p1, p1 + v1, p1 + v2, p1 + v3 } { }
+		Quad(const PointsD& points) : m_Points(points) { }
 		Quad(const Quad&) = default;
 		~Quad() = default;
 
-		const Points& getPoints() const {
+		const PointsD& getPoints() const {
 			return m_Points;
 		}
-		void setPoints(const Points& points) {
+		void setPoints(const PointsD& points) {
 			m_Points = points;
 		}
 
-		const Lines getLines() const {
-			return Lines{ Line(m_Points[0], m_Points[1]), Line(m_Points[1], m_Points[2]), Line(m_Points[2], m_Points[3]), Line(m_Points[3], m_Points[0]) };
+		const LinesD getLines() const {
+			return LinesD{ LineD(m_Points[0], m_Points[1]), LineD(m_Points[1], m_Points[2]), LineD(m_Points[2], m_Points[3]), LineD(m_Points[3], m_Points[0]) };
 		}
 
-		const Triangles getTriangles() const {
-			return Triangles{ Triangle(m_Points[0], m_Points[1], m_Points[2]), Triangle(m_Points[0], m_Points[2], m_Points[3]) };
+		const TrianglesD getTriangles() const {
+			return TrianglesD{ TriangleD(m_Points[0], m_Points[1], m_Points[2]), TriangleD(m_Points[0], m_Points[2], m_Points[3]) };
 		}
 
 		scalar getArea() const {
@@ -73,7 +73,7 @@ namespace C78E::Math {
 			return !(*this == other);
 		}
 	protected:
-		Points m_Points = getUnitQuadPoints();
+		PointsD m_Points = getUnitQuadPoints();
 	};
 
 	/**
