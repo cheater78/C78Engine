@@ -2,7 +2,7 @@ project "C78ESandbox"
 	location "./"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++20"
+	cppdialect "C++latest"
 	staticruntime "off"
 
 	targetdir  ("../bin/" .. outputdir .. "/%{prj.name}")
@@ -65,6 +65,7 @@ project "C78ESandbox"
 		
 	filter "system:Linux"
 		systemversion "latest"
+		toolset ("clang")
 
 		defines{
 			"C78E_PLATFORM_LINUX"

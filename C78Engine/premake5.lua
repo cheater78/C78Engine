@@ -2,7 +2,7 @@ project "C78Engine"
 	location "./"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++20"
+	cppdialect "C++latest"
 	staticruntime "off"
 
 	targetdir  ("../bin/" .. outputdir .. "/%{prj.name}")

@@ -415,3 +415,8 @@ bin-int/
 .vscode/
 
 config/
+
+# clang - premake export compiler commands files
+compile_commands.json
+compile_commands/
+export-compile-commands.lua

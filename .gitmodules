@@ -31,3 +31,6 @@
 [submodule "C78Engine/vendor/tinygltf"]
 	path = C78Engine/vendor/tinygltf
 	url = https://github.com/cheater78/tinygltf.git
+[submodule "vendor/premake-export-compile-commands"]
+	path = vendor/premake-export-compile-commands
+	url = https://github.com/Astral-Sheep/premake-export-compile-commands.git

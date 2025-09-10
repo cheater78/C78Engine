@@ -1,3 +1,5 @@
+require "export-compile-commands"
+
 workspace "C78Engine"
 	architecture "x64"
 	startproject "C78ESandbox"
