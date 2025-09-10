@@ -80,7 +80,7 @@ namespace C78E {
 
 		template<typename T>
 		MemoryRange<T> range() const {
-			return MemoryRange(data, size);
+			return MemoryRange<T>(data, size);
 		}
 
 		operator bool() const { return m_Buffer; }

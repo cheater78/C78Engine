@@ -1,5 +1,4 @@
 #pragma once
-#include "Utils.h"
 
 //std lib
 #include <iostream>
@@ -41,6 +40,7 @@
 #include <chrono>
 #include <random>
 
+#include <type_traits>
 #include <concepts>
 
 // std extension
@@ -53,6 +53,14 @@ namespace std {
 #define _NODISCARD [[nodiscard]]
 #endif
 
+	// from: https://stackoverflow.com/a/57595105
+	template <typename T, typename... Rest>
+	void hashCombine(size_t& seed, const T& v, const Rest&... rest) {
+		seed ^= std::hash<T>{}(v)+0x9e3779b9 + (seed << 6) + (seed >> 2);
+		(hashCombine(seed, rest), ...);
+	};
+	//~
+
 	//String
 	_EXPORT_STD _NODISCARD inline string to_string(const char* _Val) {
 		return string(_Val);
@@ -61,8 +69,7 @@ namespace std {
 		return _Val;
 	}
 
-	template <typename T>
-		requires is_floating_point_v<T>
+	template <floating_point T>
 	_EXPORT_STD _NODISCARD inline string to_string(T _Val, const size_t& _Dec) {
 		string out;
 		if constexpr (is_same_v<T, float>) {

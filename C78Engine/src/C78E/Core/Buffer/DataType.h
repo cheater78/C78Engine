@@ -1,4 +1,6 @@
 #pragma once
+#include <C78E/Utils/StdUtils.h>
+#include "Iterator.h"
 
 namespace C78E {
 
@@ -89,7 +91,7 @@ namespace C78E {
 		static inline VectorType Mat3F();
 		static inline VectorType Mat4F();
 	public:
-		VectorType(PrimitiveType::Type type, size_t count = 1);
+		VectorType(PrimitiveType::Type type = PrimitiveType::Type::None, size_t count = 1);
 		VectorType(const VectorType&) = default;
 		VectorType(VectorType&&) = default;
 		VectorType& operator=(const VectorType&) = default;
@@ -98,9 +100,9 @@ namespace C78E {
 		virtual size_t size() const override;
 		virtual size_t alignment() const override;
 
-		virtual size_t elementSize(Index elementIndex = 0) const;
-		virtual size_t elementAlignment(Index elementIndex = 0) const;
-		virtual size_t elementCount() const;
+		virtual size_t elementSize(Index elementIndex = 0) const override;
+		virtual size_t elementAlignment(Index elementIndex = 0) const override;
+		virtual size_t elementCount() const override;
 	protected:
 		size_t m_Count = 0;
 	};
@@ -235,7 +237,7 @@ namespace C78E {
 			return std::vector<T>::back();
 		}
 
-		template<typename O, std::enable_if_t<std::is_same<T, VectorType>::value, bool> = true>
+		template<typename O, std::enable_if_t<std::is_convertible<T, VectorType>::value, bool> = true>
 		ExtListType& operator=(const ExtListType<O>& other) {
 			std::vector<VectorType>::clear();
 			std::vector<VectorType>::reserve(other.elementCount());
