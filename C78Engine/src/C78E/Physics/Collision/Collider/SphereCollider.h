@@ -13,30 +13,30 @@ namespace C78E::Physics {
 	public:
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using Sphere = Sphere<dim>;
-		using AABB = AABB<dim>;
-		using Transform = Transform<dim>;
-		using Collider = Collider<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using SphereD = Sphere<dim>;
+		using AABBD = AABB<dim>;
+		using TransformD = Transform<dim>;
+		using ColliderD = Collider<dim>;
 	public:
 		SphereCollider() = default;
-		SphereCollider(Point center, scalar radius) : Collider(), Sphere(center, radius) { }
-		SphereCollider(Point center, Vector radius) : Collider(), Sphere(center, radius) { }
-		SphereCollider(const Sphere& sphere) : Collider(), Sphere(sphere) { }
+		SphereCollider(PointD center, scalar radius) : ColliderD(), SphereD(center, radius) { }
+		SphereCollider(PointD center, VectorD radius) : ColliderD(), SphereD(center, radius) { }
+		SphereCollider(const SphereD& sphere) : ColliderD(), SphereD(sphere) { }
 		SphereCollider(SphereCollider&) = default;
 		SphereCollider(const SphereCollider&) = default;
 		~SphereCollider() = default;
 
-		virtual Point getCenter() const {
-			return Sphere::getCenter();
+		virtual PointD getCenter() const {
+			return SphereD::getCenter();
 		}
-		virtual Vector getRadius() const {
-			return Sphere::getRadius();
+		virtual VectorD getRadius() const {
+			return SphereD::getRadius();
 		}
 		
 		bool isPerfectSphere() const {
-			return Sphere::isPerfectSphere();
+			return SphereD::isPerfectSphere();
 		}
 
 		/**
@@ -45,34 +45,34 @@ namespace C78E::Physics {
 		 * @param point the point to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const override {
-			const Point pointSphereLocal = Math::transform(point, transformToPointSpace.toInvMat());
-			const Vector pointDirectionSphereLocal = pointSphereLocal - getCenter();
-			const Point nearSurfacePointSphereLocal = getCenter() + getRadius() * pointDirectionSphereLocal.normalize();
-			const Point nearSurfacePoint = Math::transform(nearSurfacePointSphereLocal, transformToPointSpace.toMat());
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const override {
+			const PointD pointSphereLocal = Math::transform(point, transformToPointSpace.toInvMat());
+			const VectorD pointDirectionSphereLocal = pointSphereLocal - getCenter();
+			const PointD nearSurfacePointSphereLocal = getCenter() + getRadius() * pointDirectionSphereLocal.normalize();
+			const PointD nearSurfacePoint = Math::transform(nearSurfacePointSphereLocal, transformToPointSpace.toMat());
 			return nearSurfacePoint;
 		}
 
 
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const override {
-			const Vector directionLocal = Math::transform(direction, transformToVectorSpace.toInvMat()); // Tranform Point to Sphere space
-			const Point nearSurfacePointLocal = getCenter() + getRadius() * directionLocal.normalize(); // apply on plane vector to support -> nsp
-			const Point nearSurfacePoint = Math::transform(nearSurfacePointLocal, transformToVectorSpace.toMat()); // Transform from Sphere space back to point space
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const override {
+			const VectorD directionLocal = Math::transform(direction, transformToVectorSpace.toInvMat()); // Tranform Point to Sphere space
+			const PointD nearSurfacePointLocal = getCenter() + getRadius() * directionLocal.normalize(); // apply on plane vector to support -> nsp
+			const PointD nearSurfacePoint = Math::transform(nearSurfacePointLocal, transformToVectorSpace.toMat()); // Transform from Sphere space back to point space
 			return nearSurfacePoint;
 		}
 
-		virtual AABB getBounds() const override {
-			return AABB(getCenter() - getRadius(), getCenter() + getRadius());
+		virtual AABBD getBounds() const override {
+			return AABBD(getCenter() - getRadius(), getCenter() + getRadius());
 		}
 
-		virtual const Sphere& getSphere() const {
+		virtual const SphereD& getSphere() const {
 			return *this;
 		}
-		virtual Sphere& getSphere() {
+		virtual SphereD& getSphere() {
 			return *this;
 		}
 
-		virtual Collider::Type getType() const { return Collider::Type::Sphere; }
+		virtual ColliderD::Type getType() const { return ColliderD::Type::Sphere; }
 	protected:
 		// Sphere
 	};

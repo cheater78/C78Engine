@@ -13,35 +13,35 @@ namespace C78E::Physics {
 	public:
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using Plane = Plane<dim>;
-		using AABB = AABB<dim>;
-		using Transform = Transform<dim>;
-		using Collider = Collider<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using PlaneD = Plane<dim>;
+		using AABBD = AABB<dim>;
+		using TransformD = Transform<dim>;
+		using ColliderD = Collider<dim>;
 	public:
 		PlaneCollider() = default;
-		PlaneCollider(Vector normal, scalar distance) : Collider(), Plane(normal, distance) { }
+		PlaneCollider(VectorD normal, scalar distance) : ColliderD(), PlaneD(normal, distance) { }
 		PlaneCollider(PlaneCollider&) = default;
 		PlaneCollider(const PlaneCollider&) = default;
 		~PlaneCollider() = default;
 
-		virtual Vector getNormal() const {
-			return Plane::getNormal();
+		virtual VectorD getNormal() const {
+			return PlaneD::getNormal();
 		}
 		virtual scalar getDistance() const {
-			return Plane::getDistance();
+			return PlaneD::getDistance();
 		}
 
-		virtual void setNormal(Vector normal) {
-			Plane::setNormal(normal);
+		virtual void setNormal(VectorD normal) {
+			PlaneD::setNormal(normal);
 		}
 		virtual void setDistance(scalar distance) {
-			Plane::setDistance(distance);
+			PlaneD::setDistance(distance);
 		}
 
-		virtual Point getSupport() const {
-			return Plane::getSupport();
+		virtual PointD getSupport() const {
+			return PlaneD::getSupport();
 		}
 
 		/**
@@ -50,25 +50,25 @@ namespace C78E::Physics {
 		 * @param point the point to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const override {
-			const Vector pointPlaneLocal = Math::transform(point, transformToPointSpace.toInvMat()).getOriginVector(); // Tranform Point to Plane space
-			const Vector pointOnNormalProjection = pointPlaneLocal.projectOn(getNormal()); // project Point on PlaneSupport
-			const Vector vectorSupportToNearSurface = pointPlaneLocal - pointOnNormalProjection; // get the on plane vector component of point
-			const Point nearSurfacePointLocal = getSupport() + vectorSupportToNearSurface; // apply on plane vector to support -> nsp
-			const Point nearSurfacePoint = Math::transform(nearSurfacePointLocal, transformToPointSpace.toMat()); // Transform from Plane space back to point space
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const override {
+			const VectorD pointPlaneLocal = Math::transform(point, transformToPointSpace.toInvMat()).getOriginVector(); // Tranform Point to Plane space
+			const VectorD pointOnNormalProjection = pointPlaneLocal.projectOn(getNormal()); // project Point on PlaneSupport
+			const VectorD vectorSupportToNearSurface = pointPlaneLocal - pointOnNormalProjection; // get the on plane vector component of point
+			const PointD nearSurfacePointLocal = getSupport() + vectorSupportToNearSurface; // apply on plane vector to support -> nsp
+			const PointD nearSurfacePoint = Math::transform(nearSurfacePointLocal, transformToPointSpace.toMat()); // Transform from Plane space back to point space
 			return nearSurfacePoint;
 		}
 
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const override {
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const override {
 			return Math::transform(getSupport(), transformToVectorSpace.toMat());
 		}
 
 
-		virtual AABB getBounds() const override {
-			return AABB(getSupport(), getSupport());
+		virtual AABBD getBounds() const override {
+			return AABBD(getSupport(), getSupport());
 		}
 
-		virtual Collider::Type getType() const override { return Collider::Type::Plane; }
+		virtual ColliderD::Type getType() const override { return ColliderD::Type::Plane; }
 	protected:
 		// Plane
 	};

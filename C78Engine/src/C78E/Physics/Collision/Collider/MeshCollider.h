@@ -11,29 +11,29 @@ namespace C78E::Physics {
 	template<Dimension dim>
 	struct MeshCollider : protected AABBCollider<dim> {
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using AABB = AABB<dim>;
-		using Collider = Collider<dim>;
-		using AABBCollider = AABBCollider<dim>;
-		using HullCollider = HullCollider<dim>;
-		using DynamicHullColliders = DynamicHullColliders<dim>;
-		using Transform = Transform<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using AABBD = AABB<dim>;
+		using ColliderD = Collider<dim>;
+		using AABBColliderD = AABBCollider<dim>;
+		using HullColliderD = HullCollider<dim>;
+		using DynamicHullCollidersD = DynamicHullColliders<dim>;
+		using TransformD = Transform<dim>;
 	public:
 		MeshCollider() = default;
 		MeshCollider(MeshCollider&) = default;
 		MeshCollider(const MeshCollider&) = default;
 		~MeshCollider() = default;
 
-		AABB& calcBounds() {
-			AABB::reset();
-			for(const HullCollider& hull : m_HullColliders) {
-				AABB::growToInclude(hull.getBounds());
+		AABBD& calcBounds() {
+			AABBD::reset();
+			for(const HullColliderD& hull : m_HullColliders) {
+				AABBD::growToInclude(hull.getBounds());
 			}
 			return *this;
 		}
 		
-		const DynamicHullColliders& getHullColliders() const {
+		const DynamicHullCollidersD& getHullColliders() const {
 			return m_HullColliders;
 		}
 
@@ -43,24 +43,24 @@ namespace C78E::Physics {
 		 * @param point the point to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const override {
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const override {
 			//TODO:
-			return Point();
+			return PointD();
 		}
 
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const override {
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const override {
 			//TODO:
-			return Point();
+			return PointD();
 		}
 
-		virtual AABB getBounds() const override {
-			return AABBCollider::getBounds();
+		virtual AABBD getBounds() const override {
+			return AABBColliderD::getBounds();
 		}
 
-		virtual Collider::Type getType() const { return Collider::Type::Mesh; }
+		virtual ColliderD::Type getType() const { return ColliderD::Type::Mesh; }
 	public:
 		//Ref<Mesh> m_Mesh = nullptr;
-		DynamicHullColliders m_HullColliders;
+		DynamicHullCollidersD m_HullColliders;
 	};
 
 	template<Dimension dim>

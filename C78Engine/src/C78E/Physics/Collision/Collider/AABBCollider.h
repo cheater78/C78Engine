@@ -13,33 +13,33 @@ namespace C78E::Physics {
 	public:
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using Transform = Transform<dim>;
-		using Collider = Collider<dim>;
-		using AABB = AABB<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using TransformD = Transform<dim>;
+		using ColliderD = Collider<dim>;
+		using AABBD = AABB<dim>;
 	public:
 		AABBCollider() = default;
-		AABBCollider(Point min, Point max) : Collider(), AABB(min, max) { }
-		AABBCollider(const AABB& aabb) : Collider(), AABB(aabb) { }
+		AABBCollider(PointD min, PointD max) : ColliderD(), AABBD(min, max) { }
+		AABBCollider(const AABBD& aabb) : ColliderD(), AABBD(aabb) { }
 		AABBCollider(AABBCollider&) = default;
 		AABBCollider(const AABBCollider&) = default;
 		~AABBCollider() = default;
 
-		virtual Point getMin() const {
-			return AABB::getMin();
+		virtual PointD getMin() const {
+			return AABBD::getMin();
 		}
-		virtual Point getMax() const {
-			return AABB::getMax();
+		virtual PointD getMax() const {
+			return AABBD::getMax();
 		}
-		virtual Point getCenter() const {
-			return AABB::getCenter();
+		virtual PointD getCenter() const {
+			return AABBD::getCenter();
 		}
-		virtual Vector getSize() const {
-			return AABB::getSize();
+		virtual VectorD getSize() const {
+			return AABBD::getSize();
 		}
-		virtual Vector getHalfExtent() const {
-			return AABB::getHalfExtent();
+		virtual VectorD getHalfExtent() const {
+			return AABBD::getHalfExtent();
 		}
 
 		/**
@@ -48,28 +48,28 @@ namespace C78E::Physics {
 		 * @param point the point to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const override {
-			const AABB boundsWorld = Math::transform(getBounds(), transformToPointSpace.toMat());
-			const Point center = boundsWorld.getCenter();
-			const Vector pointDirection = point - center;
-			const Vector boxClampedPointDirection = snapToBounds(pointDirection, -boundsWorld.getHalfExtent(), boundsWorld.getHalfExtent());
-			const Point nearSurfacePoint = center + boxClampedPointDirection;
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const override {
+			const AABBD boundsWorld = Math::transform(getBounds(), transformToPointSpace.toMat());
+			const PointD center = boundsWorld.getCenter();
+			const VectorD pointDirection = point - center;
+			const VectorD boxClampedPointDirection = snapToBounds(pointDirection, -boundsWorld.getHalfExtent(), boundsWorld.getHalfExtent());
+			const PointD nearSurfacePoint = center + boxClampedPointDirection;
 			return nearSurfacePoint;
 		}
 
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const override {
-			const AABB boundsWorld = Math::transform(getBounds(), transformToVectorSpace.toMat());
-			const Point center = boundsWorld.getCenter();
-			const Vector boxClampedDirection = direction.normalize() * boundsWorld.getHalfExtent();
-			const Point nearSurfacePoint = center + boxClampedDirection;
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const override {
+			const AABBD boundsWorld = Math::transform(getBounds(), transformToVectorSpace.toMat());
+			const PointD center = boundsWorld.getCenter();
+			const VectorD boxClampedDirection = direction.normalize() * boundsWorld.getHalfExtent();
+			const PointD nearSurfacePoint = center + boxClampedDirection;
 			return nearSurfacePoint;
 		}
 
-		virtual AABB getBounds() const override {
+		virtual AABBD getBounds() const override {
 			return *this;
 		}
 
-		virtual Collider::Type getType() const { return Collider::Type::AABB; }
+		virtual ColliderD::Type getType() const { return ColliderD::Type::AABB; }
 	protected:
 		// AABB
 	};

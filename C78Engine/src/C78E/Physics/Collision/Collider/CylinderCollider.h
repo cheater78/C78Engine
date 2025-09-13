@@ -9,35 +9,35 @@ namespace C78E::Physics {
 	public:
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using AABB = AABB<dim>;
-		using Collider = Collider<dim>;
-		using Transform = Transform<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using AABBD = AABB<dim>;
+		using ColliderD = Collider<dim>;
+		using TransformD = Transform<dim>;
 	public:
 		CylinderCollider() = default;
-		CylinderCollider(Point start, Point end, scalar radius) : Collider(), m_Start(start), m_End(end), m_Radius(Vector(radius)) { }
-		CylinderCollider(Point start, Point end, Vector radius) : Collider(), m_Start(start), m_End(end), m_Radius(radius) { }
+		CylinderCollider(PointD start, PointD end, scalar radius) : ColliderD(), m_Start(start), m_End(end), m_Radius(VectorD(radius)) { }
+		CylinderCollider(PointD start, PointD end, VectorD radius) : ColliderD(), m_Start(start), m_End(end), m_Radius(radius) { }
 		CylinderCollider(CylinderCollider&) = default;
 		CylinderCollider(const CylinderCollider&) = default;
 		~CylinderCollider() = default;
 
-		Point getStart() const {
+		PointD getStart() const {
 			return m_Start;
 		}
-		Point getEnd() const {
+		PointD getEnd() const {
 			return m_End;
 		}
-		Vector getRadius() const {
+		VectorD getRadius() const {
 			return m_Radius;
 		}
-		Vector getAxis() const {
+		VectorD getAxis() const {
 			return m_End - m_Start;
 		}
-		Vector getHalfAxis() const {
+		VectorD getHalfAxis() const {
 			return getAxis() / 2.f;
 		}
-		Point getCenter() const {
+		PointD getCenter() const {
 			return getStart() + getAxis() / 2.f;
 		}
 
@@ -47,20 +47,20 @@ namespace C78E::Physics {
 		 * @param point the point to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const override {
-			const Vector axis = Math::transform(getHalfAxis(), transformToPointSpace.toMat());
-			const Point center = Math::transform(getCenter(), transformToPointSpace.toMat());
-			const Vector radius = Math::transform(getRadius(), transformToPointSpace.toMat());
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const override {
+			const VectorD axis = Math::transform(getHalfAxis(), transformToPointSpace.toMat());
+			const PointD center = Math::transform(getCenter(), transformToPointSpace.toMat());
+			const VectorD radius = Math::transform(getRadius(), transformToPointSpace.toMat());
 
-			const Vector pointCenterLocal = point - center;
+			const VectorD pointCenterLocal = point - center;
 			if(pointCenterLocal.isNullVector()) return point;
 
 			const scalar pointAxisComponent = pointCenterLocal.projectionScaleOn(axis);
 			const bool isPointOutsideAxis = pointAxisComponent < -1.f || pointAxisComponent > 1.f;
 			const scalar pointDistanceFromAxis = (1.f - glm::abs(pointAxisComponent)) * axis.length();
 
-			const Vector radiusOnAxis = radius.projectOn(axis);
-			const Vector radiusOnPlane = radius - radiusOnAxis;
+			const VectorD radiusOnAxis = radius.projectOn(axis);
+			const VectorD radiusOnPlane = radius - radiusOnAxis;
 
 			const scalar pointOnRadiusOnPlaneComponent = pointCenterLocal.projectionScaleOn(radiusOnPlane);
 			const bool isPointOutsideRadius = pointOnRadiusOnPlaneComponent < -1.f || pointOnRadiusOnPlaneComponent > 1.f;
@@ -69,10 +69,10 @@ namespace C78E::Physics {
 			const bool snapAxis = pointDistanceFromAxis < pointDistanceFromRadius;
 			const bool snapRadius = pointDistanceFromRadius < pointDistanceFromAxis;
 
-			const Vector axisOffset = (isPointOutsideAxis || (!isPointOutsideRadius && snapAxis)) ?
+			const VectorD axisOffset = (isPointOutsideAxis || (!isPointOutsideRadius && snapAxis)) ?
 				snapToBounds(pointCenterLocal, -axis, axis) :
 				clamp(pointCenterLocal, -axis, axis);
-			const Vector radiusOffset = (isPointOutsideRadius || (!isPointOutsideAxis && snapRadius)) ?
+			const VectorD radiusOffset = (isPointOutsideRadius || (!isPointOutsideAxis && snapRadius)) ?
 				snapToBounds(pointCenterLocal, -radiusOnPlane, radiusOnPlane) :
 				clamp(pointCenterLocal, -radiusOnPlane, radiusOnPlane);
 
@@ -85,23 +85,23 @@ namespace C78E::Physics {
 		 * @param direction the direction to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const override {
-			const Vector axis = Math::transform(getHalfAxis(), transformToVectorSpace.toMat());
-			const Point center = Math::transform(getCenter(), transformToVectorSpace.toMat());
-			const Vector radius = Math::transform(getRadius(), transformToVectorSpace.toMat());
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const override {
+			const VectorD axis = Math::transform(getHalfAxis(), transformToVectorSpace.toMat());
+			const PointD center = Math::transform(getCenter(), transformToVectorSpace.toMat());
+			const VectorD radius = Math::transform(getRadius(), transformToVectorSpace.toMat());
 
 			const scalar projectionLengthOnAxis = axis.dot(direction) / axis.lengthSquared();
-			Point baseAxisPoint = center;
+			PointD baseAxisPoint = center;
 			if(projectionLengthOnAxis > 0.f) {
 				baseAxisPoint = center + axis;
 			} else if(projectionLengthOnAxis < 0.f) {
 				baseAxisPoint = center - axis;
 			}
-			const Vector radiusOnAxis = radius.projectOn(axis);
-			const Vector radiusOnPlane = radius - radiusOnAxis;
+			const VectorD radiusOnAxis = radius.projectOn(axis);
+			const VectorD radiusOnPlane = radius - radiusOnAxis;
 
 			const scalar projectionLengthOnPlane = radiusOnPlane.dot(direction) / radiusOnPlane.lengthSquared();
-			Point nearSurfacePoint = baseAxisPoint;
+			PointD nearSurfacePoint = baseAxisPoint;
 			if(projectionLengthOnPlane > 0.f) {
 				nearSurfacePoint += radiusOnPlane;
 			} else if(projectionLengthOnPlane < 0.f) {
@@ -110,22 +110,22 @@ namespace C78E::Physics {
 			return nearSurfacePoint;
 		}
 
-		virtual AABB getBounds() const override {
-			const Vector axis = getHalfAxis();
-			const Point center = getCenter();
-			const Vector radius = getRadius();
+		virtual AABBD getBounds() const override {
+			const VectorD axis = getHalfAxis();
+			const PointD center = getCenter();
+			const VectorD radius = getRadius();
 
-			const Vector radiusOnAxis = radius.projectOn(axis);
-			const Vector radiusOnPlane = radius - radiusOnAxis;
+			const VectorD radiusOnAxis = radius.projectOn(axis);
+			const VectorD radiusOnPlane = radius - radiusOnAxis;
 
-			return AABB(center - axis - radiusOnPlane, center + axis + radiusOnPlane);
+			return AABBD(center - axis - radiusOnPlane, center + axis + radiusOnPlane);
 		}
 
-		virtual Collider::Type getType() const { return Collider::Type::Cylinder; }
+		virtual ColliderD::Type getType() const { return ColliderD::Type::Cylinder; }
 	protected:
-		Point m_Start = Point(0.f);
-		Point m_End = Point(0.f);
-		Vector m_Radius = Vector();
+		PointD m_Start = PointD(0.f);
+		PointD m_End = PointD(0.f);
+		VectorD m_Radius = VectorD();
 	};
 
 	template<Dimension dim>

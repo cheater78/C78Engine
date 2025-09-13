@@ -13,32 +13,32 @@ namespace C78E::Physics {
 	public:
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using AABB = AABB<dim>;
-		using Collider = Collider<dim>;
-		using Transform = Transform<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using AABBD = AABB<dim>;
+		using ColliderD = Collider<dim>;
+		using TransformD = Transform<dim>;
 	public:
 		CapsuleCollider() = default;
-		CapsuleCollider(Point start, Point end, scalar radius) : Collider(), m_Start(start), m_End(end), m_Radius(Vector(radius)) { }
-		CapsuleCollider(Point start, Point end, Vector radius) : Collider(), m_Start(start), m_End(end), m_Radius(radius) { }
+		CapsuleCollider(PointD start, PointD end, scalar radius) : ColliderD(), m_Start(start), m_End(end), m_Radius(VectorD(radius)) { }
+		CapsuleCollider(PointD start, PointD end, VectorD radius) : ColliderD(), m_Start(start), m_End(end), m_Radius(radius) { }
 		CapsuleCollider(CapsuleCollider&) = default;
 		CapsuleCollider(const CapsuleCollider&) = default;
 		~CapsuleCollider() = default;
 
-		Point getStart() const {
+		PointD getStart() const {
 			return m_Start;
 		}
-		Point getEnd() const {
+		PointD getEnd() const {
 			return m_End;
 		}
-		Vector getRadius() const { // HalfExtent
+		VectorD getRadius() const { // HalfExtent
 			return m_Radius;
 		}
-		Vector getAxis() const {
+		VectorD getAxis() const {
 			return m_End - m_Start;
 		}
-		Point getCenter() const {
+		PointD getCenter() const {
 			return (getStart() + getEnd()) * .5f;
 		}
 
@@ -48,47 +48,47 @@ namespace C78E::Physics {
 		 * @param point the point to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const override {
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const override {
 			const matd transCapsuleLocalToPointSpace = transformToPointSpace.toMat();
 			const matd transPointSpaceToCapsuleLocal = transformToPointSpace.toInvMat();
 
-			const Point pointCapsuleLocal = Math::transform(point, transPointSpaceToCapsuleLocal);
+			const PointD pointCapsuleLocal = Math::transform(point, transPointSpaceToCapsuleLocal);
 
 			// Axis from Start to End, check startLocal point vector -> axis relative length projection of point on axis (,0] (0,1) [1,)
 			const scalar pointAxisComponent = getAxis().dot(pointCapsuleLocal - getStart()) / getAxis().lengthSquared();
 
-			const Point baseAxisPointCapsuleLocal = getStart() + glm::clamp(pointAxisComponent, 0.f, 1.f) * getAxis();
-			const Vector normalBaseAxisPointToPointDirectionCapsuleLocal = (pointCapsuleLocal - baseAxisPointCapsuleLocal).getDirection();
+			const PointD baseAxisPointCapsuleLocal = getStart() + glm::clamp(pointAxisComponent, 0.f, 1.f) * getAxis();
+			const VectorD normalBaseAxisPointToPointDirectionCapsuleLocal = (pointCapsuleLocal - baseAxisPointCapsuleLocal).getDirection();
 
-			const Point nearSurfacePointCapsuleLocal = baseAxisPointCapsuleLocal + ellipsiodSurfacePointOffset(normalBaseAxisPointToPointDirectionCapsuleLocal);
-			const Point nearSurfacePoint = Math::transform(nearSurfacePointCapsuleLocal, transCapsuleLocalToPointSpace);
+			const PointD nearSurfacePointCapsuleLocal = baseAxisPointCapsuleLocal + ellipsiodSurfacePointOffset(normalBaseAxisPointToPointDirectionCapsuleLocal);
+			const PointD nearSurfacePoint = Math::transform(nearSurfacePointCapsuleLocal, transCapsuleLocalToPointSpace);
 			return nearSurfacePoint;
 		}
 
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const override {
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const override {
 			const matd transCapsuleLocalToVectorSpace = transformToVectorSpace.toMat();
 			const matd transVectorSpaceToCapsuleLocal = transformToVectorSpace.toInvMat();
 
-			const Vector directionCapsuleLocal = Math::transform(direction, transVectorSpaceToCapsuleLocal);
+			const VectorD directionCapsuleLocal = Math::transform(direction, transVectorSpaceToCapsuleLocal);
 
 			// Axis from Start to End, check startLocal point vector -> axis relative length projection of point on axis (,0] (0,1) [1,)
 			const scalar directionAxisComponent = getAxis().dot(directionCapsuleLocal) / getAxis().lengthSquared();
 
-			const Point baseAxisPointCapsuleLocal = getStart() + glm::clamp(directionAxisComponent, 0.f, 1.f) * getAxis();
-			const Vector normalBaseAxisPointToPointDirectionCapsuleLocal = (directionCapsuleLocal - baseAxisPointCapsuleLocal).getDirection();
+			const PointD baseAxisPointCapsuleLocal = getStart() + glm::clamp(directionAxisComponent, 0.f, 1.f) * getAxis();
+			const VectorD normalBaseAxisPointToPointDirectionCapsuleLocal = (directionCapsuleLocal - baseAxisPointCapsuleLocal).getDirection();
 
-			const Point nearSurfacePointCapsuleLocal = baseAxisPointCapsuleLocal + ellipsiodSurfacePointOffset(normalBaseAxisPointToPointDirectionCapsuleLocal);
-			const Point nearSurfacePoint = Math::transform(nearSurfacePointCapsuleLocal, transCapsuleLocalToVectorSpace);
+			const PointD nearSurfacePointCapsuleLocal = baseAxisPointCapsuleLocal + ellipsiodSurfacePointOffset(normalBaseAxisPointToPointDirectionCapsuleLocal);
+			const PointD nearSurfacePoint = Math::transform(nearSurfacePointCapsuleLocal, transCapsuleLocalToVectorSpace);
 			return nearSurfacePoint;
 		}
 		
-		virtual AABB getBounds() const override {
-			return AABB(getStart() - getRadius(), getEnd() + getRadius());
+		virtual AABBD getBounds() const override {
+			return AABBD(getStart() - getRadius(), getEnd() + getRadius());
 		}
 
-		virtual Collider::Type getType() const { return Collider::Type::Capsule; }
+		virtual ColliderD::Type getType() const { return ColliderD::Type::Capsule; }
 	protected:
-		Vector ellipsiodSurfacePointOffset(const Vector& direction) const {
+		VectorD ellipsiodSurfacePointOffset(const VectorD& direction) const {
 			scalar t = 0.f;
 			for(Dimension i = 0; i < dim; i++) {
 				t += (direction[i] * direction[i]) / (m_Radius[i] * m_Radius[i]);
@@ -96,9 +96,9 @@ namespace C78E::Physics {
 			return (1.f / glm::sqrt(t)) * m_Radius;
 		}
 	protected:
-		Point m_Start = Point(0.f);
-		Point m_End = Point(0.f);
-		Vector m_Radius = Vector();
+		PointD m_Start = PointD(0.f);
+		PointD m_End = PointD(0.f);
+		VectorD m_Radius = VectorD();
 	};
 
 	template<Dimension dim>

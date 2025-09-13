@@ -1,6 +1,6 @@
 #pragma once
 #include <C78E/Math/Math.h>
-#include "AbstractCollider.h"
+#include "AABBCollider.h"
 
 namespace C78E::Physics {
 
@@ -12,22 +12,22 @@ namespace C78E::Physics {
 	struct HullCollider : public AABBCollider<dim> {
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
 		template<PointsCount count>
-		using Points = Points<dim, count>;
+		using PointsD = Points<dim, count>;
 		template<VectorsCount count>
-		using Vectors = Vectors<dim, count>;
-		using DynamicPoints = DynamicPoints<dim>;
-		using DynamicVectors = DynamicVectors<dim>;
-		using Quad = Quad<dim>;
-		using AABB = AABB<dim>;
-		using Collider = Collider<dim>;
-		using AABBCollider = AABBCollider<dim>;
-		using Transform = Transform<dim>;
+		using VectorsD = Vectors<dim, count>;
+		using DynamicPointsD = DynamicPoints<dim>;
+		using DynamicVectorsD = DynamicVectors<dim>;
+		using QuadD = Quad<dim>;
+		using AABBD = AABB<dim>;
+		using ColliderD = Collider<dim>;
+		using AABBColliderD = AABBCollider<dim>;
+		using TransformD = Transform<dim>;
 	public:
 		template<PointsCount count>
-		static HullCollider<dim> createStatic(const Points<count>& points) {
+		static HullCollider<dim> createStatic(const PointsD<count>& points) {
 			HullCollider<dim> collider;
 			collider.m_HullPoints.reserve(count);
 			for(size_t i = 0; i < count; i++) {
@@ -37,45 +37,45 @@ namespace C78E::Physics {
 			return collider;
 		}
 		static HullCollider<dim> createTriangle() {
-			return createStatic(Triangle::getUnitTriangle());
+			return createStatic(Triangle<dim>::getUnitTriangle());
 		}
 		static HullCollider<dim> createSquare() {
-			return createStatic(Quad::getUnitQuadPoints());
+			return createStatic(QuadD::getUnitQuadPoints());
 		}
 		static HullCollider<dim> createTetrahedon() {
-			return createStatic(Tetrahedon::getUnitTetrahedon());
+			return createStatic(Tetrahedon<dim>::getUnitTetrahedon());
 		}
 		static HullCollider<dim> createCube() {
-			return createStatic(Cube::getUnitCube());
+			return createStatic(Cube<dim>::getUnitCube());
 		}
 
 	
 	public:
 		HullCollider() = default;
-		HullCollider(const DynamicPoints& points) : AABBCollider(), m_HullPoints(points) {
+		HullCollider(const DynamicPointsD& points) : AABBColliderD(), m_HullPoints(points) {
 			calcBounds();
 		}
 		HullCollider(HullCollider&) = default;
 		HullCollider(const HullCollider&) = default;
 		~HullCollider() = default;
 
-		virtual void addPoint(const Point& p) {
+		virtual void addPoint(const PointD& p) {
 			m_HullPoints.push_back(p);
-			AABB::growToInclude(p);
+			AABBD::growToInclude(p);
 		}
-		virtual void removePoint(const Point& p) {
+		virtual void removePoint(const PointD& p) {
 			m_HullPoints.erase(std::find(m_HullPoints.begin(), m_HullPoints.end(), p));
 			calcBounds();
 		}
 
-		virtual const DynamicPoints& getPoints() const {
+		virtual const DynamicPointsD& getPoints() const {
 			return m_HullPoints;
 		}
 
-		AABB& calcBounds() {
-			AABB::reset();
-			for(const Point& point : m_HullPoints) {
-				AABB::growToInclude(point);
+		AABBD& calcBounds() {
+			AABBD::reset();
+			for(const PointD& point : m_HullPoints) {
+				AABBD::growToInclude(point);
 			}
 			return *this;
 		}
@@ -86,13 +86,13 @@ namespace C78E::Physics {
 		 * @param point the point to refer to
 		 * @return the nearest surface point
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const override {
-			Points<dim> closestPoints; // closest Surface to point
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const override {
+			PointsD<dim> closestPoints; // closest Surface to point
 			std::array<scalar, dim> closestDistances;
 			closestDistances.fill(+scalar_limit::infinity());
 			
-			for(const Point& hullPointLocal : m_HullPoints) {
-				const Point hullPoint = Math::transform(hullPointLocal, transformToPointSpace.toMat());
+			for(const PointD& hullPointLocal : m_HullPoints) {
+				const PointD hullPoint = Math::transform(hullPointLocal, transformToPointSpace.toMat());
 				const scalar pointDistance = (hullPoint - point).length();
 				for(size_t i = 0; i < dim; i++) {
 					if(pointDistance < closestDistances[i]) {
@@ -107,15 +107,15 @@ namespace C78E::Physics {
 				}
 			}
 
-			const Vector pointSurfaceLocal = point - closestPoints[0];
-			Vectors<dim - 1> surfaceVectors;
+			const VectorD pointSurfaceLocal = point - closestPoints[0];
+			VectorsD<dim - 1> surfaceVectors;
 			for(VectorsCount i = 0; i < dim - 1; i++) {
 				surfaceVectors[i] = closestPoints[i + 1] - closestPoints[0];
 			}
-			const Vector surfaceNormal = Math::cross<dim>(surfaceVectors);
-			const Vector pointSurfaceNormalComponentSurfaceLocal = pointSurfaceLocal.projectOn(surfaceNormal);
+			const VectorD surfaceNormal = Math::cross<dim>(surfaceVectors);
+			const VectorD pointSurfaceNormalComponentSurfaceLocal = pointSurfaceLocal.projectOn(surfaceNormal);
 
-			Vector nearSurfacePointSurfaceLocal = pointSurfaceLocal - pointSurfaceNormalComponentSurfaceLocal;
+			VectorD nearSurfacePointSurfaceLocal = pointSurfaceLocal - pointSurfaceNormalComponentSurfaceLocal;
 
 			for(VectorsCount i = 0; i < dim - 1; i++) {
 				const scalar projection = nearSurfacePointSurfaceLocal.dot(surfaceVectors[i]) / surfaceVectors[i].lengthSquared();
@@ -125,7 +125,7 @@ namespace C78E::Physics {
 					nearSurfacePointSurfaceLocal += surfaceVectors[i] * (1.f - projection);
 				}
 			}
-			const Point nearSurfacePoint = closestPoints[0] + nearSurfacePointSurfaceLocal;
+			const PointD nearSurfacePoint = closestPoints[0] + nearSurfacePointSurfaceLocal;
 			return nearSurfacePoint;
 		}
 
@@ -135,12 +135,12 @@ namespace C78E::Physics {
 		 * @param direction 
 		 * @return 
 		 */
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const override {
-			const Vector directionLocal = Math::transform(direction, transformToVectorSpace.toInvMat());
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const override {
+			const VectorD directionLocal = Math::transform(direction, transformToVectorSpace.toInvMat());
 
-			Point maxPoint = Point(0.f);
+			PointD maxPoint = PointD(0.f);
 			scalar maxDistance = -scalar_limit::infinity();
-			for(const Point& point : m_HullPoints) {
+			for(const PointD& point : m_HullPoints) {
 				const scalar distance = directionLocal.dot(point.getOriginVector());
 				if(distance > maxDistance) {
 					maxDistance = distance;
@@ -150,13 +150,13 @@ namespace C78E::Physics {
 			return Math::transform(maxPoint, transformToVectorSpace.toMat());
 		}
 
-		virtual AABB getBounds() const override {
-			return AABBCollider::getBounds();
+		virtual AABBD getBounds() const override {
+			return AABBColliderD::getBounds();
 		}
 
-		virtual Collider::Type getType() const { return Collider::Type::Hull; }
+		virtual ColliderD::Type getType() const { return ColliderD::Type::Hull; }
 	public:
-		DynamicPoints m_HullPoints;
+		DynamicPointsD m_HullPoints;
 	};
 
 	template<Dimension dim>

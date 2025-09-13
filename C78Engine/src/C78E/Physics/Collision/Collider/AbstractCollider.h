@@ -11,16 +11,16 @@ namespace C78E::Physics {
 	struct Collider {
 	public:
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using AABB = AABB<dim>;
-		using Transform = Transform<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using AABBD = AABB<dim>;
+		using TransformD = Transform<dim>;
 
 		enum class Type {
 			None = 0, Plane, Sphere, AABB, Capsule, Cylinder, Hull, Mesh, TYPE_SIZE
 		};
 	public:
-		static Vector calculateColliderDistanceVec(const Collider<dim>& colliderA, Transform& transformA, const Collider<dim>& colliderB, Transform& transformB, const Vector& direction) {
+		static VectorD calculateColliderDistanceVec(const Collider<dim>& colliderA, TransformD& transformA, const Collider<dim>& colliderB, TransformD& transformB, const VectorD& direction) {
 			return colliderB.nearSurfacePoint(transformB, -direction) - colliderA.nearSurfacePoint(transformA, +direction);
 		}
 
@@ -30,9 +30,9 @@ namespace C78E::Physics {
 		Collider(const Collider&) = default;
 		virtual ~Collider() = default;
 
-		virtual Point nearSurfacePoint(Transform& transformToPointSpace, const Point& point) const = 0;
-		virtual Point nearSurfacePoint(Transform& transformToVectorSpace, const Vector& direction) const = 0;
-		virtual AABB getBounds() const = 0;
+		virtual PointD nearSurfacePoint(TransformD& transformToPointSpace, const PointD& point) const = 0;
+		virtual PointD nearSurfacePoint(TransformD& transformToVectorSpace, const VectorD& direction) const = 0;
+		virtual AABBD getBounds() const = 0;
 		virtual Type getType() const { return Type::None; }
 
 		template<typename ColliderType>

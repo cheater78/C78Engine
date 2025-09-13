@@ -17,9 +17,9 @@ namespace C78E::Physics {
 	class CollisionObject {
 	public:
 		using vecd = vec<dim>;
-		using Point = Point<dim>;
-		using Vector = Vector<dim>;
-		using Transform = Transform<dim>;
+		using PointD = Point<dim>;
+		using VectorD = Vector<dim>;
+		using TransformD = Transform<dim>;
 	public:
 		CollisionObject(Collider<dim>* collider, CollisionCallbackFunc<dim> onCollisionCallback = nullptr)
 		: m_Collider(collider), m_OnCollision(onCollisionCallback) {
@@ -36,20 +36,20 @@ namespace C78E::Physics {
 		}
 		virtual ~CollisionObject() = default;
 		
-		virtual Transform& getTransform() final {
+		virtual TransformD& getTransform() final {
 			return *m_Transform;
 		}
-		virtual const Transform& getTransform() const final {
+		virtual const TransformD& getTransform() const final {
 			return *m_Transform;
 		}
-		virtual Point getTranslation() const final {
+		virtual PointD getTranslation() const final {
 			if constexpr(dim != Math::Dimensions::D2) {
 				return m_Transform->getTranslation();
 			} else {
-				return m_Transform->getTranslation().refit<Math::Dimensions::D2>();
+				return m_Transform->getTranslation();
 			}
 		}
-		virtual const Vector& getScale() const final {
+		virtual const VectorD& getScale() const final {
 			return m_Transform->getScale();
 		}
 
@@ -76,7 +76,7 @@ namespace C78E::Physics {
 				m_OnCollision(collision, deltaTime);
 		}
 
-		virtual void useTransform(Transform* transform) final {
+		virtual void useTransform(TransformD* transform) final {
 			m_Transform = transform;
 		}
 		virtual void useCollider(Collider<dim>* collider) final {
@@ -91,7 +91,7 @@ namespace C78E::Physics {
 			return *this;
 		}
 	protected:
-		Transform* m_Transform = nullptr;
+		TransformD* m_Transform = nullptr;
 		Collider<dim>* m_Collider;
 		bool m_IsTrigger = false;
 		CollisionCallbackFunc<dim> m_OnCollision = nullptr;
@@ -102,8 +102,8 @@ namespace C78E::Physics {
 	public:
 		using vecd = vec<dim>;
 		using matd = mat<dim + 1>;
-		using Transform = Transform<dim>;
-		using Rotation = Rotation<dim>;
+		using TransformD = Transform<dim>;
+		using RotationD = Rotation<dim>;
 	public:
 		RigidBody(Collider<dim>* collider,
 			bool isKinematic, float mass, bool useWorldGravity, vecd gravity,
@@ -132,7 +132,7 @@ namespace C78E::Physics {
 		
 		virtual void applyForce(const vecd& force, const vecd& position = vecd()) {
 			m_Force += force;
-			applyTorque(Rotation::getTorque(force, position));
+			applyTorque(RotationD::getTorque(force, position));
 		}
 		virtual vecd& getForce() {
 			return m_Force;
@@ -148,20 +148,20 @@ namespace C78E::Physics {
 		virtual bool hasAngularVelocity() const {
 			return (bool)getAngularVelocity();
 		}
-		virtual Rotation& getAngularVelocity() {
+		virtual RotationD& getAngularVelocity() {
 			return m_AngularVelocity;
 		}
-		virtual Rotation getAngularVelocity() const {
+		virtual RotationD getAngularVelocity() const {
 			return m_AngularVelocity;
 		}
 
-		virtual void applyTorque(const Rotation& torque) {
+		virtual void applyTorque(const RotationD& torque) {
 			m_Torque += torque;
 		}
-		virtual Rotation& getTorque() {
+		virtual RotationD& getTorque() {
 			return m_Torque;
 		}
-		virtual Rotation getTorque() const {
+		virtual RotationD getTorque() const {
 			return m_Torque;
 		}
 
@@ -230,8 +230,8 @@ namespace C78E::Physics {
 		vecd m_Force = vecd(0.f);
 		vecd m_Velocity = vecd(0.f);
 
-		Rotation m_Torque = Rotation();
-		Rotation m_AngularVelocity = Rotation();
+		RotationD m_Torque = RotationD();
+		RotationD m_AngularVelocity = RotationD();
 		matd m_InvInteria = glm::inverse(matd(1.0f));
 
 		scalar m_Mass = 0.f; //TODO: invMass? why?
