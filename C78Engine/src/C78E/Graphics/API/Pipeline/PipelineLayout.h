@@ -11,6 +11,7 @@ namespace C78E {
 	public:
 		static Ref<PipelineLayout> create(PipelineType type = PipelineType::Graphics);
 	public:
+		PipelineLayout() = default;
 		virtual ~PipelineLayout() = default;
 
 		virtual PipelineType getType() const = 0;
@@ -21,10 +22,12 @@ namespace C78E {
 	public:
 		static Ref<GraphicsPipelineLayout> create();
 	public:
-		GraphicsPipelineLayout() = default;
-		virtual ~GraphicsPipelineLayout() = default;
+          GraphicsPipelineLayout() = default;
+          virtual ~GraphicsPipelineLayout() = default;
 
-		virtual PipelineType getType() const override final { return PipelineType::Graphics; }
+          virtual PipelineType getType() const override final {
+            return PipelineType::Graphics;
+          }
 
 	public:
 		// Instance Buffer Layouts

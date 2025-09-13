@@ -1,6 +1,7 @@
 #include "C78EPCH.h"
 #include "VulkanPipelineLayout.h"
 
+#include <C78E/Graphics/API/Buffer/BufferLayout.h>
 #include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
 
 namespace C78E {
@@ -44,8 +45,7 @@ namespace C78E {
 	}
 	
 	VulkanPipelineLayout::VulkanPipelineLayout(GraphicsContext& ctx)
-		: PipelineLayout(),
-		m_GraphicsContext(ctx.getAs<VulkanGraphicsContext>()),
+		: m_GraphicsContext(ctx.getAs<VulkanGraphicsContext>()),
 		m_Device(ctx.getAs<VulkanGraphicsContext>().getDevice()) {
 	}
 
@@ -57,7 +57,7 @@ namespace C78E {
 
 
 	VulkanGraphicsPipelineLayout::VulkanGraphicsPipelineLayout(GraphicsContext& ctx)
-		 : GraphicsPipelineLayout(), VulkanPipelineLayout(ctx) {
+		 : PipelineLayout(), GraphicsPipelineLayout(), VulkanPipelineLayout(ctx) {
 
 		writePipelineLayoutInputLayout();
 

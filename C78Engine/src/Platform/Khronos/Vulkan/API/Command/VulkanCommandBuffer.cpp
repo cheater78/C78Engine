@@ -194,6 +194,12 @@ namespace C78E {
 	//}
 	//
 	//
+
+
+	void VulkanCommandBuffer::drawVertecies(size_t vertexCount, size_t instanceCount) {
+		vkCmdDraw(m_CommandBuffer, vertexCount, instanceCount, 0, 0);
+	}
+
 	void VulkanCommandBuffer::endRenderPass() {
 		vkCmdEndRenderPass(m_CommandBuffer);
 	}

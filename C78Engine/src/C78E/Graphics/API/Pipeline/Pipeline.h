@@ -37,7 +37,7 @@ namespace C78E {
 		static Ref<GraphicsPipeline> create(GraphicsContext& ctx, Ref<GraphicsPipelineLayout> pipelineLayout, Ref<GraphicsPipelineConfig> pipelineConfig, const GraphicsPipelineTarget& pipelineTarget);
 	public:
 		virtual ~GraphicsPipeline() = default;
-		virtual PipelineType getType() const override final { return PipelineType::Graphics; }
+		virtual PipelineType getType() const override { return PipelineType::Graphics; }
 
 		virtual Ref<PipelineLayout> getPipelineLayout() const override = 0;
 		virtual Ref<PipelineConfig> getPipelineConfig() const override = 0;
@@ -50,7 +50,7 @@ namespace C78E {
 		static Ref<ComputePipeline> create(GraphicsContext& ctx, Ref<ComputePipelineLayout> pipelineLayout, Ref<ComputePipelineConfig> pipelineConfig);
 	public:
 		virtual ~ComputePipeline() = default;
-		virtual PipelineType getType() const override final { return PipelineType::Compute; }
+		virtual PipelineType getType() const override { return PipelineType::Compute; }
 
 		virtual Ref<PipelineLayout> getPipelineLayout() const override = 0;
 		virtual Ref<PipelineConfig> getPipelineConfig() const override = 0;
@@ -63,7 +63,7 @@ namespace C78E {
 		static Ref<RayTracingPipeline> create(GraphicsContext& ctx, Ref<RayTracingPipelineLayout> pipelineLayout, Ref<RayTracingPipelineConfig> pipelineConfig);
 	public:
 		virtual ~RayTracingPipeline() = default;
-		virtual PipelineType getType() const override final { return PipelineType::RayTracing; }
+		virtual PipelineType getType() const override { return PipelineType::RayTracing; }
 
 		virtual Ref<PipelineLayout> getPipelineLayout() const override = 0;
 		virtual Ref<PipelineConfig> getPipelineConfig() const override = 0;

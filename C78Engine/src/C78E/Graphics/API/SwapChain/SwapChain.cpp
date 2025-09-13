@@ -9,7 +9,7 @@ namespace C78E {
 	Ref<SwapChain> SwapChain::create(GraphicsContext& ctx, const SwapChainConfig& config) {
 		switch (GraphicsInstance::api()) {
 		case API::Vulkan:
-			return createRef<SwapChain>(ctx, config);
+			return createRef<VulkanSwapChain>(ctx, config);
 		default:
 			C78E_CORE_ASSERT(false, "SwapChain::create: API not supported!");
 			return nullptr;

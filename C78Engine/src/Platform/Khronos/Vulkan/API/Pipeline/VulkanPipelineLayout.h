@@ -8,7 +8,7 @@ namespace C78E {
 	
 	class VulkanGraphicsContext;
 
-	class VulkanPipelineLayout : public PipelineLayout {
+	class VulkanPipelineLayout : virtual public PipelineLayout {
 	public:
 		VulkanPipelineLayout(GraphicsContext& ctx);
 		virtual ~VulkanPipelineLayout();
@@ -54,19 +54,14 @@ namespace C78E {
 	class VulkanComputePipelineLayout : public ComputePipelineLayout, public VulkanPipelineLayout {
 	public:
 
-		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override {
-			return std::vector<VkPipelineShaderStageCreateInfo>();
-		}
-	// protected:
+		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override;
 		// Ref<Shader> m_Shader;
 	};
 
 	class VulkanRayTracingPipelineLayout : public RayTracingPipelineLayout, public VulkanPipelineLayout {
 	public:
 
-		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override {
-			return std::vector<VkPipelineShaderStageCreateInfo>();
-		}
+		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override;
 	};
 
 }

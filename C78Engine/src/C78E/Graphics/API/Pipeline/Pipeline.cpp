@@ -21,11 +21,23 @@ namespace C78E {
 	}
 
 	Ref<ComputePipeline> ComputePipeline::create(GraphicsContext& ctx, Ref<ComputePipelineLayout> pipelineLayout, Ref<ComputePipelineConfig> pipelineConfig) {
-		return Ref<ComputePipeline>();
+		switch (GraphicsInstance::api()) {
+		case API::Vulkan:
+			return createRef<VulkanComputePipeline>(ctx, pipelineLayout, pipelineConfig);
+		default:
+			C78E_CORE_ASSERT(false, "ComputePipeline::create: Unsupported Graphics API!");
+			return nullptr;
+		}
 	}
 
 	Ref<RayTracingPipeline> RayTracingPipeline::create(GraphicsContext& ctx, Ref<RayTracingPipelineLayout> pipelineLayout, Ref<RayTracingPipelineConfig> pipelineConfig) {
-		return Ref<RayTracingPipeline>();
+		switch (GraphicsInstance::api()) {
+		case API::Vulkan:
+			return createRef<VulkanRayTracingPipeline>(ctx, pipelineLayout, pipelineConfig);
+		default:
+			C78E_CORE_ASSERT(false, "GraphicsPipeline::create: Unsupported Graphics API!");
+			return nullptr;
+		}
 	}
 
 } // namespace C78E

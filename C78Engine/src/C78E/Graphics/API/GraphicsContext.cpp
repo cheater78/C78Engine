@@ -10,8 +10,9 @@ namespace C78E {
 	Scope<GraphicsContext> GraphicsContext::create(Window& window) {
 		switch(GraphicsInstance::api()) {
 		case API::Vulkan:  return createScope<VulkanGraphicsContext>(window);
+		default:
+			C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		}
-		C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 

@@ -20,7 +20,4 @@ namespace C78E {
 		}
 	}
 
-
-
-
-}
+} // namespace C78E

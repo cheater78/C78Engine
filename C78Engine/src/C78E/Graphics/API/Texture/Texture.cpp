@@ -1,5 +1,6 @@
 #include "C78EPCH.h"
 #include "Texture.h"
+#include "C78E/Core/Image/Image.h"
 
 #include <C78E/Graphics/API/GraphicsInstance.h>
 #include <Platform/Khronos/Vulkan/API/Texture/VulkanTexture.h>
@@ -55,7 +56,7 @@ namespace C78E {
 
 	// Texture2D
 
-	Ref<Texture2D> Texture2D::create(const Image2D& image, const Texture2D::Option& option) {
+	Ref<Texture2D> Texture2D::create(Ref<Image2D> image, const Texture2D::Option& option) {
 		switch (GraphicsInstance::api()) {
 		case API::None:    C78E_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 		//case API::Vulkan:  return createRef<VulkanTexture2D>(image, option);
@@ -97,16 +98,20 @@ namespace C78E {
 
 	// CubeMap
 
-	CubeMap::Specification::Specification(const Image2D& image)
-		: Texture::Specification(), size(image.getSize().x) {
-		format = image.getFormat();
+	CubeMap::Specification::Specification(Ref<Image2D> image)
+		: Texture::Specification(), size(image->getSize().x) {
+		format = image->getFormat();
 	}
 
-	CubeMap::CubeImageData::CubeImageData()
-		: std::array<Image2D, 6>{} {
+	CubeMap::CubeImageData::CubeImageData() {
+		const static uint32_t rgba = 0xFFFF;
+		Ref<Image2D> white = Image2D::create(ImageFormat::RGBA8, ImageSize(1,1), &rgba);
+		for(Ref<Image2D>& face : *this) {
+			face = white;
+		}
 	}
 
-	CubeMap::CubeImageData::CubeImageData(const Image2D& top, const Image2D& bot, const Image2D& front, const Image2D& back, const Image2D& left, const Image2D& right) {
+	CubeMap::CubeImageData::CubeImageData(Ref<Image2D> top, Ref<Image2D> bot, Ref<Image2D> front, Ref<Image2D> back, Ref<Image2D> left, Ref<Image2D> right) {
 		topImage() = top;
 		bottomImage() = bot;
 		frontImage() = front;
@@ -119,12 +124,12 @@ namespace C78E {
 		return CubeMap::Specification((*this)[(Face)0]);
 	}
 
-	Image2D& CubeMap::CubeImageData::operator[](Face face) {
-		return std::array<Image2D, 6>::operator[]((uint8_t)face);
+	Ref<Image2D> CubeMap::CubeImageData::operator[](Face face) {
+		return std::array<Ref<Image2D>, 6>::operator[]((uint8_t)face);
 	}
 
-	const Image2D& CubeMap::CubeImageData::operator[](Face face) const {
-		return std::array<Image2D, 6>::operator[]((uint8_t)face);
+	Ref<Image2D> CubeMap::CubeImageData::operator[](Face face) const {
+		return std::array<Ref<Image2D>, 6>::operator[]((uint8_t)face);
 	}
 
 	CubeMap::CubeMap() {
@@ -136,17 +141,19 @@ namespace C78E {
 		switch (GraphicsInstance::api()) {
 		case API::None:    C78E_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			//case API::OpenGL:  return createRef<OpenGLCubeMap>(cubeMapImageData, option);
+		default:
+			C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		}
-		C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
-	Ref<CubeMap> CubeMap::create(const Image2D& crossCubeMap, const CubeMap::Option& option) {
+	Ref<CubeMap> CubeMap::create(Ref<Image2D> crossCubeMap, const CubeMap::Option& option) {
 		switch (GraphicsInstance::api()) {
 		case API::None:    C78E_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			//case API::OpenGL:  return createRef<OpenGLCubeMap>(crossCubeMap, option);
+		default:
+			C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		}
-		C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
@@ -154,8 +161,9 @@ namespace C78E {
 		switch (GraphicsInstance::api()) {
 		case API::None:    C78E_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			//case API::OpenGL:  return createRef<OpenGLCubeMap>(textureData, specification, option);
+		default:
+			C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		}
-		C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
@@ -163,8 +171,9 @@ namespace C78E {
 		switch (GraphicsInstance::api()) {
 		case API::None:    C78E_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			//case API::OpenGL:  return createRef<OpenGLCubeMap>(rendererID, specification);
+		default:
+			C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		}
-		C78E_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 

@@ -26,6 +26,7 @@ namespace C78E {
 		//virtual void bind(Ref<Texture> texure, uint32_t binding) override;
 		//
 		//virtual void draw() override;
+		virtual void drawVertecies(size_t vertexCount, size_t instanceCount = 1) override;
 		//
 		virtual void endRenderPass() override;
 		

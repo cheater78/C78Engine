@@ -48,8 +48,9 @@ namespace C78E {
 		case ShaderStage::Geometry:				return "ShaderShaderStage::Geometry";
 		case ShaderStage::Fragment:				return "ShaderShaderStage::Fragment";
 		case ShaderStage::Compute:				return "ShaderShaderStage::Compute";
+		default:
+			C78E_CORE_FATAL("ShaderCompiler::shaderShaderStageToString: ShaderShaderStage was unknown!");
 		}
-		C78E_CORE_FATAL("ShaderCompiler::shaderShaderStageToString: ShaderShaderStage was unknown!");
 		return "ShaderShaderStage::None";
 	}
 

@@ -18,8 +18,7 @@ namespace C78E {
         virtual bool recreate(SwapChainConfig config) override;
         virtual bool resize(ImageSize size) override;
 		virtual bool nextFrame() override;
-
-    public:
+		virtual Ref<FrameBuffer> createSwapChainFrameBuffer(ImageIndex swapChainImageIndex, Ref<RenderPass> renderPass) override;
 
     protected:
 		bool createSwapChain(); // Creation of the swap chain, suitable for recreation
@@ -41,6 +40,7 @@ namespace C78E {
         VkSemaphore m_ImageAvailableSemaphore = VK_NULL_HANDLE;
         VkSemaphore m_RenderFinishedSemaphore = VK_NULL_HANDLE;
         VkFence m_InFlightFence = VK_NULL_HANDLE;
+        std::vector<VkImage> m_VkImages;
 
     };
 

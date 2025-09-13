@@ -12,6 +12,7 @@ namespace C78E {
 			}
 		}
 		C78E_CORE_ASSERT(false, "VulkanBufferManager::findMemoryType: Failed to find suitable memory type!");
+		return -1;
 	}
 	VkFormat findSupportedFormat(Ref<VulkanDevice> device, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
 		for (VkFormat format : candidates) {

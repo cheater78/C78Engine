@@ -2,7 +2,7 @@
 
 #include "RenderPass.h"
 
-#include <C78E/Graphics/API/Buffer/Framebuffer.h>
+#include <C78E/Graphics/API/Buffer/FrameBuffer.h>
 #include <C78E/Graphics/API/Pipeline/Pipeline.h>
 //#include <C78E/Graphics/API/Buffer/VertexBuffer.h>
 //#include <C78E/Graphics/API/Buffer/IndexBuffer.h>
@@ -57,7 +57,7 @@ namespace C78E {
 		//virtual void bind(Ref<PushConstant> pushConstant) = 0;
 		//virtual void bind(Ref<Texture> texure, uint32_t binding) = 0;
 		//
-		//virtual void draw() = 0;
+		virtual void drawVertecies(size_t vertexCount, size_t instanceCount = 1) = 0;
 		//
 		virtual void endRenderPass() = 0;
 		virtual bool endRecording() = 0;

@@ -89,6 +89,10 @@ namespace C78E {
         return true;
     }
 
+    Ref<FrameBuffer> VulkanSwapChain::createSwapChainFrameBuffer(ImageIndex swapChainImageIndex, Ref<RenderPass> renderPass) {
+        return createRef<VulkanFrameBuffer>(m_GraphicsContext, m_Config.swapChainElementFrameBufferSpec, renderPass, this, swapChainImageIndex, m_VkImages[swapChainImageIndex]);
+    }
+
     bool VulkanSwapChain::createSwapChain() {
         C78E_CORE_TRACE("VulkanSwapChain::createSwapChain: Creating swap chain...");
 
@@ -175,8 +179,8 @@ namespace C78E {
 		VkResult queryImageCountResult = vkGetSwapchainImagesKHR(m_Device->getVkDevice(), m_VkSwapChain, &imageCount, nullptr);
 		C78E_CORE_VALIDATE(queryImageCountResult == VK_SUCCESS, return false, "Failed to query swap chain image count!");
 
-		std::vector<VkImage> swapChainImages(imageCount);
-        VkResult queryImagesResult = vkGetSwapchainImagesKHR(m_Device->getVkDevice(), m_VkSwapChain, &imageCount, swapChainImages.data());
+		m_VkImages.resize(imageCount);
+        VkResult queryImagesResult = vkGetSwapchainImagesKHR(m_Device->getVkDevice(), m_VkSwapChain, &imageCount, m_VkImages.data());
 		C78E_CORE_VALIDATE(queryImagesResult == VK_SUCCESS, return false, "Failed to query swap chain images!");
         
 		return true;

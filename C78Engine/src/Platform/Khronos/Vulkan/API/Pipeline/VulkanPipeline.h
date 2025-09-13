@@ -8,7 +8,7 @@ namespace C78E {
 
 	class VulkanGraphicsContext;
 
-	class VulkanPipeline : public Pipeline {
+	class VulkanPipeline : virtual public Pipeline {
 	public:
 		VulkanPipeline(GraphicsContext& ctx);
 		virtual ~VulkanPipeline();
@@ -27,10 +27,11 @@ namespace C78E {
 		VulkanGraphicsPipeline(GraphicsContext& ctx, Ref<GraphicsPipelineLayout> pipelineLayout, Ref<GraphicsPipelineConfig> pipelineConfig, const GraphicsPipelineTarget& pipelineTarget);
 		~VulkanGraphicsPipeline() = default;
 
+		virtual PipelineType getType() const override { return PipelineType::Graphics; }
 		virtual Ref<PipelineLayout> getPipelineLayout() const override;
 		virtual Ref<PipelineConfig> getPipelineConfig() const override;
-		virtual Ref<GraphicsPipelineLayout> getGraphicsPipelineLayout() const;
-		virtual Ref<GraphicsPipelineConfig> getGraphicsPipelineConfig() const;
+		virtual Ref<GraphicsPipelineLayout> getGraphicsPipelineLayout() const override;
+		virtual Ref<GraphicsPipelineConfig> getGraphicsPipelineConfig() const override;
 		virtual Ref<VulkanGraphicsPipelineConfig> getVulkanGraphicsPipelineConfig() const;
 		virtual Ref<VulkanGraphicsPipelineLayout> getVulkanComputePipelineLayout() const;
 	protected:
@@ -43,6 +44,7 @@ namespace C78E {
 		VulkanComputePipeline(GraphicsContext& ctx, Ref<ComputePipelineLayout> pipelineLayout, Ref<ComputePipelineConfig> pipelineConfig);
 		~VulkanComputePipeline() = default;
 
+		virtual PipelineType getType() const override { return PipelineType::Compute; }
 		virtual Ref<PipelineConfig> getPipelineConfig() const override;
 		virtual Ref<PipelineLayout> getPipelineLayout() const override;
 		virtual Ref<ComputePipelineConfig> getComputePipelineConfig() const override;
@@ -59,6 +61,7 @@ namespace C78E {
 		VulkanRayTracingPipeline(GraphicsContext& ctx, Ref<RayTracingPipelineLayout> pipelineLayout, Ref<RayTracingPipelineConfig> pipelineConfig);
 		~VulkanRayTracingPipeline() = default;
 
+		virtual PipelineType getType() const override { return PipelineType::RayTracing; }
 		virtual Ref<PipelineLayout> getPipelineLayout() const override;
 		virtual Ref<PipelineConfig> getPipelineConfig() const override;
 		virtual Ref<RayTracingPipelineConfig> getRayTracingPipelineConfig() const override;

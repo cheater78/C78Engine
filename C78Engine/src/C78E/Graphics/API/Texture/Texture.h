@@ -162,22 +162,25 @@ namespace C78E {
 
 		class Option : public Texture::Option {
 		public:
-			Option() = default;
-			Option(const Option&) = default;
-			virtual ~Option() override = default;
-
 			Texture::Wrap wrapU = Texture::Wrap::Repeat;
 			Texture::Wrap wrapV = Texture::Wrap::Repeat;
 
 			glm::vec2 originOffset = { 0.f, 0.f };	// du, dv [0,1]
 			glm::vec2 scale = { 1.f, 1.f };			// du, dv [0,1]
 			glm::vec2 turbulence = { 0.f, 0.f };	// du, dv [0,1]
+		public:
+			Option()
+				: wrapU(Texture::Wrap::Repeat), wrapV(Texture::Wrap::Repeat),
+				originOffset(0.f, 0.f), scale(1.f, 1.f), turbulence(0.f, 0.f) {
+			}
+			Option(const Option&) = default;
+			virtual ~Option() override = default;
 		};
 
 	public:
 		Texture2D();
 		virtual ~Texture2D() override = default;
-		static Ref<Texture2D> create(const Image2D& image, const Texture2D::Option& option = Texture2D::Option());
+		static Ref<Texture2D> create(Ref<Image2D> image, const Texture2D::Option& option = Texture2D::Option());
 		static Ref<Texture2D> create(const ScopedBuffer& textureData, const Texture2D::Specification& specification, const Texture2D::Option& option = Texture2D::Option());
 		static Ref<Texture2D> create(TextureHandle rendererID, const Texture2D::Specification& specification);
 		
@@ -196,7 +199,7 @@ namespace C78E {
 		virtual uint32_t getHeight() const final;
 
 		static Asset::Type getClassType() { return Asset::Type::Texture; };
-		virtual Texture::Type getTextureType() const { return Texture::Type::Flat; };
+		virtual Texture::Type getTextureType() const override { return Texture::Type::Flat; };
 		static Texture::Type getTextureClassType() { return Texture::Type::Flat; }
 
 	protected:
@@ -208,7 +211,7 @@ namespace C78E {
 		class Specification : public Texture::Specification {
 		public:
 			Specification() = default;
-			Specification(const Image2D& image);
+			Specification(Ref<Image2D> image);
 			Specification(const Specification&) = default;
 			virtual ~Specification() override = default;
 
@@ -217,7 +220,9 @@ namespace C78E {
 
 		class Option : public Texture::Option {
 		public:
-			Option() = default;
+			Option() 
+				: wrapU(Texture::Wrap::Repeat), wrapV(Texture::Wrap::Repeat), wrapW(Texture::Wrap::Repeat),
+				turbulence(0.f, 0.f, 0.f){}
 			Option(const Option&) = default;
 			virtual ~Option() override = default;
 
@@ -237,31 +242,31 @@ namespace C78E {
 			Z_NEG = 5, Front = 5
 		};
 
-		class CubeImageData : public std::array<Image2D, 6> { //simple array to make CubeMap creation easy n consistent
+		class CubeImageData : public std::array<Ref<Image2D>, 6> { //simple array to make CubeMap creation easy n consistent
 		public:
 			CubeImageData();
-			CubeImageData(const Image2D& top, const Image2D& bot, const Image2D& front, const Image2D& back, const Image2D& left, const Image2D& right);
+			CubeImageData(Ref<Image2D> top, Ref<Image2D> bot, Ref<Image2D> front, Ref<Image2D> back, Ref<Image2D> left, Ref<Image2D> right);
 			CubeImageData(CubeImageData& other) = default;
 			~CubeImageData() = default;
 
 			CubeMap::Specification toSpecification() const;
 
-			Image2D& topImage()		{ return operator[](Face::Top); }
-			Image2D& bottomImage()	{ return operator[](Face::Bottom); }
-			Image2D& frontImage()		{ return operator[](Face::Front); }
-			Image2D& backImage()		{ return operator[](Face::Back); }
-			Image2D& leftImage()		{ return operator[](Face::Left); }
-			Image2D& rightImage()		{ return operator[](Face::Right); }
+			Ref<Image2D> topImage()		{ return operator[](Face::Top); }
+			Ref<Image2D> bottomImage()	{ return operator[](Face::Bottom); }
+			Ref<Image2D> frontImage()		{ return operator[](Face::Front); }
+			Ref<Image2D> backImage()		{ return operator[](Face::Back); }
+			Ref<Image2D> leftImage()		{ return operator[](Face::Left); }
+			Ref<Image2D> rightImage()		{ return operator[](Face::Right); }
 
-			const Image2D& topImage() const		{ return operator[](Face::Top); }
-			const Image2D& bottomImage() const	{ return operator[](Face::Bottom); }
-			const Image2D& frontImage() const		{ return operator[](Face::Front); }
-			const Image2D& backImage() const		{ return operator[](Face::Back); }
-			const Image2D& leftImage() const		{ return operator[](Face::Left); }
-			const Image2D& rightImage() const		{ return operator[](Face::Right); }
+			Ref<Image2D> topImage() const		{ return operator[](Face::Top); }
+			Ref<Image2D> bottomImage() const	{ return operator[](Face::Bottom); }
+			Ref<Image2D> frontImage() const		{ return operator[](Face::Front); }
+			Ref<Image2D> backImage() const		{ return operator[](Face::Back); }
+			Ref<Image2D> leftImage() const		{ return operator[](Face::Left); }
+			Ref<Image2D> rightImage() const		{ return operator[](Face::Right); }
 
-			Image2D& operator[](Face face);
-			const Image2D& operator[](Face face) const;
+			Ref<Image2D> operator[](Face face);
+			Ref<Image2D> operator[](Face face) const;
 		private:
 		};
 
@@ -269,7 +274,7 @@ namespace C78E {
 		CubeMap();
 		virtual ~CubeMap() override = default;
 		static Ref<CubeMap> create(const CubeImageData& cubeMapImageData, const CubeMap::Option& option = CubeMap::Option());
-		static Ref<CubeMap> create(const Image2D& crossCubeMap, const CubeMap::Option& option = CubeMap::Option());
+		static Ref<CubeMap> create(Ref<Image2D> crossCubeMap, const CubeMap::Option& option = CubeMap::Option());
 		static Ref<CubeMap> create(const ScopedBuffer& textureData, const CubeMap::Specification& specification, const CubeMap::Option& option = CubeMap::Option());
 		static Ref<CubeMap> create(TextureHandle rendererID, const CubeMap::Specification& specification);
 
@@ -286,7 +291,7 @@ namespace C78E {
 		virtual uint32_t getSize() const final;
 
 		static Asset::Type getClassType() { return Asset::Type::Texture; };
-		virtual Texture::Type getTextureType() const { return Texture::Type::Sphere; };
+		virtual Texture::Type getTextureType() const override { return Texture::Type::Sphere; };
 		static Texture::Type getTextureClassType() { return Texture::Type::Sphere; }
 
 	protected:

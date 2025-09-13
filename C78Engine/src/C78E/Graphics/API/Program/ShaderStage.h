@@ -4,7 +4,7 @@ namespace C78E {
 
 	class ShaderStage {
 	public:
-		enum Type {
+		enum Type : uint8_t {
 			None = 0,
 			// Graphics
 			Vertex,
@@ -31,8 +31,12 @@ namespace C78E {
 		static std::string_view shaderStageExtensionFragment(ShaderStage stage);
 
 		const Type& stage() const;
+
+		bool operator==(const ShaderStage& other) const {
+			return other.stage() == stage();
+		}
 	public:
-		ShaderStage(Type type);
+		ShaderStage(Type type = Type::None);
 		~ShaderStage() = default;
 
 	private:
@@ -57,6 +61,19 @@ namespace C78E {
 		ClosestHit = 1 << ShaderStage::ClosestHit,
 		Miss = 1 << ShaderStage::Miss,
 		Callable = 1 << ShaderStage::Callable
+	};
+
+}
+
+namespace std {
+
+	template<>
+	struct hash<::C78E::ShaderStage> {
+
+		size_t operator()(const ::C78E::ShaderStage& stage) const noexcept {
+			return static_cast<size_t>(static_cast<uint8_t>(stage.stage()));
+		}
+
 	};
 
 }

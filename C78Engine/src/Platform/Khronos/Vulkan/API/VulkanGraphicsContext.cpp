@@ -1,4 +1,5 @@
 #include "C78EPCH.h"
+#include "vulkan/vulkan_core.h"
 #include "VulkanGraphicsContext.h"
 
 #include <Platform/Khronos/Vulkan/API/VulkanGraphicsInstance.h>
@@ -35,7 +36,7 @@ namespace C78E {
         poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
         poolInfo.queueFamilyIndex = m_Device->getUniversalQueueFamilyIndex();
         VkResult uniCmdPool = vkCreateCommandPool(m_Device->getVkDevice(), &poolInfo, nullptr, &m_UniversalCommandPool);
-        C78E_CORE_SOFT_VALIDATE(uniCmdPool, "VulkanGraphicsContext::init: failed to create CommandPool!");
+        C78E_CORE_SOFT_VALIDATE(uniCmdPool == VK_SUCCESS, "VulkanGraphicsContext::init: failed to create CommandPool!");
 
         // requires physical device - no access until Logical Device is created
         m_SurfaceCapabilities = fetchSurfaceCapabilities();

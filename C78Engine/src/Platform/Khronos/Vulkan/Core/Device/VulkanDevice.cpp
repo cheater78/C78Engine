@@ -18,7 +18,7 @@ namespace C78E {
         if (flags & VK_QUEUE_SPARSE_BINDING_BIT) result += "SparseBinding ";
         if (flags & VK_QUEUE_PROTECTED_BIT) result += "Protected ";
         if (flags & VK_QUEUE_VIDEO_DECODE_BIT_KHR) result += "VideoDecode ";
-        if (flags & VK_QUEUE_VIDEO_ENCODE_BIT_KHR) result += "VideoEncode ";
+        // opt? if (flags & VK_QUEUE_VIDEO_ENCODE_BIT_KHR) result += "VideoEncode ";
         if (flags & VK_QUEUE_OPTICAL_FLOW_BIT_NV) result += "OpticalFlow ";
         return result + "]";
     }

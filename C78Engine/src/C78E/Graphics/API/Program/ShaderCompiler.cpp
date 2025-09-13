@@ -1,3 +1,5 @@
+#include "C78E/Core/Log/SmartLog.h"
+#include "C78E/Utils/StdUtils.h"
 #include "C78EPCH.h"
 #include "ShaderCompiler.h"
 
@@ -30,10 +32,14 @@ namespace C78E {
 			C78E_CORE_ASSERT(eol != std::string::npos, "ShaderCompiler::spliceShaderSourceCode: Syntax error, NewLine missing after ");
 			
 			const size_t shaderTypeStringStart = pos + typeTokenLength + 1; //Start of shader type name (after "#type " keyword)
-			const std::string_view shaderTypeString = std::string_view(rawSourceCode.begin() + shaderTypeStringStart, rawSourceCode.begin() + shaderTypeStringStart + typeTokenLength);
+			const size_t shaderTypeStringLength = std::str_find_first_line_ending(std::string_view(rawSourceCode.begin() + shaderTypeStringStart, rawSourceCode.end()));
+			C78E_CORE_ASSERT(shaderTypeStringLength != std::string::npos, "ShaderCompiler::spliceShaderSourceCode: No LE after type specifier!");
+			const size_t shaderTypeStringEnd = shaderTypeStringStart + shaderTypeStringLength;
+			const std::string_view shaderTypeString = std::string_view(rawSourceCode.begin() + shaderTypeStringStart, rawSourceCode.begin() + shaderTypeStringEnd);
 			const ShaderStage shaderStage = ShaderStage::parseShaderStageFromSourceString(shaderTypeString);
 
-			const size_t shaderCodeStart = std::str_find_first_not_line_ending(std::string_view(rawSourceCode.begin() + eol, rawSourceCode.end()));
+			const size_t shaderCodeStart = std::str_find_first_not_line_ending(std::string_view(rawSourceCode.begin() + shaderTypeStringEnd, rawSourceCode.end()));
+			C78E_CORE_ASSERT(shaderCodeStart != std::string::npos, "ShaderCompiler::spliceShaderSourceCode: No Shader Code found for stage({})!", shaderTypeString);
 			pos = rawSourceCode.find(typeToken, eol); // find next shader type declaration line, else remaining is the last shader code block
 
 			shaderSources[shaderStage] = (pos == std::string::npos) ? rawSourceCode.substr(shaderCodeStart) : rawSourceCode.substr(shaderCodeStart, pos - shaderCodeStart);

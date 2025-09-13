@@ -1,4 +1,5 @@
 #pragma once
+#include "C78E/Core/Log/Log.h"
 #include <C78E/Graphics/API/SwapChain/SwapChain.h>
 #include <C78E/Graphics/API/Command/CommandBuffer.h>
 
@@ -37,6 +38,7 @@ namespace C78E {
 		
 		// Shader Manager
 		Ref<ShaderManager> createShaderManager(const FilePath& cacheDirectory) {
+			C78E_CORE_TRACE("GraphicsContext::createSwapChain: creating ShaderManager...")
 			return m_ShaderManager = createRef<ShaderManager>(*this, cacheDirectory);
 		}
 		Ref<ShaderManager> getShaderManager() {

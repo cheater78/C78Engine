@@ -1,3 +1,5 @@
+#include "C78E/Core/FileSystem/FileSystem.h"
+#include "C78E/Core/Log/Log.h"
 #include "C78EPCH.h"
 #include "ShaderManager.h"
 
@@ -5,6 +7,9 @@ namespace C78E {
 
 	ShaderManager::ShaderManager(GraphicsContext& ctx, FilePath cacheDirectory)
 		: m_GraphicsContext(ctx) {
+		if(!cacheDirectory.empty()) {
+			FileSystem::createDirectoryIfNotPresent(cacheDirectory);
+		}
 		m_Compiler = ShaderCompiler::create(cacheDirectory);
 	}
 
@@ -21,6 +26,7 @@ namespace C78E {
 	}
 
 	Ref<Shader> ShaderManager::loadShaderFromSource(const std::string& source, ShaderStage stage, const std::string& debugName) {
+		C78E_CORE_TRACE("ShaderManager::loadShaderFromSource: Compiling Shader({}, stage: {})", debugName, ShaderStage::shaderStageToString(stage));
 		ShaderCompileInfo compileInfo{
 			.shaderName = debugName,
 			.stage = stage,

@@ -1,3 +1,4 @@
+#include "C78E/Graphics/API/Pipeline/Pipeline.h"
 #include "C78EPCH.h"
 #include "VulkanPipeline.h"
 
@@ -19,7 +20,7 @@ namespace C78E {
 	}
 
 	VulkanGraphicsPipeline::VulkanGraphicsPipeline(GraphicsContext& ctx, Ref<GraphicsPipelineLayout> pipelineLayout, Ref<GraphicsPipelineConfig> pipelineConfig, const GraphicsPipelineTarget& pipelineTarget)
-		: VulkanPipeline(ctx),
+		: Pipeline(ctx), VulkanPipeline(ctx),
 		m_PipelineLayout(castRef<VulkanGraphicsPipelineLayout>(pipelineLayout)),
 		m_PipelineConfig(castRef<VulkanGraphicsPipelineConfig>(pipelineConfig)) {
 		C78E_CORE_ASSERT(m_PipelineLayout, "VulkanPipeline: PipelineLayout was not a valid VulkanGraphicsPipelineLayout!");
@@ -59,32 +60,17 @@ namespace C78E {
 		graphicsPipelineCreateInfo.pDynamicState = &dynamicStateInfo;
 
 		// Graphics Pipeline Target - need to exist during pipeline creation
-
-
 		VkViewport viewport{};
 		viewport.x = static_cast<float>(pipelineTarget.renderAreaOffset.x);
 		viewport.y = static_cast<float>(pipelineTarget.renderAreaOffset.y);
-		viewport.width =
-			(pipelineTarget.renderAreaSize.x == 0 || pipelineTarget.renderAreaSize.x > framebufferTarget->getFrameBufferSpecification().size.x) ?
-			static_cast<float>(framebufferTarget->getFrameBufferSpecification().size.x) :
-			static_cast<float>(pipelineTarget.renderAreaSize.x);
-		viewport.height =
-			(pipelineTarget.renderAreaSize.y == 0 || pipelineTarget.renderAreaSize.y > framebufferTarget->getFrameBufferSpecification().size.y) ?
-			static_cast<float>(framebufferTarget->getFrameBufferSpecification().size.y) :
-			static_cast<float>(pipelineTarget.renderAreaSize.y);
+		viewport.width = static_cast<float>(pipelineTarget.renderAreaSize.x);
+		viewport.height = static_cast<float>(pipelineTarget.renderAreaSize.y);
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
 
 		VkRect2D scissor{};
 		scissor.offset = { static_cast<int32_t>(pipelineTarget.scissorOffset.x), static_cast<int32_t>(pipelineTarget.scissorOffset.y) };
-		scissor.extent = {
-			(pipelineTarget.scissorSize.x == 0 || pipelineTarget.scissorSize.x > framebufferTarget->getFrameBufferSpecification().size.x) ?
-			static_cast<uint32_t>(framebufferTarget->getFrameBufferSpecification().size.x) :
-			static_cast<uint32_t>(pipelineTarget.scissorSize.x),
-			(pipelineTarget.scissorSize.y == 0 || pipelineTarget.scissorSize.y > framebufferTarget->getFrameBufferSpecification().size.y) ?
-			static_cast<uint32_t>(framebufferTarget->getFrameBufferSpecification().size.y) :
-			static_cast<uint32_t>(pipelineTarget.scissorSize.y)
-		};
+		scissor.extent = {static_cast<uint32_t>(pipelineTarget.scissorSize.x), static_cast<uint32_t>(pipelineTarget.scissorSize.y) };
 
 		VkPipelineViewportStateCreateInfo viewportInfo{};
 		viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -138,14 +124,14 @@ namespace C78E {
 	}
 
 	VulkanComputePipeline::VulkanComputePipeline(GraphicsContext& ctx, Ref<ComputePipelineLayout> pipelineLayout, Ref<ComputePipelineConfig> pipelineConfig)
-		: VulkanPipeline(ctx),
+		: Pipeline(ctx), VulkanPipeline(ctx),
 		m_PipelineLayout(castRef<VulkanComputePipelineLayout>(pipelineLayout)),
 		m_PipelineConfig(castRef<VulkanComputePipelineConfig>(pipelineConfig)) {
 
 		Ref<VulkanPipelineLayout> vulkanPipelineLayout = castRef<VulkanPipelineLayout>(pipelineLayout);
 		C78E_CORE_ASSERT(vulkanPipelineLayout, "toVkComputePipelineCreateInfo: PipelineLayout was not a valid VulkanPipelineLayout!");
 		C78E_CORE_ASSERT(vulkanPipelineLayout->getType() == PipelineType::Compute, "toVkComputePipelineCreateInfo: PipelineLayout was not a valid Compute PipelineLayout!");
-		const VkPipelineShaderStageCreateInfo& shaderStage = vulkanPipelineLayout->getVkPipelineShaderStageCreateInfos().front();
+		const VkPipelineShaderStageCreateInfo shaderStage = vulkanPipelineLayout->getVkPipelineShaderStageCreateInfos().front();
 
 		VkComputePipelineCreateInfo computePipelineCreateInfo{};
 		computePipelineCreateInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
@@ -156,8 +142,6 @@ namespace C78E {
 		computePipelineCreateInfo.stage = shaderStage; // Assuming only one stage for compute
 
 		// Pipeline Layout
-		Ref<VulkanPipelineLayout> vulkanPipelineLayout = castRef<VulkanPipelineLayout>(pipelineLayout);
-		C78E_CORE_ASSERT(vulkanPipelineLayout, "toVkComputePipelineCreateInfo: PipelineLayout was not a valid VulkanPipelineLayout!");
 		computePipelineCreateInfo.layout = vulkanPipelineLayout->getVkPipelineLayout();
 
 		computePipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
@@ -195,7 +179,7 @@ namespace C78E {
 	}
 
 	VulkanRayTracingPipeline::VulkanRayTracingPipeline(GraphicsContext& ctx, Ref<RayTracingPipelineLayout> pipelineLayout, Ref<RayTracingPipelineConfig> pipelineConfig)
-		: VulkanPipeline(ctx),
+		: Pipeline(ctx), VulkanPipeline(ctx),
 		m_PipelineLayout(castRef<VulkanRayTracingPipelineLayout>(pipelineLayout)),
 		m_PipelineConfig(castRef<VulkanRayTracingPipelineConfig>(pipelineConfig)) {
 
