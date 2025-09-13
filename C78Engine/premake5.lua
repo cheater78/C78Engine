@@ -54,10 +54,8 @@ project "C78Engine"
 		"YAML_CPP_STATIC_DEFINE"
 	}
 	
-	filter "action:vs*"
-	    pchheader "C78EPCH.h"
-		pchsource "src/C78EPCH.cpp"
-
+	pchheader "C78EPCH.h"
+	pchsource "C78EPCH.cpp"
 
 	filter "system:Windows"
 		systemversion "latest"

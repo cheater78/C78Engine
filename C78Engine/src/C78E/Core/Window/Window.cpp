@@ -23,6 +23,7 @@ namespace C78E {
 	Window::Window(const WindowProperties& props, EventCallbackFunction eventCallbackFunction)
 		: m_WindowProperties(props), m_EventCallback(eventCallbackFunction) {
 	}
+	Window::~Window() { }
 
 	void Window::pushLayer(Ref<Layer> layer) {
 		m_LayerStack.pushLayer(layer);
@@ -34,16 +35,16 @@ namespace C78E {
 		m_LayerStack.pushOverlay(layer);
 	}
 
-	inline bool Window::isRunning() const {
+	bool Window::isRunning() const {
 		return m_Running;
 	}
-	inline void Window::close() {
+	void Window::close() {
 		C78E_CORE_VALIDATE(isRunning(), return, "Window::close: Window is not alive!");
 		m_Running = false;
 	}
 
 	// Graphics
-	inline GraphicsContext& Window::getGraphicsContext() const { return *m_Context; }
+	GraphicsContext& Window::getGraphicsContext() const { return *m_Context; }
 
 	/**
 	 * @brief triggers an update for the window and all its layers.

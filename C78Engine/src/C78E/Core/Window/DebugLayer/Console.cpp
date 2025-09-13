@@ -120,9 +120,12 @@ namespace C78E {
 
 	void Console::onEnter() {
 		char* s = m_InputBuffer;
-		if (s[0])
+		if (s[0]) {
 			onExecute(s);
-		strcpy_s(s, sizeof(m_InputBuffer), ""); //TODO: better buffer handling, clear all
+		}
+		for(char& c : m_InputBuffer) {
+			c = '\0';
+		}
 	}
 
 	void Console::onExecute(const char* cmd) {

@@ -55,18 +55,20 @@ namespace C78E::Input {
 		}
 
 		bool onEvent(Event& e) {
-			if (e.getCategoryFlags() & EventCategory::EventCategoryInput)
+			if (e.getCategoryFlags() & EventCategory::EventCategoryInput) {
 				if(e.getEventType() == EventType::KeyPressed) {
 					KeyPressedEvent event = static_cast<KeyPressedEvent&>(e);
 					m_Combo.pushKey(event.getKeyCode());
 					return true;
 				} else if(e.getEventType() == EventType::KeyReleased) {
 					KeyReleasedEvent event = static_cast<KeyReleasedEvent&>(e);
-					if(m_Combo.codes().back() == event.getKeyCode())
+					if(m_Combo.codes().back() == event.getKeyCode()) {
 						m_Recording = false;
-					else
+					} else {
 						return m_Combo.eraseKey(event.getKeyCode());
-				} 
+					}
+				}
+			}
 			return false;
 		}
 

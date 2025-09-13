@@ -20,10 +20,11 @@ namespace C78E { }
 #elif defined C78E_PLATFORM_LINUX
 #define C78E_PLATFORM_GLFW 1
 #include <glad.h>
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_core.h>
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #endif
 
 //LIB::STD

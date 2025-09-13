@@ -196,22 +196,22 @@ namespace std {
 		"\r",
 	};
 
-	size_t str_find_first_line_ending(std::string_view str) {
+	_EXPORT_STD _NODISCARD inline size_t str_find_first_line_ending(std::string_view str) {
 		size_t bestFound = std::string::npos;
 		for (const char* pattern : c_LineEndings) {
-			size_t currentFound = str.find_first_of(pattern);
-			if (currentFound < bestFound) {
+			const size_t currentFound = str.find_first_of(pattern);
+			if (currentFound != string::npos && currentFound < bestFound) {
 				bestFound = currentFound;
 			}
 		}
 		return bestFound;
 	}
 
-	size_t str_find_first_not_line_ending(std::string_view str) {
-		size_t bestFound = std::string::npos;
+	_EXPORT_STD _NODISCARD inline size_t str_find_first_not_line_ending(std::string_view str) {
+		size_t bestFound = 0;
 		for (const char* pattern : c_LineEndings) {
-			size_t currentFound = str.find_first_not_of(pattern);
-			if (currentFound > bestFound) {
+			const size_t currentFound = str.find_first_not_of(pattern);
+			if (currentFound != string::npos && currentFound > bestFound) {
 				bestFound = currentFound;
 			}
 		}

@@ -63,7 +63,7 @@ namespace C78E {
 			// but there is still atleast 1 pattern that must be contained -> doesn't match
 			if (pos >= filename.size()) return false;
 			// throw away the alr checked part of the filename, since the (next)current pattern must be behind it
-			const std::string_view filenameBack = filename.substr(pos, std::string::npos);
+			const std::string_view filenameBack(filename.begin() + pos, filename.end());
 			
 			// retrieve the next position of the current pattern inside of our leftover filename fragment
 			size_t foundPatternIndex = std::findInString(filenameBack, pattern, matchCase);

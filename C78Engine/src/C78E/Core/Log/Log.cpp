@@ -2,6 +2,9 @@
 #include "Log.h"
 
 namespace C78E {
+
+	const size_t Log::c_MaxLogLines;
+
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 	std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
 

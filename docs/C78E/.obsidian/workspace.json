@@ -4,24 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "8f9ca225dc535528",
+        "id": "11aa61e7cf4f3e12",
         "type": "tabs",
         "children": [
           {
-            "id": "040aa62d8a4d3698",
+            "id": "24cc2f4f71ff6acf",
             "type": "leaf",
             "state": {
               "type": "canvas",
               "state": {
-                "file": "C78E-Math.canvas",
+                "file": "C78E-Physics.canvas",
                 "viewState": {
-                  "x": 82.85599398366746,
-                  "y": 85.9251357931696,
-                  "zoom": -0.7000000000000002
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 0
                 }
               },
               "icon": "lucide-layout-dashboard",
-              "title": "C78E-Math"
+              "title": "C78E-Physics"
             }
           }
         ]
@@ -172,9 +172,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "040aa62d8a4d3698",
+  "active": "fdc9104c2e19e000",
   "lastOpenFiles": [
-    "Welcome.md",
-    "C78E-Math.canvas"
+    "C78E-Math.canvas",
+    "C78E-Physics.canvas",
+    "Welcome.md"
   ]
 }

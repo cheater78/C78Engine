@@ -14,14 +14,14 @@ public:
     }
 	virtual ~C78ESandboxLayer() = default;
 
-    void onAttach() {
+    void onAttach() override {
 
-        const FilePath shaderCache = FileSystem::C78EngineDirectory / "assets/cache/shaders/";
+        const FilePath shaderCache = FileSystem::C78RootDirectory / "assets/cache/shaders/";
 
         GraphicsContext& ctx = m_Window.getGraphicsContext();
         Ref<ShaderManager> shaderManager = ctx.createShaderManager(shaderCache);
 
-        const FilePath vkTestShader = FileSystem::C78EngineDirectory / "assets/shaders/vkTestShader.glsl";
+        const FilePath vkTestShader = FileSystem::C78RootDirectory / "assets/shaders/vkTestShader.glsl";
 
         LoadedFileShaders shaders = shaderManager->loadShaderFromSourceFile(vkTestShader);
 
@@ -44,15 +44,17 @@ public:
 		m_SwapChain = ctx.createSwapChain(swapChainConfig);
 
 		m_RenderPass = RenderPass::create(ctx);
-
-        m_SwapChain->getConfig().swapChainElementFrameBufferSpec.size;
-
+        
 		m_PipelineConfig = createRef<GraphicsPipelineConfig>();
 		m_PipelineLayout = createRef<GraphicsPipelineLayout>();
 
 		GraphicsPipelineTarget gpt;
-		// TODO: Viewports/Scissors
-
+        gpt.renderPass = m_RenderPass;
+        gpt.subpassIndex = 0;
+        gpt.renderAreaOffset = {0, 0 };
+        gpt.renderAreaSize = m_SwapChain->getConfig().swapChainElementFrameBufferSpec.size;
+        gpt.scissorOffset = {0, 0 };
+        gpt.scissorSize = m_SwapChain->getConfig().swapChainElementFrameBufferSpec.size;
 
 		m_Pipeline = GraphicsPipeline::create(ctx, m_PipelineLayout, m_PipelineConfig, gpt);
 
@@ -66,7 +68,7 @@ public:
 
             cmd.commandBuffer->bindPipeline(m_Pipeline);
 
-			// TODO: draw calls
+			cmd.commandBuffer->drawVertecies(3);
 
 			cmd.commandBuffer->endRenderPass();
 			cmd.commandBuffer->endRecording();
@@ -75,7 +77,7 @@ public:
         C78E_INFO("C78ESandboxLayer attached!");
     }
 
-    void onDetach() {
+    void onDetach() override {
         C78E_INFO("C78ESandboxLayer detached!");
     }
 

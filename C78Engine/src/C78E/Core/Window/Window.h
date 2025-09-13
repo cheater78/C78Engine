@@ -26,7 +26,7 @@ namespace C78E {
 		static Scope<Window> create(const WindowProperties& props = {}, EventCallbackFunction eventCallbackFunction = nullptr);
 	public:
 		Window(const WindowProperties& props = {}, EventCallbackFunction eventCallbackFunction = nullptr);
-		virtual ~Window() = default;
+		virtual ~Window();
 
 		// Layer management
 		void pushLayer(Ref<Layer> layer);
@@ -34,8 +34,8 @@ namespace C78E {
 		void pushOverlay(Ref<Layer> layer);
 
 		// Window Handling
-		inline bool isRunning() const;
-		inline void close();
+		bool isRunning() const;
+		void close();
 
 		template<typename T>
 		T* getNativeWindowAs() {

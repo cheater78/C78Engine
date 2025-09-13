@@ -11,10 +11,12 @@ namespace C78E {
 	void LayerStack::pushLayer(Ref<Layer> layer) {
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
 		m_LayerInsertIndex++;
+		layer->onAttach();
 	}
 
 	void LayerStack::pushOverlay(Ref<Layer> overlay) {
 		m_Layers.emplace_back(overlay);
+		overlay->onAttach();
 	}
 
 	void LayerStack::popLayer(Ref<Layer> layer) {

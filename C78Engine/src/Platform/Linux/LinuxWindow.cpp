@@ -3,8 +3,8 @@
 #include "LinuxWindow.h"
 
 namespace C78E {
-	LinuxWindow::LinuxWindow(const WindowProperties& properties)
-		: GLFWWindow(properties) { }
+	LinuxWindow::LinuxWindow(const WindowProperties& properties, EventCallbackFunction eventCallbackFunction)
+		: GLFWWindow(properties, eventCallbackFunction) { }
 
 	LinuxWindow::~LinuxWindow() { }
 }

@@ -35,7 +35,7 @@ namespace C78E {
 		if(!title.empty())
 			call += " --title=\"" + title + "\"";
 		if(!filter.empty())
-			for(FileSystem::EntryType type : filter)
+			for(FileSystem::EntryType type : filter) {
 				if(type == FileSystem::EntryType::Directory){
 					call += " --directory";
 					break;
@@ -44,8 +44,10 @@ namespace C78E {
 						+ FileSystem::stringFromEntryType(type)
 						+ " | " + std::join(FileSystem::extensionsFromEntryType(type), " ") + "\"";
 				}
-		if(save)
+			}
+		if(save) {
 			call += " --save";
+		}
 
 		return call;
 	}

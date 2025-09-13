@@ -83,7 +83,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then # linux
 
     echo "==== Compiling started($OSTYPE,$run_compiler) ===="
     $run_compiler
-    
+
 elif [[ "$OSTYPE" == "darwin"* ]]; then # Mac OSX
     echo "Mac OSX is currently not supported!"
     #make -f Bootstrap.mak osx        # for premake on Mac OS X

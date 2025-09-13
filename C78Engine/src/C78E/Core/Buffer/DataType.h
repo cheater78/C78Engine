@@ -202,11 +202,11 @@ namespace C78E {
 		}
 
 		virtual inline size_t elementSize(Index elementIndex) const override {
-			C78E_CORE_VALIDATE(elementIndex < std::vector<T>::size(), "ExtListType::fieldSize: elementIndex out of bounds.");
+			C78E_CORE_ASSERT(elementIndex < std::vector<T>::size(), "ExtListType::fieldSize: elementIndex out of bounds.");
 			return (*this)[elementIndex].size();
 		}
 		virtual inline size_t elementAlignment(Index elementIndex) const override {
-			C78E_CORE_VALIDATE(elementIndex < std::vector<T>::size(), "ExtListType::fieldAlignment: elementIndex out of bounds.");
+			C78E_CORE_ASSERT(elementIndex < std::vector<T>::size(), "ExtListType::fieldAlignment: elementIndex out of bounds.");
 			return (*this)[elementIndex].alignment();
 		}
 		virtual inline size_t elementCount() const override {

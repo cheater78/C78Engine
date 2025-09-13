@@ -26,8 +26,9 @@ namespace C78E {
 		case ShaderStage::TessellationControl:			return shaderc_tess_control_shader;
 		case ShaderStage::TessellationEvaluation:		return shaderc_tess_evaluation_shader;
 			//TODO: Add more shader stages
+		default:
+			C78E_CORE_ASSERT(false, "Unknown ShaderStage!");
 		}
-		C78E_CORE_ASSERT(false, "Unknown ShaderStage!");
 		return shaderc_glsl_infer_from_source;
 	}
 
@@ -55,7 +56,7 @@ namespace C78E {
 		shaderc::Compiler compiler;
 		shaderc::CompileOptions options;
 		options.SetOptimizationLevel(toShaderCOptimizationLevel(shaderCompilationInfo.optimizationLevel));
-		options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version_vulkan_1_4);
+		options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version::shaderc_env_version_vulkan_1_3);
 		const shaderc::SpvCompilationResult module = 
 			compiler.CompileGlslToSpv(
 				shaderCompilationInfo.shaderSource,
