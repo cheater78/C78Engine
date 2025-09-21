@@ -25,65 +25,107 @@ public:
 
         LoadedFileShaders shaders = shaderManager->loadShaderFromSourceFile(vkTestShader);
 
+        m_RenderPass = RenderPass::create(ctx);
+
         SwapChainConfig swapChainConfig;
-        swapChainConfig.bufferCount = SwapChainBufferCount::TripleBuffer;
+        swapChainConfig.bufferCount = (uint32_t)SwapChainBufferCount::TripleBuffer;
         swapChainConfig.refreshMode = RefreshMode::Vsync;
 		swapChainConfig.swapChainColorAttachmentIndex = 0;
+        swapChainConfig.renderPass = m_RenderPass;
 
 		FrameBufferSpecification fbSpec;
         fbSpec.hasDepthAttachment = false;
-		fbSpec.swapChainColorAttachmentIndex = 0; // TODO: speced twice, bad
+		fbSpec.swapChainColorAttachmentIndex = 0; // TODO: specd twice, bad
 		fbSpec.samples = 1;
 		fbSpec.size = m_Window.getSize();
 
-        FrameBufferAttachmentSpecification fbAttachSpec{ ImageFormat::RGBA8 };
+        FrameBufferAttachmentSpecification fbAttachSpec{ ImageFormat::BGRA8S };
         fbSpec.colorAttachmentSpecifications = { fbAttachSpec };
 
         swapChainConfig.swapChainElementFrameBufferSpec = fbSpec;
 
-		m_SwapChain = ctx.createSwapChain(swapChainConfig);
+        SwapChain& swapChain = ctx.createSwapChain(swapChainConfig);
 
-		m_RenderPass = RenderPass::create(ctx);
-        
-		m_PipelineConfig = createRef<GraphicsPipelineConfig>();
-		m_PipelineLayout = createRef<GraphicsPipelineLayout>();
+		m_PipelineConfig = createRef<VulkanGraphicsPipelineConfig>();
+		m_PipelineLayout = createRef<VulkanGraphicsPipelineLayout>(ctx);
+
+        for (const auto& [stage, shader] : shaders) {
+            m_PipelineLayout->setShader(stage, shader);
+        }
 
 		GraphicsPipelineTarget gpt;
         gpt.renderPass = m_RenderPass;
         gpt.subpassIndex = 0;
         gpt.renderAreaOffset = {0, 0 };
-        gpt.renderAreaSize = m_SwapChain->getConfig().swapChainElementFrameBufferSpec.size;
+        gpt.renderAreaSize = swapChain.getConfig().swapChainElementFrameBufferSpec.size;
         gpt.scissorOffset = {0, 0 };
-        gpt.scissorSize = m_SwapChain->getConfig().swapChainElementFrameBufferSpec.size;
+        gpt.scissorSize = swapChain.getConfig().swapChainElementFrameBufferSpec.size;
 
 		m_Pipeline = GraphicsPipeline::create(ctx, m_PipelineLayout, m_PipelineConfig, gpt);
 
-        for (uint32_t i = 0; i < m_SwapChain->frameCount(); i++) {
+        for (uint32_t i = 0; i < swapChain.getFrameCount(); i++) {
             SwapChainCommand cmd;
             cmd.commandBuffer = ctx.createCommandBuffer();
-			cmd.frameBuffer = m_SwapChain->createSwapChainFrameBuffer(i, m_RenderPass);
+            cmd.frameBuffer = swapChain.getFrameBuffer(i);
 
             cmd.commandBuffer->beginRecording();
+
+
             cmd.commandBuffer->beginRenderPass(m_RenderPass, cmd.frameBuffer);
 
             cmd.commandBuffer->bindPipeline(m_Pipeline);
+            
+			{ // TODO: temp vulkan specific code, move to vulkan command buffer class
+                Ref<VulkanCommandBuffer> vkCmd = castRef<VulkanCommandBuffer>(cmd.commandBuffer);
+
+                VkViewport viewport{};
+                viewport.x = static_cast<float>(gpt.renderAreaOffset.x);
+                viewport.y = static_cast<float>(gpt.renderAreaOffset.y);
+                viewport.width = static_cast<float>(gpt.renderAreaSize.x);
+                viewport.height = static_cast<float>(gpt.renderAreaSize.y);
+                viewport.minDepth = 0.0f;
+                viewport.maxDepth = 1.0f;
+                vkCmdSetViewport(vkCmd->getVkCommandBuffer(), 0, 1, &viewport);
+
+                VkRect2D scissor{};
+                scissor.offset = { static_cast<int32_t>(gpt.scissorOffset.x), static_cast<int32_t>(gpt.scissorOffset.y) };
+                scissor.extent = { static_cast<uint32_t>(gpt.scissorSize.x), static_cast<uint32_t>(gpt.scissorSize.y) };
+                vkCmdSetScissor(vkCmd->getVkCommandBuffer(), 0, 1, &scissor);
+
+            }
 
 			cmd.commandBuffer->drawVertecies(3);
 
-			cmd.commandBuffer->endRenderPass();
+
+            cmd.commandBuffer->endRenderPass();
+
 			cmd.commandBuffer->endRecording();
+
+			m_SwapChainCommands.push_back(cmd);
         }
 
         C78E_INFO("C78ESandboxLayer attached!");
     }
 
     void onDetach() override {
+        for (SwapChainCommand& sc : m_SwapChainCommands) {
+            sc.commandBuffer = nullptr;
+            sc.frameBuffer = nullptr;
+        }
+
         C78E_INFO("C78ESandboxLayer detached!");
     }
 
     void onUpdate(C78E::Timestep delta) override {
+		GraphicsContext& ctx = m_Window.getGraphicsContext();
 
+        
+        // Render
+        uint32_t frameIndex = ctx.beginFrame();
 
+        ctx.submit(frameIndex, m_SwapChainCommands[frameIndex].commandBuffer);
+
+        ctx.endFrame(frameIndex);
     }
 
     void onEvent(C78E::Event& e) override {
@@ -131,8 +173,6 @@ private:
 	}
 
 private:
-	Ref<SwapChain> m_SwapChain;
-    
     Ref<RenderPass> m_RenderPass;
 
 	Ref<GraphicsPipelineLayout> m_PipelineLayout;

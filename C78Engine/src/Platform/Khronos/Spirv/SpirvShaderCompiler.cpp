@@ -49,6 +49,7 @@ namespace C78E {
 			C78E_CORE_TRACE("SpirvShaderCompiler::compile: Loading cached SPIR-V binary from {}", cacheFile.string());
 			result.binary = FileSystem::readFileBinary(cacheFile);
 			result.cacheFile = cacheFile;
+			result.success = true;
 
 			return result;
 		}
@@ -68,7 +69,7 @@ namespace C78E {
 		result.success = (module.GetCompilationStatus() == shaderc_compilation_status_success);
 		result.message = module.GetErrorMessage();
 		result.cacheFile = (m_CacheEnabled) ? cacheFile : FilePath();
-		result.binary = (result.success) ? createRef<ScopedBuffer>(std::span(module).size_bytes()) : nullptr;
+		result.binary = (result.success) ? createRef<ScopedBuffer>(std::distance(module.begin(), module.end()) * sizeof(uint32_t), module.begin()) : nullptr;
 		C78E_CORE_VALIDATE(result.success, return result, "SpirvShaderCompiler::compile: Shader compilation failed! \n{}", result.message);
 
 		// Store compiled binary in cache

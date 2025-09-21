@@ -9,8 +9,6 @@ namespace C78E {
 
 	class PipelineLayout {
 	public:
-		static Ref<PipelineLayout> create(PipelineType type = PipelineType::Graphics);
-	public:
 		PipelineLayout() = default;
 		virtual ~PipelineLayout() = default;
 
@@ -20,14 +18,10 @@ namespace C78E {
 
 	class GraphicsPipelineLayout : public virtual PipelineLayout {
 	public:
-		static Ref<GraphicsPipelineLayout> create();
-	public:
-          GraphicsPipelineLayout() = default;
-          virtual ~GraphicsPipelineLayout() = default;
+        GraphicsPipelineLayout() = default;
+        virtual ~GraphicsPipelineLayout() = default;
 
-          virtual PipelineType getType() const override final {
-            return PipelineType::Graphics;
-          }
+        virtual PipelineType getType() const override;
 
 	public:
 		// Instance Buffer Layouts
@@ -57,12 +51,10 @@ namespace C78E {
 
 	class ComputePipelineLayout : public virtual PipelineLayout {
 	public:
-		static Ref<ComputePipelineLayout> create();
-	public:
 		ComputePipelineLayout() = default;
 		virtual ~ComputePipelineLayout() = default;
 
-		virtual PipelineType getType() const override final { return PipelineType::Compute; }
+		virtual PipelineType getType() const override;
 
 	public:
 		void setShader(Ref<Shader> shader);
@@ -75,13 +67,11 @@ namespace C78E {
 	//TODO: dummy for now, not implemented yet
 	class RayTracingPipelineLayout : public virtual PipelineLayout {
 	public:
-		static Ref<RayTracingPipelineLayout> create();
-	public:
 		RayTracingPipelineLayout() = default;
 		virtual ~RayTracingPipelineLayout() = default;
-		virtual PipelineType getType() const override final { return PipelineType::RayTracing; }
+		virtual PipelineType getType() const override;
 	public:
-		void setShader(ShaderStage stage, Ref<Shader> shader) {}
+		void setShader(ShaderStage stage, Ref<Shader> shader);
 	protected:
 		std::unordered_map<ShaderStage, Ref<Shader>> m_Shaders; // TODO: there can be multiple shaders per stage
 	};

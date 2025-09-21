@@ -20,12 +20,13 @@ namespace C78E {
 		: m_Window(window) {
 	}
 
-	Ref<SwapChain> GraphicsContext::createSwapChain(const SwapChainConfig& swapChainConfig) {
-		return m_SwapChain = SwapChain::create(*this, swapChainConfig);
+	SwapChain& GraphicsContext::createSwapChain(const SwapChainConfig& swapChainConfig) {
+		m_SwapChain = SwapChain::create(*this, swapChainConfig);
+		return *m_SwapChain;
 	}
 
-	Ref<SwapChain> GraphicsContext::getSwapChain() const {
-		return m_SwapChain;
+	SwapChain& GraphicsContext::getSwapChain() const {
+		return *m_SwapChain;
 	}
 
 }

@@ -4,6 +4,8 @@
 
 namespace C78E {
 
+	class VulkanCommandBuffer;
+
 	class VulkanGraphicsContext : public GraphicsContext {
 	private:
 		static std::vector<const char*> getRequiredExtensionNames();
@@ -13,14 +15,11 @@ namespace C78E {
 		virtual ~VulkanGraphicsContext();
 
 		virtual Ref<CommandBuffer> createCommandBuffer();
-		//virtual bool submit(Ref<CommandBuffer> commandBuffer) = 0;
-		//
-		//virtual Ref<VertexBuffer> createVertexBuffer() = 0;
-		//virtual Ref<IndexBuffer> createIndexBuffer() = 0;
-		//virtual Ref<UniformBuffer> createUniformBuffer() = 0;
-		//virtual Ref<StorageBuffer> createStorageBuffer() = 0;
-		
-		//virtual bool submit(Ref<CommandBuffer> commandBuffer) override;
+
+		virtual uint32_t beginFrame() override;
+		virtual bool submit(uint32_t frameIndex, Ref<CommandBuffer> commandBuffer) override;
+		virtual bool submit(uint32_t frameIndex, const std::vector<Ref<CommandBuffer>>& commandBuffers) override;
+		virtual bool endFrame(uint32_t frameIndex) override;
 	public:
 		Ref<VulkanDevice> getDevice() const { return m_Device; }
 		VkSurfaceKHR getSurface() const { return m_VkSurface; }
@@ -43,6 +42,15 @@ namespace C78E {
 		std::vector<VkPresentModeKHR> m_SurfaceSupportedPresentModes;
 
 		VkCommandPool m_UniversalCommandPool = VK_NULL_HANDLE;
+
+		std::vector<std::pair<uint32_t, uint32_t>> m_InFlightFrameCommandBuffers;
+		std::vector<Ref<CommandBuffer>> m_SubmittedCommandBuffers;
+		std::vector<Ref<FrameBuffer>> m_InFlightFrameBuffers; //TODO: used, but needed?
+
+		void insertCommandBuffer(uint32_t frameIndex, Ref<CommandBuffer> commandBuffer);
+
+		uint32_t m_FrameIndex = 0;
+
 	};
 
 }

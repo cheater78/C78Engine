@@ -177,7 +177,7 @@ namespace C78E {
 	bool FileSystem::writeFile(const FilePath& filepath, Ref<ScopedBuffer> binary){
 		C78E_CORE_VALIDATE(!filepath.empty(), return false, "FileSystem::writeFile: Provided filepath was empty!");
 		C78E_CORE_VALIDATE(filepath.is_absolute(), return false, "FileSystem::writeFile: Provided filepath was not absolute!");
-		std::ofstream stream(FileSystem::createFileIfNotPresent(filepath));
+		std::ofstream stream(FileSystem::createFileIfNotPresent(filepath), std::ios::binary);
 		C78E_CORE_VALIDATE(stream.good(), return false, "FileSystem::writeFile: Failed to write Binary File: {}", filepath);
 		stream.write(binary->as<char>(), binary->size());
 		return true;

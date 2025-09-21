@@ -1,6 +1,8 @@
 #include "C78EPCH.h"
 #include "VulkanShader.h"
 
+#include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
+
 namespace C78E {
 
 	VkPipelineShaderStageCreateInfo toVulkanPipelineShaderStageCreateInfo(VkShaderStageFlagBits stage, VkShaderModule shaderModule) {
@@ -22,6 +24,9 @@ namespace C78E {
 
 	VulkanShader::VulkanShader(GraphicsContext& ctx, ShaderStage stage, Ref<ScopedBuffer> binCode)
 		: Shader(ctx, stage) {
+
+		VulkanGraphicsContext& vulkanContext = ctx.getAs<VulkanGraphicsContext>();
+		m_Device = vulkanContext.getDevice();
 
 		VkShaderModuleCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;

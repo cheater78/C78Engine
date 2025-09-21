@@ -62,7 +62,7 @@ namespace C78E {
         m_Device = vulkanContext.getDevice();
         
         VkAttachmentDescription colorAttachment{};
-        colorAttachment.format = toVkFormat(ImageFormat::RGBA8);
+        colorAttachment.format = toVkFormat(ImageFormat::BGRA8S);
         colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
         colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -80,12 +80,24 @@ namespace C78E {
         subpass.colorAttachmentCount = 1;
         subpass.pColorAttachments = &colorAttachmentRef;
 
+        VkSubpassDependency dependency{};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+
         VkRenderPassCreateInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         renderPassInfo.attachmentCount = 1;
         renderPassInfo.pAttachments = &colorAttachment;
         renderPassInfo.subpassCount = 1;
         renderPassInfo.pSubpasses = &subpass;
+
+        renderPassInfo.dependencyCount = 1;
+        renderPassInfo.pDependencies = &dependency;
 
         VkResult renderPassCreateResult = vkCreateRenderPass(m_Device->getVkDevice(), &renderPassInfo, nullptr, &m_VkRenderPass);
         C78E_CORE_ASSERT(renderPassCreateResult == VK_SUCCESS, "VulkanRenderPass::VulkanRenderPass: Failed to create VkRenderpass!");

@@ -10,8 +10,8 @@
 
 namespace C78E {
 
-	VulkanFrameBuffer::VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass, VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage)
-		: FrameBuffer(ctx, spec, renderPass) {
+	VulkanFrameBuffer::VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass, VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage, uint32_t swapChainImageIndex)
+		: FrameBuffer(ctx, spec, renderPass), m_SwapChainImageIndex(swapChainImageIndex) {
 		C78E_CORE_ASSERT(createVulkanFrameBuffer(vulkanSwapChain, swapChainAttachmentIndex, swapChainImage), "VulkanFrameBuffer::VulkanFrameBuffer: Creation as OffScreenTarget failed!");
 	}
 
@@ -25,21 +25,29 @@ namespace C78E {
     }
 
 	void VulkanFrameBuffer::resize(ImageSize size) {
-
-
 	}
 
 	bool VulkanFrameBuffer::isSwapChainTarget() const {
 		return m_VulkanSwapChain;
 	}
 
+	uint32_t VulkanFrameBuffer::getSwapChainImageIndex() const {
+		return m_SwapChainImageIndex;
+	}
+
+	VkImage VulkanFrameBuffer::getColorAttachmentVkImage(uint32_t index) const {
+		return m_VulkanColorAttachments[index].image;
+	}
+
 	bool VulkanFrameBuffer::createVulkanFrameBuffer(VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage) {
+		//TODO: allow recreation
 		C78E_CORE_VALIDATE(m_VkFrameBuffer == VK_NULL_HANDLE, return false, "VulkanFrameBuffer::createVulkanFrameBuffer: FrameBuffer already created!");
 
 		VulkanGraphicsContext& ctx = m_GraphicsContext.getAs<VulkanGraphicsContext>();
 		m_Device = ctx.getDevice();
 
 		Ref<VulkanRenderPass> vulkanRenderPass = castRef<VulkanRenderPass>(m_RenderPass);
+		C78E_CORE_VALIDATE(vulkanRenderPass, return false, "VulkanFrameBuffer::createVulkanFrameBuffer: RenderPass is not a VulkanRenderPass!");
 
 		const bool isSwapChainTarget = !vulkanSwapChain || !swapChainImage || (swapChainAttachmentIndex != -1);
 		m_VulkanSwapChain = vulkanSwapChain;
@@ -115,11 +123,10 @@ namespace C78E {
 
 	bool VulkanFrameBuffer::createVulkanFrameBufferAttachment(VulkanFrameBufferAttachmentResources& attachment, const FrameBufferAttachmentSpecification& spec, ImageSize size, uint32_t samples, VkImage swapChainImage) {
 		const bool isSwapChainTarget = swapChainImage;
-
 		const VkFormat vkFormat = toVkFormat(spec.format);
 
 		if (!isSwapChainTarget) {
-
+			attachment.isSwapChainTarget = false;
 			// Create Image
 			VkImageCreateInfo imageInfo = {};
 			imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -152,6 +159,7 @@ namespace C78E {
 
 		} else {
 			attachment.image = swapChainImage;
+			attachment.isSwapChainTarget = true;
 		}
 
 		// Create Image View
@@ -161,8 +169,8 @@ namespace C78E {
 		viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
 		viewInfo.format = vkFormat;
 		viewInfo.subresourceRange.aspectMask = 
-			(ImageFormat::isColorFormat(spec.format)) & VK_IMAGE_ASPECT_COLOR_BIT |
-			(ImageFormat::isDepthFormat(spec.format)) & VK_IMAGE_ASPECT_DEPTH_BIT;
+			((ImageFormat::isColorFormat(spec.format)) ? VK_IMAGE_ASPECT_COLOR_BIT : 0) |
+			((ImageFormat::isDepthFormat(spec.format)) ? VK_IMAGE_ASPECT_DEPTH_BIT : 0);
 		viewInfo.subresourceRange.baseMipLevel = 0;
 		viewInfo.subresourceRange.levelCount = 1;
 		viewInfo.subresourceRange.baseArrayLayer = 0;
@@ -200,10 +208,10 @@ namespace C78E {
 		if(attachment.imageView != VK_NULL_HANDLE) {
 			vkDestroyImageView(m_Device->getVkDevice(), attachment.imageView, nullptr);
 		}
-		if(attachment.image != VK_NULL_HANDLE) {
+		if(attachment.image != VK_NULL_HANDLE && !attachment.isSwapChainTarget) {
 			vkDestroyImage(m_Device->getVkDevice(), attachment.image, nullptr);
 		}
-		if(attachment.memory != VK_NULL_HANDLE) {
+		if(attachment.memory != VK_NULL_HANDLE && !attachment.isSwapChainTarget) {
 			vkFreeMemory(m_Device->getVkDevice(), attachment.memory, nullptr);
 		}
 	}

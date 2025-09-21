@@ -19,14 +19,22 @@ namespace C78E {
 
 	class VulkanFrameBuffer : public FrameBuffer {
 	public:
-		VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass, VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage);
+		VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass, VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage, uint32_t swapChainImageIndex);
 		VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass);
 		virtual ~VulkanFrameBuffer();
 
 		virtual void resize(ImageSize size) override;
 		virtual bool isSwapChainTarget() const override;
+		virtual uint32_t getSwapChainImageIndex() const override;
 	public:
 		VkFramebuffer getVkFrameBuffer() const { return m_VkFrameBuffer; }
+		VkImage getColorAttachmentVkImage(uint32_t index) const;
+
+
+		void setImageAvailableSemaphore(VkSemaphore semaphore) { m_ImageAvailableSemaphore = semaphore; }
+		void setRenderFinishedSemaphore(VkSemaphore semaphore) { m_RenderFinishedSemaphore = semaphore; }
+		VkSemaphore getImageAvailableSemaphore() const { return m_ImageAvailableSemaphore; }
+		VkSemaphore getRenderFinishedSemaphore() const { return m_RenderFinishedSemaphore; }
 	private:
 		bool createVulkanFrameBuffer(VulkanSwapChain* vulkanSwapChain = nullptr, uint32_t swapChainAttachmentIndex = -1, VkImage swapChainImage = VK_NULL_HANDLE);
 		void destroyVulkanFrameBuffer();
@@ -43,7 +51,13 @@ namespace C78E {
 		VulkanFrameBufferAttachmentResources m_VulkanDepthAttachment;
 		std::vector<VulkanFrameBufferAttachmentResources> m_VulkanColorAttachments; // Vulkan Attachment Objects
 
+		// opt. for swap chain target
 		VulkanSwapChain* m_VulkanSwapChain = nullptr;
+		uint32_t m_SwapChainImageIndex = -1;
+
+		// sync
+		VkSemaphore m_ImageAvailableSemaphore = VK_NULL_HANDLE; //(non owning) signaled when the image is unused, e.g. after vkAcquireNextImageKHR, after presentation, or done being read from in general
+		VkSemaphore m_RenderFinishedSemaphore = VK_NULL_HANDLE; //(non owning) signaled when rendering commands are finished executing, indicates that the image is ready for presentation or reading
 	};
 
 }

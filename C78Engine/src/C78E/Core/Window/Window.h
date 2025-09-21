@@ -101,10 +101,11 @@ namespace C78E {
 		WindowProperties m_WindowProperties; // createProperties by default, should be updated by the Window implementation
 		EventCallbackFunction m_EventCallback = nullptr; // to be registered in the Window implementation
 
+		Scope<GraphicsContext> m_Context; // There might be ctx objects inside the Layers, so keep it until LayerStack died
+
 		LayerStack m_LayerStack;
 		Ref<DebugLayer> m_DebugLayer = nullptr; // opt. Layer on top of everything, for debugging purposes
 
-		Scope<GraphicsContext> m_Context;
 
 		//TODO: Windows should run on a separate thread
 	};

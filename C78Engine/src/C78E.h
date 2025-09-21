@@ -48,6 +48,15 @@
 #include <C78E/Graphics/API/Command/CommandBuffer.h>
 
 
+// Temporary Graphics - Vulkan
+#include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
+#include <Platform/Khronos/Vulkan/API/Command/VulkanCommandBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipeline.h>
+#include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipelineLayout.h>
+#include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipelineConfig.h>
+#include <Platform/Khronos/Vulkan/API/SwapChain/VulkanSwapChain.h>
+#include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
+
 //TODO: GPU Assets
 
 // Physics

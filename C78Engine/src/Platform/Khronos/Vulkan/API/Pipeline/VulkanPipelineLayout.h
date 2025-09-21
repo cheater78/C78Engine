@@ -13,6 +13,8 @@ namespace C78E {
 		VulkanPipelineLayout(GraphicsContext& ctx);
 		virtual ~VulkanPipelineLayout();
 
+		virtual PipelineType getType() const override = 0;
+
 		const VkPipelineLayout& getVkPipelineLayout() const { return m_Layout; }
 		const VkPipelineLayout* getVkPipelineLayoutPtr() const { return &m_Layout; }
 		
@@ -28,6 +30,10 @@ namespace C78E {
 	public:
 		VulkanGraphicsPipelineLayout(GraphicsContext& ctx);
 		virtual ~VulkanGraphicsPipelineLayout() = default;
+
+		virtual PipelineType getType() const override {
+			return PipelineType::Graphics;
+		}
 
 		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override;
 	public:
@@ -54,12 +60,20 @@ namespace C78E {
 	class VulkanComputePipelineLayout : public ComputePipelineLayout, public VulkanPipelineLayout {
 	public:
 
+		virtual PipelineType getType() const override {
+			return PipelineType::Compute;
+		}
+
 		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override;
 		// Ref<Shader> m_Shader;
 	};
 
 	class VulkanRayTracingPipelineLayout : public RayTracingPipelineLayout, public VulkanPipelineLayout {
 	public:
+
+		virtual PipelineType getType() const override {
+			return PipelineType::RayTracing;
+		}
 
 		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override;
 	};

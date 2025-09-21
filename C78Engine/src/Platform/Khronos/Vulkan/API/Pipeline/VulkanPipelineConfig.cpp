@@ -131,13 +131,13 @@ namespace C78E {
 		return colorBlendAttachment;
 	}
 
-	VkPipelineColorBlendStateCreateInfo VulkanGraphicsPipelineConfig::getColorBlendInfo() const {
+	VkPipelineColorBlendStateCreateInfo VulkanGraphicsPipelineConfig::getColorBlendInfo(const std::vector<VkPipelineColorBlendAttachmentState>& colorBlendAttachments) const {
 		VkPipelineColorBlendStateCreateInfo colorBlendInfo{};
 		colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 		colorBlendInfo.pNext = nullptr;
 		colorBlendInfo.flags = 0;
-		colorBlendInfo.attachmentCount = 1; // TODO: check
-		colorBlendInfo.pAttachments = VK_NULL_HANDLE;
+		colorBlendInfo.attachmentCount = colorBlendAttachments.size();
+		colorBlendInfo.pAttachments = colorBlendAttachments.data();
 		colorBlendInfo.blendConstants[0] = 0.0f;  // Optional
 		colorBlendInfo.blendConstants[1] = 0.0f;  // Optional
 		colorBlendInfo.blendConstants[2] = 0.0f;  // Optional

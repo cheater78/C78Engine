@@ -27,6 +27,8 @@ namespace C78E {
 			RGBA8 = 12, // 4 channels, 8 bits per channel -> 4B
 			RGBA16F = 13, // 4 channels, 16 bits per channel (floating point) -> 8B
 			RGBA32F = 14, // 4 channels, 32 bits per channel (floating point) -> 16B
+
+			BGRA8S, // sRGB! 4 channels, 8 bits per channel -> 4B
 		};
 	public:
 		static std::string imageFormatToString(ImageFormat imageFormat);

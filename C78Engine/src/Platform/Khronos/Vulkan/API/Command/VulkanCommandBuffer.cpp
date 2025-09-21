@@ -3,14 +3,7 @@
 
 #include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
 #include <Platform/Khronos/Vulkan/API/Command/VulkanRenderPass.h>
-//
-//#include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipeline.h>
-//
-//#include <Platform/Khronos/Vulkan/API/Buffer/VulkanGPUBuffer.h>
-//#include <Platform/Khronos/Vulkan/API/Buffer/VulkanVertexBuffer.h>
-//#include <Platform/Khronos/Vulkan/API/Buffer/VulkanIndexBuffer.h>
-//#include <Platform/Khronos/Vulkan/API/Buffer/VulkanUniformBuffer.h>
-//#include <Platform/Khronos/Vulkan/API/Buffer/VulkanStorageBuffer.h>
+
 
 namespace C78E {
 
@@ -46,6 +39,8 @@ namespace C78E {
 	}
 	
 	bool VulkanCommandBuffer::beginRecording() {
+		//TODO: allow multiple begin/end recording cycles? - reset command buffer on beginRecording if needed
+		//vkResetCommandBuffer(m_CommandBuffer, 0);
 		C78E_CORE_VALIDATE(m_State == State::Ready, return false,
 			"VulkanCommandBuffer::beginRecording: CommandBuffer wasn't ready!");
 		
@@ -65,7 +60,13 @@ namespace C78E {
 	
 	
 	void VulkanCommandBuffer::beginRenderPass(Ref<RenderPass> renderPass, Ref<FrameBuffer> frameBuffer) {
-		
+		// Mark command buffer for Graphics usage
+		requiresGraphics();
+
+		// Does the command buffer target a swap chain image?
+		m_HasSwapChainTarget |= frameBuffer->isSwapChainTarget();
+
+		// Begin the render pass
 		Ref<VulkanRenderPass> vulkanRenderPass = castRef<VulkanRenderPass>(renderPass);
 		Ref<VulkanFrameBuffer> vulkanFrameBuffer = castRef<VulkanFrameBuffer>(frameBuffer);
 
@@ -96,108 +97,8 @@ namespace C78E {
 		vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPipeline->getVkPipeline());
 	}
 	
-	//
-	//
-	//Ref<Pipeline> VulkanCommandBuffer::createPipeline(Ref<PipelineLayout> layout) {
-	//	Ref<Pipeline> pipeline;
-	//
-	//	switch (layout->getType()) {
-	//	case PipelineType::Graphics:
-	//		requiresGraphics();
-	//		//TODO: hasCurrentRenderPass() check
-	//		pipeline = createRef<VulkanPipeline>(m_GraphicsContext, getCurrentRenderPass(), layout);
-	//
-	//
-	//		vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-	//
-	//	}
-	//
-	//	
-	//}
-	//
-	//RenderPass::RenderPass(CommandBuffer& commandBuffer, const RenderPassConfig& renderPassConfig)
-	//	: m_CommandBuffer(commandBuffer) {
-	//}
-	//
-	//void VulkanCommandBuffer::bind(Ref<VertexBuffer> vertexBuffer) {
-	//	C78E_CORE_VALIDATE(vertexBuffer, return, "VulkanCommandBuffer::bind: VertexBuffer is null!");
-	//	Ref<VulkanVertexBuffer> vulkanVertexBuffer = castRef<VulkanVertexBuffer>(vertexBuffer);
-	//	C78E_CORE_VALIDATE(vulkanVertexBuffer, return, "VulkanCommandBuffer::bind: VertexBuffer is not of type VulkanVertexBuffer!");
-	//
-	//	vkCmdBindVertexBuffers(
-	//		m_CommandBuffer,
-	//		0, // First binding
-	//		1, // Binding count
-	//		vulkanVertexBuffer->getVkBufferPtr(), // Pointer to the vertex buffer handle
-	//		nullptr // Offsets (optional, can be nullptr if no offset is needed)
-	//	);
-	//}
-	//
-	//void VulkanCommandBuffer::bind(Ref<IndexBuffer> indexBuffer) {
-	//	vkCmdBindIndexBuffer(
-	//		m_CommandBuffer,
-	//		indexBuffer->getHandle(), // Index buffer handle
-	//		0, // Offset in bytes
-	//		indexBuffer->getIndexType() // Index type (VK_INDEX_TYPE_UINT16 or VK_INDEX_TYPE_UINT32)
-	//	);
-	//}
-	//
-	//void VulkanCommandBuffer::bind(Ref<UniformBuffer> uniformBuffer, uint32_t binding) {
-	//	
-	//
-	//}
-	//
-	//void VulkanCommandBuffer::bind(Ref<StorageBuffer> storageBuffer, uint32_t binding) {
-	//}
-	//
-	//void VulkanCommandBuffer::bind(Ref<PushConstant> pushConstant) {
-	//	vkCmdPushConstants(
-	//		m_CommandBuffer,
-	//		pipelineLayout,
-	//		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-	//		binding,
-	//		data.size(),
-	//		&data
-	//	);
-	//}
-	//
-	//void VulkanCommandBuffer::bind(Ref<DescriptorSet> descriptorSet) {
-	//	vkCmdBindDescriptorSets(
-	//		m_CommandBuffer,
-	//		VK_PIPELINE_BIND_POINT_GRAPHICS, // Pipeline bind point
-	//		pipelineLayout, // Pipeline layout
-	//		0, // First set
-	//		1, // Descriptor set count
-	//		&frameInfo.globalDescriptorSet,
-	//		0,
-	//		nullptr
-	//	);
-	//}
-	//
-	//void VulkanCommandBuffer::draw() {
-	//	vkCmdDrawIndexed(
-	//		m_CommandBuffer,
-	//		indexCount, // Number of indices to draw
-	//		instanceCount, // Number of instances to draw
-	//		firstIndex, // First index in the index buffer
-	//		vertexOffset, // Vertex offset
-	//		firstInstanceIndex // First instance index
-	//	);
-	//
-	//	vkCmdDraw(
-	//		m_CommandBuffer,
-	//		vertexCount, // Number of vertices to draw
-	//		instanceCount, // Number of instances to draw
-	//		firstVertex, // First vertex index
-	//		firstInstanceIndex // First instance index
-	//	);
-	//}
-	//
-	//
-
-
 	void VulkanCommandBuffer::drawVertecies(size_t vertexCount, size_t instanceCount) {
-		vkCmdDraw(m_CommandBuffer, vertexCount, instanceCount, 0, 0);
+		vkCmdDraw(m_CommandBuffer, static_cast<uint32_t>(vertexCount), static_cast<uint32_t>(instanceCount), 0, 0);
 	}
 
 	void VulkanCommandBuffer::endRenderPass() {
@@ -215,82 +116,14 @@ namespace C78E {
 		m_State = State::Finalized;
 		return true;
 	}
-	//
-	//void VulkanCommandBuffer::copyBuffer(Ref<GPUBuffer> srcBuffer, Ref<GPUBuffer> dstBuffer, size_t size, size_t srcOffset, size_t dstOffset) {
-	//	Ref<VulkanGPUBuffer> vulkanSrcBuffer = castRef<VulkanGPUBuffer>(srcBuffer);
-	//	Ref<VulkanGPUBuffer> vulkanDstBuffer = castRef<VulkanGPUBuffer>(dstBuffer);
-	//
-	//	C78E_CORE_VALIDATE(m_Buffer != buffer.m_Buffer, return, "VulkanBuffer::copyFrom: Cannot copy from self! returning early..");
-	//
-	//	C78E_CORE_VALIDATE(srcOffset < buffer.getBufferSize(), return, "VulkanBuffer::copyFrom: Source offset is out of bounds!");
-	//	C78E_CORE_VALIDATE(dstOffset < getBufferSize(), return, "VulkanBuffer::copyFrom: Destination offset is out of bounds!");
-	//
-	//	const size_t bufferIntersectionSize = glm::min(buffer.getBufferSize() - srcOffset, getBufferSize() - dstOffset);
-	//	C78E_CORE_VALIDATE(bufferIntersectionSize > 0, return, "VulkanBuffer::copyFrom: No intersection between source and destination buffer!");
-	//	C78E_CORE_VALIDATE(size == ULONG_MAX || size <= bufferIntersectionSize, return, "VulkanBuffer::copyFrom: Size greater than the buffers intersection size!");
-	//	const size_t copySize = (size == ULONG_MAX) ? bufferIntersectionSize : size;
-	//
-	//	VkBufferCopy copyRegion{};
-	//	copyRegion.srcOffset = srcOffset;
-	//	copyRegion.dstOffset = dstOffset;
-	//	copyRegion.size = size;
-	//	vkCmdCopyBuffer(m_CommandBuffer, vulkanSrcBuffer->, dstBuffer, 1, &copyRegion);
-	//}
+
+	bool VulkanCommandBuffer::hasSwapChainTarget() const { return m_HasSwapChainTarget; }
 
 	void VulkanCommandBuffer::clear() {
-
+		VkResult result = vkResetCommandBuffer(m_CommandBuffer, 0);
+		C78E_CORE_SOFT_VALIDATE(result == VK_SUCCESS, "VulkanCommandBuffer::clear: failed to clear command buffer!");
 	}
 
-
-
-	//VulkanCommandBufferManager::VulkanCommandBufferManager(GraphicsContext& graphicsContext)
-	//	: CommandBufferManager(graphicsContext), m_Device(graphicsContext.getAs<VulkanGraphicsContext>().getDevice()) {
-	//}
-	//
-	//void VulkanCommandBufferManager::createCommandPool(VkCommandPool& commandPool, uint32_t familyIndex) {
-	//	VkCommandPoolCreateInfo poolInfo = {};
-	//	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	//	poolInfo.queueFamilyIndex = familyIndex;
-	//	poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	//	VkResult result = vkCreateCommandPool(m_Device->getVkDevice(), &poolInfo, nullptr, &commandPool);
-	//	C78E_CORE_ASSERT(result == VK_SUCCESS, "VulkanCommandBufferManager::createCommandPool: failed to create CommandPool!");
-	//}
-	//
-	//void VulkanCommandBufferManager::destroyCommandPool(VkCommandPool& commandPool) {
-	//	vkDestroyCommandPool(m_Device->getVkDevice(), commandPool, nullptr);
-	//}
-	//
-	//VkCommandBuffer VulkanCommandBufferManager::beginSingleTimeCommands() {
-	//	VkCommandBufferAllocateInfo allocInfo{};
-	//	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	//	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	//	allocInfo.commandPool = commandPool;
-	//	allocInfo.commandBufferCount = 1;
-	//
-	//	VkCommandBuffer commandBuffer;
-	//	vkAllocateCommandBuffers(m_Device->getVkDevice(), &allocInfo, &commandBuffer);
-	//
-	//	VkCommandBufferBeginInfo beginInfo{};
-	//	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	//	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-	//
-	//	vkBeginCommandBuffer(commandBuffer, &beginInfo);
-	//	return commandBuffer;
-	//}
-	//
-	//void VulkanCommandBufferManager::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
-	//	vkEndCommandBuffer(commandBuffer);
-	//
-	//	VkSubmitInfo submitInfo{};
-	//	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	//	submitInfo.commandBufferCount = 1;
-	//	submitInfo.pCommandBuffers = &commandBuffer;
-	//
-	//	vkQueueSubmit(graphicsQueue_, 1, &submitInfo, VK_NULL_HANDLE);
-	//	vkQueueWaitIdle(graphicsQueue_);
-	//
-	//	vkFreeCommandBuffers(device_, commandPool, 1, &commandBuffer);
-	//}
 
 }
 

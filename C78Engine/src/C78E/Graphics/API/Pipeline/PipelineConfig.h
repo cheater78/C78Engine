@@ -48,6 +48,7 @@ namespace C78E {
 
 	struct GraphicsPipelineConfig : public PipelineConfig {
 	public:
+		GraphicsPipelineConfig() = default;
 		virtual ~GraphicsPipelineConfig() = default;
 
 		virtual PipelineType getType() const override final { return PipelineType::Graphics; }
@@ -63,7 +64,7 @@ namespace C78E {
 		bool backfaceCulling = true;
 		bool frontFaceCulling = false;
 
-		float lineWidth = 2.f;
+		float lineWidth = 1.f; //TODO: requires some vk bs
 		uint32_t patchControlPoints = 3; // for tessellation only
 	};
 

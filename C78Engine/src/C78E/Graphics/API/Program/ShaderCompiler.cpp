@@ -18,41 +18,53 @@ namespace C78E {
 		}
 	}
 
-	StageShaderSourceCode ShaderCompiler::spliceShaderSourceCode(const std::string& rawSourceCode) {
-		constexpr std::string_view typeToken = "#type";
+	StageShaderSourceCode ShaderCompiler::spliceShaderSourceCode(const std::string_view rawSourceCode) {
+		constexpr std::string_view typeToken = "#type ";
 		constexpr size_t typeTokenLength = typeToken.length();
 
+		C78E_CORE_TRACE("ShaderCompiler::spliceShaderSourceCode: Splicing Shader Source Code into Stages...");
 		StageShaderSourceCode shaderSources;
 
-		size_t pos = rawSourceCode.find_first_of(typeToken); //Start of shader type declaration line
-		C78E_CORE_SOFT_VALIDATE(pos != std::string::npos, "ShaderCompiler::spliceShaderSourceCode: SourceCode did not contain a ShaderType expression(#type <shadertype>)!");
-		
-		while (pos != std::string::npos) {
-			const size_t eol = std::str_find_first_line_ending(rawSourceCode);
-			C78E_CORE_ASSERT(eol != std::string::npos, "ShaderCompiler::spliceShaderSourceCode: Syntax error, NewLine missing after ");
-			
-			const size_t shaderTypeStringStart = pos + typeTokenLength + 1; //Start of shader type name (after "#type " keyword)
-			const size_t shaderTypeStringLength = std::str_find_first_line_ending(std::string_view(rawSourceCode.begin() + shaderTypeStringStart, rawSourceCode.end()));
-			C78E_CORE_ASSERT(shaderTypeStringLength != std::string::npos, "ShaderCompiler::spliceShaderSourceCode: No LE after type specifier!");
-			const size_t shaderTypeStringEnd = shaderTypeStringStart + shaderTypeStringLength;
-			const std::string_view shaderTypeString = std::string_view(rawSourceCode.begin() + shaderTypeStringStart, rawSourceCode.begin() + shaderTypeStringEnd);
+		// split source code by type token, ignore first element as it is before the first type token
+		std::vector<std::string_view> rawShaderStageCodeBlocks = std::split(rawSourceCode, typeToken);
+		C78E_CORE_VALIDATE(rawShaderStageCodeBlocks.size() > 1, return shaderSources, "ShaderCompiler::spliceShaderSourceCode: No Shader Type Tokens found in Source Code! Given:\n{}", rawSourceCode);
+		C78E_CORE_TRACE("ShaderCompiler::spliceShaderSourceCode: Found {} Raw Shader Code Blocks...", rawShaderStageCodeBlocks.size() - 1);
+
+		for (size_t i = 1; i < rawShaderStageCodeBlocks.size(); i++) {
+			const std::string_view rawShaderCodeBlock = rawShaderStageCodeBlocks[i];
+
+			const size_t localTypeLineEnding = std::str_find_first_line_ending(rawShaderCodeBlock);
+			C78E_CORE_VALIDATE(localTypeLineEnding != std::string::npos, break, "ShaderCompiler::spliceShaderSourceCode: Syntax error, NewLine missing after type specification! Given:\n{}", rawShaderCodeBlock);
+			const std::string_view shaderTypeString = rawShaderCodeBlock.substr(0, localTypeLineEnding);
 			const ShaderStage shaderStage = ShaderStage::parseShaderStageFromSourceString(shaderTypeString);
 
-			const size_t shaderCodeStart = std::str_find_first_not_line_ending(std::string_view(rawSourceCode.begin() + shaderTypeStringEnd, rawSourceCode.end()));
-			C78E_CORE_ASSERT(shaderCodeStart != std::string::npos, "ShaderCompiler::spliceShaderSourceCode: No Shader Code found for stage({})!", shaderTypeString);
-			pos = rawSourceCode.find(typeToken, eol); // find next shader type declaration line, else remaining is the last shader code block
+			// find shader code block, after the shader type declaration line(ending)
+			const size_t postTypeCodeBlockOffset = std::str_find_first_not_line_ending(rawShaderCodeBlock.substr(localTypeLineEnding));
+			C78E_CORE_VALIDATE(postTypeCodeBlockOffset != std::string::npos, break, "ShaderCompiler::spliceShaderSourceCode: No Shader Code found for stage({})! Given:\n{}", shaderTypeString, rawShaderCodeBlock);
+			const size_t localShaderCodeBlockOffset = localTypeLineEnding + postTypeCodeBlockOffset;
 
-			shaderSources[shaderStage] = (pos == std::string::npos) ? rawSourceCode.substr(shaderCodeStart) : rawSourceCode.substr(shaderCodeStart, pos - shaderCodeStart);
+			const std::string_view shaderSourceCodeBlock = std::string_view(rawShaderCodeBlock.begin() + localShaderCodeBlockOffset, rawShaderCodeBlock.end());
+
+			C78E_CORE_TRACE("ShaderCompiler::spliceShaderSourceCode: Found Code Block: {}, as: \n{}", ShaderStage::shaderStageToString(shaderStage), rawShaderCodeBlock);
+			C78E_CORE_VALIDATE(shaderSources.find(shaderStage) == shaderSources.end(), break, "ShaderCompiler::spliceShaderSourceCode: Duplicate Shader Stage({}) found!", shaderTypeString);
+			shaderSources[shaderStage] = shaderSourceCodeBlock;
 		}
 
 		return shaderSources;
 	}
 
-	FilePath ShaderCompiler::constructCacheFileName(const std::string& shaderName, ShaderStage stage) {
-		std::string cacheFileName = shaderName;
-		cacheFileName += ShaderStage::shaderStageExtensionFragment(stage);
-		cacheFileName += C78E_FILE_EXT_SHADER_SPIRV_BINARY;
-		return cacheFileName;
+	FilePath ShaderCompiler::constructCacheFileName(const std::string_view shaderName, ShaderStage stage) {
+		const std::string_view stageExtension = ShaderStage::shaderStageExtensionFragment(stage);
+		const std::string_view spvExtension = C78E_FILE_EXT_SHADER_SPIRV_BINARY;
+		
+		const size_t cacheFileNameLength = shaderName.length() + stageExtension.length() + spvExtension.length();
+		std::string cacheFileName;
+		cacheFileName.reserve(cacheFileNameLength);
+		cacheFileName.append(shaderName);
+		cacheFileName.append(stageExtension);
+		cacheFileName.append(spvExtension);
+
+		return FilePath(cacheFileName);
 	}
 
 	ShaderCompiler::ShaderCompiler(const FilePath& cacheDirectory)
@@ -60,6 +72,7 @@ namespace C78E {
 	}
 
 	ShaderFileCompilationResult ShaderCompiler::compileFromSourceFile(const FilePath& filePath) {
+		C78E_CORE_TRACE("ShaderCompiler::compileFromSourceFile: Compiling Shader from Source File: {}", filePath);
 		const std::string rawSourceCode = FileSystem::readFileText(filePath);
 		const StageShaderSourceCode sourceCodePerStage = spliceShaderSourceCode(rawSourceCode);
 

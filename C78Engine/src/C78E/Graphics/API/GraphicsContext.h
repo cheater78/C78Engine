@@ -2,12 +2,6 @@
 #include "C78E/Core/Log/Log.h"
 #include <C78E/Graphics/API/SwapChain/SwapChain.h>
 #include <C78E/Graphics/API/Command/CommandBuffer.h>
-
-//#include <C78E/Graphics/API/Buffer/VertexBuffer.h>
-//#include <C78E/Graphics/API/Buffer/IndexBuffer.h>
-//#include <C78E/Graphics/API/Buffer/UniformBuffer.h>
-//#include <C78E/Graphics/API/Buffer/StorageBuffer.h>
-
 #include <C78E/Graphics/API/Program/ShaderManager.h>
 
 namespace C78E {
@@ -22,20 +16,15 @@ namespace C78E {
 		virtual ~GraphicsContext() = default;
 
 		virtual Ref<CommandBuffer> createCommandBuffer() = 0;
-		//virtual bool submit(Ref<CommandBuffer> commandBuffer) = 0;
-		//
-		//virtual Ref<VertexBuffer> createVertexBuffer() = 0;
-		//virtual Ref<IndexBuffer> createIndexBuffer() = 0;
-		//virtual Ref<UniformBuffer> createUniformBuffer() = 0;
-		//virtual Ref<StorageBuffer> createStorageBuffer() = 0;
-		//
+
 		
+
 
 		// SwapChain
+		SwapChain& createSwapChain(const SwapChainConfig& swapChainConfig);
+		SwapChain& getSwapChain() const;
 
-		Ref<SwapChain> createSwapChain(const SwapChainConfig& swapChainConfig);
-		Ref<SwapChain> getSwapChain() const;
-		
+
 		// Shader Manager
 		Ref<ShaderManager> createShaderManager(const FilePath& cacheDirectory) {
 			C78E_CORE_TRACE("GraphicsContext::createSwapChain: creating ShaderManager...")
@@ -44,6 +33,13 @@ namespace C78E {
 		Ref<ShaderManager> getShaderManager() {
 			return m_ShaderManager;
 		}
+
+
+		// Render
+		virtual uint32_t beginFrame() = 0;
+		virtual bool submit(uint32_t frameIndex, Ref<CommandBuffer> commandBuffer) = 0;
+		virtual bool submit(uint32_t frameIndex, const std::vector<Ref<CommandBuffer>>& commandBuffers) = 0;
+		virtual bool endFrame(uint32_t frameIndex) = 0;
 
 	public:
 

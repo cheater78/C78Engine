@@ -9,6 +9,7 @@ namespace C78E {
 
 	struct VulkanGraphicsPipelineConfig : public GraphicsPipelineConfig {
 	public:
+		VulkanGraphicsPipelineConfig() = default;
 		virtual ~VulkanGraphicsPipelineConfig() = default;
 	public:
 		VkPipelineInputAssemblyStateCreateInfo getInputAssemblyInfo() const;
@@ -17,7 +18,7 @@ namespace C78E {
 		VkPipelineMultisampleStateCreateInfo getMultisampleInfo() const;
 		VkPipelineDepthStencilStateCreateInfo getDepthStencilInfo() const;
 		VkPipelineColorBlendAttachmentState getColorBlendAttachment() const;
-		VkPipelineColorBlendStateCreateInfo getColorBlendInfo() const;
+		VkPipelineColorBlendStateCreateInfo getColorBlendInfo(const std::vector<VkPipelineColorBlendAttachmentState>& colorBlendAttachments) const;
 		VkPipelineDynamicStateCreateInfo getDynamicStateInfo() const;
 	protected:
 		std::vector<VkDynamicState> m_DynamicStates = {
@@ -27,8 +28,8 @@ namespace C78E {
 	};
 
 	struct VulkanComputePipelineConfig : public ComputePipelineConfig {
-		public:
-			virtual ~VulkanComputePipelineConfig() = default;
+	public:
+		virtual ~VulkanComputePipelineConfig() = default;
 	public:
 	};
 

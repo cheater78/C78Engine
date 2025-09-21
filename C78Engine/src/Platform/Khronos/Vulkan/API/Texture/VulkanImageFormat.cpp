@@ -24,6 +24,8 @@ namespace C78E {
 		case ImageFormat::RGBA8: return VK_FORMAT_R8G8B8A8_UINT;
 		case ImageFormat::RGBA16F: return VK_FORMAT_R16G16B16A16_SFLOAT;
 		case ImageFormat::RGBA32F: return VK_FORMAT_R32G32B32A32_SFLOAT;
+
+		case ImageFormat::BGRA8S: return VK_FORMAT_B8G8R8A8_SRGB;
 		default:
 			C78E_CORE_ASSERT(false, "toVkFormat: Unsupported ShaderDataType!");
 		}

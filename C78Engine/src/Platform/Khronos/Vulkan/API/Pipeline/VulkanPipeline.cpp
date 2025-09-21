@@ -54,7 +54,9 @@ namespace C78E {
 		graphicsPipelineCreateInfo.pMultisampleState = &multisampleState;
 		VkPipelineDepthStencilStateCreateInfo depthStencilState = m_PipelineConfig->getDepthStencilInfo(); // Potential issue if no depth/stencil
 		graphicsPipelineCreateInfo.pDepthStencilState = &depthStencilState;
-		VkPipelineColorBlendStateCreateInfo colorBlendInfo = m_PipelineConfig->getColorBlendInfo();
+
+		std::vector<VkPipelineColorBlendAttachmentState> colorBlendAttachments = { m_PipelineConfig->getColorBlendAttachment() };
+		VkPipelineColorBlendStateCreateInfo colorBlendInfo = m_PipelineConfig->getColorBlendInfo(colorBlendAttachments);
 		graphicsPipelineCreateInfo.pColorBlendState = &colorBlendInfo;
 		VkPipelineDynamicStateCreateInfo dynamicStateInfo = m_PipelineConfig->getDynamicStateInfo();
 		graphicsPipelineCreateInfo.pDynamicState = &dynamicStateInfo;
@@ -70,7 +72,7 @@ namespace C78E {
 
 		VkRect2D scissor{};
 		scissor.offset = { static_cast<int32_t>(pipelineTarget.scissorOffset.x), static_cast<int32_t>(pipelineTarget.scissorOffset.y) };
-		scissor.extent = {static_cast<uint32_t>(pipelineTarget.scissorSize.x), static_cast<uint32_t>(pipelineTarget.scissorSize.y) };
+		scissor.extent = { static_cast<uint32_t>(pipelineTarget.scissorSize.x), static_cast<uint32_t>(pipelineTarget.scissorSize.y) };
 
 		VkPipelineViewportStateCreateInfo viewportInfo{};
 		viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;

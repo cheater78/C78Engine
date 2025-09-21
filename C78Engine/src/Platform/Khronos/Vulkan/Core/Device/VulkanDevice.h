@@ -57,8 +57,29 @@ namespace C78E {
 
         bool waitIdle() const;
 
+        
         uint32_t getUniversalQueueFamilyIndex() const {
             return m_UniversialFamily.queueFamilyIndex;
+        }
+        uint32_t getComputeQueueFamilyIndex() const {
+            return m_UniversialFamily.queueFamilyIndex;
+        }
+        uint32_t getTransferQueueFamilyIndex() const {
+            return m_UniversialFamily.queueFamilyIndex;
+        }
+
+		VkQueue getUniversalVkQueue() const {
+            return m_UniversalQueue;
+        }
+        VkQueue getPresentVkQueue() const {
+            return m_UniversalQueue;
+		}
+        VkQueue getComputeVkQueue(uint32_t index = 0) const { 
+            C78E_CORE_VALIDATE(index < 2, return VK_NULL_HANDLE, "VulkanDevice::getComputeVkQueue: Compute Queue index out of bounds!");
+            return m_ComputeQueues[index]; 
+		}
+		VkQueue getTransferVkQueue() const {
+            return m_TransferQueue;
         }
     private:
         bool buildDeviceQueueCreateInfos(std::vector<VkDeviceQueueCreateInfo>& deviceQueueCreateInfos);

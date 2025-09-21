@@ -54,7 +54,8 @@ namespace C78E {
 	 */
 	void Window::callUpdate(Timestep delta) {
 		C78E_CORE_VALIDATE(isRunning(), return, "Window::callUpdate: Window is not alive!");
-
+		
+		onUpdate(delta);
 		for (Ref<Layer> layer : m_LayerStack) {
 			layer->onUpdate(delta);
 		}
@@ -69,12 +70,6 @@ namespace C78E {
 			m_DebugLayer->end();
 		}
 
-		onUpdate(delta);
-		if(m_Context) {
-			if (Ref<SwapChain> swapChain = m_Context->getSwapChain()) {
-				swapChain->nextFrame();
-			}
-		}
 	}
 
 	/**

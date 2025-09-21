@@ -106,14 +106,26 @@ namespace std {
 		return str + " }";
 	}
 
+	template <typename S>
+	constexpr size_t getSeparatorSize(const S& separator) {
+		if constexpr (std::is_same_v<S, char>) {
+			return 1;
+		} else if constexpr (std::is_same_v<S, char*> || std::is_same_v<S, const char*>) {
+			return strlen(separator);
+		} else {
+			return std::size(separator);
+		}
+	}
+
 	template<typename T, typename S>
-	_EXPORT_STD _NODISCARD vector<T> split(const T& s, S seperator) {
+	_EXPORT_STD _NODISCARD vector<T> split(const T& s, S separator) {
+		const size_t separatorSize = getSeparatorSize<S>(separator);
 		vector<T> output;
 		string::size_type prevPos = 0, pos = 0;
 
-		while ((pos = s.find(seperator, pos)) != string::npos) {
+		while ((pos = s.find(separator, pos)) != string::npos) {
 			output.push_back(s.substr(prevPos, pos - prevPos));
-			prevPos = ++pos;
+			prevPos = pos += separatorSize;
 		}
 
 		output.push_back(s.substr(prevPos, pos - prevPos)); // Last word

@@ -86,49 +86,4 @@ namespace C78E {
 		std::vector<RenderPass> m_RenderPasses;
 	};
 
-	//TODO: all methods passthrough
-	//class SingleTimeCommandBuffer {
-	//protected:
-	//	SingleTimeCommandBuffer(Ref<CommandBuffer> commandBuffer);
-	//public:
-	//	virtual ~SingleTimeCommandBuffer();
-	//
-	//	virtual bool beginRecording();
-	//	virtual Ref<RenderPass> beginRenderPass();
-	//
-	//	virtual Ref<Pipeline> createPipeline();
-	//
-	//	virtual void bind(Ref<VertexBuffer> vertexBuffer); // currently in order
-	//	virtual void bind(Ref<IndexBuffer> indexBuffer);
-	//	virtual void bind(Ref<UniformBuffer> uniformBuffer, uint32_t binding);
-	//	virtual void bind(Ref<StorageBuffer> storageBuffer, uint32_t binding);
-	//
-	//	virtual void bind(Ref<PushConstant> pushConstant);
-	//	virtual void bind(Ref<Texture> texure, uint32_t binding);
-	//
-	//	virtual void draw() = 0;
-	//
-	//	virtual void endRenderPass() = 0;
-	//	virtual bool endRecording() = 0;
-	//
-	//	virtual void clear() = 0;
-	//
-	//protected:
-	//	Ref<CommandBuffer> m_CommandBuffer;
-	//};
-	//
-	//class CommandBufferManager {
-	//public:
-	//	static Ref<CommandBufferManager> create();
-	//public:
-	//	CommandBufferManager(GraphicsContext& graphicsContext);
-	//	virtual ~CommandBufferManager() = default;
-	//
-	//	virtual Scope<SingleTimeCommandBuffer> getSingleTimeCommandBuffer() = 0;
-	//	virtual Ref<CommandBuffer> getReusableCommandBuffer() = 0;
-	//	virtual inline bool submit(Ref<CommandBuffer> commandBuffer) = 0;
-	//protected:
-	//	GraphicsContext& m_GraphicsContext;
-	//};
-
 }

@@ -30,6 +30,7 @@ namespace C78E {
 
 		virtual void resize(ImageSize size) = 0;
 		virtual bool isSwapChainTarget() const = 0;
+		virtual uint32_t getSwapChainImageIndex() const = 0;
 		//TODO: some form of reading data to cpu memory -> provided a buffer
 		//TODO: maybe clearing Attachments to a value -> needs to acknolage different data types..?
 	public:

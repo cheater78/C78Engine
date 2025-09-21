@@ -33,8 +33,8 @@ namespace C78E {
 	public:
 		static Ref<ShaderCompiler> create(const FilePath& cacheDirectory = {});
 	public:
-		static StageShaderSourceCode spliceShaderSourceCode(const std::string& rawSourceCode);
-		static FilePath constructCacheFileName(const std::string& shaderName, ShaderStage stage);
+		static StageShaderSourceCode spliceShaderSourceCode(const std::string_view rawSourceCode);
+		static FilePath constructCacheFileName(const std::string_view shaderName, ShaderStage stage);
 
 	public:
 		ShaderCompiler(const FilePath& cacheDirectory = {});

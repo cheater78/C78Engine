@@ -17,9 +17,10 @@ namespace C78E {
 	};
 
 	struct SwapChainConfig {
-		SwapChainBufferCount bufferCount = SwapChainBufferCount::TripleBuffer;
+		uint32_t bufferCount = (uint32_t)SwapChainBufferCount::TripleBuffer;
 		FrameBufferSpecification swapChainElementFrameBufferSpec;
 		uint32_t swapChainColorAttachmentIndex = 0;
+		Ref<RenderPass> renderPass;
 		RefreshMode refreshMode = RefreshMode::Unlimited;
 	};
 	
@@ -36,19 +37,16 @@ namespace C78E {
 
 		virtual bool recreate(SwapChainConfig config) = 0;
 		virtual bool resize(ImageSize size) = 0;
-		virtual bool nextFrame() = 0; // swap buffers, acquire next image, submit command buffers
 
-		// on screen FrameBuffer Target
-		virtual Ref<FrameBuffer> createSwapChainFrameBuffer(ImageIndex swapChainImageIndex, Ref<RenderPass> renderPass) = 0;
+		virtual Ref<FrameBuffer> aquireNextFramebuffer(uint32_t frameIndex) = 0;
+		virtual Ref<FrameBuffer> getFrameBuffer(uint32_t frameIndex) = 0;
 
 	public:
-		uint32_t frameCount() const;
+		uint32_t getFrameCount() const;
 		const SwapChainConfig& getConfig() const { return m_Config; }
 	protected:
 		GraphicsContext& m_GraphicsContext;
-		SwapChainConfig m_Config; // keep for recreation and readable state
-
-		// Note: The SwapChain owns ImageBuffers, FrameBuffers are created from them and only exist in context of a RenderPass
+		SwapChainConfig m_Config; // keep for recreation and readable current state
 	};
 
 } // namespace C78E
