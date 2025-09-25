@@ -19,7 +19,13 @@ namespace C78E {
 		}
 	}
 
-	VulkanGraphicsPipeline::VulkanGraphicsPipeline(GraphicsContext& ctx, Ref<GraphicsPipelineLayout> pipelineLayout, Ref<GraphicsPipelineConfig> pipelineConfig, const GraphicsPipelineTarget& pipelineTarget)
+	VulkanGraphicsPipeline::VulkanGraphicsPipeline(
+		GraphicsContext& ctx,
+		Ref<GraphicsPipelineLayout> pipelineLayout,
+		Ref<GraphicsPipelineConfig> pipelineConfig,
+		const RenderArea& renderArea,
+		Ref<RenderPass> renderPass,
+		uint32_t subpassIndex)
 		: Pipeline(ctx), VulkanPipeline(ctx),
 		m_PipelineLayout(castRef<VulkanGraphicsPipelineLayout>(pipelineLayout)),
 		m_PipelineConfig(castRef<VulkanGraphicsPipelineConfig>(pipelineConfig)) {
@@ -63,16 +69,16 @@ namespace C78E {
 
 		// Graphics Pipeline Target - need to exist during pipeline creation
 		VkViewport viewport{};
-		viewport.x = static_cast<float>(pipelineTarget.renderAreaOffset.x);
-		viewport.y = static_cast<float>(pipelineTarget.renderAreaOffset.y);
-		viewport.width = static_cast<float>(pipelineTarget.renderAreaSize.x);
-		viewport.height = static_cast<float>(pipelineTarget.renderAreaSize.y);
+		viewport.x = static_cast<float>(renderArea.viewport.offset.x);
+		viewport.y = static_cast<float>(renderArea.viewport.offset.y);
+		viewport.width = static_cast<float>(renderArea.viewport.size.x);
+		viewport.height = static_cast<float>(renderArea.viewport.size.y);
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
 
 		VkRect2D scissor{};
-		scissor.offset = { static_cast<int32_t>(pipelineTarget.scissorOffset.x), static_cast<int32_t>(pipelineTarget.scissorOffset.y) };
-		scissor.extent = { static_cast<uint32_t>(pipelineTarget.scissorSize.x), static_cast<uint32_t>(pipelineTarget.scissorSize.y) };
+		scissor.offset = { static_cast<int32_t>(renderArea.scissor.offset.x), static_cast<int32_t>(renderArea.scissor.offset.y) };
+		scissor.extent = { static_cast<uint32_t>(renderArea.scissor.size.x), static_cast<uint32_t>(renderArea.scissor.size.y) };
 
 		VkPipelineViewportStateCreateInfo viewportInfo{};
 		viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -88,9 +94,9 @@ namespace C78E {
 		graphicsPipelineCreateInfo.layout = m_PipelineLayout->getVkPipelineLayout();
 
 		// Render Pass
-		Ref<VulkanRenderPass> renderPass = castRef<VulkanRenderPass>(pipelineTarget.renderPass);
-		graphicsPipelineCreateInfo.renderPass = renderPass->getVkRenderPass();
-		graphicsPipelineCreateInfo.subpass = pipelineTarget.subpassIndex;
+		Ref<VulkanRenderPass> vulkanRenderPass = castRef<VulkanRenderPass>(renderPass);
+		graphicsPipelineCreateInfo.renderPass = vulkanRenderPass->getVkRenderPass();
+		graphicsPipelineCreateInfo.subpass = subpassIndex;
 
 		graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
 		graphicsPipelineCreateInfo.basePipelineIndex = -1;

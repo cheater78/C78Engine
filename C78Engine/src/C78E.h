@@ -30,6 +30,10 @@
 
 #include <C78E/Core/FileSystem/FileSystem.h>
 
+#include <C78E/Core/Image/ImageFormat.h>
+#include <C78E/Core/Image/ColorSpace.h>
+#include <C78E/Core/Image/MultiSample.h>
+
 
 // Graphics
 #include <C78E/Graphics/API/GraphicsInstance.h>

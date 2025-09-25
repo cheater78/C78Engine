@@ -4,7 +4,7 @@
 namespace C78E {
 
 	VkPrimitiveTopology toVkTopology(PrimitiveTopology topology);
-	VkSampleCountFlagBits toVkSampleCount(Multisample multiSample);
+	VkSampleCountFlagBits toVkSampleCount(MultiSample multiSample);
 	VkCompareOp toVkCompareOp(DepthFunction depthFunc);
 
 	struct VulkanGraphicsPipelineConfig : public GraphicsPipelineConfig {

@@ -57,6 +57,7 @@ namespace C78E {
 		//virtual void bind(Ref<PushConstant> pushConstant) = 0;
 		//virtual void bind(Ref<Texture> texure, uint32_t binding) = 0;
 		//
+		virtual void setRenderArea(const RenderArea& renderArea) = 0;
 		virtual void drawVertecies(size_t vertexCount, size_t instanceCount = 1) = 0;
 		//
 		virtual void endRenderPass() = 0;

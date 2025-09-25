@@ -20,6 +20,10 @@ namespace C78E {
 		: m_Window(window) {
 	}
 
+	bool GraphicsContext::hasSwapChain() const {
+		return m_SwapChain != nullptr;
+	}
+
 	SwapChain& GraphicsContext::createSwapChain(const SwapChainConfig& swapChainConfig) {
 		m_SwapChain = SwapChain::create(*this, swapChainConfig);
 		return *m_SwapChain;

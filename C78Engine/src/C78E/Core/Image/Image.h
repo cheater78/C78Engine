@@ -1,6 +1,8 @@
 #pragma once
 #include <C78E/Core/Buffer/Buffer.h>
-#include <C78E/Core/Image/ImageFormat.h>
+#include "ImageFormat.h"
+#include "ImageArea.h"
+#include "MultiSample.h"
 
 namespace C78E {
 	

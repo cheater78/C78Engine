@@ -1,20 +1,18 @@
 #pragma once
 #include <C78E/Graphics/API/SwapChain/SwapChain.h>
 #include <Platform/Khronos/Vulkan/Core/Device/VulkanDevice.h>
+#include <Platform/Khronos/Vulkan/Core/VulkanConversions.h>
 #include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
 
 namespace C78E {
 
-    VkPresentModeKHR toVkPresentModeKHR(RefreshMode refreshMode);
-    VkColorSpaceKHR toVkColorSpaceKHR(ColorSpace colorSpace);
-
     class VulkanSwapChain : public SwapChain {
     public:
-        VulkanSwapChain(GraphicsContext& ctx, const SwapChainConfig& config);
+        VulkanSwapChain(GraphicsContext& ctx, const SwapChainConfig& cfg);
         ~VulkanSwapChain();
 
-        virtual bool recreate(SwapChainConfig config) override;
-        virtual bool resize(ImageSize size) override;
+        virtual bool recreate() override;
+        virtual bool recreate(SwapChainConfig cfg) override;
 
         virtual Ref<FrameBuffer> aquireNextFramebuffer(uint32_t frameIndex) override;
         virtual Ref<FrameBuffer> getFrameBuffer(uint32_t frameIndex) override;
@@ -28,23 +26,24 @@ namespace C78E {
         uint32_t waitForAnyFence();
 
     protected:
+        void createState(const SwapChainConfig& cfg);
+
 		bool createSwapChain(); // Creation of the swap chain, suitable for recreation
 		void destroySwapChain(); // Permanent destruction of the swap chain, not suitable for recreation
 
-        bool createFrameBuffers(Ref<RenderPass> renderPass);
+        bool createSyncObjects();
+        void destroySyncObjects();
 
-        VkExtent2D getVulkanSwapChainExtent() const;
-    // protected:
-        // GraphicsContext& m_GraphicsContext;
-        // SwapChainConfig m_Config;
+        bool createFrameBuffers();
+
     protected:
         Ref<VulkanDevice> m_Device;
         VkSurfaceKHR m_Surface;
 
         VkSwapchainKHR m_VkSwapChain = VK_NULL_HANDLE;
-        VkSwapchainKHR m_PreviousVkSwapChain = VK_NULL_HANDLE; // for recreation
+        VkSwapchainKHR m_VkPreviousSwapChain = VK_NULL_HANDLE;
 
-		std::vector<Ref<VulkanFrameBuffer>> m_FrameBuffers;
+		std::vector<Ref<VulkanFrameBuffer>> m_FrameBuffers; //TODO: these have to be owned! 
 
         // InFlight Sync Objects - managed by VulkanSwapChain, borrowed by FrameBuffer
         std::vector<VkSemaphore> m_FrameImageAvailableSemaphores;
@@ -53,5 +52,10 @@ namespace C78E {
         
 
     };
+
+    ImageSize acquireSupportedSurfaceSize(const VkSurfaceCapabilitiesKHR& capabilities);
+    VkSurfaceFormatKHR acquireSupportedSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& supportedFormats, ImageFormat requestedFormat = ImageFormat::ABGR8, ColorSpace colorSpace = ColorSpace::sRGB);
+    SwapInterval acquireSupportedSurfaceSwapInterval(const std::vector<VkPresentModeKHR>& supportedPresentModes, const SwapInterval requestedSwapInterval);
+
 
 } // namespace C78E

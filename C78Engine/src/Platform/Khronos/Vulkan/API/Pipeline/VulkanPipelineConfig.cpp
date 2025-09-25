@@ -19,15 +19,15 @@ namespace C78E {
 		default: return VK_PRIMITIVE_TOPOLOGY_MAX_ENUM;
 		}
 	}
-	VkSampleCountFlagBits toVkSampleCount(Multisample multiSample) {
+	VkSampleCountFlagBits toVkSampleCount(MultiSample multiSample) {
 		switch (multiSample) {
-		case Multisample::None: return VK_SAMPLE_COUNT_1_BIT;
-		case Multisample::X2: return VK_SAMPLE_COUNT_2_BIT;
-		case Multisample::X4: return VK_SAMPLE_COUNT_4_BIT;
-		case Multisample::X8: return VK_SAMPLE_COUNT_8_BIT;
-		case Multisample::X16: return VK_SAMPLE_COUNT_16_BIT;
-		case Multisample::X32: return VK_SAMPLE_COUNT_32_BIT;
-		case Multisample::X64: return VK_SAMPLE_COUNT_64_BIT;
+		case MultiSample::None: return VK_SAMPLE_COUNT_1_BIT;
+		case MultiSample::X2: return VK_SAMPLE_COUNT_2_BIT;
+		case MultiSample::X4: return VK_SAMPLE_COUNT_4_BIT;
+		case MultiSample::X8: return VK_SAMPLE_COUNT_8_BIT;
+		case MultiSample::X16: return VK_SAMPLE_COUNT_16_BIT;
+		case MultiSample::X32: return VK_SAMPLE_COUNT_32_BIT;
+		case MultiSample::X64: return VK_SAMPLE_COUNT_64_BIT;
 		default: return VK_SAMPLE_COUNT_1_BIT;
 		}
 	}
@@ -136,7 +136,7 @@ namespace C78E {
 		colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 		colorBlendInfo.pNext = nullptr;
 		colorBlendInfo.flags = 0;
-		colorBlendInfo.attachmentCount = colorBlendAttachments.size();
+		colorBlendInfo.attachmentCount = static_cast<uint32_t>(colorBlendAttachments.size());
 		colorBlendInfo.pAttachments = colorBlendAttachments.data();
 		colorBlendInfo.blendConstants[0] = 0.0f;  // Optional
 		colorBlendInfo.blendConstants[1] = 0.0f;  // Optional

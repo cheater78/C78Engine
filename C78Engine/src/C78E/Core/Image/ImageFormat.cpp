@@ -5,22 +5,23 @@ namespace C78E {
 
 	std::string ImageFormat::imageFormatToString(ImageFormat imageFormat) {
 		switch(imageFormat.m_ImagePixelLayout) {
-		case None: return "ImageFormat::None";
-		case R8: return "ImageFormat::R8";
-		case R16F: return "ImageFormat::R16F";
-		case R32: return "ImageFormat::R32";
-		case R32F: return "ImageFormat::R32F";
-		case D24S8: return "ImageFormat::D24S8";
-		case RG8: return "ImageFormat::RG8";
-		case RG16F: return "ImageFormat::RG16F";
-		case RG32F: return "ImageFormat::RG32F";
-		case RGB8: return "ImageFormat::RGB8";
-		case RGB16F: return "ImageFormat::RGB16F";
-		case RGB32F: return "ImageFormat::RGB32F";
-		case RGBA8: return "ImageFormat::RGBA8";
-		case RGBA16F: return "ImageFormat::RGBA16F";
-		case RGBA32F: return "ImageFormat::RGBA32F";
-		default: return "ImageFormat::None";
+		case None:		return "ImageFormat::None";
+		case R8:		return "ImageFormat::R8";
+		case R16F:		return "ImageFormat::R16F";
+		case R32:		return "ImageFormat::R32";
+		case R32F:		return "ImageFormat::R32F";
+		case D24S8:		return "ImageFormat::D24S8";
+		case RG8:		return "ImageFormat::RG8";
+		case RG16F:		return "ImageFormat::RG16F";
+		case RG32F:		return "ImageFormat::RG32F";
+		case RGB8:		return "ImageFormat::RGB8";
+		case RGB16F:	return "ImageFormat::RGB16F";
+		case RGB32F:	return "ImageFormat::RGB32F";
+		case RGBA8:		return "ImageFormat::RGBA8";
+		case RGBA16F:	return "ImageFormat::RGBA16F";
+		case RGBA32F:	return "ImageFormat::RGBA32F";
+		case ABGR8:		return "ImageFormat::ABGR8";
+		default:		return "ImageFormat::None";
 		}
 	}
 
@@ -40,6 +41,7 @@ namespace C78E {
 		if(imageFormatString == "ImageFormat::RGBA8") return RGBA8;
 		if(imageFormatString == "ImageFormat::RGBA16F") return RGBA16F;
 		if(imageFormatString == "ImageFormat::RGBA32F") return RGBA32F;
+		if(imageFormatString == "ImageFormat::ABGR8") return ABGR8;
 		return None;
 	}
 
@@ -50,7 +52,7 @@ namespace C78E {
 		case R16F: return 2;
 		case R32: return 4;
 		case R32F: return 4;
-		case D24S8: return 4; // depth + stencil
+		case D24S8: return 4;
 		case RG8: return 2;
 		case RG16F: return 4;
 		case RG32F: return 8;
@@ -60,6 +62,7 @@ namespace C78E {
 		case RGBA8: return 4;
 		case RGBA16F: return 8;
 		case RGBA32F: return 16;
+		case ABGR8: return 16;
 		default: return 0;
 		}
 	}
@@ -71,7 +74,7 @@ namespace C78E {
 		case R16F: return 1;
 		case R32: return 1;
 		case R32F: return 1;
-		case D24S8: return 2; // depth + stencil
+		case D24S8: return 2;
 		case RG8: return 2;
 		case RG16F: return 2;
 		case RG32F: return 2;
@@ -81,6 +84,7 @@ namespace C78E {
 		case RGBA8: return 4;
 		case RGBA16F: return 4;
 		case RGBA32F: return 4;
+		case ABGR8: return 4;
 		default: return 0;
 		}
 	}
@@ -92,7 +96,7 @@ namespace C78E {
 		case R16F: return 16;
 		case R32: return 32;
 		case R32F: return 32;
-		case D24S8: return 32; // depth + stencil
+		case D24S8: return 32;
 		case RG8: return 16;
 		case RG16F: return 32;
 		case RG32F: return 64;
@@ -102,6 +106,7 @@ namespace C78E {
 		case RGBA8: return 32;
 		case RGBA16F: return 64;
 		case RGBA32F: return 128;
+		case ABGR8: return 32;
 		default: return 0;
 		}
 	}
@@ -118,7 +123,9 @@ namespace C78E {
 		return imageFormat == ImagePixelLayout::R8 ||
 			imageFormat == ImagePixelLayout::RG8 ||
 			imageFormat == ImagePixelLayout::RGB8 ||
-			imageFormat == ImagePixelLayout::RGBA8;
+			imageFormat == ImagePixelLayout::RGBA8 ||
+			imageFormat == ImagePixelLayout::ABGR8 ||
+			false; // just so the line above can be duplicated easily
 	}
 
 	bool ImageFormat::isHDRFormat(ImageFormat imageFormat) {
@@ -129,7 +136,8 @@ namespace C78E {
 			imageFormat == ImagePixelLayout::RGB16F ||
 			imageFormat == ImagePixelLayout::RGB32F ||
 			imageFormat == ImagePixelLayout::RGBA16F ||
-			imageFormat == ImagePixelLayout::RGBA32F;
+			imageFormat == ImagePixelLayout::RGBA32F ||
+			false; // just so the line above can be duplicated easily
 	}
 
 	ImageFormat::ImageFormat() : m_ImagePixelLayout(None) {

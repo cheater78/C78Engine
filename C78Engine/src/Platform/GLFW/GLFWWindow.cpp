@@ -74,7 +74,7 @@ namespace C78E {
 
 		C78E_CORE_VALIDATE(createGLFWwindow(&m_GLFWwindow, m_WindowProperties), return, "GLFWWindow::GLFWWindow: Failed to create underlying GLFWwindow!");
 
-		m_Context = GraphicsContext::create(*this);
+		m_GraphicsContext = GraphicsContext::create(*this);
 
 		glfwSetWindowUserPointer(m_GLFWwindow, this);
 

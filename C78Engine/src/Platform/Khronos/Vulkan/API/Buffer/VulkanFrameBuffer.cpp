@@ -10,12 +10,12 @@
 
 namespace C78E {
 
-	VulkanFrameBuffer::VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass, VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage, uint32_t swapChainImageIndex)
+	VulkanFrameBuffer::VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferConfig& spec, Ref<RenderPass> renderPass, VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage, uint32_t swapChainImageIndex)
 		: FrameBuffer(ctx, spec, renderPass), m_SwapChainImageIndex(swapChainImageIndex) {
 		C78E_CORE_ASSERT(createVulkanFrameBuffer(vulkanSwapChain, swapChainAttachmentIndex, swapChainImage), "VulkanFrameBuffer::VulkanFrameBuffer: Creation as OffScreenTarget failed!");
 	}
 
-	VulkanFrameBuffer::VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass)
+	VulkanFrameBuffer::VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferConfig& spec, Ref<RenderPass> renderPass)
 		: FrameBuffer(ctx, spec, renderPass) {
 		C78E_CORE_ASSERT(createVulkanFrameBuffer(), "VulkanFrameBuffer::VulkanFrameBuffer: Creation as OffScreenTarget failed!");
 	}
@@ -35,42 +35,39 @@ namespace C78E {
 		return m_SwapChainImageIndex;
 	}
 
+
 	VkImage VulkanFrameBuffer::getColorAttachmentVkImage(uint32_t index) const {
-		return m_VulkanColorAttachments[index].image;
+		return m_VulkanAttachments[index].image;
 	}
 
 	bool VulkanFrameBuffer::createVulkanFrameBuffer(VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage) {
-		//TODO: allow recreation
-		C78E_CORE_VALIDATE(m_VkFrameBuffer == VK_NULL_HANDLE, return false, "VulkanFrameBuffer::createVulkanFrameBuffer: FrameBuffer already created!");
-
 		VulkanGraphicsContext& ctx = m_GraphicsContext.getAs<VulkanGraphicsContext>();
 		m_Device = ctx.getDevice();
-
 		Ref<VulkanRenderPass> vulkanRenderPass = castRef<VulkanRenderPass>(m_RenderPass);
 		C78E_CORE_VALIDATE(vulkanRenderPass, return false, "VulkanFrameBuffer::createVulkanFrameBuffer: RenderPass is not a VulkanRenderPass!");
-
-		const bool isSwapChainTarget = !vulkanSwapChain || !swapChainImage || (swapChainAttachmentIndex != -1);
 		m_VulkanSwapChain = vulkanSwapChain;
-
-		const ImageSize& size = m_Specification.size;
-		const FrameBufferAttachmentSpecification& depthAttachmentSpec = m_Specification.depthAttachmentSpecification;
-		const std::vector<FrameBufferAttachmentSpecification>& colorAttachmentSpecs = m_Specification.colorAttachmentSpecifications;
-		const size_t colorAttachmentCount = colorAttachmentSpecs.size();
-		const uint32_t samples = m_Specification.samples;
-
-		const size_t attachmentCount = colorAttachmentCount + (hasDepthAttachment() ? 1 : 0);
 		
-		if (hasDepthAttachment()) {
-			createVulkanFrameBufferAttachment(m_VulkanDepthAttachment, depthAttachmentSpec, size, samples, nullptr);
+		const bool recreate = m_VkFrameBuffer != VK_NULL_HANDLE;
+		const bool isSwapChainTarget = !vulkanSwapChain || !swapChainImage || (swapChainAttachmentIndex != -1);
+
+		if(recreate) {
+			destroyVulkanFrameBuffer();
 		}
 
-		m_VulkanColorAttachments.clear();
-		m_VulkanColorAttachments.resize(colorAttachmentCount);
+		
 
-		for(size_t i = 0; i < colorAttachmentSpecs.size(); i++) {
+		const ImageSize& size = m_Config.size;
+		const std::vector<FrameBufferAttachmentSpecification>& attachmentSpecs = m_Config.attachmentSpecifications;
+		const size_t attachmentCount = attachmentSpecs.size();
+		const uint32_t samples = m_Config.multiSample;
+
+		m_VulkanAttachments.clear();
+		m_VulkanAttachments.resize(attachmentCount);
+
+		for(size_t i = 0; i < attachmentSpecs.size(); i++) {
 			if(!createVulkanFrameBufferAttachment(
-				m_VulkanColorAttachments[i],
-				colorAttachmentSpecs[i],
+				m_VulkanAttachments[i],
+				attachmentSpecs[i],
 				size,
 				samples,
 				(isSwapChainTarget && i == swapChainAttachmentIndex) ? swapChainImage : VK_NULL_HANDLE)) {
@@ -79,11 +76,8 @@ namespace C78E {
 		}
 
 		std::vector<VkImageView> attachmentImageViews(attachmentCount);
-		if (hasDepthAttachment()) {
-			attachmentImageViews[0] = m_VulkanDepthAttachment.imageView;
-		}
-		for(size_t i = 0; i < colorAttachmentCount; i++) {
-			attachmentImageViews[i + (hasDepthAttachment() ? 1 : 0)] = m_VulkanColorAttachments[i].imageView;
+		for(size_t i = 0; i < attachmentCount; i++) {
+			attachmentImageViews[i] = m_VulkanAttachments[i].imageView;
 		}
 
 
@@ -107,12 +101,8 @@ namespace C78E {
 	}
 
 	void VulkanFrameBuffer::destroyVulkanFrameBuffer() {
-		// Free all attachments
-		if(hasDepthAttachment()) {
-			destroyVulkanFrameBufferAttachment(m_VulkanDepthAttachment);
-		}
-		// Destroy all color attachments
-		for(VulkanFrameBufferAttachmentResources& resource : m_VulkanColorAttachments) {
+		// Destroy all attachments
+		for(VulkanFrameBufferAttachmentResources& resource : m_VulkanAttachments) {
 			destroyVulkanFrameBufferAttachment(resource);
 		}
 		// Destroy the framebuffer
@@ -188,7 +178,7 @@ namespace C78E {
 			samplerInfo.addressModeV = toVkSamplerAddressMode(spec.wrapV);
 			samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT; // 3D framebuffers?
 			samplerInfo.anisotropyEnable = VK_TRUE;
-			samplerInfo.maxAnisotropy = 16.0f; // TODO: make this configurable
+			samplerInfo.maxAnisotropy = static_cast<float>(samples);
 			samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
 			samplerInfo.unnormalizedCoordinates = VK_FALSE;
 			samplerInfo.compareEnable = VK_FALSE;

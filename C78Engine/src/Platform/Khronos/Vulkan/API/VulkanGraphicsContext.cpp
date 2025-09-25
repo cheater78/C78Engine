@@ -38,15 +38,14 @@ namespace C78E {
         VkResult uniCmdPool = vkCreateCommandPool(m_Device->getVkDevice(), &poolInfo, nullptr, &m_UniversalCommandPool);
         C78E_CORE_SOFT_VALIDATE(uniCmdPool == VK_SUCCESS, "VulkanGraphicsContext::init: failed to create CommandPool!");
 
-        // requires physical device - no access until Logical Device is created
-        m_SurfaceCapabilities = fetchSurfaceCapabilities();
-        m_SurfaceSupportedFormats = fetchSurfaceFormats();
-        m_SurfaceSupportedPresentModes = fetchSurfacePresentModes();
-
     }
 
     void VulkanGraphicsContext::shutdown() {
         Ref<VulkanGraphicsInstance> vulkanInstance = GraphicsInstance::getAs<VulkanGraphicsInstance>();
+
+        for (auto& cmd : m_SubmittedCommandBuffers) {
+            cmd.reset(); // kill all buffers before the pool
+        }
 
         if(m_UniversalCommandPool) {
             vkDestroyCommandPool(m_Device->getVkDevice(), m_UniversalCommandPool, nullptr);
@@ -59,22 +58,12 @@ namespace C78E {
         }
     }
 
-    const VkSurfaceCapabilitiesKHR& VulkanGraphicsContext::getSurfaceCapabilities() const {
-        return m_SurfaceCapabilities;
-    }
-    const std::vector<VkSurfaceFormatKHR>& VulkanGraphicsContext::getSurfaceFormats() const {
-        return m_SurfaceSupportedFormats;
-    }
-    const std::vector<VkPresentModeKHR>& VulkanGraphicsContext::getSurfacePresentModes() const {
-        return m_SurfaceSupportedPresentModes;
-    }
-
-    VkSurfaceCapabilitiesKHR VulkanGraphicsContext::fetchSurfaceCapabilities() const {
+    VkSurfaceCapabilitiesKHR VulkanGraphicsContext::getSurfaceCapabilities() const {
         VkSurfaceCapabilitiesKHR capabilities;
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_Device->getVkPhysicalDevice(), m_VkSurface, &capabilities);
         return capabilities;
     }
-    std::vector<VkSurfaceFormatKHR> VulkanGraphicsContext::fetchSurfaceFormats() const {
+    std::vector<VkSurfaceFormatKHR> VulkanGraphicsContext::getSurfaceFormats() const {
         std::vector<VkSurfaceFormatKHR> surfaceFormats;
 
         uint32_t formatCount;
@@ -86,7 +75,7 @@ namespace C78E {
         }
         return surfaceFormats;
     }
-    std::vector<VkPresentModeKHR> VulkanGraphicsContext::fetchSurfacePresentModes() const {
+    std::vector<VkPresentModeKHR> VulkanGraphicsContext::getSurfacePresentModes() const {
         std::vector<VkPresentModeKHR> surfacePresentModes;
 
         uint32_t presentModeCount;
@@ -104,7 +93,7 @@ namespace C78E {
         Ref<VulkanSwapChain> vulkanSwapChain = castRef<VulkanSwapChain>(m_SwapChain);
         C78E_CORE_VALIDATE(vulkanSwapChain, return false, "VulkanGraphicsContext::nextFrame: SwapChain is not of type VulkanSwapChain!");
 
-        const uint32_t frameIndex = m_FrameIndex;
+        const uint32_t frameIndex = m_FrameIndex; // No ASYNC!
         m_FrameIndex = (m_FrameIndex + 1) % vulkanSwapChain->getFrameCount();
 
         Ref<FrameBuffer> frameBuffer = vulkanSwapChain->aquireNextFramebuffer(frameIndex);
@@ -112,7 +101,6 @@ namespace C78E {
             m_InFlightFrameBuffers.resize(frameIndex + 1);
         }
         m_InFlightFrameBuffers[frameIndex] = frameBuffer;
-
         return frameIndex;
     }
 
@@ -152,7 +140,7 @@ namespace C78E {
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = vulkanCommandBuffer->getVkCommandBufferPtr();
 
-        insertCommandBuffer(frameIndex, commandBuffer);
+        m_SubmittedCommandBuffers.push_back(commandBuffer);
 
         VkResult result = vkQueueSubmit(
             m_Device->getUniversalVkQueue(),
@@ -170,13 +158,12 @@ namespace C78E {
 
     bool VulkanGraphicsContext::endFrame(uint32_t frameIndex) {
         C78E_CORE_VALIDATE(m_SwapChain, return false, "VulkanGraphicsContext::endFrame: Called without SwapChain!");
-        C78E_CORE_VALIDATE(frameIndex < m_InFlightFrameCommandBuffers.size(), return false, "frameIndex out of bounds!");
         Ref<VulkanSwapChain> vulkanSwapChain = castRef<VulkanSwapChain>(m_SwapChain);
         C78E_CORE_VALIDATE(vulkanSwapChain, return false, "VulkanGraphicsContext::endFrame: SwapChain is not of type VulkanSwapChain!");
 
         // Present if this command buffer is targeting the swap chain
-        for (uint32_t i = m_InFlightFrameCommandBuffers[frameIndex].first; i < m_InFlightFrameCommandBuffers[frameIndex].second; i++) {
-            Ref<VulkanCommandBuffer> vulkanCommandBuffer = castRef<VulkanCommandBuffer>(m_SubmittedCommandBuffers[i]);
+        for (auto& cB : m_SubmittedCommandBuffers) {
+            Ref<VulkanCommandBuffer> vulkanCommandBuffer = castRef<VulkanCommandBuffer>(cB);
             C78E_CORE_VALIDATE(vulkanCommandBuffer, return false, "VulkanGraphicsContext::submit: CommandBuffer is not of type VulkanCommandBuffer!");
             
             if ((vulkanCommandBuffer->getRequiredVkQueueFlags() & VK_QUEUE_GRAPHICS_BIT) && vulkanCommandBuffer->hasSwapChainTarget()) {
@@ -201,44 +188,11 @@ namespace C78E {
                 break; // One Present per Frame only
             }
         }
-        
-        VkResult waitIdleResult = vkDeviceWaitIdle(m_Device->getVkDevice());
-		C78E_CORE_VALIDATE(waitIdleResult == VK_SUCCESS, return false, "VulkanGraphicsContext::endFrame: VkDevice - waitIdle failed!");
 
-        return true;
+        const bool waitSucc = m_Device->waitIdle();
+
+        m_SubmittedCommandBuffers.clear();
+        return waitSucc;
     }
 
-    void VulkanGraphicsContext::insertCommandBuffer(uint32_t frameIndex, Ref<CommandBuffer> commandBuffer) {
-
-        // frameIndex superceeds the current registered in flight buffer count
-        if (frameIndex >= m_InFlightFrameCommandBuffers.size()) {
-            std::pair<uint32_t, uint32_t> base = { 0, 0 };
-            if (!m_InFlightFrameCommandBuffers.empty()) {
-                const uint32_t lastElem = m_InFlightFrameCommandBuffers.back().second;
-                base = { lastElem, lastElem };
-            }
-            const uint32_t currentSize = m_InFlightFrameCommandBuffers.size();
-            const uint32_t newSize = frameIndex + 1;
-
-            m_InFlightFrameCommandBuffers.resize(newSize);
-            for (uint32_t i = currentSize; i < newSize; i++) {
-                m_InFlightFrameCommandBuffers[i] = base;
-            }
-        }
-
-        // insert at frameIndex' last element
-        const uint32_t insertIndex = m_InFlightFrameCommandBuffers[frameIndex].second;
-
-        // std::vector::insert handles insert(end(), ..) as push_back alr, so insertIndex = size is fine
-        C78E_CORE_ASSERT(insertIndex <= m_SubmittedCommandBuffers.size(), "insertIndex was out of bounds!");
-        m_SubmittedCommandBuffers.insert(m_SubmittedCommandBuffers.begin() + insertIndex, commandBuffer);
-
-        uint32_t followingIndex = m_InFlightFrameCommandBuffers[frameIndex].second++;
-
-        // handle following elements
-        for (uint32_t i = frameIndex + 1; i < m_InFlightFrameCommandBuffers.size(); i++) {
-            m_InFlightFrameCommandBuffers[i].first = followingIndex;
-            followingIndex = m_InFlightFrameCommandBuffers[i].second++;
-        }
-    }
 }

@@ -21,18 +21,21 @@ namespace C78E {
 	}
 
 	Window::Window(const WindowProperties& props, EventCallbackFunction eventCallbackFunction)
-		: m_WindowProperties(props), m_EventCallback(eventCallbackFunction) {
+		: m_WindowProperties(props), m_EventCallback(eventCallbackFunction), m_LayerStack(createScope<LayerStack>()) {
 	}
-	Window::~Window() { }
+	Window::~Window() {
+		m_LayerStack.reset();
+		m_GraphicsContext.reset(); // LayerStack could contain ctx owned elements, so kill that first!
+	}
 
 	void Window::pushLayer(Ref<Layer> layer) {
-		m_LayerStack.pushLayer(layer);
+		m_LayerStack->pushLayer(layer);
 	}
 	inline void Window::popLayer(Ref<Layer> layer) {
-		m_LayerStack.popLayer(layer);
+		m_LayerStack->popLayer(layer);
 	}
 	inline void Window::pushOverlay(Ref<Layer> layer) {
-		m_LayerStack.pushOverlay(layer);
+		m_LayerStack->pushOverlay(layer);
 	}
 
 	bool Window::isRunning() const {
@@ -44,7 +47,7 @@ namespace C78E {
 	}
 
 	// Graphics
-	GraphicsContext& Window::getGraphicsContext() const { return *m_Context; }
+	GraphicsContext& Window::getGraphicsContext() const { return *m_GraphicsContext; }
 
 	/**
 	 * @brief triggers an update for the window and all its layers.
@@ -56,7 +59,7 @@ namespace C78E {
 		C78E_CORE_VALIDATE(isRunning(), return, "Window::callUpdate: Window is not alive!");
 		
 		onUpdate(delta);
-		for (Ref<Layer> layer : m_LayerStack) {
+		for (Ref<Layer> layer : *m_LayerStack) {
 			layer->onUpdate(delta);
 		}
 
@@ -64,7 +67,7 @@ namespace C78E {
 			m_DebugLayer->begin();
 			onDebugRender();
 			m_DebugLayer->onDebugRender();
-			for (Ref<Layer> layer : m_LayerStack) {
+			for (Ref<Layer> layer : *m_LayerStack) {
 				layer->onDebugRender();
 			}
 			m_DebugLayer->end();
@@ -84,7 +87,7 @@ namespace C78E {
 		}
 		onEvent(e);
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+		for (auto it = m_LayerStack->end(); it != m_LayerStack->begin();) {
 			if (e.handled) {
 				break;
 			}
@@ -125,6 +128,12 @@ namespace C78E {
 	void Window::onWindowCloseEvent(Event& event) {
 		close();
 		event.handled = true;
+	}
+
+	void Window::onWindowResize(Event& event) {
+		if (m_GraphicsContext && m_GraphicsContext->hasSwapChain() && false) { //TODO: that even a good idea?
+			m_GraphicsContext->getSwapChain().recreate();
+		}
 	}
 
 }

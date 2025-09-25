@@ -1,8 +1,8 @@
 #pragma once
 #include <C78E/Graphics/API/Buffer/FrameBuffer.h>
 
+#include <Platform/Khronos/Vulkan/Core/VulkanConversions.h>
 #include <Platform/Khronos/Vulkan/Core/Device/VulkanDevice.h>
-#include <Platform/Khronos/Vulkan/API/Texture/VulkanImageFormat.h>
 
 namespace C78E {
 
@@ -19,13 +19,15 @@ namespace C78E {
 
 	class VulkanFrameBuffer : public FrameBuffer {
 	public:
-		VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass, VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage, uint32_t swapChainImageIndex);
-		VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferSpecification& spec, Ref<RenderPass> renderPass);
+		VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferConfig& cfg, Ref<RenderPass> renderPass,
+			VulkanSwapChain* vulkanSwapChain, uint32_t swapChainAttachmentIndex, VkImage swapChainImage, uint32_t swapChainImageIndex);
+		VulkanFrameBuffer(GraphicsContext& ctx, const FrameBufferConfig& cfg, Ref<RenderPass> renderPass);
 		virtual ~VulkanFrameBuffer();
 
 		virtual void resize(ImageSize size) override;
 		virtual bool isSwapChainTarget() const override;
 		virtual uint32_t getSwapChainImageIndex() const override;
+
 	public:
 		VkFramebuffer getVkFrameBuffer() const { return m_VkFrameBuffer; }
 		VkImage getColorAttachmentVkImage(uint32_t index) const;
@@ -42,14 +44,10 @@ namespace C78E {
 		bool createVulkanFrameBufferAttachment(VulkanFrameBufferAttachmentResources& attachment, const FrameBufferAttachmentSpecification& spec, ImageSize size, uint32_t samples, VkImage swapChainImage = VK_NULL_HANDLE);
 		void destroyVulkanFrameBufferAttachment(VulkanFrameBufferAttachmentResources& attachment);
 
-	protected:
-		// GraphicsContext& m_GraphicsContext;
-		// FrameBufferSpecification m_Specification;
 	private:
 		Ref<VulkanDevice> m_Device; // Vulkan Device Reference
 		VkFramebuffer m_VkFrameBuffer = VK_NULL_HANDLE; // FrameBuffer Handle
-		VulkanFrameBufferAttachmentResources m_VulkanDepthAttachment;
-		std::vector<VulkanFrameBufferAttachmentResources> m_VulkanColorAttachments; // Vulkan Attachment Objects
+		std::vector<VulkanFrameBufferAttachmentResources> m_VulkanAttachments; // Vulkan Attachment Objects
 
 		// opt. for swap chain target
 		VulkanSwapChain* m_VulkanSwapChain = nullptr;

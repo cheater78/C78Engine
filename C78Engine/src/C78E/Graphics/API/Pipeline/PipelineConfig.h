@@ -1,5 +1,6 @@
 #pragma once
 
+#include <C78E/Core/Image/MultiSample.h>
 #include "PipelineType.h"
 
 namespace C78E {
@@ -29,16 +30,6 @@ namespace C78E {
 		ALWAYS
 	};
 
-	enum class Multisample {
-		None = 0, Off = None, X1 = None,
-		X2,
-		X4,
-		X8,
-		X16,
-		X32,
-		X64
-	};
-
 	struct PipelineConfig {
 	public:
 		virtual ~PipelineConfig() = default;
@@ -59,7 +50,7 @@ namespace C78E {
 		bool testDepthBuffer = true;
 		bool writeDepthBuffer = true;
 		DepthFunction depthFunction = DepthFunction::Less;
-		Multisample multisample = Multisample::None;
+		MultiSample multisample = MultiSample::None;
 
 		bool backfaceCulling = true;
 		bool frontFaceCulling = false;

@@ -23,18 +23,15 @@ namespace C78E {
 		GraphicsContext& m_GraphicsContext;
 	};
 
-	struct GraphicsPipelineTarget {
-		Ref<RenderPass> renderPass;
-		uint32_t subpassIndex = 0;
-		ImagePosition renderAreaOffset = ImagePosition(0, 0);
-		ImageSize renderAreaSize = ImageSize(0, 0); // if 0,0 uses full framebuffer size
-		ImagePosition scissorOffset = ImagePosition(0, 0);
-		ImageSize scissorSize = ImageSize(0, 0); // if 0,0 uses full framebuffer size
-	};
-
 	class GraphicsPipeline : public virtual Pipeline {
 	public:
-		static Ref<GraphicsPipeline> create(GraphicsContext& ctx, Ref<GraphicsPipelineLayout> pipelineLayout, Ref<GraphicsPipelineConfig> pipelineConfig, const GraphicsPipelineTarget& pipelineTarget);
+		static Ref<GraphicsPipeline> create(
+			GraphicsContext& ctx,
+			Ref<GraphicsPipelineLayout> pipelineLayout,
+			Ref<GraphicsPipelineConfig> pipelineConfig,
+			const RenderArea& renderArea,
+			Ref<RenderPass> renderPass,
+			uint32_t subpassIndex = 0);
 	public:
 		virtual ~GraphicsPipeline() = default;
 		virtual PipelineType getType() const override { return PipelineType::Graphics; }

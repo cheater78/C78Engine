@@ -10,10 +10,16 @@ namespace C78E {
 		: m_GraphicsContext(ctx) {
 	}
 
-	Ref<GraphicsPipeline> GraphicsPipeline::create(GraphicsContext& ctx, Ref<GraphicsPipelineLayout> pipelineLayout, Ref<GraphicsPipelineConfig> pipelineConfig, const GraphicsPipelineTarget& pipelineTarget) {
+	Ref<GraphicsPipeline> GraphicsPipeline::create(
+		GraphicsContext& ctx, 
+		Ref<GraphicsPipelineLayout> pipelineLayout, 
+		Ref<GraphicsPipelineConfig> pipelineConfig,
+		const RenderArea& renderArea,
+		Ref<RenderPass> renderPass,
+		uint32_t subpassIndex) {
 		switch (GraphicsInstance::api()) {
 		case API::Vulkan:
-			return createRef<VulkanGraphicsPipeline>(ctx, pipelineLayout, pipelineConfig, pipelineTarget);
+			return createRef<VulkanGraphicsPipeline>(ctx, pipelineLayout, pipelineConfig, renderArea, renderPass, subpassIndex);
 		default:
 			C78E_CORE_ASSERT(false, "GraphicsPipeline::create: Unsupported Graphics API!");
 			return nullptr;

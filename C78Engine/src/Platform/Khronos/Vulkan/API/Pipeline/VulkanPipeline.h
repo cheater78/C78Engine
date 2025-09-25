@@ -24,7 +24,13 @@ namespace C78E {
 
 	class VulkanGraphicsPipeline : public VulkanPipeline, public GraphicsPipeline {
 	public:
-		VulkanGraphicsPipeline(GraphicsContext& ctx, Ref<GraphicsPipelineLayout> pipelineLayout, Ref<GraphicsPipelineConfig> pipelineConfig, const GraphicsPipelineTarget& pipelineTarget);
+		VulkanGraphicsPipeline(
+			GraphicsContext& ctx,
+			Ref<GraphicsPipelineLayout> pipelineLayout,
+			Ref<GraphicsPipelineConfig> pipelineConfig,
+			const RenderArea& renderArea,
+			Ref<RenderPass> renderPass,
+			uint32_t subpassIndex = 0);
 		~VulkanGraphicsPipeline() = default;
 
 		virtual PipelineType getType() const override { return PipelineType::Graphics; }

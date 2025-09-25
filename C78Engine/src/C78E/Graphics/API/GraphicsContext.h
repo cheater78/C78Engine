@@ -21,6 +21,7 @@ namespace C78E {
 
 
 		// SwapChain
+		bool hasSwapChain() const;
 		SwapChain& createSwapChain(const SwapChainConfig& swapChainConfig);
 		SwapChain& getSwapChain() const;
 
@@ -54,7 +55,7 @@ namespace C78E {
 
 	protected:
 		Window& m_Window;
-		Ref<SwapChain> m_SwapChain = nullptr;
+		Ref<SwapChain> m_SwapChain = nullptr; //TODO: Scope?
 		Ref<ShaderManager> m_ShaderManager = nullptr;
 	};
 

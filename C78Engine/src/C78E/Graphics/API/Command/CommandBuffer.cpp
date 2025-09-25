@@ -19,11 +19,11 @@ namespace C78E {
 	}
 
 	//SingleTimeCommandBuffer::SingleTimeCommandBuffer(Ref<CommandBuffer> commandBuffer)
-	//	: m_CommandBuffer(commandBuffer) {
+	//	: m_VkCommandBuffer(commandBuffer) {
 	//}
 	//
 	//SingleTimeCommandBuffer::~SingleTimeCommandBuffer() {
-	//	m_CommandBuffer->getGraphicsContext().submit(m_CommandBuffer);
+	//	m_VkCommandBuffer->getGraphicsContext().submit(m_VkCommandBuffer);
 	//}
 	//
 	//CommandBufferManager::CommandBufferManager(GraphicsContext& graphicsContext)

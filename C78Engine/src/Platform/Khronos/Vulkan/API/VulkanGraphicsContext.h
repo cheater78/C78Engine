@@ -24,16 +24,13 @@ namespace C78E {
 		Ref<VulkanDevice> getDevice() const { return m_Device; }
 		VkSurfaceKHR getSurface() const { return m_VkSurface; }
 
-		const VkSurfaceCapabilitiesKHR& getSurfaceCapabilities() const;
-		const std::vector<VkSurfaceFormatKHR>& getSurfaceFormats() const;
-		const std::vector<VkPresentModeKHR>& getSurfacePresentModes() const;
+		VkSurfaceCapabilitiesKHR getSurfaceCapabilities() const;
+		std::vector<VkSurfaceFormatKHR> getSurfaceFormats() const;
+		std::vector<VkPresentModeKHR> getSurfacePresentModes() const;
 	private:
 		void init();
 		void shutdown();
 
-		VkSurfaceCapabilitiesKHR fetchSurfaceCapabilities() const;
-		std::vector<VkSurfaceFormatKHR> fetchSurfaceFormats() const;
-		std::vector<VkPresentModeKHR> fetchSurfacePresentModes() const;
 	private:
 		Ref<VulkanDevice> m_Device;
 		VkSurfaceKHR m_VkSurface = VK_NULL_HANDLE;
@@ -43,11 +40,10 @@ namespace C78E {
 
 		VkCommandPool m_UniversalCommandPool = VK_NULL_HANDLE;
 
-		std::vector<std::pair<uint32_t, uint32_t>> m_InFlightFrameCommandBuffers;
+
 		std::vector<Ref<CommandBuffer>> m_SubmittedCommandBuffers;
 		std::vector<Ref<FrameBuffer>> m_InFlightFrameBuffers; //TODO: used, but needed?
 
-		void insertCommandBuffer(uint32_t frameIndex, Ref<CommandBuffer> commandBuffer);
 
 		uint32_t m_FrameIndex = 0;
 

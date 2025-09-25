@@ -16,6 +16,7 @@ namespace C78E {
 
 		virtual void bindPipeline(Ref<Pipeline> pipeline) override;
 
+		virtual void setRenderArea(const RenderArea& renderArea) override;
 		virtual void drawVertecies(size_t vertexCount, size_t instanceCount = 1) override;
 		//
 		virtual void endRenderPass() override;
@@ -23,8 +24,8 @@ namespace C78E {
 
 
 	public:
-		VkCommandBuffer getVkCommandBuffer() const { return m_CommandBuffer; }
-		VkCommandBuffer* getVkCommandBufferPtr() { return &m_CommandBuffer; }
+		VkCommandBuffer getVkCommandBuffer() const { return m_VkCommandBuffer; }
+		VkCommandBuffer* getVkCommandBufferPtr() { return &m_VkCommandBuffer; }
 		VkQueueFlags getRequiredVkQueueFlags() const { return m_VkQueueFlags; }
 		
 		bool hasSwapChainTarget() const;
@@ -36,7 +37,7 @@ namespace C78E {
 	private:
 		Ref<VulkanDevice> m_Device;
 		VkCommandPool m_Pool;
-		VkCommandBuffer m_CommandBuffer = VK_NULL_HANDLE;
+		VkCommandBuffer m_VkCommandBuffer = VK_NULL_HANDLE;
 		VkQueueFlags m_VkQueueFlags;
 
 		bool m_HasSwapChainTarget = false;

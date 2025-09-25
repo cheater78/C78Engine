@@ -16,13 +16,9 @@ namespace C78E {
 		}
 	}
 
-	SwapChain::SwapChain(GraphicsContext& ctx, const SwapChainConfig& config)
-		: m_GraphicsContext(ctx),
-		m_Config(config) {
+	SwapChain::SwapChain(GraphicsContext& ctx)
+		: m_GraphicsContext(ctx) {
 	}
 
-	uint32_t SwapChain::getFrameCount() const {
-		return static_cast<uint32_t>(m_Config.bufferCount);
-	}
 
 } // namespace C78E
