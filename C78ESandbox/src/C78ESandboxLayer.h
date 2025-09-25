@@ -16,8 +16,8 @@ public:
 
     void onAttach() override {
 
-        const FilePath shaderCache = FileSystem::C78RootDirectory / "assets/cache/shaders/";
-        const FilePath shaderDirectory = FileSystem::C78RootDirectory / "assets/shaders/";
+        const FilePath shaderCache = FileSystem::C78EngineDirectory / "assets/cache/shaders/";
+        const FilePath shaderDirectory = FileSystem::C78EngineDirectory / "assets/shaders/";
         const FilePath vkTestShader = shaderDirectory / "vkTestShader.glsl";
 
         GraphicsContext& ctx = m_Window.getGraphicsContext();
