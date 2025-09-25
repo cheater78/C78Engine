@@ -17,11 +17,32 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
+# Check if vendor/premake exists
+if (-not (Test-Path -Path "$c78e_path\vendor\premake" -PathType Container)) {
+    Write-Output "premake not found! updating submodules"
+    git submodule update --init --recursive
+}
+
+# Check if vendor/premake-export-compile-commands exists
+if (-not (Test-Path -Path "$c78e_path\vendor\premake-export-compile-commands" -PathType Container)) {
+    Write-Output "premake-export-compile-commands not found! updating submodules"
+    git submodule update --init --recursive
+}
+
+# Check if export-compile-commands.lua is a symlink
+$exportPath = Join-Path $c78e_path "export-compile-commands.lua"
+$targetPath = Join-Path $c78e_path "vendor\premake-export-compile-commands\export-compile-commands.lua"
+
+$exists = Test-Path $exportPath
+$isSymlink = $false
+
+if (-not $exists) {
+    Copy-Item $targetPath $exportPath -Force
+}
+
 $premake_bin = "$c78e_path\vendor\premake\bin\release\premake5.exe"
 # Check Premake
 if (-not (Test-Path "$premake_bin")) {
-	Write-Host "Premake not found! Updating submodules..."
-	git submodule update --init --recursive
 	Write-Host "Compiling Premake..."
 	Set-Location "$c78e_path\vendor\premake"
 	.\Bootstrap.bat
