@@ -146,7 +146,7 @@ namespace C78E {
 		C78E_CORE_VALIDATE(!filepath.empty(), return nullptr, "FileSystem::readFileBinary: Provided filepath was empty!");
 		C78E_CORE_VALIDATE(filepath.is_absolute(), return nullptr, "FileSystem::readFileBinary: Provided filepath was not absolute!");
 		std::ifstream stream(filepath, std::ios::binary | std::ios::ate);
-		C78E_CORE_VALIDATE(stream, return nullptr, "FileSystem::readFileBinary: Failed to read File: {}", filepath);
+		C78E_CORE_VALIDATE(stream.good(), return nullptr, "FileSystem::readFileBinary: Failed to read File: {}", filepath);
 
 		std::streampos end = stream.tellg();
 		stream.seekg(0, std::ios::beg);

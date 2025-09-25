@@ -42,7 +42,7 @@ struct fmt::formatter<type> {																			\
 	}																									\
 																										\
 	template <typename FormatContext>																	\
-	auto format(const type& input, FormatContext& ctx) -> decltype(ctx.out()) {							\
+	auto format(const type& input, FormatContext& ctx) const -> decltype(ctx.out()) {					\
 		return fmt::format_to(ctx.out(), "{}", func);													\
 	}																									\
 }

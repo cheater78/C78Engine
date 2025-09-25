@@ -23,21 +23,19 @@ if (-not (Test-Path -Path "$c78e_path\vendor\premake" -PathType Container)) {
     git submodule update --init --recursive
 }
 
-# Check if vendor/premake-export-compile-commands exists
-if (-not (Test-Path -Path "$c78e_path\vendor\premake-export-compile-commands" -PathType Container)) {
-    Write-Output "premake-export-compile-commands not found! updating submodules"
-    git submodule update --init --recursive
-}
 
-# Check if export-compile-commands.lua is a symlink
-$exportPath = Join-Path $c78e_path "export-compile-commands.lua"
-$targetPath = Join-Path $c78e_path "vendor\premake-export-compile-commands\export-compile-commands.lua"
-
-$exists = Test-Path $exportPath
-$isSymlink = $false
-
-if (-not $exists) {
-    Copy-Item $targetPath $exportPath -Force
+# Check if export-compile-commands.lua exists
+$premakeCompileCommandsPlugin = Join-Path $c78e_path "export-compile-commands.lua"
+$premakeCompileCommandsOrigin = Join-Path $c78e_path "vendor\premake-export-compile-commands\export-compile-commands.lua"
+# Check if $premakeCompileCommandsPlugin exists
+if (-not (Test-Path -Path "$premakeCompileCommandsPlugin")) {
+	# Check if $premakeCompileCommandsOrigin exists
+	if (-not (Test-Path -Path "$premakeCompileCommandsOrigin")) {
+		Write-Output "$premakeCompileCommandsOrigin not found! updating submodules"
+		git submodule update --init --recursive
+	}
+	
+	Copy-Item $premakeCompileCommandsOrigin $premakeCompileCommandsPlugin -Force
 }
 
 $premake_bin = "$c78e_path\vendor\premake\bin\release\premake5.exe"
@@ -55,36 +53,60 @@ if (-not (Test-Path "$premake_bin")) {
 }
 
 #checking Visual Studio / MSBuild
-$vswhere_bin = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
-if (Test-Path "$vswhere_bin") {
-	$msbuild_bin = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+$vswhere = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
+if (Test-Path "$vswhere") {
+	# Get the latest VS installation with MSBuild
+	$vsInfoVerion = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationVersion
+	$vsInfoPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+
+	# Parse the output (two lines: version + path)
+	$vsVersion = ($vsInfoVerion | Select-String "^[0-9]") -split "\s+" | Select-Object -First 1
+	$vsPath    = ($vsInfoPath | Select-String "^[A-Z]:\\")
+	Write-Host "Found MSVS Version: $vsVersion, at: $vsPath" 
 	
-	if (Test-Path "$msbuild_bin") {
+	# Map Visual Studio version → Premake tag
+	switch -Regex ($vsVersion) {
+		"^17\." { $premakeTag = "vs2022"; break }
+		"^16\." { $premakeTag = "vs2019"; break }
+		"^15\." { $premakeTag = "vs2017"; break }
+		default { $premakeTag = "unknown" }
+	}
+
+	$runPremake = "$premake_bin $premakeTag"
+	Write-Host "Premake MSVS Project Files ($runPremake)"
+	Invoke-Expression $runPremake
 	
-		$runPremake = "$premake_bin vs2022"
-		Write-Host "==== Generating project files (Windows Visual Studio / MSBuild) ===="
-		Invoke-Expression $runPremake
-		
-		$sln_file = Get-ChildItem -Path $c78e_path -Filter "*.sln" | Select-Object -First 1
-		if ($sln_file) {
-			if($also_compile) {
-				Write-Host "Successfully created Solution File..."
-				Write-Host "==== Compiling (Windows Visual Studio / MSBuild, $compile_config) ===="
-				& "$msbuild_bin" $solutionFile /m /p:Configuration=$compile_config
-				exit 0
-			} else {
-				Write-Host "Successfully created Solution File."
-				if(-not $setup_all) {
-					exit 0
-				}
+	$sln_file = Get-ChildItem -Path $c78e_path -Filter "*.sln" | Select-Object -First 1
+	if ($sln_file) {
+		if($also_compile) {
+			Write-Host "Successfully created Solution File..."
+			Write-Host "==== Compiling (Windows Visual Studio / MSBuild, $compile_config) ===="
+			
+			# Build MSBuild path
+			$msbuild64 = Join-Path $vsPath "MSBuild\Current\Bin\amd64\MSBuild.exe"
+			$msbuild32 = Join-Path $vsPath "MSBuild\Current\Bin\MSBuild.exe"
+
+			if (Test-Path $msbuild64) {
+				$msbuildPath = $msbuild64
+			} elseif (Test-Path $msbuild32) {
+				$msbuildPath = $msbuild32
+			}  else {
+				throw "MSBuild.exe not found under $vsPath"
 			}
+			
+			& "$msbuildPath" $sln_file /m /p:Configuration=$compile_config
+			exit 0
 		} else {
-			Write-Host "Generating project files (Windows Visual Studio) failed!"
-			exit 1
+			Write-Host "Successfully created Solution File."
+			if(-not $setup_all) {
+				exit 0
+			}
 		}
 	} else {
-		Write-Host "Visual Studio not found..."
+		Write-Host "Generating project files (Windows Visual Studio) failed!"
+		exit 1
 	}
+	
 } else {
 	Write-Host "Visual Studio not found..."
 }

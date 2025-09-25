@@ -18,7 +18,7 @@ public:
 
         const FilePath shaderCache = FileSystem::C78EngineDirectory / "assets/cache/shaders/";
         const FilePath shaderDirectory = FileSystem::C78EngineDirectory / "assets/shaders/";
-        const FilePath vkTestShader = shaderDirectory / "vkTestShader.glsl";
+        const FilePath vkTestShader = shaderDirectory / "vkHelloTriangle.glsl";
 
         GraphicsContext& ctx = m_Window.getGraphicsContext();
         Ref<ShaderManager> shaderManager = ctx.createShaderManager(shaderCache);

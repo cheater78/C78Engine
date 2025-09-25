@@ -55,8 +55,10 @@ project "C78Engine"
 	}
 	
 	pchheader "C78EPCH.h"
-	pchsource "C78EPCH.cpp"
-
+	pchsource "src/C78EPCH.cpp"  -- not considered include dir
+	
+	characterset "Unicode"     -- /DUNICODE /D_UNICODE
+	
 	filter "system:Windows"
 		systemversion "latest"
 		buildoptions {
@@ -72,6 +74,9 @@ project "C78Engine"
 		links{
 			"opengl32.lib"
 		}
+		
+	filter "action:vs*" -- Visual Studio / MSBuild
+        buildoptions { "/utf-8" }
 		
 	filter "system:Linux"
 		systemversion "latest"

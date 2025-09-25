@@ -53,6 +53,8 @@ project "C78ESandbox"
 		"YAML_CPP_STATIC_DEFINE"
 	}
 
+	characterset "Unicode"     -- /DUNICODE /D_UNICODE
+	
 	filter "system:Windows"
 		systemversion "latest"
 		buildoptions {
@@ -62,6 +64,9 @@ project "C78ESandbox"
 		defines{
 			"C78E_PLATFORM_WINDOWS"
 		}
+		
+	filter "action:vs*" -- Visual Studio / MSBuild
+        buildoptions { "/utf-8" }
 		
 	filter "system:Linux"
 		systemversion "latest"
