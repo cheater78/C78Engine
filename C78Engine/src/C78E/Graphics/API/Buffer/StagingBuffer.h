@@ -23,14 +23,15 @@ namespace C78E {
 	public:
 		template<typename T>
 		MemoryRange<T> range() {
-			return MemoryRange<T>(reinterpret_cast<T*>(data()), size() / sizeof(T))
+			return MemoryRange<T>(reinterpret_cast<T*>(data()), size() / sizeof(T));
 		}
 
 		template<typename T>
 		MemoryRange<T> range(size_t firstElementIndex, size_t elementCount = -1) {
 			C78E_CORE_ASSERT(firstElementIndex * sizeof(T) < size(), "StagingBuffer::range: firstElementIndex was out of bounds!");
 			C78E_CORE_ASSERT(elementCount == -1 || (firstElementIndex + elementCount) * sizeof(T) < size(), "StagingBuffer::range: firstElementIndex was out of bounds!");
-			return MemoryRange<T>(reinterpret_cast<T*>(data() + firstElementIndex * sizeof(T), elementCount);
+			const uint8_t* bufferBegin = reinterpret_cast<const uint8_t*>(data());
+			return MemoryRange<T>(reinterpret_cast<T*>(bufferBegin + firstElementIndex * sizeof(T)), elementCount);
 		}
 	private:
 	};

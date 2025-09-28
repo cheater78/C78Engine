@@ -38,7 +38,7 @@ namespace C78E {
 	const FrameBufferAttachmentSpecification& FrameBuffer::getDepthAttachmentSpecification() const {
 		const uint32_t& depthIndex = m_Config.activeDepthAttachment;
 		C78E_CORE_ASSERT(depthIndex != std::numeric_limits<uint32_t>::max(), "FrameBuffer::getDepthAttachmentSpecification: no active depth attachment set!");
-		const std::vector<FrameBufferAttachmentSpecification> attachments = m_Config.attachmentSpecifications;
+		const std::vector<FrameBufferAttachmentSpecification>& attachments = m_Config.attachmentSpecifications;
 		C78E_CORE_ASSERT(depthIndex < attachments.size(), "FrameBuffer::getDepthAttachmentSpecification: depth attachment index was out of bounds!(index: {}, attachments: {})", depthIndex, attachments.size());
 		return attachments[depthIndex];
 	}

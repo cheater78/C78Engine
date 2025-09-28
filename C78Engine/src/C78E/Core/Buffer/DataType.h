@@ -143,11 +143,11 @@ namespace C78E {
 		}
 
 		virtual inline size_t elementSize(Index elementIndex) const override {
-			C78E_CORE_VALIDATE(elementIndex < N, "StructType::fieldSize: fieldIndex out of bounds.");
+			C78E_CORE_VALIDATE(elementIndex < N, return std::numeric_limits<size_t>::max(), "StructType::fieldSize: fieldIndex out of bounds.");
 			return (*this)[elementIndex].size();
 		}
 		virtual inline size_t elementAlignment(Index elementIndex) const override {
-			C78E_CORE_VALIDATE(elementIndex < N, "StructType::fieldAlignment: fieldIndex out of bounds.");
+			C78E_CORE_VALIDATE(elementIndex < N, return std::numeric_limits<size_t>::max(), "StructType::fieldAlignment: fieldIndex out of bounds.");
 			return (*this)[elementIndex].alignment();
 		}
 		virtual inline size_t elementCount() const override {

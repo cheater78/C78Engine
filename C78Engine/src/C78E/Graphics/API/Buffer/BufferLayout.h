@@ -28,7 +28,7 @@ namespace C78E {
 	public:
 		template<typename... Args>
 		VertexLayout(Args&&... args)
-			: ExtListType<ShaderDataType>( std::forward<Args>(args)... ) {
+			: ExtListType<VertexAttribute>( std::forward<Args>(args)... ) {
 		}
 
 		uint32_t getStride() const {

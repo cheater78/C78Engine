@@ -24,6 +24,7 @@ namespace C78E {
 		operator uint32_t&();
 		MultiSample& operator=(const MultiSample& other) {
 			m_SampleCount = other.m_SampleCount;
+			return *this;
 		}
 
 	private:

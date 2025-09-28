@@ -14,7 +14,7 @@ namespace C78E {
 		VulkanGraphicsContext(Window& window);
 		virtual ~VulkanGraphicsContext();
 
-		virtual Ref<CommandBuffer> createCommandBuffer();
+		virtual Ref<CommandBuffer> createCommandBuffer() override;
 
 		virtual uint32_t beginFrame() override;
 		virtual bool submit(uint32_t frameIndex, Ref<CommandBuffer> commandBuffer) override;

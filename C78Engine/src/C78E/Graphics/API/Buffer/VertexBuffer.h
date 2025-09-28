@@ -1,5 +1,6 @@
 #pragma once
 #include "StagingBuffer.h"
+#include "BufferLayout.h"
 
 namespace C78E {
 
