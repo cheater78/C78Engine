@@ -18,7 +18,7 @@ public:
 
         const FilePath shaderCache = FileSystem::C78EngineDirectory / "assets/cache/shaders/";
         const FilePath shaderDirectory = FileSystem::C78EngineDirectory / "assets/shaders/";
-        const FilePath vkTestShader = shaderDirectory / "vkHelloTriangle.glsl";
+        const FilePath vkTestShader = shaderDirectory / "vkVertexBufferTest.glsl";
 
         GraphicsContext& ctx = m_Window.getGraphicsContext();
         Ref<ShaderManager> shaderManager = ctx.createShaderManager(shaderCache);
@@ -38,13 +38,41 @@ public:
         SwapChain& swapChain = ctx.createSwapChain(swapChainConfig);
 
 		m_PipelineConfig = createRef<VulkanGraphicsPipelineConfig>();
-		m_PipelineLayout = createRef<VulkanGraphicsPipelineLayout>(ctx);
 
+        // Pipeline Layout
+		m_PipelineLayout = createRef<VulkanGraphicsPipelineLayout>(ctx);
         for (const auto& [stage, shader] : shaders) {
             m_PipelineLayout->setShader(stage, shader);
         }
 
-		m_Pipeline = GraphicsPipeline::create(
+        { // VertexBuffer Setup
+            const VertexBufferLayout bufferLayout{
+                VertexAttribute("v_Position", PrimitiveType::Float32, 2),
+                VertexAttribute("v_Color", PrimitiveType::Float32, 3)
+            };
+            const size_t vertexCount = 3;
+            const size_t bufferByteSize = bufferLayout.getStride() * vertexCount;
+
+            //  StagingBuffer - Device Host coherent memory
+            m_StagingBuffer = StagingBuffer::create(ctx, bufferByteSize);
+            m_StagingBuffer->map();
+
+            const float vertices[] = {
+                -1.f, -1.f, 0.f, 1.f, 0.f,
+                +3.f, -1.f, 1.f, 0.f, 0.f,
+                -1.f, +3.f, 0.f, 0.f, 1.f,
+            };
+            std::memcpy(m_StagingBuffer->data(), vertices, bufferByteSize);
+
+            m_StagingBuffer->unmap(true); // force write back, prob. not needed
+            m_VertexBuffer = VertexBuffer::create(ctx, VertexInputRate::Vertex, bufferLayout, m_StagingBuffer);
+
+
+            m_PipelineLayout->addVertexBufferLayout(bufferLayout);
+        }
+
+        // Pipeline Setup
+        m_Pipeline = GraphicsPipeline::create(
             ctx,
             m_PipelineLayout,
             m_PipelineConfig,
@@ -135,6 +163,30 @@ public:
 
             cmd.commandBuffer->beginRenderPass(m_RenderPass, swapChain.getFrameBuffer(i));
             cmd.commandBuffer->bindPipeline(m_Pipeline);
+            cmd.commandBuffer->bind(m_VertexBuffer);
+            cmd.commandBuffer->setRenderArea(swapChain.getFullRenderArea());
+            cmd.commandBuffer->drawVertecies(3);
+            cmd.commandBuffer->endRenderPass();
+
+            cmd.commandBuffer->endRecording();
+
+            m_SwapChainCommands.push_back(cmd);
+        }
+    }
+
+    void recordCommandbuffersHelloTriangle() {
+        m_SwapChainCommands.clear();
+        GraphicsContext& ctx = m_Window.getGraphicsContext();
+        SwapChain& swapChain = ctx.getSwapChain();
+
+        for (uint32_t i = 0; i < swapChain.getFrameCount(); i++) {
+            SwapChainCommand cmd;
+            cmd.commandBuffer = ctx.createCommandBuffer();
+
+            cmd.commandBuffer->beginRecording();
+
+            cmd.commandBuffer->beginRenderPass(m_RenderPass, swapChain.getFrameBuffer(i));
+            cmd.commandBuffer->bindPipeline(m_Pipeline);
             cmd.commandBuffer->setRenderArea(swapChain.getFullRenderArea());
             cmd.commandBuffer->drawVertecies(3);
             cmd.commandBuffer->endRenderPass();
@@ -165,6 +217,9 @@ private:
 
 private:
     Ref<RenderPass> m_RenderPass;
+
+    Ref<StagingBuffer> m_StagingBuffer;
+    Ref<VertexBuffer> m_VertexBuffer;
 
 	Ref<GraphicsPipelineLayout> m_PipelineLayout;
 	Ref<GraphicsPipelineConfig> m_PipelineConfig;

@@ -16,43 +16,41 @@ namespace C78E {
 		virtual ~GraphicsContext() = default;
 
 		virtual Ref<CommandBuffer> createCommandBuffer() = 0;
-
-		
-
+		virtual Scope<CommandBuffer> beginSingleTimeCommand(CommandBuffer::UsageFlags usage = CommandBuffer::Usage::Auto) = 0;
 
 		// SwapChain
 		bool hasSwapChain() const;
 		SwapChain& createSwapChain(const SwapChainConfig& swapChainConfig);
 		SwapChain& getSwapChain() const;
-
-
+		
 		// Shader Manager
-		Ref<ShaderManager> createShaderManager(const FilePath& cacheDirectory) {
-			C78E_CORE_TRACE("GraphicsContext::createSwapChain: creating ShaderManager...")
-			return m_ShaderManager = createRef<ShaderManager>(*this, cacheDirectory);
-		}
-		Ref<ShaderManager> getShaderManager() {
-			return m_ShaderManager;
-		}
+		Ref<ShaderManager> createShaderManager(const FilePath& cacheDirectory);
+		Ref<ShaderManager> getShaderManager() const;
 
+		// General - TODO
+		virtual bool submit(Ref<CommandBuffer> commandBuffer) = 0;
 
-		// Render
+		// Graphics
 		virtual uint32_t beginFrame() = 0;
 		virtual bool submit(uint32_t frameIndex, Ref<CommandBuffer> commandBuffer) = 0;
 		virtual bool submit(uint32_t frameIndex, const std::vector<Ref<CommandBuffer>>& commandBuffers) = 0;
 		virtual bool endFrame(uint32_t frameIndex) = 0;
+		
+		// Transfer
+		virtual bool copyBuffer(
+			GPUBuffer& srcGPUBuffer,
+			GPUBuffer& dstGPUBuffer,
+			size_t size = 0, // 0 -> whole src size
+			size_t srcOffset = 0,
+			size_t dstOffset = 0) = 0;
 
 	public:
-
-		template <typename T>
-		requires std::derived_from<T, GraphicsContext>
-		T& getAs() {
+		template <std::derived_from<GraphicsContext> T>
+		inline T& getAs() {
 			T* context = dynamic_cast<T*>(this);
 			C78E_CORE_ASSERT(context, "GraphicsContext::getAs: Failed to cast GraphicsContext to Type T!");
 			return *context;
 		}
-	
-
 	protected:
 		Window& m_Window;
 		Ref<SwapChain> m_SwapChain = nullptr; //TODO: Scope?

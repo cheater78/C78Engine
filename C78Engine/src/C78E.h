@@ -42,7 +42,7 @@
 
 #include <C78E/Graphics/API/SwapChain/SwapChain.h>
 #include <C78E/Graphics/API/Command/RenderPass.h>
-#include <C78E/Graphics/API/Buffer/FrameBuffer.h>
+#include <C78E/Graphics/API/Image/FrameBuffer.h>
 
 #include <C78E/Graphics/API/Pipeline/Pipeline.h>
 #include <C78E/Graphics/API/Pipeline/PipelineLayout.h>

@@ -10,7 +10,7 @@ namespace C78E {
 	Ref<VertexBuffer> VertexBuffer::create(GraphicsContext& ctx, VertexInputRate inputRate, const VertexBufferLayout& layout, size_t vertexCount) {
 		switch(GraphicsInstance::api()) {
 		case API::Vulkan:
-			return createRef<VulkanVertexBuffer>(ctx, layout, vertexCount);
+			return createRef<VulkanVertexBuffer>(ctx, inputRate, layout, vertexCount);
 		default:
 			C78E_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 		}
@@ -20,15 +20,15 @@ namespace C78E {
 	Ref<VertexBuffer> VertexBuffer::create(GraphicsContext& ctx, VertexInputRate inputRate, const VertexBufferLayout& layout, Ref<StagingBuffer> stagingBuffer) {
 		switch (GraphicsInstance::api()) {
 		case API::Vulkan:
-			return createRef<VulkanVertexBuffer>(ctx, layout, stagingBuffer);
+			return createRef<VulkanVertexBuffer>(ctx, inputRate, layout, stagingBuffer);
 		default:
 			C78E_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 		}
 		return nullptr;
 	}
 
-	VertexBuffer::VertexBuffer(GraphicsContext& ctx, VertexInputRate inputRate, const VertexBufferLayout& layout, size_t vertexCount)
-		: m_GraphicsContext(ctx), m_VertexInputRate(inputRate), m_Layout(layout), m_VertexCount(vertexCount) {
+	VertexBuffer::VertexBuffer(VertexInputRate inputRate, const VertexBufferLayout& layout, size_t vertexCount)
+		: m_VertexInputRate(inputRate), m_Layout(layout), m_VertexCount(vertexCount) {
 	}
 
 	VertexInputRate VertexBuffer::getVertexInputRate() const {
@@ -36,7 +36,7 @@ namespace C78E {
 	}
 
 	VertexBufferLayout VertexBuffer::getVertexBufferLayout() const {
-		return m_VertexInputRate;
+		return m_Layout;
 	}
 
 	size_t VertexBuffer::getVertexCount() const {

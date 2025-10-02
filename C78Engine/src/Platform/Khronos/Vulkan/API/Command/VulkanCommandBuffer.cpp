@@ -2,27 +2,23 @@
 #include "VulkanCommandBuffer.h"
 
 #include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
+#include <Platform/Khronos/Vulkan/API/Buffer/VulkanGPUBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Buffer/VulkanVertexBuffer.h>
 #include <Platform/Khronos/Vulkan/API/Command/VulkanRenderPass.h>
 
 
 namespace C78E {
 
-	VulkanCommandBuffer::VulkanCommandBuffer(GraphicsContext& ctx, UsageFlags usage, VkCommandPool commandPool)
-		: CommandBuffer(ctx, usage), m_VkQueueFlags(VK_QUEUE_TRANSFER_BIT), m_Pool(commandPool) {
+	VulkanCommandBuffer::VulkanCommandBuffer(GraphicsContext& ctx, bool reusable, UsageFlags usage, VkCommandPool commandPool)
+		: GraphicsContextItem(ctx),
+		VulkanGraphicsContextItem(),
+		CommandBuffer(reusable, usage),
+		m_VkQueueFlags(VK_QUEUE_TRANSFER_BIT),
+		m_Pool(commandPool) {
 
 		VulkanGraphicsContext& context = ctx.getAs<VulkanGraphicsContext>();
 		m_Device = context.getDevice();
-
-		if (usage & Usage::Graphics) {
-			m_VkQueueFlags |= VK_QUEUE_GRAPHICS_BIT;
-		}
-		if (usage & Usage::Compute) {
-			m_VkQueueFlags |= VK_QUEUE_COMPUTE_BIT;
-		}
-		if (usage & Usage::RayTrace) {
-			m_VkQueueFlags |= VK_QUEUE_COMPUTE_BIT;
-		}
-
+		
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.commandPool = m_Pool;
@@ -31,7 +27,6 @@ namespace C78E {
 
 		VkResult commandBufferCreateResult = vkAllocateCommandBuffers(m_Device->getVkDevice(), &allocInfo, &m_VkCommandBuffer);
 		C78E_ASSERT(commandBufferCreateResult == VK_SUCCESS, "VulkanCommandBuffer::VulkanCommandBuffer: failed to allocate command buffer!");
-
 	}
 
 	VulkanCommandBuffer::~VulkanCommandBuffer() {
@@ -39,15 +34,13 @@ namespace C78E {
 	}
 	
 	bool VulkanCommandBuffer::beginRecording() {
-		//TODO: allow multiple begin/end recording cycles? - reset command buffer on beginRecording if needed
-		//vkResetCommandBuffer(m_VkCommandBuffer, 0);
 		C78E_CORE_VALIDATE(m_State == State::Ready, return false,
 			"VulkanCommandBuffer::beginRecording: CommandBuffer wasn't ready!");
 		
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		beginInfo.flags = 0; // Optional
-		beginInfo.pInheritanceInfo = nullptr; // Optional
+		beginInfo.flags = (m_Reusable) ? VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT : 0;
+		beginInfo.pInheritanceInfo = VK_NULL_HANDLE;
 
 		VkResult beginCommandBufferResult = vkBeginCommandBuffer(m_VkCommandBuffer, &beginInfo);
 		C78E_CORE_VALIDATE(beginCommandBufferResult == VK_SUCCESS, return false,
@@ -56,8 +49,6 @@ namespace C78E {
 		m_State = State::Recording;
 		return true;
 	}
-	
-	
 	
 	void VulkanCommandBuffer::beginRenderPass(Ref<RenderPass> renderPass, Ref<FrameBuffer> frameBuffer) {
 		// Mark command buffer for Graphics usage
@@ -117,8 +108,37 @@ namespace C78E {
 		vkCmdDraw(m_VkCommandBuffer, static_cast<uint32_t>(vertexCount), static_cast<uint32_t>(instanceCount), 0, 0);
 	}
 
+	void VulkanCommandBuffer::copyBuffer(
+		GPUBuffer& srcBuffer, GPUBuffer& dstBuffer,
+		size_t size, size_t srcOffset, size_t dstOffset) {
+		requiresTransfer();
+
+		VulkanGPUBuffer& vulkanSrcBuffer = dynamic_cast<VulkanGPUBuffer&>(srcBuffer);
+		VulkanGPUBuffer& vulkanDstBuffer = dynamic_cast<VulkanGPUBuffer&>(dstBuffer);
+
+		VulkanBuffer& srcVulkanBuffer = vulkanSrcBuffer.getVulkanBuffer();
+		VulkanBuffer& dstVulkanBuffer = vulkanDstBuffer.getVulkanBuffer();
+
+		VkBufferCopy copyRegion{};
+		copyRegion.srcOffset = static_cast<VkDeviceSize>(srcOffset);
+		copyRegion.dstOffset = static_cast<VkDeviceSize>(dstOffset);
+		copyRegion.size = static_cast<VkDeviceSize>(size != 0 ? size : srcVulkanBuffer.getSize());
+
+		vkCmdCopyBuffer(m_VkCommandBuffer, srcVulkanBuffer.getVkBuffer(), dstVulkanBuffer.getVkBuffer(), 1, &copyRegion);
+	}
+
 	void VulkanCommandBuffer::endRenderPass() {
 		vkCmdEndRenderPass(m_VkCommandBuffer);
+	}
+
+	void VulkanCommandBuffer::bind(Ref<VertexBuffer> vertexBuffer) {
+		C78E_CORE_ASSERT(vertexBuffer, "VulkanCommandBuffer::bind: vertexBuffer was nullptr!");
+		Ref<VulkanVertexBuffer> vulkanVertexBuffer = castRef<VulkanVertexBuffer>(vertexBuffer);
+
+		const uint32_t firstBinding = 0; //TODO: auto detect / explicitly specify
+		const VkBuffer vertexBuffers[] = { vulkanVertexBuffer->getVulkanBuffer().getVkBuffer() };
+		const VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(m_VkCommandBuffer, firstBinding, 1, vertexBuffers, offsets);
 	}
 	
 	bool VulkanCommandBuffer::endRecording() {
@@ -133,11 +153,14 @@ namespace C78E {
 		return true;
 	}
 
-	bool VulkanCommandBuffer::hasSwapChainTarget() const { return m_HasSwapChainTarget; }
+	bool VulkanCommandBuffer::hasSwapChainTarget() const {
+		return m_HasSwapChainTarget;
+	}
 
 	void VulkanCommandBuffer::clear() {
 		VkResult result = vkResetCommandBuffer(m_VkCommandBuffer, 0);
 		C78E_CORE_SOFT_VALIDATE(result == VK_SUCCESS, "VulkanCommandBuffer::clear: failed to clear command buffer!");
+		m_State = State::Ready;
 	}
 
 

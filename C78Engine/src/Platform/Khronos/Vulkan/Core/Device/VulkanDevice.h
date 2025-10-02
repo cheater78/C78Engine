@@ -57,33 +57,29 @@ namespace C78E {
 
         bool waitIdle() const;
 
-        
-        uint32_t getUniversalQueueFamilyIndex() const {
-            return m_UniversialFamily.queueFamilyIndex;
-        }
-        uint32_t getComputeQueueFamilyIndex() const {
-            return m_UniversialFamily.queueFamilyIndex;
-        }
-        uint32_t getTransferQueueFamilyIndex() const {
-            return m_UniversialFamily.queueFamilyIndex;
-        }
+        uint32_t getUniversalQueueFamilyIndex() const;
+        uint32_t getComputeQueueFamilyIndex() const;
+        uint32_t getTransferQueueFamilyIndex() const;
 
-		VkQueue getUniversalVkQueue() const {
-            return m_UniversalQueue;
-        }
-        VkQueue getPresentVkQueue() const {
-            return m_UniversalQueue;
-		}
-        VkQueue getComputeVkQueue(uint32_t index = 0) const { 
-            C78E_CORE_VALIDATE(index < 2, return VK_NULL_HANDLE, "VulkanDevice::getComputeVkQueue: Compute Queue index out of bounds!");
-            return m_ComputeQueues[index]; 
-		}
-		VkQueue getTransferVkQueue() const {
-            return m_TransferQueue;
-        }
+		VkQueue getUniversalVkQueue() const;
+        VkQueue getPresentVkQueue() const;
+        VkQueue getComputeVkQueue(uint32_t index = 0) const;
+		VkQueue getTransferVkQueue() const;
+
+        bool waitUniversalQueueIdle() const;
+        bool waitComputeQueueIdle(uint32_t index = 0) const;
+        bool waitTransferQueueIdle() const;
+
+        VkCommandPool getUniversalVkCommandPool() const;
+        VkCommandPool getPresentVkCommandPool() const;
+        VkCommandPool getComputeVkCommandPool() const;
+        VkCommandPool getTransferVkCommandPool() const;
+
     private:
         bool buildDeviceQueueCreateInfos(std::vector<VkDeviceQueueCreateInfo>& deviceQueueCreateInfos);
         bool createDeviceQueues();
+        bool createCommandPools();
+        void destroyCommandPools();
     private:
         VkDevice m_VkDevice = VK_NULL_HANDLE;
         VkSurfaceKHR m_Surface = VK_NULL_HANDLE;
@@ -94,6 +90,10 @@ namespace C78E {
         float m_ComputeQueuesPriorities[2] = { 1.f, 1.f };
         VkQueue m_TransferQueue; // transfer queue
         float m_TransferQueuePriority = 1.f;
+
+        VkCommandPool m_UniversalPool;
+        VkCommandPool m_ComputePool;
+        VkCommandPool m_TransferPool;
 
     };
 

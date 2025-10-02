@@ -1,5 +1,5 @@
 #pragma once
-#include <C78E/Graphics/API/Texture/Texture.h>
+#include "Texture.h"
 #include <C78E/Graphics/API/Command/RenderPass.h>
 
 namespace C78E {

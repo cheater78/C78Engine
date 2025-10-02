@@ -80,16 +80,13 @@ namespace C78E {
         return true;
     }
 
-
     bool VulkanPhysicalDevice::supportsUniversalPresent(const VkSurfaceKHR presentSurface) {
         fetchQueueFamilies(presentSurface);
         return m_UniversialFamily.queueFamilyIndex != -1 && m_UniversialFamily.supportsPresent;
     }
-
     bool VulkanPhysicalDevice::supportsDedicatedQueues() const {
         return m_ComputeFamily.queueFamilyIndex != -1 && m_TransferFamily.queueFamilyIndex != -1;
     }
-
     bool VulkanPhysicalDevice::supportsRayTracing() const {
         std::vector<const char*> rtextensions = { //TODO: also in Instance -> unify/centralize
             VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
@@ -153,7 +150,6 @@ namespace C78E {
 			C78E_CORE_TRACE("VulkanDevice::fetchDeviceExtensions: Device extension: {0}", extension.extensionName);
 		}
     }
-
     void VulkanPhysicalDevice::fetchQueueFamilyProperties() {
         C78E_CORE_TRACE("queryQueueFamilyProperties: Fetching queue families...");
         uint32_t queueFamilyCount = 0;
@@ -162,13 +158,15 @@ namespace C78E {
         C78E_CORE_TRACE("queryQueueFamilyProperties: Queue families found: {0}", queueFamilyCount);
         m_QueueFamilyProperties.resize(queueFamilyCount);
         vkGetPhysicalDeviceQueueFamilyProperties(m_VkPhysicalDevice, &queueFamilyCount, m_QueueFamilyProperties.data());
-        for (const auto& queueFamily : m_QueueFamilyProperties) {
-            C78E_CORE_TRACE("queryQueueFamilyProperties: Queue family: {0}", queueFamily.queueCount);
+        for (uint32_t i = 0; i < queueFamilyCount; i++) {
+            const auto& queueFamily = m_QueueFamilyProperties[i];
+            C78E_CORE_TRACE("queryQueueFamilyProperties: Queue family {}", i);
+            C78E_CORE_TRACE("queryQueueFamilyProperties: Queue family count: {0}", queueFamily.queueCount);
             C78E_CORE_TRACE("queryQueueFamilyProperties: Queue family flags: {0}", vkQueueFlagsToString(queueFamily.queueFlags));
         }
     }
-
     void VulkanPhysicalDevice::fetchQueueFamilies(const VkSurfaceKHR presentSurface) {
+        C78E_CORE_TRACE("VulkanPhysicalDevice::fetchQueueFamilies: fetching QueueFamilies...");
         if (m_UniversialFamily.queueFamilyIndex != -1) {
             C78E_CORE_TRACE("VulkanPhysicalDevice::fetchQueueFamilies: Universal queue family already fetched!");
 			return; // Already fetched
@@ -186,6 +184,11 @@ namespace C78E {
         m_TransferFamily.queueFamilyIndex = getQueueFamilyIndexWith(
             C78E_VULKAN_QUEUE_FAMILY_TRANSFER_QUEUE_FLAGS,
             C78E_VULKAN_QUEUE_FAMILY_QUEUE_FLAGS_MASK);
+
+        C78E_CORE_TRACE("VulkanPhysicalDevice::fetchQueueFamilies: Found:");
+        C78E_CORE_TRACE("VulkanPhysicalDevice::fetchQueueFamilies:   UniversialFamily: {}", m_UniversialFamily.queueFamilyIndex);
+        C78E_CORE_TRACE("VulkanPhysicalDevice::fetchQueueFamilies:   ComputeFamily: {}", m_ComputeFamily.queueFamilyIndex);
+        C78E_CORE_TRACE("VulkanPhysicalDevice::fetchQueueFamilies:   TransferFamily: {}", m_TransferFamily.queueFamilyIndex);
     }
 
     uint32_t VulkanPhysicalDevice::getQueueFamilyIndexWith(const VkQueueFlags queueFlags, const VkQueueFlags mask, const VkSurfaceKHR presentSurface) const {
@@ -233,13 +236,18 @@ namespace C78E {
         createInfo.ppEnabledExtensionNames = extensions.data();
 
         VkResult createResult = vkCreateDevice(getVkPhysicalDevice(), &createInfo, nullptr, &m_VkDevice);
-        C78E_CORE_ASSERT(createResult == VK_SUCCESS, "VulkanDevice::createLogicalDevice: Failed to create logical device!");
+        C78E_CORE_ASSERT(createResult == VK_SUCCESS, "VulkanDevice::VulkanDevice: Failed to create logical device!");
 
-		C78E_CORE_ASSERT(createDeviceQueues(), "VulkanDevice::createLogicalDevice: Failed to create device queues!");
+        const bool createDeviceQueuesSuccess = createDeviceQueues();
+		C78E_CORE_ASSERT(createDeviceQueuesSuccess, "VulkanDevice::VulkanDevice: Failed to create device queues!");
 
+        const bool createCommandPoolsSuccess = createCommandPools();
+        C78E_CORE_ASSERT(createCommandPoolsSuccess, "VulkanDevice::VulkanDevice: Failed to create CommandPools!");
     }
     VulkanDevice::~VulkanDevice() {
         C78E_CORE_INFO("VulkanDevice::~VulkanDevice: Destroying Vulkan device...");
+
+        destroyCommandPools();
 
         if (m_VkDevice) {
             vkDestroyDevice(m_VkDevice, nullptr);
@@ -249,27 +257,66 @@ namespace C78E {
     VkDevice VulkanDevice::getVkDevice() {
         return m_VkDevice;
     }
+
     bool VulkanDevice::waitIdle() const {
         const VkResult result = vkDeviceWaitIdle(m_VkDevice);
         C78E_CORE_VALIDATE(result == VK_SUCCESS, return false, "VulkanDevice::waitIdle: failed!");
         return true;
     }
-    /*
-    bool VulkanDevice::submitCommandBuffer(Ref<VulkanCommandBuffer> vulkanCommandBuffer) {
-        const VkQueueFlags flags = vulkanCommandBuffer->getRequiredVkQueueFlags();
-        if (m_TransferQueue && ((flags & C78E_VULKAN_QUEUE_FAMILY_QUEUE_FLAGS_MASK) == C78E_VULKAN_QUEUE_FAMILY_TRANSFER_QUEUE_FLAGS)) {
-            return m_TransferQueue->submit(vulkanCommandBuffer);
-		} else if (m_ComputeQueues[0] && ((flags & C78E_VULKAN_QUEUE_FAMILY_QUEUE_FLAGS_MASK) == C78E_VULKAN_QUEUE_FAMILY_COMPUTE_QUEUE_FLAGS)) {
-            if (!m_ComputeQueues[0]->isReady() && m_ComputeQueues[1]) {
-                return m_ComputeQueues[1]->submit(vulkanCommandBuffer);
-            }
-            return m_ComputeQueues[0]->submit(vulkanCommandBuffer);
-		} else if (m_UniversalQueue && ((flags & C78E_VULKAN_QUEUE_FAMILY_QUEUE_FLAGS_MASK) == C78E_VULKAN_QUEUE_FAMILY_UNIVERSAL_QUEUE_FLAGS)) {
-			return m_UniversalQueue->submit(vulkanCommandBuffer);
-		}
-        return false;
+
+    uint32_t VulkanDevice::getUniversalQueueFamilyIndex() const {
+        return m_UniversialFamily.queueFamilyIndex;
     }
-    */
+    uint32_t VulkanDevice::getComputeQueueFamilyIndex() const {
+        return m_UniversialFamily.queueFamilyIndex;
+    }
+    uint32_t VulkanDevice::getTransferQueueFamilyIndex() const {
+        return m_UniversialFamily.queueFamilyIndex;
+    }
+
+    VkQueue VulkanDevice::getUniversalVkQueue() const {
+        return m_UniversalQueue;
+    }
+    VkQueue VulkanDevice::getPresentVkQueue() const {
+        return m_UniversalQueue;
+    }
+    VkQueue VulkanDevice::getComputeVkQueue(uint32_t index) const {
+        C78E_CORE_VALIDATE(index < 2, return VK_NULL_HANDLE, "VulkanDevice::getComputeVkQueue: Compute Queue index out of bounds!");
+        return m_ComputeQueues[index];
+    }
+    VkQueue VulkanDevice::getTransferVkQueue() const {
+        return m_TransferQueue;
+    }
+
+    bool VulkanDevice::waitUniversalQueueIdle() const {
+        VkResult waitResult = vkQueueWaitIdle(m_UniversalQueue);
+        C78E_CORE_VALIDATE(waitResult == VK_SUCCESS, return false, "VulkanDevice::waitUniversalQueueIdle: vkQueueWaitIdle failed on UniversalQueue!");
+        return true;
+    }
+    bool VulkanDevice::waitComputeQueueIdle(uint32_t index) const {
+        C78E_CORE_VALIDATE(index < 2, return false, "VulkanDevice::waitComputeQueueIdle: Compute Queue index out of bounds!");
+        VkResult waitResult = vkQueueWaitIdle(m_ComputeQueues[index]);
+        C78E_CORE_VALIDATE(waitResult == VK_SUCCESS, return false, "VulkanDevice::waitComputeQueueIdle: vkQueueWaitIdle failed on ComputeQueues[{}]!", index);
+        return true;
+    }
+    bool VulkanDevice::waitTransferQueueIdle() const {
+        VkResult waitResult = vkQueueWaitIdle(m_TransferQueue);
+        C78E_CORE_VALIDATE(waitResult == VK_SUCCESS, return false, "VulkanDevice::waitTransferQueueIdle: vkQueueWaitIdle failed on TransferQueue!");
+        return true;
+    }
+
+    VkCommandPool VulkanDevice::getUniversalVkCommandPool() const {
+        return m_UniversalPool;
+    }
+    VkCommandPool VulkanDevice::getPresentVkCommandPool() const {
+        return m_UniversalPool;
+    }
+    VkCommandPool VulkanDevice::getComputeVkCommandPool() const {
+        return m_ComputePool;
+    }
+    VkCommandPool VulkanDevice::getTransferVkCommandPool() const {
+        return m_TransferPool;
+    }
 
     bool VulkanDevice::buildDeviceQueueCreateInfos(std::vector<VkDeviceQueueCreateInfo>& deviceQueueCreateInfos) {
         deviceQueueCreateInfos.clear();
@@ -312,7 +359,6 @@ namespace C78E {
         }
         return true;
     }
-
     bool VulkanDevice::createDeviceQueues() {
         if (m_UniversialFamily.queueFamilyIndex != -1) {
             vkGetDeviceQueue(m_VkDevice, m_UniversialFamily.queueFamilyIndex, 0, &m_UniversalQueue);
@@ -333,6 +379,45 @@ namespace C78E {
         C78E_CORE_VALIDATE(m_UniversalQueue || m_ComputeQueues[0] || m_ComputeQueues[1] || m_TransferQueue,
             return false, "VulkanDevice::createDeviceQueues: No Queue was created!");
         return true;
+    }
+    bool VulkanDevice::createCommandPools() {
+        {
+            VkCommandPoolCreateInfo poolInfo{};
+            poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+            poolInfo.queueFamilyIndex = getUniversalQueueFamilyIndex();
+            VkResult commandPoolCreateResult = vkCreateCommandPool(m_VkDevice, &poolInfo, nullptr, &m_UniversalPool);
+            C78E_CORE_VALIDATE(commandPoolCreateResult == VK_SUCCESS, return false, "VulkanDevice::createCommandPools: failed to create UniversalCommandPool!");
+        }
+        {
+            VkCommandPoolCreateInfo poolInfo{};
+            poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+            poolInfo.queueFamilyIndex = getComputeQueueFamilyIndex();
+            VkResult commandPoolCreateResult = vkCreateCommandPool(m_VkDevice, &poolInfo, nullptr, &m_ComputePool);
+            C78E_CORE_VALIDATE(commandPoolCreateResult == VK_SUCCESS, return false, "VulkanDevice::createCommandPools: failed to create ComputeCommandPool!");
+        }
+        {
+            VkCommandPoolCreateInfo poolInfo{};
+            poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+            poolInfo.queueFamilyIndex = getTransferQueueFamilyIndex();
+            VkResult commandPoolCreateResult = vkCreateCommandPool(m_VkDevice, &poolInfo, nullptr, &m_TransferPool);
+            C78E_CORE_VALIDATE(commandPoolCreateResult == VK_SUCCESS, return false, "VulkanDevice::createCommandPools: failed to create TransferCommandPool!");
+        }
+        return true;
+    }
+
+    void VulkanDevice::destroyCommandPools() {
+        if(m_UniversalPool) {
+            vkDestroyCommandPool(m_VkDevice, m_UniversalPool, nullptr);
+        }
+        if (m_ComputePool) {
+            vkDestroyCommandPool(m_VkDevice, m_ComputePool, nullptr);
+        }
+        if (m_TransferPool) {
+            vkDestroyCommandPool(m_VkDevice, m_TransferPool, nullptr);
+        }
     }
 
 	// static Vulkan Device Manager

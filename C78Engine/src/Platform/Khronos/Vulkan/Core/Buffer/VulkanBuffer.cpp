@@ -36,61 +36,83 @@ namespace C78E {
 		return bufferElementSize;
 	}
 
-	VulkanBuffer::VulkanBuffer(Ref<VulkanDevice> device, VkDeviceSize elementSize, uint32_t elementCount, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags)
-		: m_Device(device), m_ElementSize(elementSize), m_ElementCount(elementCount), m_UsageFlags(usageFlags), m_MemoryPropertyFlags(memoryPropertyFlags), m_AlignmentSize(1) {
-		const VkPhysicalDeviceProperties& properties = m_Device->getPhysicalDeviceProperties();
-		const VkPhysicalDeviceLimits& limits = properties.limits;
-		
-		if (usageFlags & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT) {
-			m_AlignmentSize = toVkAlignment(limits.minUniformBufferOffsetAlignment, m_AlignmentSize);
-		}
-		if (usageFlags & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT) {
-			m_AlignmentSize = toVkAlignment(limits.minStorageBufferOffsetAlignment, m_AlignmentSize);
-		}
-		if (usageFlags & VK_BUFFER_USAGE_TRANSFER_SRC_BIT) {
-			m_AlignmentSize = toVkAlignment(limits.minMemoryMapAlignment, m_AlignmentSize);
-		}
 
-		C78E_CORE_VALIDATE(createBuffer(), return, "VulkanBuffer::VulkanBuffer: Failed to create Vulkan buffer!");
+	Scope<VulkanBuffer> VulkanBuffer::create(Ref<VulkanDevice> device, size_t size, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkSharingMode sharingMode) {
+		return createScope<VulkanBuffer>(device, size, usageFlags, memoryPropertyFlags, sharingMode);
 	}
+
+	VulkanBuffer::VulkanBuffer(Ref<VulkanDevice> device, size_t size, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkSharingMode sharingMode)
+		: m_Device(device), m_Size(size), m_VkBufferUsageFlags(usageFlags), m_VkMemoryPropertyFlags(memoryPropertyFlags), m_VkSharingMode(sharingMode) {
+		const VkDeviceSize bufferSize = static_cast<VkDeviceSize>(size);
+
+		VkBufferCreateInfo bufferInfo{};
+		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+		bufferInfo.size = bufferSize;
+		bufferInfo.usage = usageFlags;
+		bufferInfo.sharingMode = sharingMode;
+
+		VkResult createBufferResult = vkCreateBuffer(m_Device->getVkDevice(), &bufferInfo, nullptr, &m_VkBuffer);
+		C78E_CORE_ASSERT(createBufferResult == VK_SUCCESS, "VulkanBufferManager::createVulkanBuffer: Failed to create vulkan buffer!");
+
+		VkMemoryRequirements memRequirements; // query VkMemoryRequirements
+		vkGetBufferMemoryRequirements(m_Device->getVkDevice(), m_VkBuffer, &memRequirements);
+
+		VkMemoryAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+		allocInfo.allocationSize = memRequirements.size;
+		allocInfo.memoryTypeIndex = findMemoryType(m_Device, memRequirements.memoryTypeBits, memoryPropertyFlags);
+
+		VkResult allocateMemoryResult = vkAllocateMemory(m_Device->getVkDevice(), &allocInfo, nullptr, &m_VkDeviceMemory);
+		C78E_CORE_ASSERT(allocateMemoryResult == VK_SUCCESS, "VulkanBufferManager::createVulkanBuffer: Failed to allocate buffer memory!");
+
+		VkResult bindMemoryResult = vkBindBufferMemory(m_Device->getVkDevice(), m_VkBuffer, m_VkDeviceMemory, 0);
+		C78E_CORE_ASSERT(bindMemoryResult == VK_SUCCESS, "VulkanBufferManager::createVulkanBuffer: Failed to bind buffer memory!");
+
+	}
+
 	VulkanBuffer::~VulkanBuffer() {
-		destroyBuffer();
+		if (m_Mapped) {
+			vkUnmapMemory(m_Device->getVkDevice(), m_VkDeviceMemory);
+			m_Mapped = nullptr;
+		}
+		if (m_VkBuffer) {
+			vkDestroyBuffer(m_Device->getVkDevice(), m_VkBuffer, nullptr);
+			m_VkBuffer = VK_NULL_HANDLE;
+		}
+		if (m_VkDeviceMemory) {
+			vkFreeMemory(m_Device->getVkDevice(), m_VkDeviceMemory, nullptr);
+			m_VkDeviceMemory = VK_NULL_HANDLE;
+		}
 	}
 
-	inline VkBuffer VulkanBuffer::getVkBuffer() const {
-		return m_Buffer;
+	VkDeviceSize VulkanBuffer::getSize() const {
+		return m_Size;
 	}
+
+	VkBuffer VulkanBuffer::getVkBuffer() const {
+		return m_VkBuffer;
+	}
+
 	const VkBuffer* VulkanBuffer::getVkBufferPtr() const {
-		return &m_Buffer;
-	}
-	inline VkDeviceSize VulkanBuffer::getElementSize() const {
-		return m_ElementSize;
-	}
-	inline uint32_t VulkanBuffer::getElementCount() const {
-		return m_ElementCount;
-	}
-	inline VkBufferUsageFlags VulkanBuffer::getVkUsageFlags() const {
-		return m_UsageFlags;
-	}
-	inline VkMemoryPropertyFlags VulkanBuffer::getVkMemoryPropertyFlags() const {
-		return m_MemoryPropertyFlags;
-	}
-	inline VkDeviceSize VulkanBuffer::getAlignmentSize() const {
-		return m_AlignmentSize;
+		return &m_VkBuffer;
 	}
 
-	inline VkDeviceSize VulkanBuffer::getBufferSize() const {
-		return m_ElementCount * m_AlignmentSize;
+	VkBufferUsageFlags VulkanBuffer::getVkUsageFlags() const {
+		return m_VkBufferUsageFlags;
 	}
-	inline VkDescriptorBufferInfo VulkanBuffer::descriptorInfo(VkDeviceSize size, VkDeviceSize offset) {
-		return VkDescriptorBufferInfo{ m_Buffer, offset, size };
+
+	VkMemoryPropertyFlags VulkanBuffer::getVkMemoryPropertyFlags() const {
+		return m_VkMemoryPropertyFlags;
 	}
-	
+
+	void* VulkanBuffer::getMappedPtr() const {
+		return m_Mapped;
+	}
 
 	inline bool VulkanBuffer::isHostVisible() const {
-		return (m_MemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+		return (m_VkMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 	}
-	inline bool VulkanBuffer::isHostCoherent() const { return (m_MemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT); }
+	inline bool VulkanBuffer::isHostCoherent() const { return (m_VkMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT); }
 	inline bool VulkanBuffer::isMapped() const { return m_Mapped != nullptr; }
 
 	bool VulkanBuffer::map(VkDeviceSize size, VkDeviceSize offset, bool readIn) {
@@ -99,7 +121,7 @@ namespace C78E {
 		}
 		m_MappedSize = size;
 		m_MappedBufferOffset = offset;
-		VkResult result = vkMapMemory(m_Device->getVkDevice(), m_Memory, m_MappedBufferOffset, m_MappedSize, 0, &m_Mapped);
+		VkResult result = vkMapMemory(m_Device->getVkDevice(), m_VkDeviceMemory, m_MappedBufferOffset, m_MappedSize, 0, &m_Mapped);
 		C78E_CORE_VALIDATE(result == VK_SUCCESS, return false, "VulkanBuffer::map: Failed to map buffer memory!");
 		if (readIn && !isHostCoherent()) {
 			readMappedFromDeviceMemory();
@@ -115,7 +137,7 @@ namespace C78E {
 		if (writeBack && !isHostCoherent()) {
 			writeMappedToDeviceMemory();
 		}
-		vkUnmapMemory(m_Device->getVkDevice(), m_Memory);
+		vkUnmapMemory(m_Device->getVkDevice(), m_VkDeviceMemory);
 		m_Mapped = nullptr;
 		m_MappedSize = 0;
 		m_MappedBufferOffset = 0;
@@ -124,7 +146,7 @@ namespace C78E {
 	bool VulkanBuffer::readMappedFromDeviceMemory(VkDeviceSize size, VkDeviceSize offset) {
 		VkMappedMemoryRange mappedRange = {};
 		mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-		mappedRange.memory = m_Memory;
+		mappedRange.memory = m_VkDeviceMemory;
 		mappedRange.offset = offset;
 		mappedRange.size = size;
 
@@ -135,7 +157,7 @@ namespace C78E {
 	bool VulkanBuffer::writeMappedToDeviceMemory(VkDeviceSize size, VkDeviceSize offset) {
 		VkMappedMemoryRange mappedRange = {};
 		mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-		mappedRange.memory = m_Memory;
+		mappedRange.memory = m_VkDeviceMemory;
 		mappedRange.offset = offset;
 		mappedRange.size = size;
 
@@ -144,46 +166,56 @@ namespace C78E {
 		return true;
 	}
 
-	bool VulkanBuffer::createBuffer() {
-		VkBufferCreateInfo bufferInfo{};
-		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-		bufferInfo.size = getBufferSize();
-		bufferInfo.usage = m_UsageFlags;
-		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-		VkResult createBufferResult = vkCreateBuffer(m_Device->getVkDevice(), &bufferInfo, nullptr, &m_Buffer);
-		C78E_CORE_VALIDATE(createBufferResult == VK_SUCCESS, return false, "VulkanBufferManager::createVulkanBuffer: Failed to create vulkan buffer!");
 
-		VkMemoryRequirements memRequirements;
-		vkGetBufferMemoryRequirements(m_Device->getVkDevice(), m_Buffer, &memRequirements);
-
-		VkMemoryAllocateInfo allocInfo{};
-		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-		allocInfo.allocationSize = memRequirements.size;
-		allocInfo.memoryTypeIndex = findMemoryType(m_Device, memRequirements.memoryTypeBits, m_MemoryPropertyFlags);
-
-		VkResult allocateMemoryResult = vkAllocateMemory(m_Device->getVkDevice(), &allocInfo, nullptr, &m_Memory);
-		C78E_CORE_VALIDATE(allocateMemoryResult == VK_SUCCESS, return false, "VulkanBufferManager::createVulkanBuffer: Failed to allocate buffer memory!");
-
-		VkResult bindMemoryResult = vkBindBufferMemory(m_Device->getVkDevice(), m_Buffer, m_Memory, 0);
-		C78E_CORE_VALIDATE(bindMemoryResult == VK_SUCCESS, return false, "VulkanBufferManager::createVulkanBuffer: Failed to bind buffer memory!");
-
-		return true;
+	VulkanElementBuffer::VulkanElementBuffer(
+		Ref<VulkanDevice> device,
+		VkDeviceSize elementSize,
+		uint32_t elementCount,
+		VkBufferUsageFlags usageFlags,
+		VkMemoryPropertyFlags memoryPropertyFlags,
+		VkSharingMode sharingMode)
+		: VulkanBuffer(device, elementCount * computeAlignmentSize(elementSize, usageFlags), usageFlags, memoryPropertyFlags, sharingMode),
+		m_ElementSize(elementSize),
+		m_ElementCount(elementCount) {
 	}
 
-	void VulkanBuffer::destroyBuffer() {
-		if(m_Mapped) {
-			vkUnmapMemory(m_Device->getVkDevice(), m_Memory);
-			m_Mapped = nullptr;
+	VulkanElementBuffer::~VulkanElementBuffer() {
+	}
+	
+	VkDeviceSize VulkanElementBuffer::getElementSize() const {
+		return m_ElementSize;
+	}
+	uint32_t VulkanElementBuffer::getElementCount() const {
+		return m_ElementCount;
+	}
+	
+	VkDeviceSize VulkanElementBuffer::getAlignmentSize() const {
+		return m_AlignmentSize;
+	}
+	
+	VkDescriptorBufferInfo VulkanElementBuffer::descriptorInfo(VkDeviceSize size, VkDeviceSize offset) {
+		return VkDescriptorBufferInfo{ m_VkBuffer, offset, size };
+	}
+
+	size_t VulkanElementBuffer::computeAlignmentSize(VkDeviceSize elementSize, VkBufferUsageFlags usageFlags) {
+		const VkPhysicalDeviceProperties& properties = m_Device->getPhysicalDeviceProperties();
+		const VkPhysicalDeviceLimits& limits = properties.limits;
+		
+		VkDeviceSize minAlignmentSize = 1;
+		if(usageFlags & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT) {
+			minAlignmentSize = std::max(minAlignmentSize, limits.minUniformBufferOffsetAlignment);
 		}
-		if(m_Buffer) {
-			vkDestroyBuffer(m_Device->getVkDevice(), m_Buffer, nullptr);
-			m_Buffer = VK_NULL_HANDLE;
+		if(usageFlags & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT) {
+			minAlignmentSize = std::max(minAlignmentSize, limits.minStorageBufferOffsetAlignment);
 		}
-		if(m_Memory) {
-			vkFreeMemory(m_Device->getVkDevice(), m_Memory, nullptr);
-			m_Memory = VK_NULL_HANDLE;
+		if(usageFlags & VK_BUFFER_USAGE_TRANSFER_SRC_BIT) {
+			minAlignmentSize = std::max(minAlignmentSize, limits.minMemoryMapAlignment);
 		}
+
+		m_AlignmentSize = toVkAlignment(elementSize, minAlignmentSize);
+
+		return static_cast<VkDeviceSize>(m_AlignmentSize);
 	}
 
 }

@@ -24,4 +24,17 @@ namespace C78E {
 		}
 	};
 
+	//TODO: for complete ShaderReflection:
+
+	// What Shader Data Fields are there? -> ShaderDataField
+	// - Vertex/Instance Attribute (name, location, VectorType(limited))
+	// - UniformBufferObject (name, binding, VectorType(limited))
+	// - TextureSampler (name, binding) TODO: 2D,...?
+	// ...?
+
+	// What Shader Data Types are there? -> ShaderDataType
+	// - glsl primitives -> (name <-> static VectorType)
+	// - arrays -> (name, Vec<ShaderDataType>)
+	// - structs -> (name, ExtListType<ShaderDataType>)
+	// ...?
 }

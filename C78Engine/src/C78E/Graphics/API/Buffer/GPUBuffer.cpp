@@ -1,5 +1,5 @@
 #include "C78EPCH.h"
-#include "BufferLayout.h"
+#include "GPUBuffer.h"
 
 namespace C78E {
 

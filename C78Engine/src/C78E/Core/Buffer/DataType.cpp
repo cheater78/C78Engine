@@ -36,7 +36,7 @@ namespace C78E {
 		return size(); // for primitives, alignment size is the same as size -> pow of 2 is natural alignment
 	}
 
-	PrimitiveType::Type PrimitiveType::getType() const {
+	PrimitiveType::Type PrimitiveType::raw() const {
 		return m_Type;
 	}
 

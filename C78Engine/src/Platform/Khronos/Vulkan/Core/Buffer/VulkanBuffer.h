@@ -10,55 +10,74 @@ namespace C78E {
 
 	class VulkanBuffer {
 	public:
-		VulkanBuffer(
+		static Scope<VulkanBuffer> create(Ref<VulkanDevice> device,
+			size_t size,
+			VkBufferUsageFlags usageFlags,
+			VkMemoryPropertyFlags memoryPropertyFlags,
+			VkSharingMode sharingMode = VK_SHARING_MODE_EXCLUSIVE);
+	public:
+		VulkanBuffer(Ref<VulkanDevice> device,
+			size_t size,
+			VkBufferUsageFlags usageFlags,
+			VkMemoryPropertyFlags memoryPropertyFlags,
+			VkSharingMode sharingMode = VK_SHARING_MODE_EXCLUSIVE);
+		virtual ~VulkanBuffer();
+
+		VkDeviceSize getSize() const;
+		// to access VulkanBuffer CPU memory the buffer must be host visible and mapped
+		bool isHostVisible() const;
+		bool isHostCoherent() const;
+		// Map to RAM, requires HostVisibility
+		bool isMapped() const;
+		bool map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0, bool readIn = true);
+		void unmap(bool writeBack = false);
+		// read/write non HostCoherent memory range
+		bool readMappedFromDeviceMemory(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+		bool writeMappedToDeviceMemory(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+
+		VkBuffer getVkBuffer() const;
+		const VkBuffer* getVkBufferPtr() const;
+		VkBufferUsageFlags getVkUsageFlags() const;
+		VkMemoryPropertyFlags getVkMemoryPropertyFlags() const;
+		void* getMappedPtr() const;
+	protected:
+		Ref<VulkanDevice> m_Device;
+		VkDeviceSize m_Size = 0;
+		VkBufferUsageFlags m_VkBufferUsageFlags = 0;
+		VkMemoryPropertyFlags m_VkMemoryPropertyFlags = 0;
+		VkSharingMode m_VkSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		VkBuffer m_VkBuffer = VK_NULL_HANDLE;
+		VkDeviceMemory m_VkDeviceMemory = VK_NULL_HANDLE;
+		// Map to RAM, requires HostCoherence
+		void* m_Mapped = nullptr;
+		VkDeviceSize m_MappedSize = 0;
+		VkDeviceSize m_MappedBufferOffset = 0;
+	};
+
+	class VulkanElementBuffer : public VulkanBuffer {
+	public:
+		VulkanElementBuffer(
 			Ref<VulkanDevice> device,
 			VkDeviceSize elementSize,
 			uint32_t elementCount,
 			VkBufferUsageFlags usageFlags,
-			VkMemoryPropertyFlags memoryPropertyFlags);
-		virtual ~VulkanBuffer();
+			VkMemoryPropertyFlags memoryPropertyFlags,
+			VkSharingMode sharingMode = VK_SHARING_MODE_EXCLUSIVE);
+		virtual ~VulkanElementBuffer();
 
-	public:
-		VkBuffer getVkBuffer() const;
-		const VkBuffer* getVkBufferPtr() const;
-		VkDeviceSize getElementSize() const;
-		uint32_t getElementCount() const;
-		VkBufferUsageFlags getVkUsageFlags() const;
-		VkMemoryPropertyFlags getVkMemoryPropertyFlags() const;
-		VkDeviceSize getAlignmentSize() const;
-
-		VkDeviceSize getBufferSize() const;
 		VkDescriptorBufferInfo descriptorInfo(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 
-	public: // to access VulkanBuffer CPU memory the buffer must be host visible
-		bool isHostVisible() const;
-		bool isHostCoherent() const;
-		bool isMapped() const;
-
-		bool map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0, bool readIn = false);
-		void unmap(bool writeBack = false);
-
-		bool readMappedFromDeviceMemory(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-		bool writeMappedToDeviceMemory(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-
+		VkDeviceSize getElementSize() const;
+		uint32_t getElementCount() const;
+		VkDeviceSize getAlignmentSize() const;
 	private:
-		bool createBuffer();
-		void destroyBuffer();
+		size_t computeAlignmentSize(VkDeviceSize elementSize, VkBufferUsageFlags usageFlags);
 	private:
-		Ref<VulkanDevice> m_Device;
 		VkDeviceSize m_ElementSize;
-		uint32_t m_ElementCount;
-		VkBufferUsageFlags m_UsageFlags;
-		VkMemoryPropertyFlags m_MemoryPropertyFlags;
 		VkDeviceSize m_AlignmentSize;
-
-		VkBuffer m_Buffer = VK_NULL_HANDLE;
-		VkDeviceMemory m_Memory = VK_NULL_HANDLE;
-
-		void* m_Mapped = nullptr;
-		VkDeviceSize m_MappedSize = 0;
-		VkDeviceSize m_MappedBufferOffset = 0;
-
+		uint32_t m_ElementCount;
 	};
+
+	//TODO: maybe primitive Base Buffer and some structured type? - or could all Buffers be structured?(idea of buffer data structure interface, which requires a layout - constructed on the fly)
 
 }

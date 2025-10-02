@@ -7,7 +7,7 @@
 namespace C78E {
 
 	VkFormat toVkFormat(ShaderDataType type) {
-		switch(type.getType()) {
+		switch(type.raw()) {
 		case PrimitiveType::Float32:
 			switch (type.elementCount()) {
 			case 1: return VK_FORMAT_R32_SFLOAT;

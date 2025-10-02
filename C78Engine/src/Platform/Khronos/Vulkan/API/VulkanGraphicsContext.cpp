@@ -17,45 +17,14 @@ namespace C78E {
 	}
 
     Ref<CommandBuffer> VulkanGraphicsContext::createCommandBuffer() {
-		return createRef<VulkanCommandBuffer>(*this, CommandBuffer::Usage::Auto, m_UniversalCommandPool);
+		return createRef<VulkanCommandBuffer>(*this, true, CommandBuffer::Usage::Auto, getVkCommandPoolFor(CommandBuffer::Usage::Auto));
     }
 
-    void VulkanGraphicsContext::init() {
-		Ref<VulkanGraphicsInstance> vulkanInstance = GraphicsInstance::getAs<VulkanGraphicsInstance>();
-
-        // Create window surface
-        VkResult result = glfwCreateWindowSurface(vulkanInstance->getInstance(), m_Window.getNativeWindowAs<GLFWwindow>(), nullptr, &m_VkSurface);
-        C78E_CORE_ASSERT(result == VK_SUCCESS, "VulkanGraphicsContext::init: Failed to create window surface!");
-
-		// pick a suitable device
-		m_Device = vulkanInstance->pickDevice(m_VkSurface);
-
-        // Create Command Pool
-        VkCommandPoolCreateInfo poolInfo{};
-        poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-        poolInfo.queueFamilyIndex = m_Device->getUniversalQueueFamilyIndex();
-        VkResult uniCmdPool = vkCreateCommandPool(m_Device->getVkDevice(), &poolInfo, nullptr, &m_UniversalCommandPool);
-        C78E_CORE_SOFT_VALIDATE(uniCmdPool == VK_SUCCESS, "VulkanGraphicsContext::init: failed to create CommandPool!");
-
-    }
-
-    void VulkanGraphicsContext::shutdown() {
-        Ref<VulkanGraphicsInstance> vulkanInstance = GraphicsInstance::getAs<VulkanGraphicsInstance>();
-
-        for (auto& cmd : m_SubmittedCommandBuffers) {
-            cmd.reset(); // kill all buffers before the pool
-        }
-
-        if(m_UniversalCommandPool) {
-            vkDestroyCommandPool(m_Device->getVkDevice(), m_UniversalCommandPool, nullptr);
-        }
-
-        m_SwapChain = nullptr;
-
-        if(m_VkSurface) {
-            vkDestroySurfaceKHR(vulkanInstance->getInstance(), m_VkSurface, nullptr);
-        }
+    Scope<CommandBuffer> VulkanGraphicsContext::beginSingleTimeCommand(CommandBuffer::UsageFlags usage) {
+        Scope<CommandBuffer> cmdBuf = createScope<VulkanCommandBuffer>(*this, false, usage, getVkCommandPoolFor(usage));
+        //TODO: how todo submissions(blocking / non blocking) on destruction? - separate class? / Scope?
+        // move Vk objects to some storage in ctx -> execute async for non blocking
+        return std::move(cmdBuf);
     }
 
     VkSurfaceCapabilitiesKHR VulkanGraphicsContext::getSurfaceCapabilities() const {
@@ -156,6 +125,21 @@ namespace C78E {
         return false;
     }
 
+    bool VulkanGraphicsContext::submit(Ref<CommandBuffer> commandBuffer) {
+        Ref<VulkanCommandBuffer> vulkanCommandBuffer = castRef<VulkanCommandBuffer>(commandBuffer);
+        C78E_CORE_VALIDATE(vulkanCommandBuffer, return false, "VulkanGraphicsContext::submit: CommandBuffer is not of type VulkanCommandBuffer!");
+        const bool requiresGraphics = vulkanCommandBuffer->getRequiredVkQueueFlags() & VK_QUEUE_GRAPHICS_BIT;
+        const bool requiresCompute = vulkanCommandBuffer->getRequiredVkQueueFlags() & VK_QUEUE_COMPUTE_BIT;
+        const bool requiresTransfer = vulkanCommandBuffer->getRequiredVkQueueFlags() & VK_QUEUE_TRANSFER_BIT;
+
+        const bool isTransferOnly = !requiresGraphics && !requiresCompute && requiresTransfer;
+
+        if(isTransferOnly) {
+            return submitTransferOnlyCommandBuffer(commandBuffer);
+		}
+        return false;
+    }
+
     bool VulkanGraphicsContext::endFrame(uint32_t frameIndex) {
         C78E_CORE_VALIDATE(m_SwapChain, return false, "VulkanGraphicsContext::endFrame: Called without SwapChain!");
         Ref<VulkanSwapChain> vulkanSwapChain = castRef<VulkanSwapChain>(m_SwapChain);
@@ -194,5 +178,109 @@ namespace C78E {
         m_SubmittedCommandBuffers.clear();
         return waitSucc;
     }
+
+    bool VulkanGraphicsContext::copyBuffer(GPUBuffer& srcGPUBuffer, GPUBuffer& dstGPUBuffer, size_t size, size_t srcOffset, size_t dstOffset) {
+        Ref<CommandBuffer> cmd = createCommandBuffer(); // TODO: Currently universal queue fam
+        cmd->beginRecording();
+        cmd->copyBuffer(srcGPUBuffer, dstGPUBuffer, size, srcOffset, dstOffset);
+        cmd->endRecording();
+
+        //TODO: general submission for all cmb buffs -> commit to correct queue auto
+        Ref<VulkanCommandBuffer> vulkanCommandBuffer = castRef<VulkanCommandBuffer>(cmd);
+        VkSubmitInfo submitInfo{};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        submitInfo.pWaitDstStageMask = &waitStages;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = vulkanCommandBuffer->getVkCommandBufferPtr();
+
+        VkResult result = vkQueueSubmit(
+            m_Device->getTransferVkQueue(),
+            1,
+            &submitInfo,
+            VK_NULL_HANDLE // wait fence
+        );
+        m_Device->waitTransferQueueIdle(); // wait for completion, TODO: use fence
+        return true; // TODO: ...
+    }
+
+    void VulkanGraphicsContext::init() {
+        Ref<VulkanGraphicsInstance> vulkanInstance = GraphicsInstance::getAs<VulkanGraphicsInstance>();
+
+        // Create window surface
+        VkResult result = glfwCreateWindowSurface(vulkanInstance->getInstance(), m_Window.getNativeWindowAs<GLFWwindow>(), nullptr, &m_VkSurface);
+        C78E_CORE_ASSERT(result == VK_SUCCESS, "VulkanGraphicsContext::init: Failed to create window surface!");
+
+        // pick a suitable device
+        m_Device = vulkanInstance->pickDevice(m_VkSurface);
+
+    }
+
+    void VulkanGraphicsContext::shutdown() {
+        Ref<VulkanGraphicsInstance> vulkanInstance = GraphicsInstance::getAs<VulkanGraphicsInstance>();
+
+        for (auto& cmd : m_SubmittedCommandBuffers) {
+            cmd.reset(); // kill all buffers before the pool
+        }
+
+        m_SwapChain = nullptr;
+
+        if (m_VkSurface) {
+            vkDestroySurfaceKHR(vulkanInstance->getInstance(), m_VkSurface, nullptr);
+        }
+    }
+
+    VkCommandPool VulkanGraphicsContext::getVkCommandPoolFor(CommandBuffer::UsageFlags usage) const {
+        using Usage = CommandBuffer::Usage;
+        if (!usage || usage & Usage::Graphics) { // Auto or Graphics
+            return m_Device->getUniversalVkCommandPool();
+        } else if (usage & Usage::Compute) {
+            return m_Device->getComputeVkCommandPool();
+        } else if (usage & Usage::Control) {
+            return m_Device->getTransferVkCommandPool();
+        }
+        return VK_NULL_HANDLE;
+    }
+
+    bool VulkanGraphicsContext::submitComputeOnlyCommandBuffer(Ref<CommandBuffer> commandBuffer) {
+        Ref<VulkanCommandBuffer> vulkanCommandBuffer = castRef<VulkanCommandBuffer>(commandBuffer);
+        C78E_CORE_VALIDATE(vulkanCommandBuffer, return false, "VulkanGraphicsContext::submitTransferOnlyCommandBuffer: CommandBuffer is not of type VulkanCommandBuffer!");
+        
+        return false;
+    }
+
+    bool VulkanGraphicsContext::submitTransferOnlyCommandBuffer(Ref<CommandBuffer> commandBuffer) {
+        Ref<VulkanCommandBuffer> vulkanCommandBuffer = castRef<VulkanCommandBuffer>(commandBuffer);
+        C78E_CORE_VALIDATE(vulkanCommandBuffer, return false, "VulkanGraphicsContext::submitTransferOnlyCommandBuffer: CommandBuffer is not of type VulkanCommandBuffer!");
+        
+        // Submit command buffer to a qualified queue
+        VkSubmitInfo submitInfo{};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+        VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        submitInfo.pWaitDstStageMask = &waitStages;
+
+        //// Command buffer wait semaphores
+        //VkSemaphore waitSemaphores[] = { };
+        //submitInfo.waitSemaphoreCount = 1;
+        //submitInfo.pWaitSemaphores = waitSemaphores;
+        //
+        //// Command buffer signal semaphores
+        //VkSemaphore signalSemaphores[] = { };
+        //submitInfo.signalSemaphoreCount = 1;
+        //submitInfo.pSignalSemaphores = signalSemaphores;
+
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = vulkanCommandBuffer->getVkCommandBufferPtr();
+
+        VkResult result = vkQueueSubmit(
+            m_Device->getTransferVkQueue(),
+            1,
+            &submitInfo,
+            VK_NULL_HANDLE // wait fence
+        );
+        return false;
+    }
+
 
 }

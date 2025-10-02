@@ -5,7 +5,7 @@
 //#include <C78E/Graphics/API/Buffer/IndexBuffer.h>
 //#include <C78E/Graphics/API/Buffer/UniformBuffer.h>
 //#include <C78E/Graphics/API/Buffer/StorageBuffer.h>
-//#include <C78E/Graphics/API/Buffer/FrameBuffer.h>
+//#include <C78E/Graphics/API/Image/FrameBuffer.h>
 
 namespace C78E {
 

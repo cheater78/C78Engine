@@ -1,5 +1,5 @@
 #pragma once
-#include <C78E/Graphics/API/Texture/Texture.h>
+#include <C78E/Graphics/API/Image/Texture.h>
 
 namespace C78E {
 

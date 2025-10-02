@@ -6,8 +6,8 @@
 
 namespace C78E {
 
-	CommandBuffer::CommandBuffer(GraphicsContext& ctx, UsageFlags usage)
-		: m_GraphicsContext(ctx), m_State(State::Ready), m_Usage(usage) {
+	CommandBuffer::CommandBuffer(bool reusable, UsageFlags usage)
+		: m_Reusable(reusable), m_State(State::Ready), m_Usage(usage) {
 	}
 
 	CommandBuffer::~CommandBuffer() {
@@ -17,17 +17,5 @@ namespace C78E {
 	void CommandBuffer::addUsage(UsageFlags usage) {
 		m_Usage |= usage;
 	}
-
-	//SingleTimeCommandBuffer::SingleTimeCommandBuffer(Ref<CommandBuffer> commandBuffer)
-	//	: m_VkCommandBuffer(commandBuffer) {
-	//}
-	//
-	//SingleTimeCommandBuffer::~SingleTimeCommandBuffer() {
-	//	m_VkCommandBuffer->getGraphicsContext().submit(m_VkCommandBuffer);
-	//}
-	//
-	//CommandBufferManager::CommandBufferManager(GraphicsContext& graphicsContext)
-	//	: m_GraphicsContext(graphicsContext) {
-	//}
 
 }

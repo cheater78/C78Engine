@@ -1,6 +1,6 @@
 #pragma once
 #include "SwapInterval.h"
-#include <C78E/Graphics/API/Buffer/FrameBuffer.h>
+#include <C78E/Graphics/API/Image/FrameBuffer.h>
 
 namespace C78E {
 

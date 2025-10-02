@@ -1,5 +1,5 @@
 #pragma once
-#include <C78E/Graphics/API/Buffer/FrameBuffer.h>
+#include <C78E/Graphics/API/Image/FrameBuffer.h>
 
 #include <Platform/Khronos/Vulkan/Core/VulkanConversions.h>
 #include <Platform/Khronos/Vulkan/Core/Device/VulkanDevice.h>

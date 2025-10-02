@@ -18,6 +18,14 @@ namespace C78E {
 		
 		virtual size_t size() const = 0;
 		virtual size_t alignment() const = 0;
+
+	public:
+		bool operator==(const DataType& other) const {
+			return size() == other.size();
+		}
+		bool operator!=(const DataType& other) const {
+			return !operator==(other);
+		}
 	protected:
 		static size_t naturalAligmentOf(size_t size);
 	};
@@ -41,7 +49,7 @@ namespace C78E {
 			UInt64,
 			Float16,
 			Float32,
-			Double64
+			Double64,
 		};
 	public:
 		PrimitiveType(Type type);
@@ -53,7 +61,13 @@ namespace C78E {
 		virtual size_t size() const override;
 		virtual size_t alignment() const override;
 	public:
-		Type getType() const;
+		Type raw() const;
+		bool operator==(const PrimitiveType& other) const {
+			return DataType::operator==(other) && m_Type == other.m_Type;
+		}
+		bool operator!=(const PrimitiveType& other) const {
+			return !operator==(other);
+		}
 	protected:
 		Type m_Type = None;
 	};
@@ -68,18 +82,32 @@ namespace C78E {
 	public:
 		virtual ~CompositeType() = default;
 
-		virtual size_t size() const = 0;
-		virtual size_t alignment() const = 0;
+		virtual size_t size() const override = 0;
+		virtual size_t alignment() const override = 0;
 
 		virtual size_t elementSize(Index elementIndex) const = 0;
 		virtual size_t elementAlignment(Index elementIndex) const = 0;
 		virtual size_t elementCount() const = 0;
-
+	public:
+		bool operator==(const CompositeType& other) const {
+			if (!DataType::operator==(other) ||
+				elementCount() != other.elementCount()) {
+				return false;
+			}
+			for (size_t i = 0; i < elementCount(); i++) {
+				if (elementSize(i) != other.elementSize(i)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		bool operator!=(const CompositeType& other) const {
+			return !operator==(other);
+		}
 	};
 
 	/**
 	 * @brief VectorType is a CompositeType that represents a vector of PrimitiveTypes.
-	 * It can be used to represent vectors, matrices, and other composite types of single typed elements.
 	 */
 	class VectorType : public PrimitiveType, public CompositeType {
 	public:
@@ -103,10 +131,17 @@ namespace C78E {
 		virtual size_t elementSize(Index elementIndex = 0) const override;
 		virtual size_t elementAlignment(Index elementIndex = 0) const override;
 		virtual size_t elementCount() const override;
+
+		bool operator==(const VectorType& other) const {
+			// Checking CompositeType would be overkill(elementwise comparison) -> only one PrimitiveType
+			return PrimitiveType::operator==(other) && m_Count == other.m_Count; // -> check PrimitiveType and their count
+		}
+		bool operator!=(const VectorType& other) const {
+			return !operator==(other);
+		}
 	protected:
 		size_t m_Count = 0;
 	};
-
 
 	/**
 	 * @brief StructType is a fixed-size CompositeType containing a fixed number of VectorTypes.
@@ -175,7 +210,7 @@ namespace C78E {
 	requires std::is_convertible_v<T, VectorType>
 	class ExtListType : public CompositeType, private std::vector<T> {
 	public:
-		using ListTypeRange = MemoryRange<T>;
+		using ListTypeRange = MemoryRange<const T>;
 		using ListTypeIterator = ListTypeRange::Iterator;
 		using Index = size_t;
 	public:
@@ -188,47 +223,38 @@ namespace C78E {
 
 		virtual size_t size() const override {
 			size_t size = 0;
-			for (const T& elem : elements()) {
-				size += elem.size();
+			for (auto it = std::vector<T>::begin(); it != std::vector<T>::end(); it++) {
+				size += it->size();
 			}
 			return size;
 		}
 		virtual size_t alignment() const override {
 			size_t alignment = 0;
-			for (const T& elem : elements()) {
-				alignment += elem.alignment();
+			for (auto it = std::vector<T>::begin(); it != std::vector<T>::end(); it++) {
+				alignment += it->alignment();
 			}
 			return naturalAligmentOf(alignment);
 		}
 
 		virtual inline size_t elementSize(Index elementIndex) const override {
 			C78E_CORE_ASSERT(elementIndex < std::vector<T>::size(), "ExtListType::fieldSize: elementIndex out of bounds.");
-			return (*this)[elementIndex].size();
+			return std::vector<T>::operator[](elementIndex).size();
 		}
 		virtual inline size_t elementAlignment(Index elementIndex) const override {
 			C78E_CORE_ASSERT(elementIndex < std::vector<T>::size(), "ExtListType::fieldAlignment: elementIndex out of bounds.");
-			return (*this)[elementIndex].alignment();
+			return std::vector<T>::operator[](elementIndex).alignment();
 		}
 		virtual inline size_t elementCount() const override {
 			return std::vector<T>::size();
 		}
 
-		ListTypeRange elements() {
-			return ListTypeRange(std::vector<T>::data(), std::vector<T>::size());
+		ListTypeRange elements() const {
+			return ListTypeRange(&std::vector<T>::front(), &std::vector<T>::back());
 		}
-		const ListTypeRange elements() const {
-			return ListTypeRange(std::vector<T>::data(), std::vector<T>::size());
-		}
-		ListTypeIterator begin() {
+		ListTypeIterator begin() const {
 			return elements().begin();
 		}
-		ListTypeIterator end() {
-			return elements().end();
-		}
-		const ListTypeIterator begin() const {
-			return elements().begin();
-		}
-		const ListTypeIterator end() const {
+		ListTypeIterator end() const {
 			return elements().end();
 		}
 
@@ -245,6 +271,22 @@ namespace C78E {
 				std::vector<VectorType>::emplace_back(static_cast<VectorType>(elem));
 			}
 			return *this;
+		}
+
+		bool operator==(const ExtListType& other) const {
+			if(!CompositeType::operator==(other)) {
+				return false;
+			}
+			ListTypeIterator it = begin();
+			ListTypeIterator oit = other.begin();
+			for (; it != end() && oit != other.end();) {
+				if (*it != *oit) {
+					return false;
+				}
+				it++;
+				oit++;
+			}
+			return true;
 		}
 
 	};

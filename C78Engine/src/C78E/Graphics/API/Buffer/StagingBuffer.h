@@ -1,20 +1,23 @@
 #pragma once
 #include <C78E/Core/Buffer/Iterator.h>
 #include <C78E/Core/Log/SmartLog.h>
+#include <C78E/Graphics/API/Buffer/GPUBuffer.h>
+#include <C78E/Graphics/Core/GraphicsContextItem.h>
 
 namespace C78E {
 
 	/**
 	 * @brief CPU Memory Buffer that holds data, to be uploaded to the GPU
 	 */
-	class StagingBuffer {
+	class StagingBuffer : public virtual GPUBuffer {
 	public:
-		static Ref<StagingBuffer> create(size_t size);
+		static Ref<StagingBuffer> create(GraphicsContext& ctx, size_t size);
 	public:
+		StagingBuffer() = default;
 		virtual ~StagingBuffer() = default;
 
 		virtual bool isMapped() const = 0;
-		virtual void map() = 0;
+		virtual bool map() = 0;
 		virtual void unmap(bool writeBack = false) = 0;
 
 		virtual void* data() = 0;
@@ -33,7 +36,21 @@ namespace C78E {
 			const uint8_t* bufferBegin = reinterpret_cast<const uint8_t*>(data());
 			return MemoryRange<T>(reinterpret_cast<T*>(bufferBegin + firstElementIndex * sizeof(T)), elementCount);
 		}
-	private:
+	};
+
+
+	class StagedBuffer {
+	public:
+		StagedBuffer() = default;
+		virtual ~StagedBuffer() = default;
+	public:
+		bool hasStagingBuffer() const;
+		Ref<StagingBuffer> getStagingBuffer() const;
+		Ref<StagingBuffer> setStagingBuffer(Ref<StagingBuffer> stagingBuffer);
+		Ref<StagingBuffer> createStagingBuffer(GraphicsContext& ctx, size_t size);
+		void dropStagingBuffer();
+	protected: //TODO: prot. prob. unnecessary
+		Ref<StagingBuffer> m_StagingBuffer;
 	};
 
 }

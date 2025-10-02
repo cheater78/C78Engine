@@ -33,4 +33,14 @@ namespace C78E {
 		return *m_SwapChain;
 	}
 
+	// Shader Manager
+	Ref<ShaderManager> GraphicsContext::createShaderManager(const FilePath& cacheDirectory) {
+		C78E_CORE_TRACE("GraphicsContext::createSwapChain: creating ShaderManager...")
+			return m_ShaderManager = createRef<ShaderManager>(*this, cacheDirectory);
+	}
+
+	Ref<ShaderManager> GraphicsContext::getShaderManager() const {
+		return m_ShaderManager;
+	}
+
 }
