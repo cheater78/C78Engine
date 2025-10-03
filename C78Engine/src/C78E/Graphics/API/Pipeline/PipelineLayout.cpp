@@ -6,28 +6,32 @@
 
 namespace C78E {
 
-
-
 	PipelineType GraphicsPipelineLayout::getType() const {
 		return PipelineType::Graphics;
 	}
 
 	// Instance Buffer Layouts
 	void GraphicsPipelineLayout::addInstanceBufferLayout(const InstanceBufferLayout& layout) {
-
+		m_InstanceBufferLayouts.push_back(layout);
 	}
 
 	void GraphicsPipelineLayout::setInstanceBufferLayout(size_t index, const InstanceBufferLayout& layout) {
-
+		if (index < m_InstanceBufferLayouts.size()) {
+			m_InstanceBufferLayouts.resize(index + 1);
+		}
+		m_InstanceBufferLayouts[index] = layout;
 	}
 
 	// Vertex Buffer Layouts
 	void GraphicsPipelineLayout::addVertexBufferLayout(const VertexBufferLayout& layout) {
-
+		m_VertexBufferLayouts.push_back(layout);
 	}
 
 	void GraphicsPipelineLayout::setVertexBufferLayout(size_t index, const VertexBufferLayout& layout) {
-
+		if (index < m_VertexBufferLayouts.size()) {
+			m_VertexBufferLayouts.resize(index + 1);
+		}
+		m_VertexBufferLayouts[index] = layout;
 	}
 
 	// Push Constant Layouts

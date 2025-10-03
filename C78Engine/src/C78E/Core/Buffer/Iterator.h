@@ -16,9 +16,9 @@ namespace C78E {
 		struct Iterator {
 			using iterator_category = std::forward_iterator_tag;
 			using value_type = T;
-			T* ptr;
+			const T* ptr;
 
-			T operator*() const { return *ptr; }
+			const T& operator*() const { return *ptr; }
 			Iterator& operator++() {
 				ptr++; 
 				return *this;
@@ -33,9 +33,9 @@ namespace C78E {
 		struct ReverseIterator {
 			using iterator_category = std::forward_iterator_tag;
 			using value_type = T;
-			T* ptr;
+			const T* ptr;
 
-			T operator*() const { return *ptr; }
+			const T& operator*() const { return *ptr; }
 			ReverseIterator& operator++() {
 				ptr--;
 				return *this;
@@ -48,12 +48,12 @@ namespace C78E {
 			}
 		};
 	public:
-		MemoryRange(T* begin, T* end)
+		MemoryRange(const T* begin, const T* end) //TODO: not working correctly?
 			: m_Begin(begin), m_ElementCount((end - begin) / sizeof(T)) {
 			C78E_CORE_ASSERT(begin && end, "MemoryRange::MemoryRange: begin or end pointer was nullptr!");
 			C78E_CORE_ASSERT((end - begin) % sizeof(T), "MemoryRange::MemoryRange: begin and end do not fit a whole number of {}", typeid(T).name());
 		}
-		MemoryRange(T* begin, size_t elementCount)
+		MemoryRange(const T* begin, size_t elementCount)
 			: m_Begin(begin), m_ElementCount(elementCount) {
 		}
 
@@ -61,17 +61,17 @@ namespace C78E {
 			return Iterator(m_Begin);
 		}
 		virtual Iterator end() const {
-			return Iterator(m_Begin + m_ElementCount * sizeof(T));
+			return Iterator(m_Begin + m_ElementCount);
 		}
 
-		virtual ReverseIterator rend() const {
-			return ReverseIterator(m_Begin + m_ElementCount * sizeof(T));
+		virtual ReverseIterator rend() const { //TODO: check
+			return ReverseIterator(m_Begin + m_ElementCount);
 		}
 		virtual ReverseIterator rbegin() const {
 			return ReverseIterator(m_Begin);
 		}
 
-		virtual T& at(size_t index) const {
+		virtual const T& at(size_t index) const {
 			C78E_CORE_ASSERT(index < m_ElementCount, "MemoryRange::at: Index out of bounds!");
 			return m_Begin[index];
 		}
@@ -87,15 +87,15 @@ namespace C78E {
 			return m_ElementCount * sizeof(T);
 		}
 
-		inline T& operator[](size_t index) {
+		inline const T& operator[](size_t index) const {
 			return at(index);
 		}
 
-		inline T* data() {
+		inline const T* data() const {
 			return m_Begin;
 		}
 	private:
-		T* const m_Begin;
+		const T* const m_Begin;
 		size_t m_ElementCount;
 	};
 

@@ -149,41 +149,46 @@ namespace C78E {
 	void VulkanGraphicsPipelineLayout::writePipelineVertexInputLayout() {
 		m_BindingDescriptions.clear();
 		m_AttributeDescriptions.clear();
-		/*
+		
 		// Buffer Binding Descriptions map to Buffer Layouts = #Instance Buffers + #Vertex Buffers
 		m_BindingDescriptions.reserve(m_InstanceBufferLayouts.size() + m_VertexBufferLayouts.size());
-		for(const BufferLayout& bufferLayout : m_InstanceBufferLayouts) { // instanced buffers
+		for(const VertexLayout& layout : m_InstanceBufferLayouts) { // instanced buffers
 			VkVertexInputBindingDescription bindingDescription{};
 			bindingDescription.binding = static_cast<uint32_t>(m_BindingDescriptions.size());
-			bindingDescription.stride = bufferLayout.getStride();
+			bindingDescription.stride = layout.getStride();
 			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
 			m_BindingDescriptions.emplace_back(bindingDescription);
-			for(const BufferElement& element : bufferLayout.getElements()) { // buffer elements
+
+			uint32_t offset = 0;
+			for(const VertexAttribute& element : layout.attributes()) { // buffer elements
 				VkVertexInputAttributeDescription attributeDescription{};
 				attributeDescription.location = static_cast<uint32_t>(m_AttributeDescriptions.size());
 				attributeDescription.binding = bindingDescription.binding; // Must match the binding in the vertex input binding description
-				attributeDescription.format = toVkFormat(element.type); // Convert ShaderDataType to VkFormat
-				attributeDescription.offset = element.offset; // Offset of the attribute in the vertex data
+				attributeDescription.format = toVkFormat(element); // Convert ShaderDataType to VkFormat
+				attributeDescription.offset = offset; // Offset of the attribute in the vertex data
 				m_AttributeDescriptions.emplace_back(attributeDescription);
+				offset += element.size();
 			}
 		}
-		for(const BufferLayout& bufferLayout : m_VertexBufferLayouts) { // ordered buffers
+		for(const VertexLayout& bufferLayout : m_VertexBufferLayouts) { // ordered buffers
 			VkVertexInputBindingDescription bindingDescription{};
 			bindingDescription.binding = static_cast<uint32_t>(m_BindingDescriptions.size());
 			bindingDescription.stride = bufferLayout.getStride();
 			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 			m_BindingDescriptions.emplace_back(bindingDescription);
 
-			for(const BufferElement& element : bufferLayout.getElements()) { // buffer elements
+			uint32_t offset = 0;
+			for(const VertexAttribute& element : bufferLayout.attributes()) { // buffer elements
 				VkVertexInputAttributeDescription attributeDescription{};
 				attributeDescription.location = static_cast<uint32_t>(m_AttributeDescriptions.size());
 				attributeDescription.binding = bindingDescription.binding; // Must match the binding in the vertex input binding description
-				attributeDescription.format = toVkFormat(element.type); // Convert ShaderDataType to VkFormat
-				attributeDescription.offset = element.offset; // Offset of the attribute in the vertex data
+				attributeDescription.format = toVkFormat(element); // Convert ShaderDataType to VkFormat
+				attributeDescription.offset = offset; // Offset of the attribute in the vertex data
 				m_AttributeDescriptions.emplace_back(attributeDescription);
+				offset += element.size();
 			}
 		}
-		*/
+		
 	}
 
 

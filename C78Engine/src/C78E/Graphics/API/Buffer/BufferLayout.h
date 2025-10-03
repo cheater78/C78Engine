@@ -18,23 +18,24 @@ namespace C78E {
 	public:
 		using Attribute = VertexAttribute;
 		using AttributeListType = ExtListType<Attribute>;
-		using AttributeRange = MemoryRange<const Attribute>;
+		using AttributeRange = AttributeListType::ListTypeRange;
 		using AttributeIterator = AttributeRange::Iterator;
 		using AttributeIndex = uint32_t;
 	public:
+		VertexLayout()
+			: AttributeListType() {
+		}
 		template<typename... Args>
-		VertexLayout(Args&&... args)
-			: ExtListType<VertexAttribute>( std::forward<Args>(args)... ) {
+			requires (std::is_same_v<Attribute, std::decay_t<Args>> && ...)
+		inline VertexLayout(Args&&... args)
+			: AttributeListType( std::forward<Args>(args)... ) {
 		}
 
 		uint32_t getStride() const;
 		uint32_t getAttributeCount() const;
 		uint32_t getAttributeOffset(uint32_t index) const;
 
-		AttributeRange attributes();
-		const AttributeRange attributes() const;
-		AttributeIterator begin();
-		AttributeIterator end();
+		AttributeRange attributes() const;
 		AttributeIterator begin() const;
 		AttributeIterator end() const;
 
@@ -43,6 +44,8 @@ namespace C78E {
 	};
 	using InstanceBufferLayout = VertexLayout;
 	using VertexBufferLayout = VertexLayout;
+
+	using IndexLayout = PrimitiveType;
 
 	class UniformLayout {
 

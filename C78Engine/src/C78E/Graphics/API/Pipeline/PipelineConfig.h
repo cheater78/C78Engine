@@ -47,12 +47,12 @@ namespace C78E {
 		PrimitiveTopology primitiveTopology = PrimitiveTopology::Triangles;
 		bool primitiveStripRestart = false; // for strip topologies only
 
-		bool testDepthBuffer = true;
-		bool writeDepthBuffer = true;
+		bool testDepthBuffer = false;
+		bool writeDepthBuffer = false;
 		DepthFunction depthFunction = DepthFunction::Less;
 		MultiSample multisample = MultiSample::None;
 
-		bool backfaceCulling = true;
+		bool backfaceCulling = false;
 		bool frontFaceCulling = false;
 
 		float lineWidth = 1.f; //TODO: requires some vk bs

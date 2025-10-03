@@ -167,7 +167,11 @@ namespace C78E {
                 presentInfo.pImageIndices = &imageIndex;
 
                 VkResult result = vkQueuePresentKHR(m_Device->getPresentVkQueue(), &presentInfo);
-                //TODO: handle result - suboptimal, etc
+                C78E_CORE_VALIDATE(
+                    result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR,
+                    return false,
+                    "VulkanGraphicsContext::endFrame: vkQueuePresentKHR failed!"
+                );
 
                 break; // One Present per Frame only
             }
@@ -195,12 +199,12 @@ namespace C78E {
         submitInfo.pCommandBuffers = vulkanCommandBuffer->getVkCommandBufferPtr();
 
         VkResult result = vkQueueSubmit(
-            m_Device->getTransferVkQueue(),
+            m_Device->getUniversalVkQueue(),
             1,
             &submitInfo,
             VK_NULL_HANDLE // wait fence
         );
-        m_Device->waitTransferQueueIdle(); // wait for completion, TODO: use fence
+        m_Device->waitUniversalQueueIdle(); // wait for completion, TODO: use fence
         return true; // TODO: ...
     }
 

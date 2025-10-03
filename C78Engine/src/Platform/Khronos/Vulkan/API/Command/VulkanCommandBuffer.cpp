@@ -3,8 +3,10 @@
 
 #include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
 #include <Platform/Khronos/Vulkan/API/Buffer/VulkanGPUBuffer.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanVertexBuffer.h>
 #include <Platform/Khronos/Vulkan/API/Command/VulkanRenderPass.h>
+
+#include <Platform/Khronos/Vulkan/API/Buffer/VulkanVertexBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Buffer/VulkanIndexBuffer.h>
 
 
 namespace C78E {
@@ -39,7 +41,7 @@ namespace C78E {
 		
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		beginInfo.flags = (m_Reusable) ? VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT : 0;
+		beginInfo.flags = (m_Reusable) ? 0 : VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 		beginInfo.pInheritanceInfo = VK_NULL_HANDLE;
 
 		VkResult beginCommandBufferResult = vkBeginCommandBuffer(m_VkCommandBuffer, &beginInfo);
@@ -104,8 +106,14 @@ namespace C78E {
 		vkCmdSetScissor(m_VkCommandBuffer, 0, 1, &scissor);
 	}
 
-	void VulkanCommandBuffer::drawVertecies(size_t vertexCount, size_t instanceCount) {
+	void VulkanCommandBuffer::drawVertices(size_t vertexCount, size_t instanceCount) {
+		requiresGraphics();
 		vkCmdDraw(m_VkCommandBuffer, static_cast<uint32_t>(vertexCount), static_cast<uint32_t>(instanceCount), 0, 0);
+	}
+
+	void VulkanCommandBuffer::drawIndices(size_t indexCount, size_t instanceCount) {
+		requiresGraphics();
+		vkCmdDrawIndexed(m_VkCommandBuffer, static_cast<uint32_t>(indexCount), static_cast<uint32_t>(instanceCount), 0, 0, 0);
 	}
 
 	void VulkanCommandBuffer::copyBuffer(
@@ -139,6 +147,20 @@ namespace C78E {
 		const VkBuffer vertexBuffers[] = { vulkanVertexBuffer->getVulkanBuffer().getVkBuffer() };
 		const VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(m_VkCommandBuffer, firstBinding, 1, vertexBuffers, offsets);
+	}
+
+	void VulkanCommandBuffer::bind(Ref<IndexBuffer> indexBuffer) {
+		C78E_CORE_ASSERT(indexBuffer, "VulkanCommandBuffer::bind: vertexBuffer was nullptr!");
+		Ref<VulkanIndexBuffer> vulkanIndexBuffer = castRef<VulkanIndexBuffer>(indexBuffer);
+		
+		const VkIndexType indexType = toVkIndexType(indexBuffer->getIndexLayout());
+
+		vkCmdBindIndexBuffer(
+			m_VkCommandBuffer,
+			vulkanIndexBuffer->getVulkanBuffer().getVkBuffer(),
+			0, // index offset
+			indexType
+		);
 	}
 	
 	bool VulkanCommandBuffer::endRecording() {

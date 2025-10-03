@@ -206,50 +206,57 @@ namespace C78E {
 	 * @brief ListType is a CompositeType that represents a collection of VectorTypes.
 	 * It can be used to represent any Type that consists of multiple VectorTypes.
 	 */
-	template<typename T>
-	requires std::is_convertible_v<T, VectorType>
-	class ExtListType : public CompositeType, private std::vector<T> {
+	template<std::derived_from<VectorType> T>
+	class ExtListType : public CompositeType {
 	public:
-		using ListTypeRange = MemoryRange<const T>;
+		using ListTypeRange = MemoryRange<T>;
 		using ListTypeIterator = ListTypeRange::Iterator;
 		using Index = size_t;
 	public:
-		ExtListType() = default;
+		ExtListType()
+			: m_Elements() {
+		}
+		ExtListType(const ExtListType& other) {
+			m_Elements.clear();
+			m_Elements.resize(other.m_Elements.size());
+			std::copy(other.m_Elements.begin(), other.m_Elements.end(), m_Elements.begin());
+		}
 		template<typename... Args>
-		ExtListType(Args&&... args)
-			: std::vector<T>{ std::forward<Args>(args)... } {
+		requires (std::is_same_v<T, std::decay_t<Args>> && ...)
+		inline ExtListType(Args&&... args)
+			: m_Elements{ std::forward<Args>(args)... } {
 		}
 		virtual ~ExtListType() = default;
 
 		virtual size_t size() const override {
 			size_t size = 0;
-			for (auto it = std::vector<T>::begin(); it != std::vector<T>::end(); it++) {
+			for (auto it = m_Elements.begin(); it != m_Elements.end(); it++) {
 				size += it->size();
 			}
 			return size;
 		}
 		virtual size_t alignment() const override {
 			size_t alignment = 0;
-			for (auto it = std::vector<T>::begin(); it != std::vector<T>::end(); it++) {
+			for (auto it = m_Elements.begin(); it != m_Elements.end(); it++) {
 				alignment += it->alignment();
 			}
 			return naturalAligmentOf(alignment);
 		}
 
 		virtual inline size_t elementSize(Index elementIndex) const override {
-			C78E_CORE_ASSERT(elementIndex < std::vector<T>::size(), "ExtListType::fieldSize: elementIndex out of bounds.");
-			return std::vector<T>::operator[](elementIndex).size();
+			C78E_CORE_ASSERT(elementIndex < m_Elements.size(), "ExtListType::fieldSize: elementIndex out of bounds.");
+			return m_Elements[elementIndex].size();
 		}
 		virtual inline size_t elementAlignment(Index elementIndex) const override {
-			C78E_CORE_ASSERT(elementIndex < std::vector<T>::size(), "ExtListType::fieldAlignment: elementIndex out of bounds.");
-			return std::vector<T>::operator[](elementIndex).alignment();
+			C78E_CORE_ASSERT(elementIndex < m_Elements.size(), "ExtListType::fieldAlignment: elementIndex out of bounds.");
+			return m_Elements[elementIndex].alignment();
 		}
 		virtual inline size_t elementCount() const override {
-			return std::vector<T>::size();
+			return m_Elements.size();
 		}
 
 		ListTypeRange elements() const {
-			return ListTypeRange(&std::vector<T>::front(), &std::vector<T>::back());
+			return ListTypeRange(m_Elements.data(), m_Elements.size());
 		}
 		ListTypeIterator begin() const {
 			return elements().begin();
@@ -259,8 +266,8 @@ namespace C78E {
 		}
 
 		T& pushField(const T& element) {
-			std::vector<T>::push_back(element);
-			return std::vector<T>::back();
+			m_Elements.push_back(element);
+			return m_Elements.back();
 		}
 
 		template<typename O, std::enable_if_t<std::is_convertible<T, VectorType>::value, bool> = true>
@@ -277,18 +284,18 @@ namespace C78E {
 			if(!CompositeType::operator==(other)) {
 				return false;
 			}
-			ListTypeIterator it = begin();
-			ListTypeIterator oit = other.begin();
-			for (; it != end() && oit != other.end();) {
-				if (*it != *oit) {
+
+			for (size_t i = 0; i < m_Elements.size(); i++) {
+				const T& own = m_Elements[i];
+				const T& oth = other.m_Elements[i];
+				if (own != oth) {
 					return false;
 				}
-				it++;
-				oit++;
 			}
 			return true;
 		}
-
+	protected:
+		std::vector<T> m_Elements;
 	};
 	using ListType = ExtListType<VectorType>;
 

@@ -23,20 +23,8 @@ namespace C78E {
 		return static_cast<uint32_t>(elementAlignment(static_cast<ListType::Index>(index)));
 	}
 
-	VertexLayout::AttributeRange VertexLayout::attributes() {
+	VertexLayout::AttributeRange VertexLayout::attributes() const {
 		return AttributeListType::elements();
-	}
-
-	const VertexLayout::AttributeRange VertexLayout::attributes() const {
-		return AttributeListType::elements();
-	}
-
-	VertexLayout::AttributeIterator VertexLayout::begin() {
-		return AttributeListType::begin();
-	}
-
-	VertexLayout::AttributeIterator VertexLayout::end() {
-		return AttributeListType::end();
 	}
 
 	VertexLayout::AttributeIterator VertexLayout::begin() const {

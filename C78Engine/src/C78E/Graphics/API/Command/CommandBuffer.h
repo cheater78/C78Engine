@@ -8,9 +8,10 @@
 
 #include <C78E/Graphics/API/Buffer/GPUBuffer.h>
 #include <C78E/Graphics/API/Buffer/StagingBuffer.h>
+
+#include <C78E/Graphics/API/Buffer/IndexBuffer.h>
 #include <C78E/Graphics/API/Buffer/VertexBuffer.h>
 
-//#include <C78E/Graphics/API/Buffer/IndexBuffer.h>
 //#include <C78E/Graphics/API/Buffer/UniformBuffer.h>
 //#include <C78E/Graphics/API/Buffer/StorageBuffer.h>
 //#include <C78E/Graphics/API/Buffer/PushConstant.h>
@@ -55,9 +56,11 @@ namespace C78E {
 		virtual void endRenderPass() = 0;
 		
 		virtual void bind(Ref<VertexBuffer> vertexBuffer) = 0;
+		virtual void bind(Ref<IndexBuffer> indexBuffer) = 0;
 
 		virtual void setRenderArea(const RenderArea& renderArea) = 0;
-		virtual void drawVertecies(size_t vertexCount, size_t instanceCount = 1) = 0;
+		virtual void drawVertices(size_t vertexCount, size_t instanceCount = 1) = 0;
+		virtual void drawIndices(size_t indexCount, size_t instanceCount = 1) = 0;
 
 		// Compute Commands
 

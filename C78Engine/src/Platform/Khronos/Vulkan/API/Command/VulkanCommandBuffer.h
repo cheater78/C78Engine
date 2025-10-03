@@ -22,9 +22,11 @@ namespace C78E {
 		virtual void endRenderPass() override;
 
 		virtual void bind(Ref<VertexBuffer> vertexBuffer) override;
+		virtual void bind(Ref<IndexBuffer> indexBuffer) override;
 
 		virtual void setRenderArea(const RenderArea& renderArea) override;
-		virtual void drawVertecies(size_t vertexCount, size_t instanceCount = 1) override;
+		virtual void drawVertices(size_t vertexCount, size_t instanceCount = 1) override;
+		virtual void drawIndices(size_t indexCount, size_t instanceCount = 1) override;
 		
 		// Compute Commands
 

@@ -45,7 +45,7 @@ namespace C78E {
 
 			const std::string_view shaderSourceCodeBlock = std::string_view(rawShaderCodeBlock.begin() + localShaderCodeBlockOffset, rawShaderCodeBlock.end());
 
-			C78E_CORE_TRACE("ShaderCompiler::spliceShaderSourceCode: Found Code Block: {}, as: \n{}", ShaderStage::shaderStageToString(shaderStage), rawShaderCodeBlock);
+			C78E_CORE_TRACE("ShaderCompiler::spliceShaderSourceCode: Found Code Block: {}, with {} Lines.", ShaderStage::shaderStageToString(shaderStage), rawShaderCodeBlock.size());
 			C78E_CORE_VALIDATE(shaderSources.find(shaderStage) == shaderSources.end(), break, "ShaderCompiler::spliceShaderSourceCode: Duplicate Shader Stage({}) found!", shaderTypeString);
 			shaderSources[shaderStage] = shaderSourceCodeBlock;
 		}
