@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <C78E/Math/Core/TransformMatrix.h>
 
 namespace C78E::Math {
@@ -40,7 +40,7 @@ namespace C78E::Math {
             }
             return angles;
         }
-        static Rotation getTorque(const vecd& force, const vecd& position) {
+        static Rotation getTorque(const vecd& force, const vecd& position) { //TODO: does not belong here
             matd torqueMatrix(0.f);
             for(Dimension i = 0; i < dim; ++i) {
                 for(Dimension j = 0; j < dim; ++j) {

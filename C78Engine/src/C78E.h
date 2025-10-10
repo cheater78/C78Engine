@@ -21,7 +21,9 @@
 #include <C78E/Core/UUID.h>
 #include <C78E/Core/Buffer/Buffer.h>
 #include <C78E/Core/Random.h>
+
 #include <C78E/Core/Application/Application.h>
+#include <C78E/Core/Window/Window.h>
 
 #include <C78E/Core/Events/ApplicationEvent.h>
 #include <C78E/Core/Events/KeyEvent.h>
@@ -37,19 +39,35 @@
 
 // Graphics
 #include <C78E/Graphics/API/GraphicsInstance.h>
-#include <C78E/Core/Window/Window.h>
 #include <C78E/Graphics/API/GraphicsContext.h>
+#include <C78E/Graphics/Core/GraphicsContextItem.h>
 
-#include <C78E/Graphics/API/SwapChain/SwapChain.h>
+#include <C78E/Graphics/API/Buffer/BufferLayout.h>
+#include <C78E/Graphics/API/Buffer/GPUBuffer.h>
+#include <C78E/Graphics/API/Buffer/StagingBuffer.h>
+#include <C78E/Graphics/API/Buffer/VertexBuffer.h>
+#include <C78E/Graphics/API/Buffer/IndexBuffer.h>
+#include <C78E/Graphics/API/Buffer/UniformBuffer.h>
+
 #include <C78E/Graphics/API/Command/RenderPass.h>
-#include <C78E/Graphics/API/Image/FrameBuffer.h>
+#include <C78E/Graphics/API/Command/CommandBuffer.h>
 
 #include <C78E/Graphics/API/Pipeline/Pipeline.h>
+#include <C78E/Graphics/API/Pipeline/PipelineType.h>
 #include <C78E/Graphics/API/Pipeline/PipelineLayout.h>
 #include <C78E/Graphics/API/Pipeline/PipelineConfig.h>
 
+#include <C78E/Graphics/API/Program/Shader.h>
+#include <C78E/Graphics/API/Program/ShaderStage.h>
+#include <C78E/Graphics/API/Program/ShaderDataType.h>
+#include <C78E/Graphics/API/Program/ShaderCompiler.h>
+#include <C78E/Graphics/API/Program/ShaderManager.h>
 
-#include <C78E/Graphics/API/Command/CommandBuffer.h>
+#include <C78E/Graphics/API/Image/Texture.h>
+#include <C78E/Graphics/API/Image/FrameBuffer.h>
+
+#include <C78E/Graphics/API/SwapChain/SwapChain.h>
+#include <C78E/Graphics/API/SwapChain/SwapInterval.h>
 
 
 // Temporary Graphics - Vulkan
@@ -59,7 +77,7 @@
 #include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipelineLayout.h>
 #include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipelineConfig.h>
 #include <Platform/Khronos/Vulkan/API/SwapChain/VulkanSwapChain.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanFrameBuffer.h>
 
 //TODO: GPU Assets
 

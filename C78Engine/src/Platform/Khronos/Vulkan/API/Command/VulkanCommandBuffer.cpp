@@ -5,8 +5,11 @@
 #include <Platform/Khronos/Vulkan/API/Buffer/VulkanGPUBuffer.h>
 #include <Platform/Khronos/Vulkan/API/Command/VulkanRenderPass.h>
 
+#include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipeline.h>
+
 #include <Platform/Khronos/Vulkan/API/Buffer/VulkanVertexBuffer.h>
 #include <Platform/Khronos/Vulkan/API/Buffer/VulkanIndexBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Buffer/VulkanUniformBuffer.h>
 
 
 namespace C78E {
@@ -72,7 +75,7 @@ namespace C78E {
 		renderPassInfo.renderArea.offset = { 0, 0 };
 		renderPassInfo.renderArea.extent = toVkExtent(vulkanFrameBuffer->getSize());
 
-		VkClearValue clearColor = { {{0.0f, 0.0f, 0.0f, 1.0f}} }; //TODO: rn fixed rgba, needs to be per RenderPass attachment
+		VkClearValue clearColor = { {{0.018f, 0.018f, 0.02f, 1.0f}} }; //TODO: rn fixed rgba, needs to be per RenderPass attachment
 		renderPassInfo.clearValueCount = 1;
 		renderPassInfo.pClearValues = &clearColor;
 
@@ -87,6 +90,15 @@ namespace C78E {
 	void VulkanCommandBuffer::bindPipeline(Ref<Pipeline> pipeline) {
 		Ref<VulkanPipeline> vulkanPipeline = castRef<VulkanPipeline>(pipeline);
 		C78E_CORE_VALIDATE(vulkanPipeline, return, "VulkanCommandBuffer::bindPipeline: Pipeline is not of type VulkanPipeline!");
+		m_CurrentRecordingPipeline = vulkanPipeline;
+
+		//TODO: VkDescriptorPoolSize -> currently 1 for VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER -> auto fetch or specify
+		m_DrescriptorPool = createScope<VulkanDescriptorPool>(
+			m_Device,
+			1, // Descriptor Sets Count
+			1 // Descriptor Set Allocate Count
+		);
+
 		vkCmdBindPipeline(m_VkCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPipeline->getVkPipeline());
 	}
 	
@@ -162,6 +174,54 @@ namespace C78E {
 			indexType
 		);
 	}
+
+	void VulkanCommandBuffer::bind(Ref<UniformBuffer> uniformBuffer) {
+		C78E_CORE_ASSERT(uniformBuffer, "VulkanCommandBuffer::bind: uniformBuffer was nullptr!");
+		Ref<VulkanUniformBuffer> vulkanUniformBuffer = castRef<VulkanUniformBuffer>(uniformBuffer);
+		
+		Ref<PipelineLayout> pipelineLayout = m_CurrentRecordingPipeline->getPipelineLayout();
+		Ref<VulkanPipelineLayout> vulkanPipelineLayout = castRef<VulkanPipelineLayout>(pipelineLayout);
+		Ref<VulkanGraphicsPipelineLayout> vulkanGraphicsPipelineLayout = castRef<VulkanGraphicsPipelineLayout>(vulkanPipelineLayout);
+		VkPipelineLayout vkPipelineLayout = vulkanPipelineLayout->getVkPipelineLayout();
+
+		//TODO: currently just 1
+		const auto& setLayouts = vulkanGraphicsPipelineLayout->getDescriptorSetLayouts();
+		if (!setLayouts.empty()) {
+			m_DrescriptorPool->allocateDescriptorSets(
+				&m_UniformBufferDescriptorSet,
+				1,
+				setLayouts.data()
+			);
+		}
+
+		VkDescriptorBufferInfo bufferInfo{};
+		bufferInfo.buffer = vulkanUniformBuffer->getVulkanBuffer().getVkBuffer();
+		bufferInfo.offset = 0; // TODO: Handle
+		bufferInfo.range = vulkanUniformBuffer->getVulkanBuffer().getSize();
+
+		VkWriteDescriptorSet descriptorWrite{};
+		descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrite.dstSet = m_UniformBufferDescriptorSet;
+		descriptorWrite.dstBinding = 0;
+		descriptorWrite.dstArrayElement = 0;
+		descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		descriptorWrite.descriptorCount = 1;
+		descriptorWrite.pBufferInfo = &bufferInfo;
+		descriptorWrite.pImageInfo = nullptr; // Optional
+		descriptorWrite.pTexelBufferView = nullptr; // Optional
+		vkUpdateDescriptorSets(m_Device->getVkDevice(), 1, &descriptorWrite, 0, nullptr);
+
+		vkCmdBindDescriptorSets(
+			m_VkCommandBuffer,
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vkPipelineLayout,
+			0, // first set
+			1, // set count
+			&m_UniformBufferDescriptorSet,
+			0, // dyn offset count
+			nullptr  // dyn offsets
+		);
+	}
 	
 	bool VulkanCommandBuffer::endRecording() {
 		C78E_CORE_VALIDATE(m_State == State::Recording, return false,
@@ -184,7 +244,6 @@ namespace C78E {
 		C78E_CORE_SOFT_VALIDATE(result == VK_SUCCESS, "VulkanCommandBuffer::clear: failed to clear command buffer!");
 		m_State = State::Ready;
 	}
-
 
 }
 

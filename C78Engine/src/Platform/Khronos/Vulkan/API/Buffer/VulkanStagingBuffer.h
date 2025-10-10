@@ -17,7 +17,7 @@ namespace C78E {
 		virtual void* data() override;
 		virtual size_t size() override;
 
-		bool alive() override { return false; }
+		virtual bool alive() override { return false; }
 		virtual void free() override { }
 
 	protected:

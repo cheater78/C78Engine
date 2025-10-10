@@ -44,41 +44,23 @@ namespace C78E {
 		return VkFormat();
 	}
 	
-	VulkanPipelineLayout::VulkanPipelineLayout(GraphicsContext& ctx)
-		: m_GraphicsContext(ctx.getAs<VulkanGraphicsContext>()),
-		m_Device(ctx.getAs<VulkanGraphicsContext>().getDevice()) {
+	VulkanPipelineLayout::VulkanPipelineLayout() {
 	}
 
 	VulkanPipelineLayout::~VulkanPipelineLayout() {
-		if (m_Layout) {
-			vkDestroyPipelineLayout(m_Device->getVkDevice(), m_Layout, nullptr);
-		}
+		//TODO: rly? idk 
+		// if (m_VkPipelineLayout) {
+		// 	vkDestroyPipelineLayout(m_Device->getVkDevice(), m_VkPipelineLayout, nullptr);
+		// }
 	}
 
 
 	VulkanGraphicsPipelineLayout::VulkanGraphicsPipelineLayout(GraphicsContext& ctx)
-		 : PipelineLayout(), GraphicsPipelineLayout(), VulkanPipelineLayout(ctx) {
+		 : GraphicsContextItem(ctx), VulkanGraphicsContextItem(), PipelineLayout(), GraphicsPipelineLayout(), VulkanPipelineLayout() {
+	}
 
-		writePipelineLayoutInputLayout();
-
-		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.pNext = VK_NULL_HANDLE;
-		pipelineLayoutInfo.flags = 0;
-
-		// Descriptor Set Layouts
-		const uint32_t setLayoutCount = static_cast<uint32_t>(m_DescriptorSetLayouts.size());
-		pipelineLayoutInfo.setLayoutCount = setLayoutCount;
-		pipelineLayoutInfo.pSetLayouts = (setLayoutCount) ? m_DescriptorSetLayouts.data() : VK_NULL_HANDLE;
-
-		// Push Constants
-		const uint32_t pushConstantRangeCount = static_cast<uint32_t>(m_PushConstantRanges.size());
-		pipelineLayoutInfo.pushConstantRangeCount = pushConstantRangeCount;
-		pipelineLayoutInfo.pPushConstantRanges = (pushConstantRangeCount) ? m_PushConstantRanges.data() : VK_NULL_HANDLE;
-
-		VkResult result = vkCreatePipelineLayout(m_Device->getVkDevice(), &pipelineLayoutInfo, nullptr, &m_Layout);
-		C78E_CORE_SOFT_VALIDATE(result == VK_SUCCESS, "buildPipelineLayout: Failed to create PipelineLayout!");
-
+	VulkanGraphicsPipelineLayout::~VulkanGraphicsPipelineLayout() {
+		free();
 	}
 
 	std::vector<VkPipelineShaderStageCreateInfo> VulkanGraphicsPipelineLayout::getVkPipelineShaderStageCreateInfos() const {
@@ -106,46 +88,97 @@ namespace C78E {
 		return vertexInputInfo;
 	}
 	
+	bool VulkanGraphicsPipelineLayout::init() {
+		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+		pipelineLayoutInfo.pNext = VK_NULL_HANDLE;
+		pipelineLayoutInfo.flags = 0;
 
-	void VulkanGraphicsPipelineLayout::writePipelineLayoutInputLayout() {
-		m_DescriptorSetLayouts.clear();
-		m_PushConstantRanges.clear();
-		/*
 		// Descriptor Set Layouts
-		// TODO: manage descriptor set layouts properly, this is just a placeholder
-		for(const InstanceBufferLayout& layout : m_InstanceBufferLayouts) {
-			VkDescriptorSetLayoutBinding binding{};
-			binding.binding = static_cast<uint32_t>(m_DescriptorSetLayouts.size());
-			binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; // Assuming storage buffer for instance data
-			binding.descriptorCount = 1;
-			binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT; // Adjust as needed
-			binding.pImmutableSamplers = nullptr; // Optional
-			m_DescriptorSetLayouts.emplace_back(binding);
-		}
-		for(const VertexBufferLayout& layout : m_VertexBufferLayouts) {
-			VkDescriptorSetLayoutBinding binding{};
-			binding.binding = static_cast<uint32_t>(m_DescriptorSetLayouts.size());
-			binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; // Assuming storage buffer for vertex data
-			binding.descriptorCount = 1;
-			binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT; // Adjust as needed
-			binding.pImmutableSamplers = nullptr; // Optional
-			m_DescriptorSetLayouts.emplace_back(binding);
-		}
+		const bool descriptorSetLayoutsCreateResult = initDescriptorSetLayouts();
+		C78E_CORE_VALIDATE(descriptorSetLayoutsCreateResult, return false,
+			"VulkanGraphicsPipelineLayout::init: Failed to create DescriptorSetLayouts!");
+		const uint32_t setLayoutCount = static_cast<uint32_t>(m_DescriptorSetLayouts.size());
+		pipelineLayoutInfo.setLayoutCount = setLayoutCount;
+		pipelineLayoutInfo.pSetLayouts = (setLayoutCount) ? m_DescriptorSetLayouts.data() : VK_NULL_HANDLE;
+
 		// Push Constants
-		for(const auto& [stage, layout] : m_PushConstantLayouts) {
-			VkShaderStageFlagBits stageFlags = toVkShaderStage(stage);
-			size_t offset = 0;
-			for(const UniformLayout& layout : layout) {
-				VkPushConstantRange pushConstantRange{};
-				pushConstantRange.stageFlags = stageFlags;
-				pushConstantRange.offset = offset;
-				pushConstantRange.size = layout.getStride();
-				m_PushConstantRanges.emplace_back(pushConstantRange);
-				offset += layout.getStride(); // Update offset for the next push constant range
+		const bool pushConstantRangesCreateResult = initPushConstantRanges();
+		C78E_CORE_VALIDATE(pushConstantRangesCreateResult, return false,
+			"VulkanGraphicsPipelineLayout::init: Failed to create PushConstantRanges!");
+		const uint32_t pushConstantRangeCount = static_cast<uint32_t>(m_PushConstantRanges.size());
+		pipelineLayoutInfo.pushConstantRangeCount = pushConstantRangeCount;
+		pipelineLayoutInfo.pPushConstantRanges = (pushConstantRangeCount) ? m_PushConstantRanges.data() : VK_NULL_HANDLE;
+
+		VkResult result = vkCreatePipelineLayout(m_Device->getVkDevice(), &pipelineLayoutInfo, nullptr, &m_VkPipelineLayout);
+		C78E_CORE_VALIDATE(result == VK_SUCCESS, return false, "buildPipelineLayout: Failed to create PipelineLayout!");
+
+		return true;
+	}
+
+	void VulkanGraphicsPipelineLayout::free() {
+		if (m_VkPipelineLayout) {
+			vkDestroyPipelineLayout(m_Device->getVkDevice(), m_VkPipelineLayout, nullptr);
+			m_VkPipelineLayout = VK_NULL_HANDLE;
+		}
+		freeDescriptorSetLayouts();
+		freePushConstantRanges();
+	}
+
+	bool VulkanGraphicsPipelineLayout::initDescriptorSetLayouts() {
+		// Clean up all possibly alr existing DescriptorSetLayouts
+		if (!m_DescriptorSetLayouts.empty()) {
+			C78E_CORE_WARN("VulkanGraphicsPipelineLayout::initDescriptorSetLayouts: DescriptorSetLayouts alr existed! Removing them first...");
+			freeDescriptorSetLayouts();
+		}
+
+		//TODO: add storageBuffers, etc. - all the things that use descriptorSets
+
+		
+		{ // Uniform Buffer - DrescriptorSetLayouts
+			std::vector<VkDescriptorSetLayoutBinding> bindings;
+			bindings.reserve(m_UniformBufferBindings.size());
+			for (const BufferBinding& binding : m_UniformBufferBindings) {
+				const VkDescriptorSetLayoutBinding layoutBinding = toVkDescriptorSetLayoutBinding(
+					VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+					binding.binding,
+					toVkShaderStage(binding.stages)
+				);
+				bindings.emplace_back(layoutBinding);
+			}
+
+			VkDescriptorSetLayout& uniformBufferLaout = m_DescriptorSetLayouts.emplace_back();
+
+			// TODO: alr in VulkanDescriptor.h -> clean up
+			VkDescriptorSetLayoutCreateInfo layoutInfo{};
+			layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+			layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+			layoutInfo.pBindings = bindings.data();
+
+			VkResult result = vkCreateDescriptorSetLayout(m_Device->getVkDevice(), &layoutInfo, nullptr, &uniformBufferLaout);
+			C78E_CORE_VALIDATE(result == VK_SUCCESS, return false, "VulkanGraphicsPipelineLayout::initDescriptorSetLayouts: creating DescriptorSetLayout failed!");
+		}
+
+		return true;
+	}
+
+	void VulkanGraphicsPipelineLayout::freeDescriptorSetLayouts() {
+		for (auto& descriptorSetLayout : m_DescriptorSetLayouts) {
+			if (descriptorSetLayout) {
+				vkDestroyDescriptorSetLayout(m_Device->getVkDevice(), descriptorSetLayout, nullptr);
 			}
 		}
-		*/
+		m_DescriptorSetLayouts.clear();
 	}
+
+	bool VulkanGraphicsPipelineLayout::initPushConstantRanges() {
+		C78E_CORE_WARN("VulkanGraphicsPipelineLayout::initPushConstantRanges: is not impl! - pretending its fine...");
+		return true;
+	}
+
+	void VulkanGraphicsPipelineLayout::freePushConstantRanges() {
+	}
+
 	void VulkanGraphicsPipelineLayout::writePipelineVertexInputLayout() {
 		m_BindingDescriptions.clear();
 		m_AttributeDescriptions.clear();
@@ -190,7 +223,6 @@ namespace C78E {
 		}
 		
 	}
-
 
 	std::vector<VkPipelineShaderStageCreateInfo> VulkanComputePipelineLayout::getVkPipelineShaderStageCreateInfos() const {
 		std::vector<VkPipelineShaderStageCreateInfo> stageCreateInfos(1);

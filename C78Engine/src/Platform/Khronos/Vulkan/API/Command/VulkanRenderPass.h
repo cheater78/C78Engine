@@ -1,6 +1,6 @@
 #pragma once
 #include <C78E/Graphics/API/Command/RenderPass.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanFrameBuffer.h>
 #include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipeline.h>
 
 

@@ -1,10 +1,13 @@
 #pragma once
 #include <C78E/Graphics/API/GraphicsContext.h>
 #include <Platform/Khronos/Vulkan/Core/Device/VulkanDevice.h>
+#include <Platform/Khronos/Vulkan/Core/Descriptor/VulkanDescriptor.h>
 
 namespace C78E {
 
 	class VulkanCommandBuffer;
+
+	GraphicsContextLimits toGraphicsContextLimits(VkPhysicalDeviceLimits limits);
 
 	class VulkanGraphicsContext : public GraphicsContext {
 	private:
@@ -56,7 +59,7 @@ namespace C78E {
 		std::vector<Ref<CommandBuffer>> m_SubmittedCommandBuffers;
 		std::vector<Ref<FrameBuffer>> m_InFlightFrameBuffers; //TODO: used, but needed?
 
-		uint32_t m_FrameIndex = 0;
+		uint32_t m_FrameIndex = 0; // TODO: rather some FrameHandle
 
 	};
 

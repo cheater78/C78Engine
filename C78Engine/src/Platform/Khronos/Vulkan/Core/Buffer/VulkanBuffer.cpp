@@ -117,7 +117,11 @@ namespace C78E {
 
 	bool VulkanBuffer::map(VkDeviceSize size, VkDeviceSize offset, bool readIn) {
 		if (isMapped()) {
-			unmap();
+			if (m_MappedSize != size || m_MappedBufferOffset != offset) {
+				unmap();
+			} else {
+				return true;
+			}
 		}
 		m_MappedSize = size;
 		m_MappedBufferOffset = offset;

@@ -1,6 +1,7 @@
 #include "C78EPCH.h"
 #include "StagingBuffer.h"
 
+#include <C78E/Graphics/API/GraphicsContext.h>
 #include <C78E/Graphics/API/GraphicsInstance.h>
 #include <Platform/Khronos/Vulkan/API/Buffer/VulkanStagingBuffer.h>
 
@@ -36,4 +37,15 @@ namespace C78E {
 		m_StagingBuffer = nullptr;
 	}
 
+
+	void StagedBuffer::readDeviceMemory() {
+		GraphicsContext& ctx = getGraphicsContext();
+		ctx.copyBuffer(*this, *m_StagingBuffer);
+	}
+
+	void StagedBuffer::writeDeviceMemory() {
+		GraphicsContext& ctx = getGraphicsContext();
+		ctx.copyBuffer(*m_StagingBuffer, *this);
+	}
+	
 }

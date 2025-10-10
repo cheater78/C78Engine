@@ -17,12 +17,10 @@ namespace C78E {
 		if(shaderStage == "compute")
 			return ShaderStage(ShaderStage::Compute);
 		C78E_CORE_FATAL("ShaderShaderStage::parseShaderShaderStageFromSourceString: string '{}' does not represent a ShaderShaderStage!", shaderStage);
-		return ShaderStage(None);
+		return ShaderStage(Vertex);
 	}
 
 	ShaderStage ShaderStage::shaderStageFromString(const std::string& shaderStage) {
-		if(shaderStage == "ShaderShaderStage::None")
-			return ShaderStage(ShaderStage::None);
 		if(shaderStage == "ShaderShaderStage::Vertex")
 			return ShaderStage(ShaderStage::Vertex);
 		if(shaderStage == "ShaderShaderStage::Tesselation")
@@ -36,12 +34,11 @@ namespace C78E {
 		if(shaderStage == "ShaderShaderStage::Compute")
 			return ShaderStage(ShaderStage::Compute);
 		C78E_CORE_FATAL("ShaderShaderStage::shaderShaderStageFromString: string '{}' does not represent a ShaderShaderStage!", shaderStage);
-		return ShaderStage(ShaderStage::None);
+		return ShaderStage(ShaderStage::Vertex);
 	}
 
 	std::string ShaderStage::shaderStageToString(ShaderStage ShaderStage) {
 		switch(ShaderStage.stage()) {
-		case ShaderStage::None:					return "ShaderShaderStage::None";
 		case ShaderStage::Vertex:					return "ShaderShaderStage::Vertex";
 		case ShaderStage::TessellationControl:			return "ShaderShaderStage::Tesselation";
 		case ShaderStage::TessellationEvaluation:	return "ShaderShaderStage::TessEvaluation";
@@ -77,8 +74,77 @@ namespace C78E {
 	ShaderStage::ShaderStage(Type type) : m_Type(type) {
 	}
 
-	inline const ShaderStage::Type& ShaderStage::stage() const {
+	const ShaderStage::Type& ShaderStage::stage() const {
 		return m_Type;
 	}
 
+	bool ShaderStage::operator==(const ShaderStage& other) const {
+		return other.stage() == stage();
+	}
+
+	ShaderStage ShaderStages::toShaderStage(ShaderStages stages) {
+		const ShaderStageBitsType bits = stages.m_Bits;
+		const ShaderStageBitsType stageIndex = std::countr_zero(bits);
+		switch (stageIndex) {
+		case ShaderStage::Vertex: return ShaderStage::Vertex;
+		case ShaderStage::TessellationControl: return ShaderStage::TessellationControl;
+		case ShaderStage::TessellationEvaluation: return ShaderStage::TessellationEvaluation;
+		case ShaderStage::Geometry: return ShaderStage::Geometry;
+		case ShaderStage::Fragment: return ShaderStage::Fragment;
+		case ShaderStage::Compute: return ShaderStage::Compute;
+		case ShaderStage::RayGeneration: return ShaderStage::RayGeneration;
+		case ShaderStage::Intersection: return ShaderStage::Intersection;
+		case ShaderStage::AnyHit: return ShaderStage::AnyHit;
+		case ShaderStage::ClosestHit: return ShaderStage::ClosestHit;
+		case ShaderStage::Miss: return ShaderStage::Miss;
+		case ShaderStage::Callable: return ShaderStage::Callable;
+		default:
+			C78E_CORE_ASSERT(false, "ShaderStages::toShaderStage: stages did not contain a valid ShaderStage!");
+		}
+		return ShaderStage::Vertex;
+	}
+
+	ShaderStages::ShaderStages(ShaderStageBitsType bits)
+		: m_Bits(bits) {
+	}
+
+	ShaderStages::ShaderStageBitsType ShaderStages::raw() const {
+		return m_Bits;
+	}
+
+	ShaderStages::StageRange ShaderStages::stages() const {
+		return StageRange(m_Bits);
+	}
+
+	ShaderStages::StageIterator ShaderStages::begin() const {
+		return stages().begin();
+	}
+
+	ShaderStages::StageIterator ShaderStages::end() const {
+		return stages().end();
+	}
+
+	ShaderStages::ShaderStageBitsType ShaderStages::size() const {
+		return stages().size();
+	}
+
+	bool ShaderStages::operator==(const ShaderStages& other) const {
+		return other.m_Bits == m_Bits;
+	}
+
+	bool ShaderStages::operator&=(const ShaderStages& other) {
+		return m_Bits &= other.m_Bits;
+	}
+
+	ShaderStages::operator bool() const {
+		return m_Bits;
+	}
+
+
+	ShaderStages operator&(const ShaderStages& a, const ShaderStages& b) {
+		return a.raw() & b.raw();
+	}
+	ShaderStages operator|(const ShaderStages& a, const ShaderStages& b) {
+		return a.raw() | b.raw();
+	}
 }

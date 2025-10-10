@@ -4,7 +4,7 @@
 
 #include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
 #include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipelineLayout.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanFrameBuffer.h>
 #include <Platform/Khronos/Vulkan/API/Command/VulkanRenderPass.h>
 
 namespace C78E {
@@ -31,6 +31,10 @@ namespace C78E {
 		m_PipelineConfig(castRef<VulkanGraphicsPipelineConfig>(pipelineConfig)) {
 		C78E_CORE_ASSERT(m_PipelineLayout, "VulkanPipeline: PipelineLayout was not a valid VulkanGraphicsPipelineLayout!");
 		C78E_CORE_ASSERT(m_PipelineConfig, "VulkanPipeline: PipelineConfig was not a valid VulkanGraphicsPipelineConfig!");
+
+		//TODO: create the actual VkPipelineLayout - not pretty
+		m_PipelineLayout->init();
+
 
 		const std::vector<VkPipelineShaderStageCreateInfo>& shaderStages = m_PipelineLayout->getVkPipelineShaderStageCreateInfos();
 

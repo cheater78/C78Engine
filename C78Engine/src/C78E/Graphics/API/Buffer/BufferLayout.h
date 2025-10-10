@@ -4,51 +4,68 @@
 
 namespace C78E {
 
-	class VertexAttribute : public ShaderDataType {
-	public:
-		VertexAttribute();
-		VertexAttribute(const std::string& name, PrimitiveType::Type type, size_t count = 1);
-		~VertexAttribute() = default;
-
-	protected:
-		std::string m_Name;
-	};
-
+	using VertexAttribute = ShaderDataField;
 	class VertexLayout : protected ExtListType<VertexAttribute>{
 	public:
-		using Attribute = VertexAttribute;
-		using AttributeListType = ExtListType<Attribute>;
-		using AttributeRange = AttributeListType::ListTypeRange;
-		using AttributeIterator = AttributeRange::Iterator;
-		using AttributeIndex = uint32_t;
+		using VertexAttributeListType = ExtListType<VertexAttribute>;
+		using VertexAttributeRange = VertexAttributeListType::ListTypeRange;
+		using VertexAttributeIterator = VertexAttributeRange::Iterator;
+		using VertexAttributeIndex = uint32_t;
 	public:
 		VertexLayout()
-			: AttributeListType() {
+			: VertexAttributeListType() {
 		}
 		template<typename... Args>
-			requires (std::is_same_v<Attribute, std::decay_t<Args>> && ...)
+			requires (std::is_same_v<VertexAttribute, std::decay_t<Args>> && ...)
 		inline VertexLayout(Args&&... args)
-			: AttributeListType( std::forward<Args>(args)... ) {
+			: VertexAttributeListType( std::forward<Args>(args)... ) {
 		}
 
 		uint32_t getStride() const;
 		uint32_t getAttributeCount() const;
 		uint32_t getAttributeOffset(uint32_t index) const;
 
-		AttributeRange attributes() const;
-		AttributeIterator begin() const;
-		AttributeIterator end() const;
+		VertexAttributeRange attributes() const;
+		VertexAttributeIterator begin() const;
+		VertexAttributeIterator end() const;
 
-		VertexLayout& pushAttribute(const Attribute& attribute);
+		VertexLayout& pushAttribute(const VertexAttribute& attribute);
 
 	};
+
 	using InstanceBufferLayout = VertexLayout;
 	using VertexBufferLayout = VertexLayout;
-
 	using IndexLayout = PrimitiveType;
 
-	class UniformLayout {
+	using UniformField = ShaderDataField; //TODO: structs in structs
+	class UniformLayout : protected ExtListType<UniformField>{
+	public:
+		using UniformFieldListType = ExtListType<UniformField>;
+		using UniformFieldRange = UniformFieldListType::ListTypeRange;
+		using UniformFieldIterator = UniformFieldRange::Iterator;
+		using UniformFieldIndex = uint32_t;
+	public:
+		UniformLayout()
+			: UniformFieldListType() {
+		}
+		template<typename... Args>
+			requires (std::is_same_v<UniformField, std::decay_t<Args>> && ...)
+		inline UniformLayout(Args&&... args)
+			: UniformFieldListType(std::forward<Args>(args)...) {
+		}
+	public:
+		size_t getSize() const;
+		size_t getFieldCount() const;
 
+		UniformFieldRange fields() const;
+		UniformFieldIterator begin() const;
+		UniformFieldIterator end() const;
+
+		UniformLayout& pushAttribute(const UniformField& attribute);
+
+		bool operator==(const UniformLayout& layout) const {
+			return UniformFieldListType::operator==(layout);
+		}
 	};
 
 }

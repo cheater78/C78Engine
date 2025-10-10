@@ -1,7 +1,7 @@
 #pragma once
 #include "VulkanBufferLayout.h"
+#include "VulkanGPUBuffer.h"
 #include <Platform/Khronos/Vulkan/Core/VulkanGraphicsContextItem.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanGPUBuffer.h>
 #include <C78E/Graphics/API/Buffer/VertexBuffer.h>
 
 namespace C78E {

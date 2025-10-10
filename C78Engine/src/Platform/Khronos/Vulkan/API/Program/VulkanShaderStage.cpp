@@ -16,8 +16,14 @@ namespace C78E {
 		return (VkShaderStageFlagBits)0;
 	}
 
-	VkShaderStageFlagBits toVkShaderStage(const ShaderStageBits& stages) {
-		return (VkShaderStageFlagBits)stages;
+	VkShaderStageFlags toVkShaderStage(ShaderStages stages) {
+		VkShaderStageFlags stageFlags = 0;
+		for(auto stageBit : stages) {
+			const ShaderStage stage = ShaderStages::toShaderStage(stageBit);
+			stageFlags |= toVkShaderStage(stage);
+			stages &= ~stageBit;
+		}
+		return stageFlags;
 	}
 
 } // namespace C78E

@@ -1,53 +1,63 @@
 #pragma once
 #include <C78E/Graphics/API/Pipeline/PipelineLayout.h>
+#include <Platform/Khronos/Vulkan/Core/VulkanGraphicsContextItem.h>
 #include <Platform/Khronos/Vulkan/API/Program/VulkanShader.h>
+#include <Platform/Khronos/Vulkan/Core/Descriptor/VulkanDescriptor.h>
 
 namespace C78E {
 
 	VkFormat toVkFormat(ShaderDataType type);
-	
-	class VulkanGraphicsContext;
 
-	class VulkanPipelineLayout : virtual public PipelineLayout {
+	class VulkanPipelineLayout : public virtual VulkanGraphicsContextItem, public virtual PipelineLayout {
 	public:
-		VulkanPipelineLayout(GraphicsContext& ctx);
+		VulkanPipelineLayout();
 		virtual ~VulkanPipelineLayout();
 
 		virtual PipelineType getType() const override = 0;
 
-		const VkPipelineLayout& getVkPipelineLayout() const { return m_Layout; }
-		const VkPipelineLayout* getVkPipelineLayoutPtr() const { return &m_Layout; }
+		const VkPipelineLayout& getVkPipelineLayout() const { return m_VkPipelineLayout; }
+		const VkPipelineLayout* getVkPipelineLayoutPtr() const { return &m_VkPipelineLayout; }
 		
 		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const = 0;
 
 	protected:
-		VulkanGraphicsContext& m_GraphicsContext;
-		Ref<VulkanDevice> m_Device = nullptr;
-		VkPipelineLayout m_Layout;
+		VkPipelineLayout m_VkPipelineLayout;
 	};
 
 	class VulkanGraphicsPipelineLayout : public GraphicsPipelineLayout, public VulkanPipelineLayout {
 	public:
 		VulkanGraphicsPipelineLayout(GraphicsContext& ctx);
-		virtual ~VulkanGraphicsPipelineLayout() = default;
+		virtual ~VulkanGraphicsPipelineLayout();
 
 		virtual PipelineType getType() const override {
 			return PipelineType::Graphics;
 		}
 
+		virtual bool alive() override { return false; }
+
+		//TODO: integrate in GraphicsContextItem
+		bool init();
+		virtual void free() override; //TODO: integrate in GraphicsContextItem
+
 		virtual std::vector<VkPipelineShaderStageCreateInfo> getVkPipelineShaderStageCreateInfos() const override;
 	public:
 		VkPipelineVertexInputStateCreateInfo getVertexInputInfo();
+		const std::vector<VkDescriptorSetLayout>& getDescriptorSetLayouts() {
+			return m_DescriptorSetLayouts;
+		}
 
+
+		
 	private:
-		void writePipelineLayoutInputLayout();
+		
+
+		bool initDescriptorSetLayouts();
+		void freeDescriptorSetLayouts();
+
+		bool initPushConstantRanges();
+		void freePushConstantRanges();
+
 		void writePipelineVertexInputLayout();
-	// protected:
-		// std::vector<BufferLayout> m_InstanceBufferLayouts; // Instance Buffer Layouts
-		// std::vector<BufferLayout> m_VertexBufferLayouts; // Vertex Buffer Layouts
-		// std::map<ShaderStage, std::vector<BufferLayout>> m_PushConstantLayouts; // Push Constant Layouts per Stage
-		// 
-		// std::unordered_map<ShaderStage, Ref<Shader>> m_Shaders;
 	protected:
 		std::vector<VkDescriptorSetLayout> m_DescriptorSetLayouts;
 		std::vector<VkPushConstantRange> m_PushConstantRanges;

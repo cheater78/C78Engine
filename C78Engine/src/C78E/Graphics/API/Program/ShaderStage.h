@@ -1,13 +1,15 @@
 #pragma once
+#include <C78E/Core/Buffer/Iterator.h>
 
 namespace C78E {
 
 	class ShaderStage {
 	public:
-		enum Type : uint8_t {
-			None = 0,
+		using ShaderStageType = uint8_t;
+	public:
+		enum Type : ShaderStageType {
 			// Graphics
-			Vertex,
+			Vertex = 0,
 			TessellationControl,
 			TessellationEvaluation,
 			Geometry,
@@ -29,39 +31,70 @@ namespace C78E {
 		static std::string shaderStageToString(ShaderStage stage);
 
 		static std::string_view shaderStageExtensionFragment(ShaderStage stage);
+	public:
+		ShaderStage(Type type = Type::Vertex);
+		~ShaderStage() = default;
 
 		const Type& stage() const;
 
-		bool operator==(const ShaderStage& other) const {
-			return other.stage() == stage();
-		}
-	public:
-		ShaderStage(Type type = Type::None);
-		~ShaderStage() = default;
-
+		bool operator==(const ShaderStage& other) const;
 	private:
 		Type m_Type;
 	};
 
-	enum class ShaderStageBits : size_t {
-		None = 0,
-		// Graphics
-		Vertex = 1 << ShaderStage::Vertex,
-		TessellationControl = 1 << ShaderStage::TessellationControl,
-		TessellationEvaluation = 1 << ShaderStage::TessellationEvaluation,
-		Geometry = 1 << ShaderStage::Geometry,
-		Fragment = 1 << ShaderStage::Fragment, Pixel = Fragment,
-		AllGraphics = Vertex | TessellationControl | TessellationEvaluation | Geometry | Fragment,
-		// Compute
-		Compute = 1 << ShaderStage::Compute,
-		// Ray Tracing
-		RayGeneration = 1 << ShaderStage::RayGeneration,
-		Intersection = 1 << ShaderStage::Intersection,
-		AnyHit = 1 << ShaderStage::AnyHit,
-		ClosestHit = 1 << ShaderStage::ClosestHit,
-		Miss = 1 << ShaderStage::Miss,
-		Callable = 1 << ShaderStage::Callable
+	class ShaderStages {
+	public:
+		using ShaderStageBitsType = size_t;
+	public:
+		enum ShaderStageBits : ShaderStageBitsType {
+			None = 0,
+			// Graphics
+			Vertex = 1 << ShaderStage::Vertex,
+			TessellationControl = 1 << ShaderStage::TessellationControl,
+			TessellationEvaluation = 1 << ShaderStage::TessellationEvaluation,
+			Geometry = 1 << ShaderStage::Geometry,
+			Fragment = 1 << ShaderStage::Fragment, Pixel = Fragment,
+			AllGraphics = Vertex | TessellationControl | TessellationEvaluation | Geometry | Fragment,
+			// Compute
+			Compute = 1 << ShaderStage::Compute,
+			// Ray Tracing
+			RayGeneration = 1 << ShaderStage::RayGeneration,
+			Intersection = 1 << ShaderStage::Intersection,
+			AnyHit = 1 << ShaderStage::AnyHit,
+			ClosestHit = 1 << ShaderStage::ClosestHit,
+			Miss = 1 << ShaderStage::Miss,
+			Callable = 1 << ShaderStage::Callable
+		};
+	public:
+		using StageRange = BitRange<ShaderStageBitsType>;
+		using StageIterator = StageRange::Iterator;
+	public:
+		// TODO: toString
+
+		static ShaderStage toShaderStage(ShaderStages stages);
+	public:
+		ShaderStages(ShaderStageBitsType bits = None);
+		~ShaderStages() = default;
+
+		ShaderStageBitsType raw() const;
+
+		StageRange stages() const;
+
+		StageIterator begin() const;
+		StageIterator end() const;
+
+		ShaderStageBitsType size() const;
+
+		bool operator==(const ShaderStages& other) const;
+		bool operator&=(const ShaderStages& other);
+		operator bool() const;
+	private:
+		ShaderStageBitsType m_Bits;
 	};
+
+	ShaderStages operator&(const ShaderStages& a, const ShaderStages& b);
+	ShaderStages operator|(const ShaderStages& a, const ShaderStages& b);
+	
 
 }
 

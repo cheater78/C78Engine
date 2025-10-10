@@ -3,7 +3,7 @@
 
 #include <C78E/Graphics/API/GraphicsInstance.h>
 #include <C78E/Graphics/API/GraphicsContext.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanFrameBuffer.h>
 
 namespace C78E {
 

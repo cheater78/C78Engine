@@ -10,7 +10,7 @@ namespace C78E {
 		Instance
 	};
 
-	class VertexBuffer : public virtual GPUBuffer, public StagedBuffer {
+	class VertexBuffer : public virtual StagedBuffer {
 	public:
 		static Ref<VertexBuffer> create(GraphicsContext& ctx, VertexInputRate inputRate, const VertexBufferLayout& layout, size_t vertexCount);
 		static Ref<VertexBuffer> create(GraphicsContext& ctx, VertexInputRate inputRate, const VertexBufferLayout& layout, Ref<StagingBuffer> stagingBuffer);
@@ -18,6 +18,8 @@ namespace C78E {
 		VertexBuffer(VertexInputRate inputRate, const VertexBufferLayout& layout, size_t vertexCount);
 		virtual ~VertexBuffer() = default;
 
+		virtual bool alive() = 0;
+		virtual void free() = 0;
 	public:
 		VertexInputRate getVertexInputRate() const;
 		VertexBufferLayout getVertexBufferLayout() const;

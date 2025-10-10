@@ -3,6 +3,11 @@
 
 namespace C78E {
 
+	// What Shader Data Types are there? -> ShaderDataType
+	// - glsl primitives -> (name <-> static VectorType)
+	// - arrays -> (name, Vec<ShaderDataType>)
+	// - structs -> (name, ExtListType<ShaderDataType>)
+	// ...?
 	class ShaderDataType : public VectorType {
 	public:
 		ShaderDataType() = default;
@@ -31,10 +36,16 @@ namespace C78E {
 	// - UniformBufferObject (name, binding, VectorType(limited))
 	// - TextureSampler (name, binding) TODO: 2D,...?
 	// ...?
+	class ShaderDataField : public VectorType {
+	public:
+		ShaderDataField();
+		ShaderDataField(const std::string& name, PrimitiveType::Type type, size_t count = 1);
+		~ShaderDataField() = default;
 
-	// What Shader Data Types are there? -> ShaderDataType
-	// - glsl primitives -> (name <-> static VectorType)
-	// - arrays -> (name, Vec<ShaderDataType>)
-	// - structs -> (name, ExtListType<ShaderDataType>)
-	// ...?
+	public:
+		const std::string& getFieldName() const;
+	protected:
+		std::string m_Name;
+	};
+	
 }

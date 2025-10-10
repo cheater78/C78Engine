@@ -8,6 +8,19 @@
 
 namespace C78E {
 
+    GraphicsContextLimits toGraphicsContextLimits(VkPhysicalDeviceLimits limits) {
+        GraphicsContextLimits gcl;
+        // Vertex
+        gcl.maxVertexAttributeCount = limits.maxVertexInputAttributes;
+        gcl.maxVertexBindings = limits.maxVertexInputBindings;
+        // Uniform
+        gcl.maxPushConstantSize = limits.maxPushConstantsSize;
+        gcl.maxUniformBuffers = limits.maxDescriptorSetUniformBuffers;
+        gcl.maxPerStageUniformBuffers = limits.maxPerStageDescriptorUniformBuffers;
+
+        return gcl;
+    }
+
     VulkanGraphicsContext::VulkanGraphicsContext(Window& window)
 		: GraphicsContext(window) {
 		init();
@@ -183,6 +196,10 @@ namespace C78E {
         return waitSucc;
     }
 
+    const GraphicsContextLimits& GraphicsContext::getGraphicsContextLimits() const {
+        return m_Limits;
+    }
+
     bool VulkanGraphicsContext::copyBuffer(GPUBuffer& srcGPUBuffer, GPUBuffer& dstGPUBuffer, size_t size, size_t srcOffset, size_t dstOffset) {
         Ref<CommandBuffer> cmd = createCommandBuffer(); // TODO: Currently universal queue fam
         cmd->beginRecording();
@@ -217,6 +234,7 @@ namespace C78E {
 
         // pick a suitable device
         m_Device = vulkanInstance->pickDevice(m_VkSurface);
+        m_Limits = toGraphicsContextLimits(m_Device->getPhysicalDeviceProperties().limits);
 
     }
 
@@ -285,6 +303,5 @@ namespace C78E {
         );
         return false;
     }
-
 
 }

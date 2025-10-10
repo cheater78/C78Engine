@@ -14,7 +14,7 @@ namespace C78E {
 
 	struct ShaderCompileInfo {
 		const std::string& shaderName;
-		ShaderStage stage = ShaderStage::None;
+		ShaderStage stage = ShaderStage::Compute;
 		const std::string& shaderSource;
 		ShaderOptimizationLevel optimizationLevel = ShaderOptimizationLevel::Performance;
 		FilePath cacheFile; // opt.

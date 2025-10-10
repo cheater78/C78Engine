@@ -99,4 +99,54 @@ namespace C78E {
 		size_t m_ElementCount;
 	};
 
+	template<std::unsigned_integral T>
+	class BitRange {
+	public:
+		using IteratorDifference = T;
+		struct Iterator {
+			using iterator_category = std::forward_iterator_tag;
+			using value_type = T;
+			T mask;
+
+			T operator*() const {
+				if (!mask) {
+					return T(0);
+				}
+				const T setLSB = std::countr_zero(mask);
+				return static_cast<T>(1 << setLSB);
+			}
+			Iterator& operator++() {
+				if (!mask) {
+					return *this;
+				}
+				const T setLSB = std::countr_zero(mask);
+				const T maskedBit = static_cast<T>(1 << setLSB);
+				mask &= ~maskedBit;
+				return *this;
+			}
+			bool operator!=(const Iterator& other) const {
+				return mask != other.mask;
+			}
+		};
+	public:
+		BitRange(const T mask)
+			: m_Bits(mask) {
+		}
+
+		Iterator begin() const {
+			return Iterator(m_Bits);
+		}
+#
+		Iterator end() const {
+			return Iterator(0);
+		}
+
+		T size() const {
+			return std::popcount(m_Bits);
+		}
+
+	private:
+		const T m_Bits = 0;
+	};
+
 }

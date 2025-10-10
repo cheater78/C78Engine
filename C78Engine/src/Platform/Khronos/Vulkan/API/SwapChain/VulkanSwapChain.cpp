@@ -2,7 +2,7 @@
 #include "VulkanSwapChain.h"
 
 #include <Platform/Khronos/Vulkan/API/VulkanGraphicsContext.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanFrameBuffer.h>
 
 namespace C78E {
 

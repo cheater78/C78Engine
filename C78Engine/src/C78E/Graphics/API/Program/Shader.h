@@ -18,7 +18,7 @@ namespace C78E {
 		virtual Asset::Type getType() const override { return Asset::Type::Shader; }
 		static Type getClassType() { return Type::Shader; };
 	protected:
-		ShaderStage m_Stage = ShaderStage::None;
+		ShaderStage m_Stage = ShaderStage::Compute;
 		GraphicsContext& m_GraphicsContext;
 	};
 

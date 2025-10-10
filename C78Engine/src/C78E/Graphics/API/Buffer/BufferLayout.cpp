@@ -3,14 +3,6 @@
 
 namespace C78E {
 
-	VertexAttribute::VertexAttribute()
-		: ShaderDataType(PrimitiveType::None, 0), m_Name("Unnamed") {
-	}
-
-	VertexAttribute::VertexAttribute(const std::string& name, PrimitiveType::Type type, size_t count)
-		: ShaderDataType(type, count), m_Name(name) {
-	}
-
 	uint32_t VertexLayout::getStride() const {
 		return static_cast<uint32_t>(size());
 	}
@@ -23,21 +15,48 @@ namespace C78E {
 		return static_cast<uint32_t>(elementAlignment(static_cast<ListType::Index>(index)));
 	}
 
-	VertexLayout::AttributeRange VertexLayout::attributes() const {
-		return AttributeListType::elements();
+	VertexLayout::VertexAttributeRange VertexLayout::attributes() const {
+		return VertexAttributeListType::elements();
 	}
 
-	VertexLayout::AttributeIterator VertexLayout::begin() const {
-		return AttributeListType::begin();
+	VertexLayout::VertexAttributeIterator VertexLayout::begin() const {
+		return VertexAttributeListType::begin();
 	}
 
-	VertexLayout::AttributeIterator VertexLayout::end() const {
-		return AttributeListType::end();
+	VertexLayout::VertexAttributeIterator VertexLayout::end() const {
+		return VertexAttributeListType::end();
 	}
 
-	VertexLayout& VertexLayout::pushAttribute(const Attribute& attribute) {
+	VertexLayout& VertexLayout::pushAttribute(const VertexAttribute& attribute) {
 		pushField(attribute);
 		return *this;
 	}
 
+
+	size_t UniformLayout::getSize() const {
+		return UniformFieldListType::alignedSize();
+	}
+
+	size_t UniformLayout::getFieldCount() const {
+		return UniformFieldListType::elementCount();
+	}
+
+	UniformLayout::UniformFieldRange UniformLayout::fields() const {
+		return UniformFieldListType::elements();
+	}
+
+	UniformLayout::UniformFieldIterator UniformLayout::begin() const {
+		return UniformFieldListType::begin();
+	}
+
+	UniformLayout::UniformFieldIterator UniformLayout::end() const {
+		return UniformFieldListType::end();
+	}
+
+	UniformLayout& UniformLayout::pushAttribute(const UniformField& attribute) {
+		pushField(attribute);
+		return *this;
+	}
+
+	
 }

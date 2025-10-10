@@ -43,7 +43,7 @@ namespace C78E {
 	}
 
 	VulkanIndexBuffer::VulkanIndexBuffer(GraphicsContext& ctx, const IndexLayout& layout, Ref<StagingBuffer> stagingBuffer)
-		: GraphicsContextItem(ctx), VulkanGraphicsContextItem(), GPUBuffer(), VulkanGPUBuffer(), IndexBuffer(layout, stagingBuffer->size() / layout.size()) {
+		: GraphicsContextItem(ctx), VulkanGraphicsContextItem(), GPUBuffer(), VulkanGPUBuffer(), StagedBuffer(), IndexBuffer(layout, stagingBuffer->size() / layout.size()) {
 		C78E_CORE_TRACE("VulkanIndexBuffer::VulkanIndexBuffer: Creating prestaged VulkanIndexBuffer..");
 		C78E_CORE_TRACE("VulkanIndexBuffer::VulkanIndexBuffer:   StagingBuffer: Mapped to RAM: {}", stagingBuffer->isMapped());
 		

@@ -8,6 +8,18 @@ namespace C78E {
 
 	class Window;
 
+	struct GraphicsContextLimits {
+		// Vertex
+		uint32_t maxVertexAttributeCount;
+		uint32_t maxVertexBindings;
+		// Uniform
+		uint32_t maxPushConstantSize;
+		uint32_t maxUniformBuffers;
+		uint32_t maxPerStageUniformBuffers;
+		// add as needed..
+
+	};
+
 	class GraphicsContext {
 	public:
 		static Scope<GraphicsContext> create(Window& window);
@@ -51,8 +63,11 @@ namespace C78E {
 			C78E_CORE_ASSERT(context, "GraphicsContext::getAs: Failed to cast GraphicsContext to Type T!");
 			return *context;
 		}
+
+		const GraphicsContextLimits& getGraphicsContextLimits() const;
 	protected:
 		Window& m_Window;
+		GraphicsContextLimits m_Limits;
 		Ref<SwapChain> m_SwapChain = nullptr; //TODO: Scope?
 		Ref<ShaderManager> m_ShaderManager = nullptr;
 	};

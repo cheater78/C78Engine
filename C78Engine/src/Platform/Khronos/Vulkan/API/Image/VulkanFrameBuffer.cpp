@@ -6,7 +6,7 @@
 #include <Platform/Khronos/Vulkan/API/Command/VulkanRenderPass.h>
 
 #include <Platform/Khronos/Vulkan/API/SwapChain/VulkanSwapChain.h>
-#include <Platform/Khronos/Vulkan/API/Texture/VulkanTexture.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanTexture.h>
 
 namespace C78E {
 

@@ -5,6 +5,10 @@
 
 #include "C78ESandboxLayer.h"
 
+#include "Layers/VkHelloTriangle.h"
+#include "Layers/VkVertexBufferTest.h"
+#include "Layers/VkUniformBufferTest.h"
+
 static const C78E::WindowProperties appWindowProperties{
 	"C78ESandbox",
 	C78E::Resolution::resolution(C78E::Resolution::FHD),
@@ -16,7 +20,7 @@ class C78App : public C78E::Application {
 public:
 	C78App() : C78E::Application() {
 		C78E::Window& window1 = createWindow(appWindowProperties);
-		window1.pushLayer(C78E::createRef<C78ESandboxLayer>(window1));
+		window1.pushLayer(C78E::createRef<VkUniformBufferTest>(window1));
 	}
 
 	C78App(const C78App&) = delete;

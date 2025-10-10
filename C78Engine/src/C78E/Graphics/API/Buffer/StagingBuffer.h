@@ -23,6 +23,8 @@ namespace C78E {
 		virtual void* data() = 0;
 		virtual size_t size() = 0;
 
+		virtual bool alive() = 0;
+		virtual void free() = 0;
 	public:
 		template<typename T>
 		MemoryRange<T> range() {
@@ -38,18 +40,26 @@ namespace C78E {
 		}
 	};
 
-
-	class StagedBuffer {
+	/*
+	* Buffer that has a StagingBuffer for transfers
+	*/
+	class StagedBuffer : public virtual GPUBuffer {
 	public:
 		StagedBuffer() = default;
 		virtual ~StagedBuffer() = default;
+		
+		virtual bool alive() = 0;
+		virtual void free() = 0;
 	public:
 		bool hasStagingBuffer() const;
 		Ref<StagingBuffer> getStagingBuffer() const;
 		Ref<StagingBuffer> setStagingBuffer(Ref<StagingBuffer> stagingBuffer);
 		Ref<StagingBuffer> createStagingBuffer(GraphicsContext& ctx, size_t size);
 		void dropStagingBuffer();
-	protected: //TODO: prot. prob. unnecessary
+
+		void readDeviceMemory();
+		void writeDeviceMemory();
+	protected:
 		Ref<StagingBuffer> m_StagingBuffer;
 	};
 

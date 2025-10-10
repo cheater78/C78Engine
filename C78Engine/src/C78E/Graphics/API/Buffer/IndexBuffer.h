@@ -5,7 +5,7 @@
 
 namespace C78E {
 
-	class IndexBuffer : public virtual GPUBuffer, public StagedBuffer {
+	class IndexBuffer : public virtual StagedBuffer {
 	public:
 		static Ref<IndexBuffer> create(GraphicsContext& ctx, const IndexLayout& layout, size_t indexCount);
 		static Ref<IndexBuffer> create(GraphicsContext& ctx, const IndexLayout& layout, Ref<StagingBuffer> stagingBuffer);
@@ -13,6 +13,8 @@ namespace C78E {
 		IndexBuffer(const IndexLayout& layout, size_t indexCount);
 		virtual ~IndexBuffer();
 
+		virtual bool alive() = 0;
+		virtual void free() = 0;
 	public:
 		IndexLayout getIndexLayout() const;
 		size_t getIndexCount() const;

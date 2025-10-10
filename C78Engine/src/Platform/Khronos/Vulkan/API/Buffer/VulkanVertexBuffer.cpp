@@ -42,10 +42,7 @@ namespace C78E {
 	VulkanVertexBuffer::VulkanVertexBuffer(GraphicsContext& ctx, VertexInputRate inputRate, const VertexBufferLayout& layout, Ref<StagingBuffer> stagingBuffer)
 		: GraphicsContextItem(ctx), VulkanGraphicsContextItem(), VertexBuffer(inputRate, layout, stagingBuffer->size() / layout.getStride()) {
 		C78E_CORE_TRACE("VulkanVertexBuffer::VulkanVertexBuffer: Creating prestaged VulkanVertexBuffer..");
-		C78E_CORE_TRACE("VulkanVertexBuffer::VulkanVertexBuffer:   StagingBuffer: Mapped to RAM: {}", (stagingBuffer->isMapped() ? "mapped" : "mapping now"));
-		if (!stagingBuffer->isMapped()) {
-			stagingBuffer->map();
-		}
+		C78E_CORE_TRACE("VulkanVertexBuffer::VulkanVertexBuffer:   StagingBuffer: Mapped to RAM: {}", stagingBuffer->isMapped());
 		
 		const uint32_t vertexSize = m_Layout.getStride();
 		const uint32_t bufferSize = stagingBuffer->size();

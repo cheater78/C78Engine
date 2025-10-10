@@ -2,6 +2,8 @@
 #include <C78E/Graphics/API/Command/CommandBuffer.h>
 #include <Platform/Khronos/Vulkan/Core/VulkanGraphicsContextItem.h>
 #include <Platform/Khronos/Vulkan/Core/Device/VulkanDevice.h>
+#include <Platform/Khronos/Vulkan/Core/Descriptor/VulkanDescriptor.h>
+#include <Platform/Khronos/Vulkan/API/Pipeline/VulkanPipeline.h>
 
 namespace C78E {
 
@@ -23,6 +25,7 @@ namespace C78E {
 
 		virtual void bind(Ref<VertexBuffer> vertexBuffer) override;
 		virtual void bind(Ref<IndexBuffer> indexBuffer) override;
+		virtual void bind(Ref<UniformBuffer> uniformBuffer) override;
 
 		virtual void setRenderArea(const RenderArea& renderArea) override;
 		virtual void drawVertices(size_t vertexCount, size_t instanceCount = 1) override;
@@ -61,5 +64,9 @@ namespace C78E {
 		VkQueueFlags m_VkQueueFlags; // TODO: convert on the fly from m_Usage
 
 		bool m_HasSwapChainTarget = false;
+
+		Ref<VulkanPipeline> m_CurrentRecordingPipeline = nullptr;
+		Scope<VulkanDescriptorPool> m_DrescriptorPool = nullptr;
+		VkDescriptorSet m_UniformBufferDescriptorSet;
 	};
 }

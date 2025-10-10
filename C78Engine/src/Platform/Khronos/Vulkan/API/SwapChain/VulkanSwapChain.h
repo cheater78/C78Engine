@@ -2,7 +2,7 @@
 #include <C78E/Graphics/API/SwapChain/SwapChain.h>
 #include <Platform/Khronos/Vulkan/Core/Device/VulkanDevice.h>
 #include <Platform/Khronos/Vulkan/Core/VulkanConversions.h>
-#include <Platform/Khronos/Vulkan/API/Buffer/VulkanFrameBuffer.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanFrameBuffer.h>
 
 namespace C78E {
 

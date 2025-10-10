@@ -235,6 +235,18 @@ namespace C78E {
 			}
 			return size;
 		}
+		virtual size_t alignedSize() const {
+			size_t size = 0;
+			for (auto it = m_Elements.begin(); it != m_Elements.end(); it++) {
+				const size_t alignment = it->alignment();
+				const size_t offset = size % alignment; // divergence from alignment
+				if (offset) {
+					size += alignment - offset; // correcct for alignment padding
+				}
+				size += it->size();
+			}
+			return size;
+		}
 		virtual size_t alignment() const override {
 			size_t alignment = 0;
 			for (auto it = m_Elements.begin(); it != m_Elements.end(); it++) {

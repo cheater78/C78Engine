@@ -3,7 +3,7 @@
 #include "C78E/Core/Image/Image.h"
 
 #include <C78E/Graphics/API/GraphicsInstance.h>
-#include <Platform/Khronos/Vulkan/API/Texture/VulkanTexture.h>
+#include <Platform/Khronos/Vulkan/API/Image/VulkanTexture.h>
 
 namespace C78E {
 

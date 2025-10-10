@@ -4,10 +4,11 @@
 
 #include <C78E/Graphics/API/Command/RenderPass.h>
 #include "PipelineType.h"
+#include <C78E/Graphics/Core/GraphicsContextItem.h>
 
 namespace C78E {
 
-	class PipelineLayout {
+	class PipelineLayout : public virtual GraphicsContextItem {
 	public:
 		PipelineLayout() = default;
 		virtual ~PipelineLayout() = default;
@@ -23,20 +24,20 @@ namespace C78E {
 
         virtual PipelineType getType() const override;
 
+		virtual bool alive() = 0;
+		virtual void free() = 0;
 	public:
 		// Instance Buffer Layouts
-		void addInstanceBufferLayout(const InstanceBufferLayout& layout);
-		void setInstanceBufferLayout(size_t index, const InstanceBufferLayout& layout);
+		virtual void setInstanceBufferLayout(size_t index, const InstanceBufferLayout& layout);
 
 		// Vertex Buffer Layouts
-		void addVertexBufferLayout(const VertexBufferLayout& layout);
-		void setVertexBufferLayout(size_t index, const VertexBufferLayout& layout);
+		virtual void setVertexBufferLayout(size_t index, const VertexBufferLayout& layout);
 
 		// Push Constant Layouts
-		void setPushConstantLayout(ShaderStageBits stages, size_t index, const UniformLayout& layout);
+		virtual void setPushConstantLayout(ShaderStages stages, size_t index, const UniformLayout& layout);
 
 		// Uniform Buffer Layouts
-		void setUniformBufferLayout(ShaderStageBits stages, size_t index, const UniformLayout& layout);
+		virtual void setUniformBufferLayout(ShaderStages stages, size_t index, const UniformLayout& layout);
 
 		// Shaders
 		void setShader(ShaderStage stage, Ref<Shader> shader);
@@ -44,7 +45,13 @@ namespace C78E {
 	protected:
 		std::vector<InstanceBufferLayout> m_InstanceBufferLayouts; // Instance Buffer Layouts
 		std::vector<VertexBufferLayout> m_VertexBufferLayouts; // Vertex Buffer Layouts
-		std::map<ShaderStage, std::vector<UniformLayout>> m_PushConstantLayouts; // Push Constant Layouts per Stage
+		
+		struct BufferBinding {
+			ShaderStages stages;
+			uint32_t binding = 0;
+			UniformLayout layout;
+		};
+		std::vector<BufferBinding> m_UniformBufferBindings;
 
 		std::unordered_map<ShaderStage, Ref<Shader>> m_Shaders;
 	};

@@ -4,7 +4,7 @@
 namespace C78E {
 	
 	VkShaderStageFlagBits toVkShaderStage(const ShaderStage& stage);
-	VkShaderStageFlagBits toVkShaderStage(const ShaderStageBits& stages);
+	VkShaderStageFlags toVkShaderStage(ShaderStages stages);
 
 
 }
