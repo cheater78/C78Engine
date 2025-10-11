@@ -30,7 +30,7 @@ namespace C78E {
 					window->callUpdate(delta);
 				}
 			}
-
+			
 			// Purge closed windows - O(n)
 			m_Windows.erase(
 				std::remove_if(

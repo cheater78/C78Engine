@@ -9,6 +9,7 @@
 #include "Layers/Vk01VertexBufferTest.h"
 #include "Layers/Vk02UniformBufferTest.h"
 #include "Layers/Vk03InstanceBufferTest.h"
+#include "Layers/Vk04TextureSamplerTest.h"
 
 static const C78E::WindowProperties appWindowProperties{
 	"C78ESandbox",
@@ -21,6 +22,7 @@ class C78App : public C78E::Application {
 public:
 	C78App() : C78E::Application() {
 		C78E::Window& window1 = createWindow(appWindowProperties);
+		// window1.createDebugLayer(); //TODO: ImGui Impl
 		window1.pushLayer(C78E::createRef<VkInstanceBufferTest>(window1));
 	}
 

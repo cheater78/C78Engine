@@ -14,7 +14,7 @@ namespace C78E::ImGuiImplementation {
 
     //TODO:: Platform Abstraction
 
-    void init();
+    void init(Window& window);
 
     void newFrame();
 

@@ -31,11 +31,16 @@ namespace C78E {
 	void Window::pushLayer(Ref<Layer> layer) {
 		m_LayerStack->pushLayer(layer);
 	}
-	inline void Window::popLayer(Ref<Layer> layer) {
+	void Window::popLayer(Ref<Layer> layer) {
 		m_LayerStack->popLayer(layer);
 	}
-	inline void Window::pushOverlay(Ref<Layer> layer) {
+	void Window::pushOverlay(Ref<Layer> layer) {
 		m_LayerStack->pushOverlay(layer);
+	}
+
+	// Debug Layer
+	Ref<DebugLayer> Window::createDebugLayer() {
+		return m_DebugLayer = createRef<DebugLayer>(*this);
 	}
 
 	bool Window::isRunning() const {

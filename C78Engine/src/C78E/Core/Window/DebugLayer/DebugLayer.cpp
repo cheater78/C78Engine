@@ -46,7 +46,7 @@ namespace C78E {
 		setDarkThemeColors();
 
 		// Setup Platform/Renderer bindings
-		ImGuiImplementation::init();
+		ImGuiImplementation::init(m_Window);
 
 		C78E_CORE_INFO("ImGui Layer created.");
 	}

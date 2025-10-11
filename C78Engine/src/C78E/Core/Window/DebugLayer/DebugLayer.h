@@ -8,6 +8,11 @@ namespace C78E {
 	// Window itself is depended on DebugLayer
 	class Window;
 
+
+	//TODO: This needs its own Platform impl -> Vk ImGui is different from gl
+	// Define some interface to allow key flow aspects of the ImGui Vk Impl / Gl? - crude imgui/example backend first
+
+
 	class DebugLayer : public Layer {
 	public:
 		DebugLayer(Window& window);

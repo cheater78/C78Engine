@@ -32,6 +32,8 @@ namespace C78E {
 		void pushLayer(Ref<Layer> layer);
 		void popLayer(Ref<Layer> layer);
 		void pushOverlay(Ref<Layer> layer);
+		// Debug Layer
+		Ref<DebugLayer> createDebugLayer();
 
 		// Window Handling
 		bool isRunning() const;
@@ -41,6 +43,7 @@ namespace C78E {
 		T* getNativeWindowAs() {
 			return (T*)getNativeWindow();
 		}
+
 
 		// Graphics
 		GraphicsContext& getGraphicsContext() const;
