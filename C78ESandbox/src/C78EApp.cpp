@@ -21,7 +21,7 @@ class C78App : public C78E::Application {
 public:
 	C78App() : C78E::Application() {
 		C78E::Window& window1 = createWindow(appWindowProperties);
-		window1.pushLayer(C78E::createRef<VkUniformBufferTest>(window1));
+		window1.pushLayer(C78E::createRef<VkInstanceBufferTest>(window1));
 	}
 
 	C78App(const C78App&) = delete;
