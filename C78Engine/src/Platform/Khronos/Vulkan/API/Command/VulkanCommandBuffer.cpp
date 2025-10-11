@@ -99,6 +99,8 @@ namespace C78E {
 			1 // Descriptor Set Allocate Count
 		);
 
+		m_VertexLocationOffset = 0;
+
 		vkCmdBindPipeline(m_VkCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPipeline->getVkPipeline());
 	}
 	
@@ -155,10 +157,12 @@ namespace C78E {
 		C78E_CORE_ASSERT(vertexBuffer, "VulkanCommandBuffer::bind: vertexBuffer was nullptr!");
 		Ref<VulkanVertexBuffer> vulkanVertexBuffer = castRef<VulkanVertexBuffer>(vertexBuffer);
 
-		const uint32_t firstBinding = 0; //TODO: auto detect / explicitly specify
+		const uint32_t firstBinding = m_VertexLocationOffset; //TODO: auto detect / explicitly specify
 		const VkBuffer vertexBuffers[] = { vulkanVertexBuffer->getVulkanBuffer().getVkBuffer() };
 		const VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(m_VkCommandBuffer, firstBinding, 1, vertexBuffers, offsets);
+
+		m_VertexLocationOffset += vertexBuffer->getVertexBufferLayout().getAttributeCount();
 	}
 
 	void VulkanCommandBuffer::bind(Ref<IndexBuffer> indexBuffer) {

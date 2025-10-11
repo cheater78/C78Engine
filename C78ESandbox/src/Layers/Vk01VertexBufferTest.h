@@ -16,7 +16,7 @@ public:
         const FilePath appDirectory = FileSystem::C78RootDirectory / "C78ESandbox/";
         const FilePath shaderCache = appDirectory / "assets/cache/shaders/";
         const FilePath shaderDirectory = appDirectory / "assets/shaders/";
-        const FilePath vkTestShader = shaderDirectory / "vkVertexBufferTest.glsl";
+        const FilePath vkTestShader = shaderDirectory / "vk01VertexBufferTest.glsl";
 
         GraphicsContext& ctx = m_Window.getGraphicsContext();
         Ref<ShaderManager> shaderManager = ctx.createShaderManager(shaderCache);

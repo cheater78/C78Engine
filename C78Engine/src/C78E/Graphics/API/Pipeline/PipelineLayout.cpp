@@ -12,7 +12,7 @@ namespace C78E {
 
 	// Instance Buffer Layouts
 	void GraphicsPipelineLayout::setInstanceBufferLayout(size_t index, const InstanceBufferLayout& layout) {
-		if (index < m_InstanceBufferLayouts.size()) {
+		if (index <= m_InstanceBufferLayouts.size()) {
 			m_InstanceBufferLayouts.resize(index + 1);
 		}
 		m_InstanceBufferLayouts[index] = layout;

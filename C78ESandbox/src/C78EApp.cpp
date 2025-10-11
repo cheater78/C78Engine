@@ -5,9 +5,10 @@
 
 #include "C78ESandboxLayer.h"
 
-#include "Layers/VkHelloTriangle.h"
-#include "Layers/VkVertexBufferTest.h"
-#include "Layers/VkUniformBufferTest.h"
+#include "Layers/Vk00HelloTriangle.h"
+#include "Layers/Vk01VertexBufferTest.h"
+#include "Layers/Vk02UniformBufferTest.h"
+#include "Layers/Vk03InstanceBufferTest.h"
 
 static const C78E::WindowProperties appWindowProperties{
 	"C78ESandbox",

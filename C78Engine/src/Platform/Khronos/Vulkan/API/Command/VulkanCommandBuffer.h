@@ -68,5 +68,7 @@ namespace C78E {
 		Ref<VulkanPipeline> m_CurrentRecordingPipeline = nullptr;
 		Scope<VulkanDescriptorPool> m_DrescriptorPool = nullptr;
 		VkDescriptorSet m_UniformBufferDescriptorSet;
+
+		uint32_t m_VertexLocationOffset = 0;
 	};
 }

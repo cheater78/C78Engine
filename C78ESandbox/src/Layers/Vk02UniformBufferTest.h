@@ -3,21 +3,21 @@
 
 using namespace C78E; // not great, but im lazy
 
-struct UniformBufferTestObject {
-    float animTime = 0.f;
-    alignas(16) mat4 view;
-    alignas(16) mat4 proj;
-
-    static UniformLayout getUniformLayout() {
-        UniformLayout layout;
-        layout.pushAttribute(UniformField("animTime", PrimitiveType::Float32, 1));
-        layout.pushAttribute(UniformField("view", PrimitiveType::Float32, 16));
-        layout.pushAttribute(UniformField("proj", PrimitiveType::Float32, 16));
-        return layout;
-    }
-};
-
 class VkUniformBufferTest : public C78E::Layer {
+public:
+    struct UniformBufferTestObject {
+        float animTime = 0.f;
+        alignas(16) mat4 view;
+        alignas(16) mat4 proj;
+
+        static UniformLayout getUniformLayout() {
+            UniformLayout layout;
+            layout.pushAttribute(UniformField("animTime", PrimitiveType::Float32, 1));
+            layout.pushAttribute(UniformField("view", PrimitiveType::Float32, 16));
+            layout.pushAttribute(UniformField("proj", PrimitiveType::Float32, 16));
+            return layout;
+        }
+    };
 public:
     VkUniformBufferTest(C78E::Window& window)
         : Layer(window, "VkUniformBufferTest") {
@@ -29,7 +29,7 @@ public:
         const FilePath appDirectory = FileSystem::C78RootDirectory / "C78ESandbox/";
         const FilePath shaderCache = appDirectory / "assets/cache/shaders/";
         const FilePath shaderDirectory = appDirectory / "assets/shaders/";
-        const FilePath vkTestShader = shaderDirectory / "vkUniformBufferTest.glsl";
+        const FilePath vkTestShader = shaderDirectory / "vk02UniformBufferTest.glsl";
 
         GraphicsContext& ctx = m_Window.getGraphicsContext();
         Ref<ShaderManager> shaderManager = ctx.createShaderManager(shaderCache);
@@ -99,7 +99,7 @@ public:
         }
 
         {
-            m_CameraTransform.setTranslation(vec3(0.f, 0.f, -5.f));
+            m_CameraTransform.setTranslation(vec3(0.f, 0.f, -1.f));
 
             updateUBO(Timestep());
             m_PipelineLayout->setUniformBufferLayout(ShaderStages::Vertex | ShaderStages::Fragment, 0, UniformBufferTestObject::getUniformLayout());
@@ -207,9 +207,9 @@ public:
 
             const vec3 rotate = sens * vec3(dy, dx, 0.f);
 
-            glm::quat rotation = m_CameraTransform.getRotation().getQuat();
-            rotation = glm::rotate(rotation, rotate);
-            m_CameraTransform.setRotation(Rotation3(rotation));
+            vec3 rotation = m_CameraTransform.getRotation().toEulerAngles();
+            rotation = glm::mod(rotation + rotate, glm::two_pi<scalar>());
+            m_CameraTransform.setRotation(rotation);
 
             e.handled = true;
         }
@@ -269,7 +269,7 @@ public:
             cmd->bind(m_UniformBuffer);
 
             cmd->setRenderArea(swapChain.getFullRenderArea());
-            cmd->drawIndices(m_IndexBuffer->getIndexCount(), 25);
+            cmd->drawIndices(m_IndexBuffer->getIndexCount());
 
             cmd->endRenderPass();
             cmd->endRecording();
