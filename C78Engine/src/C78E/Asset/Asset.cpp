@@ -53,7 +53,6 @@ namespace C78E {
 		switch ((uint8_t)type) {
 		case C78E::Asset::Type::None:		return "Asset::Type::None";
 		case C78E::Asset::Type::Scene:		return "Asset::Type::Scene";
-		case C78E::Asset::Type::Model:		return "Asset::Type::Model";
 		case C78E::Asset::Type::Mesh:		return "Asset::Type::Mesh";
 		case C78E::Asset::Type::Material:	return "Asset::Type::Material";
 		case C78E::Asset::Type::Shader:		return "Asset::Type::Shader";
@@ -76,7 +75,6 @@ namespace C78E {
 		const std::string suffix = typeString.substr(prefix.size());
 
 		if (suffix == "Scene")		return Type::Scene;
-		if (suffix == "Model")		return Type::Model;
 		if (suffix == "Mesh")		return Type::Mesh;
 		if (suffix == "Material")	return Type::Material;
 		if (suffix == "Shader")		return Type::Shader;

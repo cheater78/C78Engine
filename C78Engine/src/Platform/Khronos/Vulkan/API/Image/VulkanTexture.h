@@ -7,7 +7,7 @@ namespace C78E {
 	VkSamplerMipmapMode toVkSamplerMipmapMode(Texture::Filter filter);
 	VkSamplerAddressMode toVkSamplerAddressMode(Texture::Wrap wrap);
 
-	/*
+	
 	class VulkanTexture : public Texture {
 	public:
 		VulkanTexture();
@@ -28,5 +28,5 @@ namespace C78E {
 		VkImageView m_ImageView;
 		uint32_t m_Width, m_Height;
 	};
-	*/
+	
 }
