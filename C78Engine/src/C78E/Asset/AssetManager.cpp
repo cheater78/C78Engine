@@ -174,15 +174,16 @@ namespace C78E {
 
 	FilePath EditorAssetManager::Importer::verifyMapSourceFile(Ref<AssetDescriptorMap> importDescriptorMap) {
 		C78E_CORE_VALIDATE(importDescriptorMap, return "", "EditorAssetManager::Importer::verifyMapSourceFile: importDescriptorMap was null!");
-		FilePath sourceFile;
+		FilePath sourceFile = "";
 		for (const AssetDescriptor& assetDescriptor : *importDescriptorMap) {
 			C78E_CORE_VALIDATE(
 				sourceFile.empty() || sourceFile == assetDescriptor.second->fileSource,
 				return "",
 				"EditorAssetManager::Importer::verifyMapSourceFile: sourceFiles in the Map were different!"
 			);
-			if (sourceFile.empty())
+			if (sourceFile.empty()) {
 				sourceFile = assetDescriptor.second->fileSource;
+			}
 		}
 		C78E_CORE_VALIDATE(!sourceFile.empty(), return "", "EditorAssetManager::Importer::verifyMapSourceFile: importDescriptorMaps sourceFiles were all empty!");
 		return sourceFile;

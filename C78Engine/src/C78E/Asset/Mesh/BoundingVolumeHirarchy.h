@@ -25,7 +25,7 @@ namespace C78E {
 
 	public:
 		BVH() = delete;
-		BVH(C78E::Ref<Mesh> mesh, uint32_t maxDepth = 32) : m_Mesh(mesh), m_MaxDepth(maxDepth) { build(); }
+		BVH(C78E::Ref<HEMesh> mesh, uint32_t maxDepth = 32) : m_Mesh(mesh), m_MaxDepth(maxDepth) { build(); }
 		BVH(const BVH& other) = delete;
 		~BVH() = default;
 
@@ -90,7 +90,7 @@ namespace C78E {
 		}
 
 	private:
-		Ref<Mesh> m_Mesh;
+		Ref<HEMesh> m_Mesh;
 		uint32_t m_MaxDepth;
 		std::vector<Geometry::Triangle> m_Triangles;
 		std::vector<Node> m_Nodes;

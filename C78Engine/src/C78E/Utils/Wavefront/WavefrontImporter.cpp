@@ -572,7 +572,7 @@ namespace C78E {
      * @return Meshes split by Materials
      */
     static EditorAssetManager::ImportedAssetGroup parseWavefrontShape(tinyobj::ObjReader& reader, int shapeID) {
-        std::map<size_t, Ref<Mesh>> meshes; // Meshes with one Material each(or none)
+        std::map<size_t, Ref<HEMesh>> meshes; // Meshes with one Material each(or none)
         std::map<size_t, WavefrontMeshImporter::WavefrontMeshMeta> metas;
 
         const tinyobj::attrib_t& srcAttributes = reader.GetAttrib();
@@ -603,17 +603,17 @@ namespace C78E {
             metas[currentMMID].wavefrontMaterialID = srcFaceMaterialID;
             metas[currentMMID].wavefrontGroup = shape.name;
 
-            Ref<Mesh>& mesh = meshes[currentMMID]; // provide the current mesh, materialless mesh at -1(size_t max)
+            Ref<HEMesh>& mesh = meshes[currentMMID]; // provide the current mesh, materialless mesh at -1(size_t max)
             if (!mesh)
-                mesh = Mesh::createMesh(); // init mesh, first time
+                mesh = HEMesh::createMesh(); // init mesh, first time
 
             const size_t faceVertexCount = size_t(shape.mesh.num_face_vertices[f]);
             C78E_CORE_VALIDATE(faceVertexCount > 2, continue, "WavefrontImporter: Face {} has less than 3 Vertecies, skipping!", f);
-            std::vector<Mesh::VertexIndex> faceVertexIndecies = std::vector<Mesh::VertexIndex>(faceVertexCount); // mandatory
+            std::vector<HEMesh::VertexIndex> faceVertexIndecies = std::vector<HEMesh::VertexIndex>(faceVertexCount); // mandatory
             // for optional vertex Data !vector::empty() || vector::size() will determine whether the 
-            std::vector<Mesh::NormalIndex> faceNormalIndecies; // optional
-            std::vector<Mesh::TextureCoordinateIndex> faceTextureCoordinateIndecies; // optional
-            std::vector<Mesh::ColorIndex> faceColorIndecies; // optional
+            std::vector<HEMesh::NormalIndex> faceNormalIndecies; // optional
+            std::vector<HEMesh::TextureCoordinateIndex> faceTextureCoordinateIndecies; // optional
+            std::vector<HEMesh::ColorIndex> faceColorIndecies; // optional
 
             /*
             * Loop over all vertecies in this face, gather vertex data
@@ -628,7 +628,7 @@ namespace C78E {
 
                 // VertexPosition
                 /* mandatory */ {
-                    const Mesh::Position position = {
+                    const HEMesh::Position position = {
                         srcAttributes.vertices[3 * size_t(srcVertAttr.vertex_index) + 0],
                         srcAttributes.vertices[3 * size_t(srcVertAttr.vertex_index) + 1],
                         srcAttributes.vertices[3 * size_t(srcVertAttr.vertex_index) + 2],
@@ -640,8 +640,8 @@ namespace C78E {
                 // VertexNormal(optional, )
                 if (srcFaceVertID && (faceIsValid &= hasNormal == faceNormalIndecies.empty())) break; // if not first time and attr definition is ambiguous, discard face
                 if (hasNormal) {
-                    if (!srcFaceVertID) faceNormalIndecies = std::vector<Mesh::NormalIndex>(faceVertexCount); // first time alloc
-                    const Mesh::Normal normal = {
+                    if (!srcFaceVertID) faceNormalIndecies = std::vector<HEMesh::NormalIndex>(faceVertexCount); // first time alloc
+                    const HEMesh::Normal normal = {
                         srcAttributes.normals[3 * size_t(srcVertAttr.normal_index) + 0],
                         srcAttributes.normals[3 * size_t(srcVertAttr.normal_index) + 1],
                         srcAttributes.normals[3 * size_t(srcVertAttr.normal_index) + 2],
@@ -653,8 +653,8 @@ namespace C78E {
                 // VertexTextureCoordinate(optional, )
                 if (srcFaceVertID && (faceIsValid &= hasTextureCoordinate == faceTextureCoordinateIndecies.empty())) break; // if not first time and attr definition is ambiguous, discard face
                 if (hasTextureCoordinate) {
-                    if (!srcFaceVertID) faceTextureCoordinateIndecies = std::vector<Mesh::TextureCoordinateIndex>(faceVertexCount); // first time alloc
-                    const Mesh::TextureCoordinate textureCoordinate = {
+                    if (!srcFaceVertID) faceTextureCoordinateIndecies = std::vector<HEMesh::TextureCoordinateIndex>(faceVertexCount); // first time alloc
+                    const HEMesh::TextureCoordinate textureCoordinate = {
                         srcAttributes.texcoords[2 * size_t(srcVertAttr.texcoord_index) + 0],
                         srcAttributes.texcoords[2 * size_t(srcVertAttr.texcoord_index) + 1]
                     };
@@ -664,8 +664,8 @@ namespace C78E {
                 // VertexColor(optional, )
                 if (srcFaceVertID && (faceIsValid &= hasColor == faceColorIndecies.empty())) break; // if not first time and attr definition is ambiguous, discard face
                 if (hasColor) {
-                    if (!srcFaceVertID) faceColorIndecies = std::vector<Mesh::ColorIndex>(faceVertexCount); // first time alloc
-                    const Mesh::Color color = {
+                    if (!srcFaceVertID) faceColorIndecies = std::vector<HEMesh::ColorIndex>(faceVertexCount); // first time alloc
+                    const HEMesh::Color color = {
                         srcAttributes.colors[3 * size_t(srcVertAttr.vertex_index) + 0],
                         srcAttributes.colors[3 * size_t(srcVertAttr.vertex_index) + 1],
                         srcAttributes.colors[3 * size_t(srcVertAttr.vertex_index) + 2],
@@ -681,10 +681,10 @@ namespace C78E {
             * construct all Halfedges based on the the face vertecies
             * add Halfedge from: last, to: first, at the end
             */
-            std::vector<Mesh::HalfedgeIndex> halfedges = std::vector<Mesh::HalfedgeIndex>(faceVertexCount);
+            std::vector<HEMesh::HalfedgeIndex> halfedges = std::vector<HEMesh::HalfedgeIndex>(faceVertexCount);
             for (auto vIt = faceVertexIndecies.begin(); vIt != --faceVertexIndecies.end();) {
-                Mesh::VertexIndex from = *vIt;
-                Mesh::VertexIndex to = *(++vIt);
+                HEMesh::VertexIndex from = *vIt;
+                HEMesh::VertexIndex to = *(++vIt);
                 halfedges[vIt - faceVertexIndecies.begin()] = mesh->addHalfedge(from, to);
             }
             halfedges.back() = mesh->addHalfedge(faceVertexIndecies.back(), faceVertexIndecies.front());
@@ -738,7 +738,7 @@ namespace C78E {
         for (size_t s = 0; s < srcShapes.size(); s++) {
             EditorAssetManager::ImportedAssetGroup shapeMeshes = parseWavefrontShape(reader, static_cast<int>(s)); // load Mesh and WavefrontMeshMeta
             for (auto& [shapeMesh, shapeMeta] : shapeMeshes) {
-                Ref<Mesh> readMesh = std::static_pointer_cast<Mesh>(shapeMesh);
+                Ref<HEMesh> readMesh = std::static_pointer_cast<HEMesh>(shapeMesh);
                 Ref<WavefrontMeshImporter::WavefrontMeshMeta> readMeshMeta = std::static_pointer_cast<WavefrontMeshImporter::WavefrontMeshMeta>(shapeMeta);
 
                 // Search existing Handle

@@ -18,7 +18,7 @@ namespace C78E {
 
 		BoundingBox() = default;
 		BoundingBox(const BoundingBox& other) = default;
-		BoundingBox(const Mesh& mesh) { growToInclude(mesh); }
+		BoundingBox(const HEMesh& mesh) { growToInclude(mesh); }
 		~BoundingBox() = default;
 
 		void growToInclude(glm::vec3 point) {
@@ -26,7 +26,7 @@ namespace C78E {
 			max = glm::max<glm::vec3>(point, max);
 		}
 
-		void growToInclude(Mesh::Position position) {
+		void growToInclude(HEMesh::Position position) {
 			growToInclude(position);
 		}
 
@@ -36,7 +36,7 @@ namespace C78E {
 			growToInclude(triangle.vertA);
 		}
 
-		void growToInclude(const Mesh& mesh) {
+		void growToInclude(const HEMesh& mesh) {
 			auto triangles = mesh.getTriangles();
 
 			for (auto& triangle : triangles)

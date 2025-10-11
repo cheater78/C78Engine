@@ -1,5 +1,6 @@
 #pragma once
 #include <C78E/Asset/Mesh/Mesh.h>
+#include <C78E/Asset/Mesh/HEMesh.h>
 #include <C78E/Asset/AssetManager.h>
 
 namespace C78E {
